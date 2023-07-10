@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "TripDraw"
-include ':app'
-include ':domain'
-include ':support'
+include(":app")
+include(":domain")
+include(":support")
