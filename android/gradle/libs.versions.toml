@@ -70,10 +70,10 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
 [bundles]
-basic-test = ["junit", "assertj", "mockk"]
-android-test = ["androidx-test-junit", "androidx-test-espresso"]
-http-client = ["okhttp", "retrofit", "moshi", "moshi-converter"]
-android-default = ["core-ktx", "appcompat", "constraintlayout", "material"]
+basicTest = ["junit", "assertj", "mockk"]
+androidTest = ["androidx-test-junit", "androidx-test-espresso"]
+httpClient = ["okhttp", "retrofit", "moshi", "moshi-converter"]
+androidDefault = ["core-ktx", "appcompat", "constraintlayout", "material"]
 
 
 [plugins]
