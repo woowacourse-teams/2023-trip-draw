@@ -64,10 +64,10 @@ dependencies {
     implementation(libs.bundles.androidDefault)
 
     // 테스트 의존성
-    implementation(libs.bundles.androidUnitTest)
+    testImplementation(libs.bundles.androidUnitTest)
 
     // 안드로이드 테스트 의존성
-    implementation(libs.bundles.androidTest)
+    androidTestImplementation(libs.bundles.androidTest)
 
     // HttpClient 관련 의존성
     implementation(libs.bundles.httpClient)
