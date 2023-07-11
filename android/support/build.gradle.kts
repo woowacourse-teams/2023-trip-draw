@@ -7,11 +7,10 @@ plugins {
 
 android {
     namespace = "com.teamtripdraw.android.support"
-    compileSdk = 33
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 26
-        targetSdk = 33
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,12 +41,14 @@ android {
 
 dependencies {
     // 안드로이드 기본 의존성
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    testImplementation("org.assertj:assertj-core:3.22.0")
+    implementation(libs.bundles.androidDefault)
+
+    // 테스트 의존성
+    testImplementation(libs.bundles.androidUnitTest)
+
+    // HttpClient 관련 의존성
+    implementation(libs.bundles.httpClient)
+
+    // Glide
+    implementation(libs.glide)
 }
