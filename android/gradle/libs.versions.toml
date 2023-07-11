@@ -97,7 +97,7 @@ mockkAgent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
 [bundles]
-domainTest = []
+domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk"]
 androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter"]
