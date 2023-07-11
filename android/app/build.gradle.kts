@@ -64,7 +64,7 @@ dependencies {
     implementation(libs.bundles.androidDefault)
 
     // 테스트 의존성
-    implementation(libs.bundles.basicTest)
+    implementation(libs.bundles.androidUnitTest)
 
     // 안드로이드 테스트 의존성
     implementation(libs.bundles.androidTest)
