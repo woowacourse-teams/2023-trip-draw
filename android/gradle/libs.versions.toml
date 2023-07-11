@@ -48,6 +48,9 @@ mockk = "1.13.5"
 # Glide
 glide = "4.15.1"
 
+# addKtlintFormatGitPreCommitHook
+jlleitschuh = "10.3.0"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -74,7 +77,7 @@ junit4 = { module = "junit:junit", version.ref = "junit" }
 junit4VintageEngine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "supportJunit5" }
 
 # domain junit5
-junitJupiter  = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
+junitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
 assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCore" }
 
 # Networking
@@ -107,5 +110,8 @@ androidLibrary = { id = "com.android.library", version.ref = "gradleplugin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+# addKtlintFormatGitPreCommitHook
+jlleitschuh = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "jlleitschuh" }
+
 # use junit5 for test
 mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus" }
