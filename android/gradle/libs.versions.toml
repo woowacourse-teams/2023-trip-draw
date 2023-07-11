@@ -37,6 +37,7 @@ gradleplugin = "7.4.0"
 # Networking
 okhttp = "4.11.0"
 retrofit = "2.9.0"
+loggingInterceptor = "4.11.0"
 
 # Moshi
 moshi = "1.14.0"
@@ -83,6 +84,7 @@ assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCore"
 # Networking
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 
 # Moshi
 moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
@@ -100,7 +102,7 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk"]
 androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
-httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter"]
+httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material"]
 
 
