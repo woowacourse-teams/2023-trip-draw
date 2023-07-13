@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- android default -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- trip draw -->
+    <color name="td_main_blue">#1746A2</color>
+    <color name="td_sub_blue">#4978D4</color>
+    <color name="td_light_blue">#71A0FC</color>
+    <color name="td_gray">#F6F1F1</color>
+    <color name="td_dark_gray">#BCBCBC</color>
+    <color name="td_black">#000000</color>
+    <color name="td_red">#DF2E38</color>
+    <color name="td_white">#FFFFFF</color>
+    <color name="td_main_orange">#FFA41B</color>
+    <color name="td_sub_orange">#FFC239</color>
+    <color name="td_light_orange">#FFE057</color>
 </resources>
