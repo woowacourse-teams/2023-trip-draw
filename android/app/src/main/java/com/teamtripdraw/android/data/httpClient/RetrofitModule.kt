@@ -1,6 +1,7 @@
 package com.teamtripdraw.android.data.httpClient
 
 import com.squareup.moshi.Moshi
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseStateCallAdapterFactory
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -45,6 +46,7 @@ object RetrofitModule {
         Retrofit.Builder()
             .baseUrl("")
             .client(tripDrawOkHttpClient)
+            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 }
