@@ -6,7 +6,7 @@ import java.net.UnknownHostException
 
 sealed class ResponseState<out T> {
     // Http 응답 code 200대(응답 성공)
-    data class Success<T>(val body: T) : ResponseState<T>()
+    data class Success<T>(val body: T?) : ResponseState<T>()
 
     // isSuccessful의 값이 false인 경우(200~300대 응답이 아닌경우)
     data class Failure(val code: Int, val errorBody: ResponseBody? = null) :
