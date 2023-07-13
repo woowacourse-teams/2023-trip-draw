@@ -10,3 +10,4 @@ inline fun <reified T> Retrofit.getParsedErrorBody(errorBody: ResponseBody?): T?
             T::class.java.annotations
         ).convert(errorBody)
     }
+

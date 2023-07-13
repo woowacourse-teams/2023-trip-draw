@@ -13,6 +13,7 @@ class ResponseStateCall<T>(private val call: Call<T>) : Call<ResponseState<T>> {
     override fun enqueue(callback: Callback<ResponseState<T>>) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
+                val headers = response.headers()
                 val body = response.body()
                 val code = response.code()
                 val errorBody = response.errorBody()
@@ -20,7 +21,7 @@ class ResponseStateCall<T>(private val call: Call<T>) : Call<ResponseState<T>> {
                 if (response.isSuccessful) {
                     callback.onResponse(
                         this@ResponseStateCall,
-                        Response.success(ResponseState.Success(body))
+                        Response.success(ResponseState.Success(body, headers))
                     )
                 } else {
                     callback.onResponse(
