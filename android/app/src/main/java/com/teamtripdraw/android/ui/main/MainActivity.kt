@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui
+package com.teamtripdraw.android.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
