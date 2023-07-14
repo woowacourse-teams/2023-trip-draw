@@ -74,4 +74,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+
+    // NaverMap
+    implementation(libs.naverMap)
 }
