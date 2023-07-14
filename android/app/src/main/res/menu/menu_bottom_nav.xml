@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_bn_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/menu_bn_home" />
+
+    <item
+        android:id="@+id/menu_bn_history"
+        android:icon="@drawable/ic_history"
+        android:title="@string/menu_bn_history" />
+
+    <item
+        android:id="@+id/menu_bn_my_page"
+        android:icon="@drawable/ic_my_page"
+        android:title="@string/menu_bn_my_page" />
+</menu>
