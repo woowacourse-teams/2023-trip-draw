@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,11 @@ public class Point extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDateTime recordedAt;
+
+    @Builder
+    public Point(Double latitude, Double longitude, LocalDateTime recordedAt) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.recordedAt = recordedAt;
+    }
 }
