@@ -1,7 +1,8 @@
-package dev.tripdraw.domain;
+package dev.tripdraw.domain.member;
 
 import static lombok.AccessLevel.PROTECTED;
 
+import dev.tripdraw.domain.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Builder;

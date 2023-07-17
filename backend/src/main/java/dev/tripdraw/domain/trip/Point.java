@@ -1,7 +1,8 @@
-package dev.tripdraw.domain;
+package dev.tripdraw.domain.trip;
 
 import static lombok.AccessLevel.PROTECTED;
 
+import dev.tripdraw.domain.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
