@@ -1,7 +1,9 @@
-package dev.tripdraw.domain;
+package dev.tripdraw.domain.trip;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.domain.trip.Route;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

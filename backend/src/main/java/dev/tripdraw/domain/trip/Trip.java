@@ -1,8 +1,10 @@
-package dev.tripdraw.domain;
+package dev.tripdraw.domain.trip;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
+import dev.tripdraw.domain.common.BaseEntity;
+import dev.tripdraw.domain.member.Member;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
