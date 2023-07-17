@@ -1,4 +1,4 @@
-package dev.tripdraw.domain;
+package dev.tripdraw.domain.common;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 

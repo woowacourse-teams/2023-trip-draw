@@ -1,4 +1,4 @@
-package dev.tripdraw.domain;
+package dev.tripdraw.domain.trip;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.FetchType.LAZY;
