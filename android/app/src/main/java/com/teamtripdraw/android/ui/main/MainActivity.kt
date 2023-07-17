@@ -3,11 +3,15 @@ package com.teamtripdraw.android.ui.main
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.replace
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityMainBinding
+import com.teamtripdraw.android.ui.history.HistoryFragment
+import com.teamtripdraw.android.ui.home.HomeFragment
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.HISTORY
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.HOME
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.MY_PAGE
+import com.teamtripdraw.android.ui.myPage.MyPageFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,18 +21,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initDefaultFragment()
+        initBottomNavigation()
+    }
+
+    private fun initDefaultFragment() {
+        supportFragmentManager.beginTransaction().replace<HomeFragment>(R.id.fcv_main).commit()
     }
 
     private fun initBottomNavigation() {
         binding.bnMain.setOnItemSelectedListener {
             when (BottomNavigationMenuType.resourceIdToMenuType(it.itemId)) {
                 HOME -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace<HomeFragment>(R.id.fcv_main).commit()
                     return@setOnItemSelectedListener true
                 }
                 HISTORY -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace<HistoryFragment>(R.id.fcv_main).commit()
                     return@setOnItemSelectedListener true
                 }
                 MY_PAGE -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace<MyPageFragment>(R.id.fcv_main).commit()
                     return@setOnItemSelectedListener true
                 }
             }
