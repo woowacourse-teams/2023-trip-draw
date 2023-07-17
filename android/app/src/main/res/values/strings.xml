@@ -6,4 +6,7 @@
     <string name="menu_bn_home">홈</string>
     <string name="menu_bn_history">나의 여행</string>
     <string name="menu_bn_my_page">마이페이지</string>
+
+    <!-- HomeFragment -->
+    <string name="tv_record_start">기록 시작</string>
 </resources>

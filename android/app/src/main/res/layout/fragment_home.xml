@@ -7,10 +7,11 @@
     tools:context=".ui.home.HomeFragment">
 
     <fragment
-        android:id="@+id/map_fragment"
+        android:id="@+id/fragment_map"
         android:name="com.naver.maps.map.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="87dp"
         app:navermap_locationButtonEnabled="true"
         app:navermap_rotateGesturesEnabled="false"
         app:navermap_scaleBarEnabled="true"
@@ -20,7 +21,18 @@
     <include
         android:id="@+id/tb_main"
         layout="@layout/layout_logo_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/btn_record_start"
+        layout="@layout/layout_record_start_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_map" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
