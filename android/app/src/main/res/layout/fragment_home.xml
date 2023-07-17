@@ -11,5 +11,9 @@
         android:name="com.naver.maps.map.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:navermap_locationButtonEnabled="true"
+        app:navermap_scaleBarEnabled="true"
+        app:navermap_tiltGesturesEnabled="false"
+        app:navermap_rotateGesturesEnabled="false"
         tools:layout="@layout/map_preview" />
 </androidx.constraintlayout.widget.ConstraintLayout>
