@@ -6,24 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <fragment
-        android:id="@+id/fragment_map"
-        android:name="com.naver.maps.map.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="87dp"
-        app:navermap_locationButtonEnabled="true"
-        app:navermap_rotateGesturesEnabled="false"
-        app:navermap_scaleBarEnabled="true"
-        app:navermap_tiltGesturesEnabled="false"
-        tools:layout="@layout/map_preview" />
-
     <include
         android:id="@+id/tb_main"
         layout="@layout/layout_logo_tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/toolbar_default"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <fragment
+        android:id="@+id/fragment_map"
+        android:name="com.naver.maps.map.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="87dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_main"
+        app:navermap_locationButtonEnabled="true"
+        app:navermap_rotateGesturesEnabled="false"
+        app:navermap_scaleBarEnabled="true"
+        app:navermap_tiltGesturesEnabled="false"
+        tools:layout="@layout/map_preview"
+        tools:layout_editor_absoluteX="0dp" />
 
     <include
         android:id="@+id/btn_record_start"
