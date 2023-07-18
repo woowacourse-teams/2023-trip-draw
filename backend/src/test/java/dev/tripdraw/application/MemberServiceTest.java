@@ -54,7 +54,8 @@ class MemberServiceTest {
         LoginUser loginUser = new LoginUser("순후추");
 
         // expect
-        assertThatThrownBy(() -> memberService.validateLoginUser(loginUser)).isInstanceOf(AuthException.class);
+        assertThatThrownBy(() -> memberService.validateLoginUser(loginUser))
+                .isInstanceOf(AuthException.class);
     }
 
     @Test
