@@ -26,6 +26,7 @@ class MemberControllerTest {
 
     @Test
     void 회원가입을_한다() {
+        // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new MemberCreateRequest("통후추"))

@@ -18,12 +18,15 @@ class AuthExtractorTest {
 
     @Test
     void 요청의_헤더에서_LoginUser를_추출한다() {
+        // given
         HttpServletRequest request = mock(HttpServletRequest.class);
+        String encoded = "BASIC 7Ya17ZuE7LaU";
+        when(request.getHeader(HttpServletRequest.BASIC_AUTH)).thenReturn(encoded);
 
-        when(request.getHeader(HttpServletRequest.BASIC_AUTH)).thenReturn("Basic 7Ya17ZuE7LaU");
-
+        // when
         LoginUser loginUser = AuthExtractor.extract(request);
 
+        // then
         assertThat(loginUser.nickname()).isEqualTo("통후추");
     }
 

@@ -18,14 +18,14 @@ class MemberRepositoryTest {
 
     @Test
     void 닉네임으로_회원을_조회한다() {
-        //given
+        // given
         Member 통후추 = new Member("통후추");
         memberRepository.save(통후추);
 
-        //when
+        // when
         Member member = memberRepository.findByNickname("통후추").get();
 
-        //then
+        // then
         assertThat(member).isEqualTo(통후추);
     }
 }

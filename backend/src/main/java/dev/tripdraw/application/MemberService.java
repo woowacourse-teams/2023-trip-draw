@@ -29,10 +29,10 @@ public class MemberService {
         return member.get();
     }
 
+    @Transactional
     public Long register(MemberCreateRequest memberCreateRequest) {
         String nickname = memberCreateRequest.nickname();
         Optional<Member> byNickname = memberRepository.findByNickname(nickname);
-        ;
 
         if (byNickname.isPresent()) {
             throw new BadRequestException(ExceptionCode.ALREADY_HAS_NICKNAME);
