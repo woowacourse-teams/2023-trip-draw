@@ -33,22 +33,21 @@ class TripTest {
     @Test
     void 인가된_사용자는_예외가_발생하지_않는다() {
         // given
-        Member member = new Member("tonghuchu");
+        Member member = new Member("통후추");
         Trip trip = new Trip("trip", member);
 
         // expect
-        assertThatNoException().isThrownBy(() -> trip.validateAuthorization(member));
+        assertThatNoException().isThrownBy(() -> trip.validateAuthorization(new Member("통후추")));
     }
 
     @Test
     void 인가되지_않은_사용자는_예외가_발생한다() {
         // given
-        Member member = new Member("tonghuchu");
-        Member other = new Member("other");
+        Member member = new Member("통후추");
         Trip trip = new Trip("trip", member);
 
         // expect
-        assertThatThrownBy(() -> trip.validateAuthorization(other))
+        assertThatThrownBy(() -> trip.validateAuthorization(new Member("other")))
                 .isInstanceOf(ForbiddenException.class);
     }
 }
