@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginTop="52dp"
-        android:text="@string/nickname_setup_main_title"
+        android:text="@string/tv_main_title"
         android:textAppearance="@style/title_2B"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,50 +21,39 @@
         android:id="@+id/tv_sub_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nickname_setup_sub_title"
+        android:text="@string/tv_sub_title"
         android:textAppearance="@style/subtitle_2"
         app:layout_constraintStart_toStartOf="@+id/tv_main_title"
         app:layout_constraintTop_toBottomOf="@id/tv_main_title" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_nickname_container"
+    <EditText
+        android:id="@+id/et_nickname"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_default"
         android:layout_marginTop="50dp"
+        android:autofillHints="username"
         android:background="@drawable/shape_td_dark_gray_line_12_rect"
-        android:paddingHorizontal="@dimen/margin_default"
+        android:hint="@string/et_nickname"
+        android:inputType="text"
+        android:padding="@dimen/margin_default"
+        android:textAppearance="@style/body_1"
+        android:textColorHint="@color/td_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_sub_title">
+        app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
 
-        <EditText
-            android:id="@+id/et_nickname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_default"
-            android:autofillHints="username"
-            android:background="@null"
-            android:hint="@string/nickname_setup_nickname_hint"
-            android:inputType="text"
-            android:textAppearance="@style/body_1"
-            android:textColorHint="@color/td_gray"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_duplication_check"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/btn_duplication_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nickname_setup_duplication_check"
-            android:textAppearance="@style/caption_1"
-            android:textColor="@color/td_gray"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/btn_duplication_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:text="@string/btn_duplication_check"
+        android:textAppearance="@style/caption_1"
+        android:textColor="@color/td_gray"
+        app:layout_constraintBottom_toBottomOf="@id/et_nickname"
+        app:layout_constraintEnd_toEndOf="@id/et_nickname"
+        app:layout_constraintTop_toTopOf="@id/et_nickname" />
 
     <TextView
         android:id="@+id/tv_nickname_state_message"
@@ -73,8 +62,8 @@
         android:layout_marginTop="8dp"
         android:textAppearance="@style/caption_1"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@id/layout_nickname_container"
-        app:layout_constraintTop_toBottomOf="@id/layout_nickname_container"
+        app:layout_constraintStart_toStartOf="@id/et_nickname"
+        app:layout_constraintTop_toBottomOf="@id/et_nickname"
         tools:text="설명글입니다" />
 
     <TextView
@@ -84,8 +73,8 @@
         android:layout_marginTop="8dp"
         android:textAppearance="@style/body2"
         android:textColor="@color/td_gray"
-        app:layout_constraintEnd_toEndOf="@id/layout_nickname_container"
-        app:layout_constraintTop_toBottomOf="@id/layout_nickname_container"
+        app:layout_constraintEnd_toEndOf="@id/et_nickname"
+        app:layout_constraintTop_toBottomOf="@id/et_nickname"
         tools:text="0/10" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -93,10 +82,10 @@
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_margin="@dimen/margin_default"
-        android:background="@drawable/shape_fill_12_rect"
+        android:background="@drawable/shape_optional_fill_12_rect"
         android:backgroundTint="@color/td_gray"
         android:enabled="false"
-        android:text="@string/nickname_setup_complete"
+        android:text="@string/btn_setup_complete"
         android:textAppearance="@style/title_2M"
         android:textColor="@color/td_white"
         app:layout_constraintBottom_toBottomOf="parent"
