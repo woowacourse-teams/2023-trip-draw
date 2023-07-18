@@ -1,7 +1,12 @@
 package dev.tripdraw.presentation.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import dev.tripdraw.dto.request.MemberCreateRequest;
+import dev.tripdraw.dto.response.MemberCreateResponse;
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -28,12 +33,17 @@ class MemberControllerTest {
 
     @Test
     void 회원가입을_한다() {
-        // expect
-        RestAssured.given().log().all()
+        // given
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new MemberCreateRequest("통후추"))
                 .when().post("/members")
                 .then().log().all()
-                .statusCode(HttpStatus.CREATED.value());
+                .statusCode(HttpStatus.CREATED.value())
+                .extract();
+        MemberCreateResponse memberCreateResponse = response.as(MemberCreateResponse.class);
+
+        // expect
+        assertThat(memberCreateResponse.nickname()).isEqualTo("통후추");
     }
 }
