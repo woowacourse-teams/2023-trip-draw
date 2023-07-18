@@ -14,6 +14,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./backend
+
     steps:
       - name: 체크아웃
         uses: actions/checkout@v3
@@ -26,9 +29,11 @@ jobs:
 
       - name: 권한 부여
         run: chmod +x gradlew
+        working-directory: ${{ env.working-directory }}
 
       - name: 빌드 수행
         run: ./gradlew build
+        working-directory: ${{ env.working-directory }}
 
       - name: 테스트 결과 코멘트 등록
         uses: EnricoMi/publish-unit-test-result-action@v2

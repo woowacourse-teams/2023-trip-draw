@@ -10,6 +10,9 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
+    env:
+      working-directory: ./backend
+
   steps:
     - name: 수정 권한 부여
       run: |
@@ -22,13 +25,16 @@ jobs:
       run: |
         chmod +x ./gradlew
         ./gradlew bootjar
+      working-directory: ${{ env.working-directory }}
 
     - name: 배포된 프로그램 종료
       run: |
         if sudo lsof -i :8080; then
           sudo lsof -i :8080 | awk 'NR!=1 {print $2}' | sudo xargs kill -9
         fi
+      working-directory: ${{ env.working-directory }}
 
     - name: 배포
       run: |
-        sudo  nohup java -jar build/libs/tripdraw.jar &
+        sudo nohup java -jar build/libs/tripdraw.jar &
+      working-directory: ${{ env.working-directory }}
