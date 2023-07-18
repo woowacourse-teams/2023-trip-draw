@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - develop-backend
+    paths:
+      - 'backend/**'
 
 permissions:
   pull-requests: write
