@@ -27,7 +27,7 @@ class MemberControllerTest {
     int port;
 
     @BeforeEach
-    void set_up() {
+    void setUp() {
         RestAssured.port = port;
     }
 

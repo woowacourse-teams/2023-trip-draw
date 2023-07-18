@@ -31,7 +31,7 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @BeforeEach
-    void set_up() {
+    void setUp() {
         Member member = new Member("통후추");
         memberRepository.save(member);
     }
@@ -67,7 +67,7 @@ class MemberServiceTest {
         MemberCreateResponse response = memberService.register(memberCreateRequest);
 
         // then
-        assertThat(memberRepository.findByNickname(response.nickname())).isNotNull();
+        assertThat(memberRepository.existsByNickname(response.nickname())).isTrue();
     }
 
     @Test
@@ -76,6 +76,7 @@ class MemberServiceTest {
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest("통후추");
 
         // expect
-        assertThatThrownBy(() -> memberService.register(memberCreateRequest)).isInstanceOf(BadRequestException.class);
+        assertThatThrownBy(() -> memberService.register(memberCreateRequest))
+                .isInstanceOf(BadRequestException.class);
     }
 }

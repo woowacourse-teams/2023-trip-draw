@@ -18,9 +18,6 @@ public class BasicAuthorizationDecoder {
         }
 
         byte[] decodedBytes = Base64.decodeBase64(authHeader[NICKNAME]);
-        String decodedString = new String(decodedBytes);
-
-        String[] credentials = decodedString.split(":");
-        return credentials[0];
+        return new String(decodedBytes);
     }
 }
