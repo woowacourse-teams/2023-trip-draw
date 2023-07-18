@@ -7,6 +7,7 @@ import dev.tripdraw.dto.request.MemberCreateRequest;
 import dev.tripdraw.exception.AuthException;
 import dev.tripdraw.exception.BadRequestException;
 import dev.tripdraw.exception.ExceptionCode;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,28 +20,25 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Member validateLoginUser(LoginUser loginUser) {
-        Member member = findByNickname(loginUser.nickname());
+        Optional<Member> member = memberRepository.findByNickname(loginUser.nickname());
 
-        if (member == null) {
+        if (member.isEmpty()) {
             throw new AuthException(ExceptionCode.HAS_NO_MEMBER);
         }
 
-        return member;
+        return member.get();
     }
 
     public Long register(MemberCreateRequest memberCreateRequest) {
         String nickname = memberCreateRequest.nickname();
-        Member byNickname = findByNickname(nickname);
+        Optional<Member> byNickname = memberRepository.findByNickname(nickname);
+        ;
 
-        if (byNickname != null) {
+        if (byNickname.isPresent()) {
             throw new BadRequestException(ExceptionCode.ALREADY_HAS_NICKNAME);
         }
 
         Member member = memberRepository.save(new Member(nickname));
         return member.getId();
-    }
-
-    private Member findByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname);
     }
 }

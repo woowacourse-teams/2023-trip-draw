@@ -23,7 +23,7 @@ class MemberRepositoryTest {
         memberRepository.save(통후추);
 
         //when
-        Member member = memberRepository.findByNickname("통후추");
+        Member member = memberRepository.findByNickname("통후추").get();
 
         //then
         assertThat(member).isEqualTo(통후추);
