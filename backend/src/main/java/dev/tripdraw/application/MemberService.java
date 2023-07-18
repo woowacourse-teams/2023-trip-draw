@@ -4,6 +4,7 @@ import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
+import dev.tripdraw.dto.response.MemberCreateResponse;
 import dev.tripdraw.exception.AuthException;
 import dev.tripdraw.exception.BadRequestException;
 import dev.tripdraw.exception.ExceptionCode;
@@ -30,7 +31,7 @@ public class MemberService {
         return member.get();
     }
 
-    public Long register(MemberCreateRequest memberCreateRequest) {
+    public MemberCreateResponse register(MemberCreateRequest memberCreateRequest) {
         String nickname = memberCreateRequest.nickname();
         Optional<Member> byNickname = memberRepository.findByNickname(nickname);
 
@@ -39,6 +40,6 @@ public class MemberService {
         }
 
         Member member = memberRepository.save(new Member(nickname));
-        return member.getId();
+        return MemberCreateResponse.from(member);
     }
 }

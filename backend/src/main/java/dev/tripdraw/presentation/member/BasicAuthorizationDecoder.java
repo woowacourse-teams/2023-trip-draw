@@ -1,7 +1,9 @@
 package dev.tripdraw.presentation.member;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BasicAuthorizationDecoder {
 
     private static final int AUTHORIZATION = 0;
@@ -9,7 +11,7 @@ public class BasicAuthorizationDecoder {
     private static final String AUTH_TYPE = "basic";
 
 
-    public static String decode(String authorization) {
+    public String decode(String authorization) {
         String[] authHeader = authorization.split(" ");
         if (!authHeader[AUTHORIZATION].equalsIgnoreCase(AUTH_TYPE)) {
             return null;

@@ -13,10 +13,11 @@ class BasicAuthorizationDecoderTest {
     @Test
     void base64로_암호화된_문자열을_해독한다() {
         // given
+        BasicAuthorizationDecoder basicAuthorizationDecoder = new BasicAuthorizationDecoder();
         String encoded = "BASIC 7Ya17ZuE7LaU";
 
         // when
-        String decoded = BasicAuthorizationDecoder.decode(encoded);
+        String decoded = basicAuthorizationDecoder.decode(encoded);
 
         // then
         assertThat(decoded).isEqualTo("통후추");

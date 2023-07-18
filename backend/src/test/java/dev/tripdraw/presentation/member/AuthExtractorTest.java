@@ -19,12 +19,13 @@ class AuthExtractorTest {
     @Test
     void 요청의_헤더에서_LoginUser를_추출한다() {
         // given
+        AuthExtractor authExtractor = new AuthExtractor(new BasicAuthorizationDecoder());
         HttpServletRequest request = mock(HttpServletRequest.class);
         String encoded = "BASIC 7Ya17ZuE7LaU";
         when(request.getHeader(HttpServletRequest.BASIC_AUTH)).thenReturn(encoded);
 
         // when
-        LoginUser loginUser = AuthExtractor.extract(request);
+        LoginUser loginUser = authExtractor.extract(request);
 
         // then
         assertThat(loginUser.nickname()).isEqualTo("통후추");
@@ -32,10 +33,12 @@ class AuthExtractorTest {
 
     @Test
     void 요청의_헤더에_인증_정보가_없을_경우_예외를_발생시킨다() {
+        // given
+        AuthExtractor authExtractor = new AuthExtractor(new BasicAuthorizationDecoder());
         HttpServletRequest request = mock(HttpServletRequest.class);
-
         when(request.getHeader(HttpServletRequest.BASIC_AUTH)).thenReturn(null);
 
-        assertThatThrownBy(() -> AuthExtractor.extract(request)).isInstanceOf(BadRequestException.class);
+        // expect
+        assertThatThrownBy(() -> authExtractor.extract(request)).isInstanceOf(BadRequestException.class);
     }
 }

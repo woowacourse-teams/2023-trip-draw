@@ -2,8 +2,9 @@ package dev.tripdraw.presentation.controller;
 
 import dev.tripdraw.application.MemberService;
 import dev.tripdraw.dto.request.MemberCreateRequest;
-import java.net.URI;
+import dev.tripdraw.dto.response.MemberCreateResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,9 +19,11 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody MemberCreateRequest memberCreateRequest) {
-        Long id = memberService.register(memberCreateRequest);
+    public ResponseEntity<MemberCreateResponse> create(@RequestBody MemberCreateRequest memberCreateRequest) {
+        MemberCreateResponse response = memberService.register(memberCreateRequest);
 
-        return ResponseEntity.created(URI.create(String.valueOf(id))).build();
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(201))
+                .body(response);
     }
 }

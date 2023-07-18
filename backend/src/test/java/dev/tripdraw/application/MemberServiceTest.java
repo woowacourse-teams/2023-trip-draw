@@ -7,6 +7,7 @@ import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
+import dev.tripdraw.dto.response.MemberCreateResponse;
 import dev.tripdraw.exception.AuthException;
 import dev.tripdraw.exception.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,10 +63,10 @@ class MemberServiceTest {
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest("순후추");
 
         // when
-        Long id = memberService.register(memberCreateRequest);
+        MemberCreateResponse response = memberService.register(memberCreateRequest);
 
         // then
-        assertThat(memberRepository.findById(id)).isNotNull();
+        assertThat(memberRepository.findByNickname(response.nickname())).isNotNull();
     }
 
     @Test

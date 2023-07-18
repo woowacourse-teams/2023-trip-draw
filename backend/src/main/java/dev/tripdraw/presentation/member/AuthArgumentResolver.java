@@ -9,9 +9,11 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final AuthExtractor authExtractor;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -26,6 +28,6 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             WebDataBinderFactory binderFactory
     ) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        return AuthExtractor.extract(request);
+        return authExtractor.extract(request);
     }
 }
