@@ -42,6 +42,6 @@ class MemberRepositoryTest {
         memberRepository.save(member);
 
         // expect
-        assertThat(memberRepository.existsByNickname(member.getNickname())).isFalse();
+        assertThat(memberRepository.existsByNickname(member.getNickname())).isTrue();
     }
 }
