@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PROTECTED;
 import dev.tripdraw.domain.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,22 @@ public class Member extends BaseEntity {
     @Builder
     public Member(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Member member = (Member) o;
+        return Objects.equals(nickname, member.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nickname);
     }
 }
