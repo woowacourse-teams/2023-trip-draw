@@ -7,6 +7,7 @@ import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
+import dev.tripdraw.exception.AuthException;
 import dev.tripdraw.exception.BadRequestException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +52,7 @@ class MemberServiceTest {
         LoginUser loginUser = new LoginUser("순후추");
 
         //expect
-        assertThatThrownBy(() -> memberService.validateLoginUser(loginUser)).isInstanceOf(BadRequestException.class);
+        assertThatThrownBy(() -> memberService.validateLoginUser(loginUser)).isInstanceOf(AuthException.class);
     }
 
     @Test
