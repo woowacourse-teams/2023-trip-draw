@@ -1,11 +1,11 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.exception.ExceptionCode.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.exception.ExceptionCode;
 import dev.tripdraw.exception.ForbiddenException;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -41,7 +41,7 @@ public class Trip extends BaseEntity {
 
     public void validateAuthorization(Member member) {
         if (!this.member.equals(member)) {
-            throw new ForbiddenException(ExceptionCode.NOT_AUTHORIZED);
+            throw new ForbiddenException(NOT_AUTHORIZED);
         }
     }
 }

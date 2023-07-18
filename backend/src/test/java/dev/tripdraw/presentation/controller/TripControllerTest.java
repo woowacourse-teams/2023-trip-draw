@@ -41,7 +41,7 @@ class TripControllerTest extends ControllerTest {
     }
 
     @Test
-    void 여행에_위치_정보를_저장한다() {
+    void 여행에_위치_정보를_추가한다() {
         // given
         String encodedMember = "7Ya17ZuE7LaU";
         PointCreateRequest request = new PointCreateRequest(

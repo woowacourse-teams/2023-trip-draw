@@ -26,8 +26,8 @@ public class TripService {
         Trip trip = tripRepository.findById(pointCreateRequest.tripId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND));
         Member member = memberService.validateLoginUser(loginUser);
-        Point point = pointCreateRequest.toPoint();
 
+        Point point = pointCreateRequest.toPoint();
         trip.validateAuthorization(member);
         trip.add(point);
 

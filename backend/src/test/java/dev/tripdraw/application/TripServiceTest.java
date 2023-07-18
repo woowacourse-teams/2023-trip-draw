@@ -40,16 +40,20 @@ class TripServiceTest {
 
     @BeforeEach
     void setUp() {
-        Member member = new Member("통후추");
-        memberRepository.save(member);
-        this.trip = tripRepository.save(new Trip("통후추의 여행", member));
+        Member member = memberRepository.save(new Member("통후추"));
+        trip = tripRepository.save(new Trip("통후추의 여행", member));
         loginUser = new LoginUser("통후추");
     }
 
     @Test
     void 여행에_위치_정보를_추가한다() {
         // given
-        PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.getId(), 1.1, 2.2, LocalDateTime.now());
+        PointCreateRequest pointCreateRequest = new PointCreateRequest(
+                trip.getId(),
+                1.1,
+                2.2,
+                LocalDateTime.now()
+        );
 
         // when
         PointCreateResponse pointCreateResponse = tripService.addPoint(loginUser, pointCreateRequest);
@@ -62,7 +66,12 @@ class TripServiceTest {
     void 여행에_위치_정보를_추가할_때_해당_여행이_존재하지_않으면_예외를_발생시킨다() {
         // given
         Long nonExistentId = Long.MIN_VALUE;
-        PointCreateRequest pointCreateRequest = new PointCreateRequest(nonExistentId, 1.1, 2.2, LocalDateTime.now());
+        PointCreateRequest pointCreateRequest = new PointCreateRequest(
+                nonExistentId,
+                1.1,
+                2.2,
+                LocalDateTime.now()
+        );
 
         // expect
         assertThatThrownBy(() -> tripService.addPoint(loginUser, pointCreateRequest))

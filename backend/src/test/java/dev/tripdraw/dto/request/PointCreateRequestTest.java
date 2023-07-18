@@ -29,6 +29,7 @@ class PointCreateRequestTest {
         assertThat(point).isEqualTo(new Point(
                 1.1,
                 2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)));
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        ));
     }
 }
