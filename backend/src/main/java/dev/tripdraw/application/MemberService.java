@@ -4,6 +4,7 @@ import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
+import dev.tripdraw.exception.AuthException;
 import dev.tripdraw.exception.BadRequestException;
 import dev.tripdraw.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class MemberService {
         Member member = findByNickname(loginUser.nickname());
 
         if (member == null) {
-            throw new BadRequestException(ExceptionCode.HAS_NO_MEMBER);
+            throw new AuthException(ExceptionCode.HAS_NO_MEMBER);
         }
 
         return member;
