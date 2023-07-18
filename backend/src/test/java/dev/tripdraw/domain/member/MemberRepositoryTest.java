@@ -29,11 +29,13 @@ class MemberRepositoryTest {
         assertThat(foundMember).isEqualTo(member);
     }
 
+    @Test
     void 회원이_존재하지_않는경우_false를_반환한다() {
         // expect
         assertThat(memberRepository.existsByNickname("통후추")).isFalse();
     }
 
+    @Test
     void 회원이_존재하는_경우_true를_반환한다() {
         // given
         Member member = new Member("통후추");
