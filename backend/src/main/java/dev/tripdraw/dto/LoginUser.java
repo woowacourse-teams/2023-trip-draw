@@ -1,4 +1,4 @@
-package dev.tripdraw.presentation.member;
+package dev.tripdraw.dto;
 
 public record LoginUser(String nickname) {
 }
