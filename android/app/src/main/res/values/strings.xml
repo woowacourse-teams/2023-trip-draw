@@ -9,4 +9,11 @@
 
     <!-- HomeFragment -->
     <string name="tv_record_start">기록 시작</string>
+
+    <!-- NicknameSetupActivity -->
+    <string name="nickname_setup_main_title">닉네임을 알려주세요</string>
+    <string name="nickname_setup_sub_title">설정된 닉네임은 수정이 불가합니다.</string>
+    <string name="nickname_setup_nickname_hint">공백을 포함할 수 없습니다.</string>
+    <string name="nickname_setup_duplication_check">중복 확인</string>
+    <string name="nickname_setup_complete">시작하기</string>
 </resources>
