@@ -13,12 +13,13 @@
     <color name="td_main_blue">#1746A2</color>
     <color name="td_sub_blue">#4978D4</color>
     <color name="td_light_blue">#71A0FC</color>
-    <color name="td_gray">#F6F1F1</color>
-    <color name="td_dark_gray">#BCBCBC</color>
-    <color name="td_black">#000000</color>
     <color name="td_red">#DF2E38</color>
-    <color name="td_white">#FFFFFF</color>
     <color name="td_main_orange">#FFA41B</color>
     <color name="td_sub_orange">#FFC239</color>
     <color name="td_light_orange">#FFE057</color>
+    <color name="td_black">#000000</color>
+    <color name="td_dark_gray">#BCBCBC</color>
+    <color name="td_gray">#D0D0DA</color>
+    <color name="td_light_gray">#F6F1F1</color>
+    <color name="td_white">#FFFFFF</color>
 </resources>
