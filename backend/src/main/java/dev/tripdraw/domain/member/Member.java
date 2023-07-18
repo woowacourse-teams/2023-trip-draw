@@ -28,15 +28,21 @@ public class Member extends BaseEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Member member)) {
             return false;
         }
-        Member member = (Member) o;
-        return Objects.equals(nickname, member.nickname);
+        return Objects.equals(getId(), member.getId()) && Objects.equals(nickname, member.getNickname());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nickname);
+        return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "nickname='" + nickname + '\'' +
+                '}';
     }
 }
