@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public Member validateLoginUser(LoginUser loginUser) {
         Optional<Member> member = memberRepository.findByNickname(loginUser.nickname());
 
@@ -29,7 +30,6 @@ public class MemberService {
         return member.get();
     }
 
-    @Transactional
     public Long register(MemberCreateRequest memberCreateRequest) {
         String nickname = memberCreateRequest.nickname();
         Optional<Member> byNickname = memberRepository.findByNickname(nickname);
