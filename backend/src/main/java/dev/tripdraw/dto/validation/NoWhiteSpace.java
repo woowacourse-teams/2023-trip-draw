@@ -1,4 +1,4 @@
-package dev.tripdraw.dto.request;
+package dev.tripdraw.dto.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

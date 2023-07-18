@@ -43,7 +43,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 닉네임_정보가_없으면_에러를_발생시킨다() {
+    void 닉네임_정보가_없으면_예외를_발생시킨다() {
         // given
         LoginUser loginUser = new LoginUser("순후추");
 
@@ -66,7 +66,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 이미_존재하는_닉네임으로_회원_가입시_에러를_발생시킨다() {
+    void 이미_존재하는_닉네임으로_회원_가입시_예외를_발생시킨다() {
         // given
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest("통후추");
 
