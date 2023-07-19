@@ -14,34 +14,41 @@ private const val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
 
 fun checkForeGroundPermission(
     context: Context,
-    activityResultLauncher: ActivityResultLauncher<Array<String>>,
-    moveToCurrentPoint: () -> Unit
+    activityResultLauncher: ActivityResultLauncher<Array<String>>
 ) {
     val coarseLocationState =
         ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PERMISSION_GRANTED
     val fineLocationState =
         ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PERMISSION_GRANTED
-    processLocationPermission(coarseLocationState, fineLocationState, activityResultLauncher, moveToCurrentPoint)
+    processLocationPermission(
+        coarseLocationState,
+        fineLocationState,
+        activityResultLauncher
+    )
 }
 
 private fun processLocationPermission(
     coarseLocationState: Boolean,
     fineLocationState: Boolean,
-    activityResultLauncher: ActivityResultLauncher<Array<String>>,
-    moveToCurrentPoint: () -> Unit
+    activityResultLauncher: ActivityResultLauncher<Array<String>>
 ) {
     when (LocationPermissionState.get(coarseLocationState, fineLocationState)) {
         NO_PERMISSION -> {
             activityResultLauncher.launch(arrayOf(FINE_LOCATION, COARSE_LOCATION))
         }
         HAS_COARSE -> {
-            moveToCurrentPoint()
             activityResultLauncher.launch(arrayOf(FINE_LOCATION))
         }
-        ALL_PERMISSION -> {
-            moveToCurrentPoint()
-        }
+        ALL_PERMISSION -> {}
     }
+}
+
+fun getCurrentLocationPermissionState(context: Context): LocationPermissionState {
+    val coarseLocationState =
+        ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PERMISSION_GRANTED
+    val fineLocationState =
+        ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PERMISSION_GRANTED
+    return LocationPermissionState.get(coarseLocationState, fineLocationState)
 }
 
 enum class LocationPermissionState {
