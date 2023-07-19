@@ -1,12 +1,12 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.exception.ExceptionCode.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.exception.ForbiddenException;
+import dev.tripdraw.exception.trip.TripException;
+import dev.tripdraw.exception.trip.TripExceptionType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -20,7 +20,10 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Trip extends BaseEntity {
 
-    private String name;
+    private static final String TRIP_NAME_PREFIX = "의 여행";
+
+    @Embedded
+    private TripName name;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -30,9 +33,13 @@ public class Trip extends BaseEntity {
     private Route route = new Route();
 
     @Builder
-    public Trip(String name, Member member) {
+    public Trip(TripName name, Member member) {
         this.name = name;
         this.member = member;
+    }
+
+    public static Trip from(Member member) {
+        return new Trip(TripName.from(member), member);
     }
 
     public void add(Point point) {
@@ -41,7 +48,7 @@ public class Trip extends BaseEntity {
 
     public void validateAuthorization(Member member) {
         if (!this.member.equals(member)) {
-            throw new ForbiddenException(NOT_AUTHORIZED);
+            throw new TripException(TripExceptionType.NOT_AUTHORIZED);
         }
     }
 }

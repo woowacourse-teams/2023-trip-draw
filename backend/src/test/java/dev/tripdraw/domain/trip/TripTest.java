@@ -1,11 +1,12 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.exception.ForbiddenException;
+import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -19,7 +20,7 @@ class TripTest {
     void 여행_경로에_좌표를_추가한다() {
         // given
         Member member = new Member("tonghuchu");
-        Trip trip = new Trip("trip", member);
+        Trip trip = Trip.from(member);
         Point point = new Point(1.1, 2.2, LocalDateTime.now());
 
         // when
@@ -34,7 +35,7 @@ class TripTest {
     void 인가된_사용자는_예외가_발생하지_않는다() {
         // given
         Member member = new Member("통후추");
-        Trip trip = new Trip("trip", member);
+        Trip trip = Trip.from(member);
 
         // expect
         assertThatNoException().isThrownBy(() -> trip.validateAuthorization(new Member("통후추")));
@@ -44,10 +45,11 @@ class TripTest {
     void 인가되지_않은_사용자는_예외가_발생한다() {
         // given
         Member member = new Member("통후추");
-        Trip trip = new Trip("trip", member);
+        Trip trip = Trip.from(member);
 
         // expect
         assertThatThrownBy(() -> trip.validateAuthorization(new Member("other")))
-                .isInstanceOf(ForbiddenException.class);
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED.getMessage());
     }
 }

@@ -1,11 +1,11 @@
 package dev.tripdraw.presentation.member;
 
-import static dev.tripdraw.exception.ExceptionCode.NO_AUTH_HEADER;
+import static dev.tripdraw.exception.auth.AuthExceptionType.NO_AUTH_HEADER;
 import static jakarta.servlet.http.HttpServletRequest.BASIC_AUTH;
 import static org.springframework.util.StringUtils.hasText;
 
 import dev.tripdraw.dto.LoginUser;
-import dev.tripdraw.exception.BadRequestException;
+import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class AuthExtractor {
     public LoginUser extract(HttpServletRequest request) {
         String authorization = request.getHeader(BASIC_AUTH);
         if (!hasText(authorization)) {
-            throw new BadRequestException(NO_AUTH_HEADER);
+            throw new AuthException(NO_AUTH_HEADER);
         }
 
         String nickname = basicAuthorizationDecoder.decode(authorization);
