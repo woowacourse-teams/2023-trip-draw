@@ -7,6 +7,8 @@ import com.teamtripdraw.android.domain.user.NicknameValidState
 
 class NicknameSetupViewModel : ViewModel() {
 
+    val MAX_INPUT_NAME_LENGTH = NicknameValidState.MAX_NAME_LENGTH + 1
+
     val nickname: MutableLiveData<String> = MutableLiveData("")
 
     private val _nicknameState: MutableLiveData<NicknameValidState> = MutableLiveData(NicknameValidState.EMPTY)
