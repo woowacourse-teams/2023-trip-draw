@@ -76,7 +76,7 @@ class TripControllerTest extends ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("BASIC", "basic " + 통후추_BASE64)
                 .body(request)
-                .when().post("/trips/points")
+                .when().post("/points")
                 .then().log().all()
                 .extract();
 
