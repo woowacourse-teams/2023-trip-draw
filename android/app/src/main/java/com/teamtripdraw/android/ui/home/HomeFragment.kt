@@ -13,7 +13,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
-import com.teamtripdraw.android.support.framework.presentation.extemsions.checkForeGroundPermission
+import com.teamtripdraw.android.support.framework.presentation.extensions.checkForeGroundPermission
 import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION_PERMISSION_REQUEST_CODE
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserLocationOption
