@@ -17,6 +17,6 @@
     <string name="btn_duplication_check">중복 확인</string>
     <string name="btn_setup_complete">시작하기</string>
     <string name="warning_contain_blank">닉네임은 공백을 포함할 수 없습니다</string>
-    <string name="warning_over_length">닉네임은 10자를 초과할 수 없습니다</string>
+    <string name="warning_exceed_limit">닉네임은 10자를 초과할 수 없습니다</string>
     <string name="tv_nickname_length">%d/10</string>
 </resources>

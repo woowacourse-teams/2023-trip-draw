@@ -37,7 +37,7 @@
 
         <EditText
             android:id="@+id/et_nickname"
-            nicknameEtStatus="@{nicknameSetupViewModel.nicknameState}"
+            nicknameEtState="@{nicknameSetupViewModel.nicknameState}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_default"
@@ -55,12 +55,13 @@
             app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
 
         <TextView
-            android:id="@+id/tv_nickname_state_message"
-            nicknameTvStatus="@{nicknameSetupViewModel.nicknameState}"
+            android:id="@+id/tv_nickname_valid_state_warning_message"
+            nicknameValidStateTv="@{nicknameSetupViewModel.nicknameState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_red"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/et_nickname"
             app:layout_constraintTop_toBottomOf="@id/et_nickname"
@@ -80,7 +81,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_setup_complete"
-            nicknameCompleteBtnStatus="@{nicknameSetupViewModel.nicknameState}"
+            nicknameCompleteBtnState="@{nicknameSetupViewModel.nicknameState}"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_margin="@dimen/margin_default"

@@ -21,7 +21,7 @@ class NicknameSetupActivity : AppCompatActivity() {
         binding.nicknameSetupViewModel = viewModel
 
         viewModel.nickname.observe(this) {
-            viewModel.updateNickNameState(viewModel.nickname.value!!)
+            viewModel.updateNickNameState(it)
         }
     }
 }
