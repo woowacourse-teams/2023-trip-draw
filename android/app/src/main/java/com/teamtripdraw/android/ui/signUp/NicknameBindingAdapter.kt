@@ -9,7 +9,7 @@ import androidx.databinding.BindingAdapter
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.domain.user.NicknameValidState
 
-@BindingAdapter("nicknameCompleteBtnState")
+@BindingAdapter("nicknameCompleteButtonState")
 fun AppCompatButton.setDrawable(state: NicknameValidState) {
     val btnEnabled: Boolean = when (state) {
         NicknameValidState.AVAILABLE -> true
@@ -23,7 +23,7 @@ fun AppCompatButton.setDrawable(state: NicknameValidState) {
     this.background = ResourcesCompat.getDrawable(resources, btnBackground, null)
 }
 
-@BindingAdapter("nicknameEtState")
+@BindingAdapter("nicknameEditTextState")
 fun EditText.setDrawable(state: NicknameValidState) {
     val etLineColor = when (state) {
         NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> R.drawable.shape_td_dark_gray_line_12_rect
@@ -33,7 +33,7 @@ fun EditText.setDrawable(state: NicknameValidState) {
     this.background = ResourcesCompat.getDrawable(resources, etLineColor, null)
 }
 
-@BindingAdapter("nicknameValidStateTv")
+@BindingAdapter("nicknameValidStateTextView")
 fun TextView.setDrawable(state: NicknameValidState) {
     when (state) {
         NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> {
