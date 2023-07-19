@@ -9,7 +9,7 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
-import dev.tripdraw.dto.response.TripCreationResponse;
+import dev.tripdraw.dto.response.TripCreateResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -53,11 +53,11 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        TripCreationResponse tripCreationResponse = response.as(TripCreationResponse.class);
+        TripCreateResponse tripCreateResponse = response.as(TripCreateResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(tripCreationResponse.tripId()).isNotNull();
+            softly.assertThat(tripCreateResponse.tripId()).isNotNull();
         });
     }
 

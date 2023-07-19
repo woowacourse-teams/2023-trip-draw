@@ -10,7 +10,7 @@ import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
-import dev.tripdraw.dto.response.TripCreationResponse;
+import dev.tripdraw.dto.response.TripCreateResponse;
 import dev.tripdraw.exception.BadRequestException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,10 +42,10 @@ class TripServiceTest {
     @Test
     void 여행을_생성한다() {
         // given
-        TripCreationResponse tripCreationResponse = tripService.create(loginUser);
+        TripCreateResponse tripCreateResponse = tripService.create(loginUser);
 
         // expect
-        assertThat(tripCreationResponse.tripId()).isNotNull();
+        assertThat(tripCreateResponse.tripId()).isNotNull();
     }
 
     @Test
