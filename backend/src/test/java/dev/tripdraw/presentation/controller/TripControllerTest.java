@@ -40,7 +40,7 @@ class TripControllerTest extends ControllerTest {
         super.setUp();
 
         Member member = memberRepository.save(new Member("통후추"));
-        trip = tripRepository.save(new Trip("통후추의 여행", member));
+        trip = tripRepository.save(Trip.from(member));
     }
 
     @Test

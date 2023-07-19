@@ -33,14 +33,13 @@ public class Trip extends BaseEntity {
     private Route route = new Route();
 
     @Builder
-    public Trip(String name, Member member) {
-        this.name = new TripName(name);
+    public Trip(TripName name, Member member) {
+        this.name = name;
         this.member = member;
     }
 
-    public Trip(Member member) {
-        this.name = TripName.from(member);
-        this.member = member;
+    public static Trip from(Member member) {
+        return new Trip(TripName.from(member), member);
     }
 
     public void add(Point point) {

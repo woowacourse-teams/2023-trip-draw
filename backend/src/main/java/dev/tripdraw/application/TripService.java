@@ -25,7 +25,7 @@ public class TripService {
 
     public TripCreateResponse create(LoginUser loginUser) {
         Member member = memberService.validateLoginUser(loginUser);
-        Trip trip = new Trip(member);
+        Trip trip = Trip.from(member);
         Trip savedTrip = tripRepository.save(trip);
         return TripCreateResponse.from(savedTrip);
     }
