@@ -9,6 +9,7 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
+import dev.tripdraw.dto.response.TripCreationResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -23,6 +24,8 @@ import org.springframework.http.MediaType;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class TripControllerTest extends ControllerTest {
+
+    private static final String 통후추_BASE64 = "7Ya17ZuE7LaU";
 
     @Autowired
     private TripRepository tripRepository;
@@ -41,9 +44,26 @@ class TripControllerTest extends ControllerTest {
     }
 
     @Test
+    void 여행을_생성한다() {
+        // given & when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .header("BASIC", "basic " + 통후추_BASE64)
+                .when().post("/trips")
+                .then().log().all()
+                .extract();
+
+        // then
+        TripCreationResponse tripCreationResponse = response.as(TripCreationResponse.class);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
+            softly.assertThat(tripCreationResponse.tripId()).isNotNull();
+        });
+    }
+
+    @Test
     void 여행에_위치_정보를_추가한다() {
         // given
-        String encodedMember = "7Ya17ZuE7LaU";
         PointCreateRequest request = new PointCreateRequest(
                 trip.getId(),
                 1.1,
@@ -54,9 +74,9 @@ class TripControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("BASIC", "basic " + encodedMember)
+                .header("BASIC", "basic " + 통후추_BASE64)
                 .body(request)
-                .when().post("/points")
+                .when().post("/trips/points")
                 .then().log().all()
                 .extract();
 
