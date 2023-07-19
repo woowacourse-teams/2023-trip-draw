@@ -7,14 +7,16 @@ import static org.springframework.util.StringUtils.hasText;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
 public class AuthExtractor {
 
     private final BasicAuthorizationDecoder basicAuthorizationDecoder;
+
+    public AuthExtractor(BasicAuthorizationDecoder basicAuthorizationDecoder) {
+        this.basicAuthorizationDecoder = basicAuthorizationDecoder;
+    }
 
     public LoginUser extract(HttpServletRequest request) {
         String authorization = request.getHeader(BASIC_AUTH);

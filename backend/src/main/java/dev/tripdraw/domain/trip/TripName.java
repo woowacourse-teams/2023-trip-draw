@@ -1,14 +1,8 @@
 package dev.tripdraw.domain.trip;
 
-import static lombok.AccessLevel.PROTECTED;
-
 import dev.tripdraw.domain.member.Member;
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class TripName {
 
@@ -16,11 +10,18 @@ public class TripName {
 
     private String name;
 
+    protected TripName() {
+    }
+
     public TripName(String name) {
         this.name = name;
     }
 
     public static TripName from(Member member) {
-        return new TripName(member.getNickname() + TRIP_NAME_PREFIX);
+        return new TripName(member.nickname() + TRIP_NAME_PREFIX);
+    }
+
+    public String name() {
+        return name;
     }
 }

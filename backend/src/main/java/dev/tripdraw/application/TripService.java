@@ -12,16 +12,19 @@ import dev.tripdraw.dto.response.PointCreateResponse;
 import dev.tripdraw.dto.response.TripCreateResponse;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Transactional
 @Service
 public class TripService {
 
     private final TripRepository tripRepository;
     private final MemberService memberService;
+
+    public TripService(TripRepository tripRepository, MemberService memberService) {
+        this.tripRepository = tripRepository;
+        this.memberService = memberService;
+    }
 
     public TripCreateResponse create(LoginUser loginUser) {
         Member member = memberService.validateLoginUser(loginUser);

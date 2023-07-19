@@ -27,8 +27,8 @@ class TripTest {
         trip.add(point);
 
         // then
-        Route route = trip.getRoute();
-        assertThat(route.getPoints()).hasSize(1);
+        Route route = trip.route();
+        assertThat(route.points()).hasSize(1);
     }
 
     @Test
@@ -38,7 +38,7 @@ class TripTest {
         Trip trip = Trip.from(member);
 
         // expect
-        assertThatNoException().isThrownBy(() -> trip.validateAuthorization(new Member("통후추")));
+        assertThatNoException().isThrownBy(() -> trip.validateAuthorization(member));
     }
 
     @Test
