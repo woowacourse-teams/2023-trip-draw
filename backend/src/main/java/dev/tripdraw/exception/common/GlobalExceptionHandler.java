@@ -1,5 +1,8 @@
 package dev.tripdraw.exception.common;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +27,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception e) {
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus httpStatus = INTERNAL_SERVER_ERROR;
         log.error(e.getMessage(), e);
         return ResponseEntity.status(httpStatus)
                 .body(ExceptionResponse.of(httpStatus.name(), INTERNAL_SERVER_ERROR_MESSAGE));
@@ -38,9 +41,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request
     ) {
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(BAD_REQUEST)
                 .body(new ExceptionResponse(
-                        HttpStatus.BAD_REQUEST.name(),
+                        BAD_REQUEST.name(),
                         METHOD_ARGUMENT_NOT_VALID_MESSAGE,
                         generateValidationExceptions(e)
                 ));
