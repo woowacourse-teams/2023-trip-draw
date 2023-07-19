@@ -27,7 +27,7 @@ public class TripService {
         Member member = memberService.validateLoginUser(loginUser);
         Trip trip = new Trip(member);
         Trip savedTrip = tripRepository.save(trip);
-        return new TripCreateResponse(savedTrip.getId());
+        return TripCreateResponse.from(savedTrip);
     }
 
     public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
