@@ -1,13 +1,11 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
 import dev.tripdraw.dto.response.MemberCreateResponse;
 import dev.tripdraw.exception.member.MemberException;
@@ -28,29 +26,6 @@ class MemberServiceTest {
     void setUp() {
         Member member = new Member("통후추");
         memberRepository.save(member);
-    }
-
-    @Test
-    void 닉네임으로_회원의_정보가_있는지_검증한다() {
-        // given
-        LoginUser loginUser = new LoginUser("통후추");
-
-        // when
-        Member member = memberService.validateLoginUser(loginUser);
-
-        // then
-        assertThat(member.nickname()).isEqualTo("통후추");
-    }
-
-    @Test
-    void 닉네임_정보가_없으면_예외를_발생시킨다() {
-        // given
-        LoginUser loginUser = new LoginUser("순후추");
-
-        // expect
-        assertThatThrownBy(() -> memberService.validateLoginUser(loginUser))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
 
     @Test
