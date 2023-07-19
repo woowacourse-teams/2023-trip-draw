@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Trip extends BaseEntity {
 
+    private static final String TRIP_NAME_PREFIX = "의 여행";
+
     private String name;
 
     @ManyToOne(fetch = LAZY)
@@ -33,6 +35,10 @@ public class Trip extends BaseEntity {
     public Trip(String name, Member member) {
         this.name = name;
         this.member = member;
+    }
+
+    public static Trip from(Member member) {
+        return new Trip(member.getNickname() + TRIP_NAME_PREFIX, member);
     }
 
     public void add(Point point) {

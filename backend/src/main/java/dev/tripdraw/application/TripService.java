@@ -23,9 +23,11 @@ public class TripService {
     private final TripRepository tripRepository;
     private final MemberService memberService;
 
-    public TripCreationResponse create() {
-        //TODO 로직 작성
-        return new TripCreationResponse(1L);
+    public TripCreationResponse create(LoginUser loginUser) {
+        Member member = memberService.validateLoginUser(loginUser);
+        Trip trip = Trip.from(member);
+        Trip savedTrip = tripRepository.save(trip);
+        return new TripCreationResponse(savedTrip.getId());
     }
 
     public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
