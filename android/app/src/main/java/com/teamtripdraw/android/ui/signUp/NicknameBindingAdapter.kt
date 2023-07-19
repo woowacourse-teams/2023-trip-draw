@@ -7,31 +7,45 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.teamtripdraw.android.R
+import com.teamtripdraw.android.domain.user.NicknameValidState
 
-@BindingAdapter("nicknameCompleteBtnStatus")
-fun AppCompatButton.setDrawable(state: NicknameState) {
-    this.background = ResourcesCompat.getDrawable(resources, state.completeBtnDrawable, null)
-    this.isEnabled = state.completeBtnEnabled
-}
-
-@BindingAdapter("nicknameEtStatus")
-fun EditText.setDrawable(state: NicknameState) {
-    if (state.warningState) {
-        this.background =
-            ResourcesCompat.getDrawable(resources, R.drawable.shape_td_red_line_12_rect, null)
-    } else {
-        this.background =
-            ResourcesCompat.getDrawable(resources, R.drawable.shape_td_dark_gray_line_12_rect, null)
+@BindingAdapter("nicknameCompleteBtnState")
+fun AppCompatButton.setDrawable(state: NicknameValidState) {
+    val btnEnabled: Boolean = when (state) {
+        NicknameValidState.AVAILABLE -> true
+        NicknameValidState.EMPTY, NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK -> false
     }
+    val btnBackground =
+        if (btnEnabled) R.drawable.shape_td_sub_blue_fill_12_rect
+        else R.drawable.shape_td_gray_fill_12_rect
+
+    this.isEnabled = btnEnabled
+    this.background = ResourcesCompat.getDrawable(resources, btnBackground, null)
 }
 
-@BindingAdapter("nicknameTvStatus")
-fun TextView.setDrawable(state: NicknameState) {
-    if (state.warningState) {
-        this.setTextColor(ResourcesCompat.getColor(resources, R.color.td_red, null))
-        this.visibility = View.VISIBLE
-        this.text = resources.getString(state.warningMessage!!)
-    } else {
-        this.visibility = View.GONE
+@BindingAdapter("nicknameEtState")
+fun EditText.setDrawable(state: NicknameValidState) {
+    val etLineColor = when (state) {
+        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> R.drawable.shape_td_dark_gray_line_12_rect
+        NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK -> R.drawable.shape_td_red_line_12_rect
+    }
+
+    this.background = ResourcesCompat.getDrawable(resources, etLineColor, null)
+}
+
+@BindingAdapter("nicknameValidStateTv")
+fun TextView.setDrawable(state: NicknameValidState) {
+    when (state) {
+        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> {
+            this.visibility = View.GONE
+        }
+        NicknameValidState.EXCEED_LIMIT -> {
+            this.visibility = View.VISIBLE
+            this.text = resources.getString(R.string.warning_exceed_limit)
+        }
+        NicknameValidState.CONTAIN_BLANK -> {
+            this.visibility = View.VISIBLE
+            this.text = resources.getString(R.string.warning_contain_blank)
+        }
     }
 }
