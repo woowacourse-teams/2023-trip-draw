@@ -30,10 +30,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     ) { permissions ->
         when {
             permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) -> {
-                // 세부 항목을 사용 하면 더 정확한 지도 서비스 를 이용할 수 있다는 다이얼로그
+                // todo: 세부 항목을 사용 하면 더 정확한 지도 서비스 를 이용할 수 있다는 다이얼로그 #15
             }
             else -> {
-                // 권한 받아야 한다는 다이얼로그 띄워주기
+                // todo: 권한 받아야 한다는 다이얼로그 띄워주기 #15
             }
         }
     }
