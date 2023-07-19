@@ -58,6 +58,9 @@ naverMap = "3.16.2"
 # FragmentKtx
 fragmentKtx = "1.5.5"
 
+# gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
+gmsPlayServicesLocation = "20.0.0"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -110,12 +113,16 @@ naverMap = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
 # FragmentKtx
 fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 
+# gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
+gmsPlayServicesLocation = { module = "com.google.android.gms:play-services-location", version.ref = "gmsPlayServicesLocation" }
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk"]
 androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
+naverMap = ["naverMap", "gmsPlayServicesLocation"]
 
 
 [plugins]
