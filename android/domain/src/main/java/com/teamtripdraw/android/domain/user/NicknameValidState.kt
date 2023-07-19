@@ -4,8 +4,8 @@ enum class NicknameValidState {
     EMPTY, AVAILABLE, EXCEED_LIMIT, CONTAIN_BLANK;
 
     companion object {
-        private const val MAX_NAME_LENGTH = 10
-        private const val MIN_NAME_LENGTH = 1
+        const val MAX_NAME_LENGTH = 10
+        const val MIN_NAME_LENGTH = 1
         private const val WRONG_NICKNAME_STATE = "닉네임의 상태가 올바르지 않습니다."
 
         fun getValidState(nickname: String): NicknameValidState {

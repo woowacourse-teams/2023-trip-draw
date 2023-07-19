@@ -45,7 +45,7 @@
             android:autofillHints="username"
             android:hint="@string/et_nickname"
             android:inputType="text"
-            android:maxLength="11"
+            android:maxLength="@{nicknameSetupViewModel.nicknameState.MAX_NAME_LENGTH + 1}"
             android:padding="@dimen/margin_default"
             android:text="@={nicknameSetupViewModel.nickname}"
             android:textAppearance="@style/body_1"
