@@ -1,12 +1,13 @@
 package dev.tripdraw.presentation.member;
 
+import static dev.tripdraw.exception.auth.AuthExceptionType.NO_AUTH_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import dev.tripdraw.dto.LoginUser;
-import dev.tripdraw.exception.BadRequestException;
+import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -39,6 +40,8 @@ class AuthExtractorTest {
         when(request.getHeader(HttpServletRequest.BASIC_AUTH)).thenReturn(null);
 
         // expect
-        assertThatThrownBy(() -> authExtractor.extract(request)).isInstanceOf(BadRequestException.class);
+        assertThatThrownBy(() -> authExtractor.extract(request))
+                .isInstanceOf(AuthException.class)
+                .hasMessage(NO_AUTH_HEADER.getMessage());
     }
 }

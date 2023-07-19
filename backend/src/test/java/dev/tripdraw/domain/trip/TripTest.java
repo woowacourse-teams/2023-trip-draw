@@ -1,11 +1,12 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.exception.ForbiddenException;
+import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -48,6 +49,7 @@ class TripTest {
 
         // expect
         assertThatThrownBy(() -> trip.validateAuthorization(new Member("other")))
-                .isInstanceOf(ForbiddenException.class);
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED.getMessage());
     }
 }

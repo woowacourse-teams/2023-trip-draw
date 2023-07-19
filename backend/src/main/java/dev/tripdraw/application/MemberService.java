@@ -1,15 +1,14 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.ExceptionCode.ALREADY_HAS_NICKNAME;
-import static dev.tripdraw.exception.ExceptionCode.HAS_NO_MEMBER;
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
 import dev.tripdraw.dto.response.MemberCreateResponse;
-import dev.tripdraw.exception.AuthException;
-import dev.tripdraw.exception.BadRequestException;
+import dev.tripdraw.exception.member.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +23,13 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member validateLoginUser(LoginUser loginUser) {
         return memberRepository.findByNickname(loginUser.nickname())
-                .orElseThrow(() -> new AuthException(HAS_NO_MEMBER));
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
     public MemberCreateResponse register(MemberCreateRequest memberCreateRequest) {
         String nickname = memberCreateRequest.nickname();
         if (memberRepository.existsByNickname(nickname)) {
-            throw new BadRequestException(ALREADY_HAS_NICKNAME);
+            throw new MemberException(NICKNAME_CONFLICT);
         }
 
         Member member = memberRepository.save(new Member(nickname));

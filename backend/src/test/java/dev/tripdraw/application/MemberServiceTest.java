@@ -1,5 +1,7 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -8,8 +10,7 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
 import dev.tripdraw.dto.response.MemberCreateResponse;
-import dev.tripdraw.exception.AuthException;
-import dev.tripdraw.exception.BadRequestException;
+import dev.tripdraw.exception.member.MemberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,8 @@ class MemberServiceTest {
 
         // expect
         assertThatThrownBy(() -> memberService.validateLoginUser(loginUser))
-                .isInstanceOf(AuthException.class);
+                .isInstanceOf(MemberException.class)
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -70,6 +72,7 @@ class MemberServiceTest {
 
         // expect
         assertThatThrownBy(() -> memberService.register(memberCreateRequest))
-                .isInstanceOf(BadRequestException.class);
+                .isInstanceOf(MemberException.class)
+                .hasMessage(NICKNAME_CONFLICT.getMessage());
     }
 }
