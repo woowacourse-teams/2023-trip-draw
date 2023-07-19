@@ -2,21 +2,21 @@ package com.teamtripdraw.android.ui.signUp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
 
 class NicknameSetupActivity : AppCompatActivity() {
 
-    private val binding: ActivityNicknameSetupBinding by lazy {
-        ActivityNicknameSetupBinding.inflate(layoutInflater)
-    }
-    private val viewModel: NicknameSetupViewModel by lazy {
-        ViewModelProvider(this)[NicknameSetupViewModel::class.java]
-    }
+    private lateinit var binding: ActivityNicknameSetupBinding
+    private val viewModel: NicknameSetupViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_nickname_setup)
+
         binding.lifecycleOwner = this
         binding.nicknameSetupViewModel = viewModel
 
