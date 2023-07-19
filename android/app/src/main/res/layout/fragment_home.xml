@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_map"
         android:name="com.naver.maps.map.MapFragment"
         android:layout_width="match_parent"
@@ -22,12 +22,7 @@
         android:layout_marginBottom="87dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tb_main"
-        app:navermap_locationButtonEnabled="true"
-        app:navermap_rotateGesturesEnabled="false"
-        app:navermap_scaleBarEnabled="true"
-        app:navermap_tiltGesturesEnabled="false"
-        tools:layout="@layout/map_preview"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout="@layout/map_preview" />
 
     <include
         android:id="@+id/btn_record_start"
