@@ -22,7 +22,8 @@ public class Trip extends BaseEntity {
 
     private static final String TRIP_NAME_PREFIX = "의 여행";
 
-    private String name;
+    @Embedded
+    private TripName name;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -33,12 +34,13 @@ public class Trip extends BaseEntity {
 
     @Builder
     public Trip(String name, Member member) {
-        this.name = name;
+        this.name = new TripName(name);
         this.member = member;
     }
 
-    public static Trip from(Member member) {
-        return new Trip(member.getNickname() + TRIP_NAME_PREFIX, member);
+    public Trip(Member member) {
+        this.name = TripName.from(member);
+        this.member = member;
     }
 
     public void add(Point point) {
