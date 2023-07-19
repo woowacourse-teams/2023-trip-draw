@@ -9,16 +9,18 @@ import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
 import dev.tripdraw.dto.response.MemberCreateResponse;
 import dev.tripdraw.exception.member.MemberException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 @Transactional
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @Transactional(readOnly = true)
     public Member validateLoginUser(LoginUser loginUser) {

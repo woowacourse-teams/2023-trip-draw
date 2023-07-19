@@ -14,10 +14,6 @@ public record PointCreateRequest(
 ) {
 
     public Point toPoint() {
-        return Point.builder()
-                .latitude(latitude)
-                .longitude(longitude)
-                .recordedAt(recordedAt)
-                .build();
+        return new Point(latitude, longitude, recordedAt);
     }
 }

@@ -2,8 +2,6 @@ package dev.tripdraw.domain.trip;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dev.tripdraw.domain.trip.Point;
-import dev.tripdraw.domain.trip.Route;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -23,7 +21,7 @@ class RouteTest {
         route.add(point);
 
         // then
-        assertThat(route.getPoints()).hasSize(1);
+        assertThat(route.points()).hasSize(1);
     }
 }
 

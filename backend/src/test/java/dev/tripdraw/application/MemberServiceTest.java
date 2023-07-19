@@ -39,7 +39,7 @@ class MemberServiceTest {
         Member member = memberService.validateLoginUser(loginUser);
 
         // then
-        assertThat(member.getNickname()).isEqualTo("통후추");
+        assertThat(member.nickname()).isEqualTo("통후추");
     }
 
     @Test

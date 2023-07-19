@@ -1,7 +1,6 @@
 package dev.tripdraw.domain.trip;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
@@ -11,12 +10,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 public class Trip extends BaseEntity {
 
@@ -32,7 +26,9 @@ public class Trip extends BaseEntity {
     @Embedded
     private Route route = new Route();
 
-    @Builder
+    protected Trip() {
+    }
+
     public Trip(TripName name, Member member) {
         this.name = name;
         this.member = member;
@@ -50,5 +46,17 @@ public class Trip extends BaseEntity {
         if (!this.member.equals(member)) {
             throw new TripException(TripExceptionType.NOT_AUTHORIZED);
         }
+    }
+
+    public TripName name() {
+        return name;
+    }
+
+    public Member member() {
+        return member;
+    }
+
+    public Route route() {
+        return route;
     }
 }

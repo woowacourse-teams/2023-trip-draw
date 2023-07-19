@@ -8,9 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
 
-@Getter
 @Embeddable
 public class Route {
 
@@ -23,5 +21,9 @@ public class Route {
 
     public void add(Point point) {
         points.add(point);
+    }
+
+    public List<Point> points() {
+        return points;
     }
 }

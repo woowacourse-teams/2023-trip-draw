@@ -65,7 +65,7 @@ class TripControllerTest extends ControllerTest {
     void 여행에_위치_정보를_추가한다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
-                trip.getId(),
+                trip.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
