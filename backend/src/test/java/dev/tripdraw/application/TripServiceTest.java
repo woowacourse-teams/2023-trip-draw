@@ -1,5 +1,6 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -11,7 +12,7 @@ import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
 import dev.tripdraw.dto.response.TripCreateResponse;
-import dev.tripdraw.exception.BadRequestException;
+import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,6 +79,7 @@ class TripServiceTest {
 
         // expect
         assertThatThrownBy(() -> tripService.addPoint(loginUser, pointCreateRequest))
-                .isInstanceOf(BadRequestException.class);
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
 }
