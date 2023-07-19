@@ -20,7 +20,10 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Trip extends BaseEntity {
 
-    private String name;
+    private static final String TRIP_NAME_PREFIX = "의 여행";
+
+    @Embedded
+    private TripName name;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -30,9 +33,13 @@ public class Trip extends BaseEntity {
     private Route route = new Route();
 
     @Builder
-    public Trip(String name, Member member) {
+    public Trip(TripName name, Member member) {
         this.name = name;
         this.member = member;
+    }
+
+    public static Trip from(Member member) {
+        return new Trip(TripName.from(member), member);
     }
 
     public void add(Point point) {

@@ -4,6 +4,7 @@ import dev.tripdraw.application.TripService;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
+import dev.tripdraw.dto.response.TripCreateResponse;
 import dev.tripdraw.presentation.member.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class TripController {
 
     private final TripService tripService;
+
+    @PostMapping("/trips")
+    public ResponseEntity<TripCreateResponse> create(@Auth LoginUser loginUser) {
+        TripCreateResponse response = tripService.create(loginUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
     @PostMapping("/points")
     public ResponseEntity<PointCreateResponse> addPoint(

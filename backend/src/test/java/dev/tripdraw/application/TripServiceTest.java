@@ -10,20 +10,14 @@ import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
+import dev.tripdraw.dto.response.TripCreateResponse;
 import dev.tripdraw.exception.BadRequestException;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Transactional
-@SpringBootTest
+@ServiceTest
 class TripServiceTest {
 
     @Autowired
@@ -41,8 +35,17 @@ class TripServiceTest {
     @BeforeEach
     void setUp() {
         Member member = memberRepository.save(new Member("통후추"));
-        trip = tripRepository.save(new Trip("통후추의 여행", member));
+        trip = tripRepository.save(Trip.from(member));
         loginUser = new LoginUser("통후추");
+    }
+
+    @Test
+    void 여행을_생성한다() {
+        // given
+        TripCreateResponse tripCreateResponse = tripService.create(loginUser);
+
+        // expect
+        assertThat(tripCreateResponse.tripId()).isNotNull();
     }
 
     @Test
