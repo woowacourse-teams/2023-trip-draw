@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Member extends BaseEntity {
 
+    private static final int NICKNAME_MAX_LENGTH = 10;
+
     @Column(nullable = false, unique = true)
     private String nickname;
 
