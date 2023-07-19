@@ -1,0 +1,58 @@
+name: BACKEND-DEV-CI
+
+on:
+  pull_request:
+    branches:
+      - develop-backend
+    paths:
+      - 'backend/**'
+
+permissions:
+  pull-requests: write
+  checks: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./backend
+
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v3
+
+      - name: JDK 17 설정
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: 권한 부여
+        run: chmod +x gradlew
+        working-directory: ${{ env.working-directory }}
+
+      - name: 빌드 수행
+        run: ./gradlew build
+        working-directory: ${{ env.working-directory }}
+
+      - name: 테스트 결과 코멘트 등록
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: '**/build/test-results/test/TEST-*.xml'
+
+      - name: 테스트 실패 시, 실패한 코드 라인 코멘트 등록
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+          token: ${{ github.token }}
+
+      - name: 슬랙 알림 발송
+        uses: 8398a7/action-slack@v3
+        if: always()
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
