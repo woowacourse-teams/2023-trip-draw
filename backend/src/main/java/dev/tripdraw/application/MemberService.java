@@ -1,11 +1,9 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.MemberCreateRequest;
 import dev.tripdraw.dto.response.MemberCreateResponse;
 import dev.tripdraw.exception.member.MemberException;
@@ -23,9 +21,8 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member validateLoginUser(LoginUser loginUser) {
-        return memberRepository.findByNickname(loginUser.nickname())
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    public boolean existsByNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 
     public MemberCreateResponse register(MemberCreateRequest memberCreateRequest) {
