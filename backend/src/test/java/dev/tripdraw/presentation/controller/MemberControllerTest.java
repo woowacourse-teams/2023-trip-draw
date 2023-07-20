@@ -1,9 +1,11 @@
 package dev.tripdraw.presentation.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
 
-import dev.tripdraw.dto.request.MemberCreateRequest;
-import dev.tripdraw.dto.response.MemberCreateResponse;
+import dev.tripdraw.dto.member.MemberCreateRequest;
+import dev.tripdraw.dto.member.MemberResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -11,17 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Sql(value = "/truncate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class MemberControllerTest {
+class MemberControllerTest extends ControllerTest {
 
     @LocalServerPort
     int port;
@@ -34,16 +31,47 @@ class MemberControllerTest {
     @Test
     void 회원가입을_한다() {
         // given
+        MemberCreateRequest request = new MemberCreateRequest("통후추");
+
+        // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new MemberCreateRequest("통후추"))
+                .body(request)
                 .when().post("/members")
                 .then().log().all()
-                .statusCode(HttpStatus.CREATED.value())
+                .statusCode(CREATED.value())
                 .extract();
-        MemberCreateResponse memberCreateResponse = response.as(MemberCreateResponse.class);
+        MemberResponse memberResponse = response.as(MemberResponse.class);
 
         // expect
-        assertThat(memberCreateResponse.nickname()).isEqualTo("통후추");
+        assertThat(memberResponse.nickname()).isEqualTo("통후추");
+    }
+
+    @Test
+    void 회원가입시_닉네임에_공백이_있으면_예외를_발생시킨다() {
+        // given
+        MemberCreateRequest invalidRequest = new MemberCreateRequest("통 후추");
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(invalidRequest)
+                .when().post("/members")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    void 회원가입시_닉네임이_10자가_넘으면_예외를_발생시킨다() {
+        // given
+        MemberCreateRequest invalidRequest = new MemberCreateRequest("통통통통통통통통통후추");
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(invalidRequest)
+                .when().post("/members")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
     }
 }

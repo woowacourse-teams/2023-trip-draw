@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import dev.tripdraw.dto.LoginUser;
+import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayNameGeneration;

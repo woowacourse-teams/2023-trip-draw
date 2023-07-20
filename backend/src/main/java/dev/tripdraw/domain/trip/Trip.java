@@ -1,22 +1,17 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.exception.trip.TripException;
-import dev.tripdraw.exception.trip.TripExceptionType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.util.List;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 public class Trip extends BaseEntity {
 
@@ -32,7 +27,9 @@ public class Trip extends BaseEntity {
     @Embedded
     private Route route = new Route();
 
-    @Builder
+    protected Trip() {
+    }
+
     public Trip(TripName name, Member member) {
         this.name = name;
         this.member = member;
@@ -48,7 +45,27 @@ public class Trip extends BaseEntity {
 
     public void validateAuthorization(Member member) {
         if (!this.member.equals(member)) {
-            throw new TripException(TripExceptionType.NOT_AUTHORIZED);
+            throw new TripException(NOT_AUTHORIZED);
         }
+    }
+
+    public TripName name() {
+        return name;
+    }
+
+    public String nameValue() {
+        return name.name();
+    }
+
+    public Member member() {
+        return member;
+    }
+
+    public Route route() {
+        return route;
+    }
+
+    public List<Point> points() {
+        return route.points();
     }
 }
