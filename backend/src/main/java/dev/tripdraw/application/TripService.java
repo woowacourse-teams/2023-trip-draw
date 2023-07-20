@@ -11,6 +11,8 @@ import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
 import dev.tripdraw.dto.response.TripCreateResponse;
+import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.exception.member.MemberExceptionType;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -28,16 +30,16 @@ public class TripService {
     }
 
     public TripCreateResponse create(LoginUser loginUser) {
-        Member member = memberRepository.findByNickname(loginUser.nickname()).get();
+        Member member = getByNickname(loginUser.nickname());
         Trip trip = Trip.from(member);
         Trip savedTrip = tripRepository.save(trip);
         return TripCreateResponse.from(savedTrip);
     }
 
     public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
+        Member member = getByNickname(loginUser.nickname());
         Trip trip = tripRepository.findById(pointCreateRequest.tripId())
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
-        Member member = memberRepository.findByNickname(loginUser.nickname()).get();
 
         Point point = pointCreateRequest.toPoint();
         trip.validateAuthorization(member);
@@ -45,5 +47,10 @@ public class TripService {
 
         tripRepository.flush();
         return PointCreateResponse.from(point);
+    }
+
+    private Member getByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname)
+                .orElseThrow(() -> new MemberException(MemberExceptionType.MEMBER_NOT_FOUND));
     }
 }
