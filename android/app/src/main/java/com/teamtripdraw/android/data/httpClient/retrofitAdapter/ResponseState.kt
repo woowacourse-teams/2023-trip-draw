@@ -6,9 +6,9 @@ import okhttp3.ResponseBody
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-sealed class ResponseState<out T> {
+sealed class ResponseState<out T : Any> {
     // Http 응답 code 200대(응답 성공)
-    data class Success<T>(val body: T?, val headers: Headers) : ResponseState<T>()
+    data class Success<T : Any>(val body: T, val headers: Headers) : ResponseState<T>()
 
     // isSuccessful의 값이 false인 경우(200~300대 응답이 아닌경우)
     data class Failure(val code: Int, val errorBody: ResponseBody? = null) :
@@ -28,7 +28,7 @@ sealed class ResponseState<out T> {
         networkErrorListener: (error: UnknownHostException) -> Unit = this::defaultNetworkErrorListener,
         timeOutErrorListener: (error: SocketTimeoutException) -> Unit = this::defaultTimeOutErrorListener,
         unknownErrorListener: (error: Throwable) -> Unit = this::defaultUnknownErrorListener,
-        successListener: (body: T?, headers: Headers) -> Unit = this::defaultSuccessListener
+        successListener: (body: T, headers: Headers) -> Unit = this::defaultSuccessListener
     ) {
         when (this) {
             is Success -> {
@@ -66,5 +66,5 @@ sealed class ResponseState<out T> {
         Log.e("ResponseState.UnknownError", "error : $error, message : ${error.message}")
     }
 
-    private fun defaultSuccessListener(body: T?, headers: Headers) {}
+    private fun defaultSuccessListener(body: T, headers: Headers) {}
 }
