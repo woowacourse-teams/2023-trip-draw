@@ -1,7 +1,6 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -47,7 +46,11 @@ class TripServiceTest {
         TripCreateResponse tripCreateResponse = tripService.create(loginUser);
 
         // expect
-        assertThat(tripCreateResponse.tripId()).isNotNull();
+        assertSoftly(softly -> {
+            softly.assertThat(tripCreateResponse.tripId()).isNotNull();
+            softly.assertThat(tripCreateResponse.name()).isNotNull();
+            softly.assertThat(tripCreateResponse.routes()).isEmpty();
+        });
     }
 
     @Test

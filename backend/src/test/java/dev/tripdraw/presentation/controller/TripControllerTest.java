@@ -60,6 +60,8 @@ class TripControllerTest extends ControllerTest {
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
             softly.assertThat(tripCreateResponse.tripId()).isNotNull();
+            softly.assertThat(tripCreateResponse.name()).isNotNull();
+            softly.assertThat(tripCreateResponse.routes()).isEmpty();
         });
     }
 
