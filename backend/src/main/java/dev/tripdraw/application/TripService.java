@@ -1,5 +1,6 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 import dev.tripdraw.domain.member.Member;
@@ -12,7 +13,6 @@ import dev.tripdraw.dto.request.PointCreateRequest;
 import dev.tripdraw.dto.response.PointCreateResponse;
 import dev.tripdraw.dto.response.TripCreateResponse;
 import dev.tripdraw.exception.member.MemberException;
-import dev.tripdraw.exception.member.MemberExceptionType;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -51,6 +51,6 @@ public class TripService {
 
     private Member getByNickname(String nickname) {
         return memberRepository.findByNickname(nickname)
-                .orElseThrow(() -> new MemberException(MemberExceptionType.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 }

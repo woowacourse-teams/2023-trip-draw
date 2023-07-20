@@ -1,9 +1,10 @@
 package dev.tripdraw.presentation.member;
 
+import static dev.tripdraw.exception.auth.AuthExceptionType.AUTH_FAIL;
+
 import dev.tripdraw.application.MemberService;
 import dev.tripdraw.dto.LoginUser;
 import dev.tripdraw.exception.auth.AuthException;
-import dev.tripdraw.exception.auth.AuthExceptionType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         LoginUser loginUser = authExtractor.extract(request);
 
         if (!memberService.existsByNickname(loginUser.nickname())) {
-            throw new AuthException(AuthExceptionType.MEMBER_NOT_FOUND);
+            throw new AuthException(AUTH_FAIL);
         }
 
         return true;

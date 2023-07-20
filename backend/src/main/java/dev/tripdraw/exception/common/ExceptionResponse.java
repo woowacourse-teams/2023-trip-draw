@@ -1,7 +1,8 @@
 package dev.tripdraw.exception.common;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public record ExceptionResponse(
         String exceptionCode,
         String message,
 
-        @JsonInclude(Include.NON_EMPTY)
+        @JsonInclude(NON_EMPTY)
         List<ValidationException> exceptions
 ) {
     public static ExceptionResponse of(String exceptionCode, String message) {
