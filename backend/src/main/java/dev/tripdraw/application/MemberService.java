@@ -27,7 +27,7 @@ public class MemberService {
 
     public MemberCreateResponse register(MemberCreateRequest memberCreateRequest) {
         String nickname = memberCreateRequest.nickname();
-        if (memberRepository.existsByNickname(nickname)) {
+        if (existsByNickname(nickname)) {
             throw new MemberException(NICKNAME_CONFLICT);
         }
 
