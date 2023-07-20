@@ -8,9 +8,9 @@ import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
-import dev.tripdraw.dto.request.PointCreateRequest;
-import dev.tripdraw.dto.response.PointCreateResponse;
-import dev.tripdraw.dto.response.TripCreateResponse;
+import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointResponse;
+import dev.tripdraw.dto.trip.TripResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -55,11 +55,13 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        TripCreateResponse tripCreateResponse = response.as(TripCreateResponse.class);
+        TripResponse tripResponse = response.as(TripResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(tripCreateResponse.tripId()).isNotNull();
+            softly.assertThat(tripResponse.tripId()).isNotNull();
+            softly.assertThat(tripResponse.name()).isNotNull();
+            softly.assertThat(tripResponse.routes()).isEmpty();
         });
     }
 
@@ -93,11 +95,14 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
+        PointResponse pointResponse = response.as(PointResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(pointCreateResponse.id()).isNotNull();
+            softly.assertThat(pointResponse.pointId()).isNotNull();
+            softly.assertThat(pointResponse.latitude()).isEqualTo(request.latitude());
+            softly.assertThat(pointResponse.longitude()).isEqualTo(request.longitude());
+            softly.assertThat(pointResponse.recordedAt()).isEqualTo(request.recordedAt());
         });
     }
 

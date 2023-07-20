@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
-import dev.tripdraw.dto.request.MemberCreateRequest;
-import dev.tripdraw.dto.response.MemberCreateResponse;
+import dev.tripdraw.dto.member.MemberCreateRequest;
+import dev.tripdraw.dto.member.MemberResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -41,10 +41,10 @@ class MemberControllerTest extends ControllerTest {
                 .then().log().all()
                 .statusCode(CREATED.value())
                 .extract();
-        MemberCreateResponse memberCreateResponse = response.as(MemberCreateResponse.class);
+        MemberResponse memberResponse = response.as(MemberResponse.class);
 
         // expect
-        assertThat(memberCreateResponse.nickname()).isEqualTo("통후추");
+        assertThat(memberResponse.nickname()).isEqualTo("통후추");
     }
 
     @Test

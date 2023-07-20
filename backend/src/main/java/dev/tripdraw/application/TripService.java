@@ -8,10 +8,10 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
-import dev.tripdraw.dto.LoginUser;
-import dev.tripdraw.dto.request.PointCreateRequest;
-import dev.tripdraw.dto.response.PointCreateResponse;
-import dev.tripdraw.dto.response.TripCreateResponse;
+import dev.tripdraw.dto.auth.LoginUser;
+import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointResponse;
+import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
@@ -29,14 +29,14 @@ public class TripService {
         this.memberRepository = memberRepository;
     }
 
-    public TripCreateResponse create(LoginUser loginUser) {
+    public TripResponse create(LoginUser loginUser) {
         Member member = getByNickname(loginUser.nickname());
         Trip trip = Trip.from(member);
         Trip savedTrip = tripRepository.save(trip);
-        return TripCreateResponse.from(savedTrip);
+        return TripResponse.from(savedTrip);
     }
 
-    public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
+    public PointResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
         Member member = getByNickname(loginUser.nickname());
         Trip trip = tripRepository.findById(pointCreateRequest.tripId())
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
@@ -46,7 +46,7 @@ public class TripService {
         trip.add(point);
 
         tripRepository.flush();
-        return PointCreateResponse.from(point);
+        return PointResponse.from(point);
     }
 
     private Member getByNickname(String nickname) {
