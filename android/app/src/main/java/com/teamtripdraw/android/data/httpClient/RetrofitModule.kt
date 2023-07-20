@@ -3,6 +3,7 @@ package com.teamtripdraw.android.data.httpClient
 import com.squareup.moshi.Moshi
 import com.teamtripdraw.android.BuildConfig.TRIP_DRAW_BASE_URL
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseStateCallAdapterFactory
+import com.teamtripdraw.android.data.httpClient.service.SetNickNameService
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -50,4 +51,7 @@ object RetrofitModule {
             .addCallAdapterFactory(ResponseStateCallAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
+
+    val setNickNameService: SetNickNameService =
+        tripDrawRetrofit.create(SetNickNameService::class.java)
 }
