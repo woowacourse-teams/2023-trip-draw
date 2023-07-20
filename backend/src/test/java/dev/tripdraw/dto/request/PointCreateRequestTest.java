@@ -3,6 +3,7 @@ package dev.tripdraw.dto.request;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.dto.trip.PointCreateRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

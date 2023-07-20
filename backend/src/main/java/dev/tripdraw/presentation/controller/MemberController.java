@@ -3,8 +3,8 @@ package dev.tripdraw.presentation.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import dev.tripdraw.application.MemberService;
-import dev.tripdraw.dto.request.MemberCreateRequest;
-import dev.tripdraw.dto.response.MemberCreateResponse;
+import dev.tripdraw.dto.member.MemberCreateRequest;
+import dev.tripdraw.dto.member.MemberCreateResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

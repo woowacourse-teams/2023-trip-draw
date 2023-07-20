@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.dto.request.MemberCreateRequest;
-import dev.tripdraw.dto.response.MemberCreateResponse;
+import dev.tripdraw.dto.member.MemberCreateRequest;
+import dev.tripdraw.dto.member.MemberCreateResponse;
 import dev.tripdraw.exception.member.MemberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package dev.tripdraw.dto.response;
+package dev.tripdraw.dto.member;
 
 import dev.tripdraw.domain.member.Member;
 

@@ -1,4 +1,4 @@
-package dev.tripdraw.dto.request;
+package dev.tripdraw.dto.member;
 
 import dev.tripdraw.dto.validation.NoWhiteSpace;
 import org.hibernate.validator.constraints.Length;

@@ -1,4 +1,4 @@
-package dev.tripdraw.dto.response;
+package dev.tripdraw.dto.trip;
 
 import dev.tripdraw.domain.trip.Trip;
 

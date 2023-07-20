@@ -3,7 +3,7 @@ package dev.tripdraw.presentation.member;
 import static dev.tripdraw.exception.auth.AuthExceptionType.AUTH_FAIL;
 
 import dev.tripdraw.application.MemberService;
-import dev.tripdraw.dto.LoginUser;
+import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

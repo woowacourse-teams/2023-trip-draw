@@ -1,4 +1,4 @@
-package dev.tripdraw.dto.request;
+package dev.tripdraw.dto.trip;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 

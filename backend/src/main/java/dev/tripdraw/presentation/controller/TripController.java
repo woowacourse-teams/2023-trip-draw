@@ -3,10 +3,10 @@ package dev.tripdraw.presentation.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import dev.tripdraw.application.TripService;
-import dev.tripdraw.dto.LoginUser;
-import dev.tripdraw.dto.request.PointCreateRequest;
-import dev.tripdraw.dto.response.PointCreateResponse;
-import dev.tripdraw.dto.response.TripCreateResponse;
+import dev.tripdraw.dto.auth.LoginUser;
+import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointCreateResponse;
+import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.presentation.member.Auth;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

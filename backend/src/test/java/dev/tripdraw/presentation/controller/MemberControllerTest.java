@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
-import dev.tripdraw.dto.request.MemberCreateRequest;
-import dev.tripdraw.dto.response.MemberCreateResponse;
+import dev.tripdraw.dto.member.MemberCreateRequest;
+import dev.tripdraw.dto.member.MemberCreateResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
