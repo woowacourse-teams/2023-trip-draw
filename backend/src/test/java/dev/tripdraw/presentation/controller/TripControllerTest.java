@@ -2,7 +2,7 @@ package dev.tripdraw.presentation.controller;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -70,7 +70,7 @@ class TripControllerTest extends ControllerTest {
                 .header("BASIC", "basic " + 순후추_BASE64)
                 .when().post("/trips")
                 .then().log().all()
-                .statusCode(NOT_FOUND.value());
+                .statusCode(FORBIDDEN.value());
     }
 
     @Test
@@ -118,6 +118,6 @@ class TripControllerTest extends ControllerTest {
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
-                .statusCode(NOT_FOUND.value());
+                .statusCode(FORBIDDEN.value());
     }
 }
