@@ -10,6 +10,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.List;
 
 @Entity
 public class Trip extends BaseEntity {
@@ -52,11 +53,19 @@ public class Trip extends BaseEntity {
         return name;
     }
 
+    public String nameValue() {
+        return name.name();
+    }
+
     public Member member() {
         return member;
     }
 
     public Route route() {
         return route;
+    }
+
+    public List<Point> points() {
+        return route.points();
     }
 }
