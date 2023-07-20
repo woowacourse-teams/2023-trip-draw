@@ -97,7 +97,10 @@ class TripControllerTest extends ControllerTest {
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(pointCreateResponse.id()).isNotNull();
+            softly.assertThat(pointCreateResponse.pointId()).isNotNull();
+            softly.assertThat(pointCreateResponse.latitude()).isEqualTo(request.latitude());
+            softly.assertThat(pointCreateResponse.longitude()).isEqualTo(request.longitude());
+            softly.assertThat(pointCreateResponse.recordedAt()).isEqualTo(request.recordedAt());
         });
     }
 

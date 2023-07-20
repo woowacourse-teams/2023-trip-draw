@@ -3,6 +3,7 @@ package dev.tripdraw.application;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -58,7 +59,12 @@ class TripServiceTest {
         PointCreateResponse pointCreateResponse = tripService.addPoint(loginUser, pointCreateRequest);
 
         // then
-        assertThat(pointCreateResponse.id()).isNotNull();
+        assertSoftly(softly -> {
+            softly.assertThat(pointCreateResponse.pointId()).isNotNull();
+            softly.assertThat(pointCreateResponse.latitude()).isEqualTo(pointCreateRequest.latitude());
+            softly.assertThat(pointCreateResponse.longitude()).isEqualTo(pointCreateRequest.longitude());
+            softly.assertThat(pointCreateResponse.recordedAt()).isEqualTo(pointCreateRequest.recordedAt());
+        });
     }
 
     @Test
