@@ -17,5 +17,5 @@ jobs:
 
       - name: 배포 스크립트 실행
         run: |
-          sh deploy.sh
+          sudo sh deploy.sh
         working-directory: ${{ env.working-directory }}
