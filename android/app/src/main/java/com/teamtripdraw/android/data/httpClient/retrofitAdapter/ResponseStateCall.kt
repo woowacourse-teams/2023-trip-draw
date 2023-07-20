@@ -5,10 +5,12 @@ import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.reflect.Type
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class ResponseStateCall<T>(private val call: Call<T>) : Call<ResponseState<T>> {
+class ResponseStateCall<T : Any>(private val call: Call<T>, private val responseType: Type) :
+    Call<ResponseState<T>> {
 
     override fun enqueue(callback: Callback<ResponseState<T>>) {
         call.enqueue(object : Callback<T> {
@@ -19,10 +21,30 @@ class ResponseStateCall<T>(private val call: Call<T>) : Call<ResponseState<T>> {
                 val errorBody = response.errorBody()
 
                 if (response.isSuccessful) {
-                    callback.onResponse(
-                        this@ResponseStateCall,
-                        Response.success(ResponseState.Success(body, headers))
-                    )
+                    if (body != null) {
+                        callback.onResponse(
+                            this@ResponseStateCall,
+                            Response.success(ResponseState.Success(body, headers))
+                        )
+                    } else {
+                        if (responseType == Unit::class.java) {
+                            callback.onResponse(
+                                this@ResponseStateCall,
+                                Response.success(ResponseState.Success(Unit as T, headers))
+                            )
+                        } else {
+                            callback.onResponse(
+                                this@ResponseStateCall,
+                                Response.success(
+                                    ResponseState.UnknownError(
+                                        IllegalArgumentException(
+                                            RETURN_TYPE_NOT_UNIT_ERROR
+                                        )
+                                    )
+                                )
+                            )
+                        }
+                    }
                 } else {
                     callback.onResponse(
                         this@ResponseStateCall,
@@ -47,7 +69,7 @@ class ResponseStateCall<T>(private val call: Call<T>) : Call<ResponseState<T>> {
         throw UnsupportedOperationException("해당 커스텀 callAdpater에서는 execute를 지원하지 않습니다.")
     }
 
-    override fun clone(): Call<ResponseState<T>> = ResponseStateCall(call.clone())
+    override fun clone(): Call<ResponseState<T>> = ResponseStateCall(call.clone(), responseType)
 
     override fun isExecuted(): Boolean = call.isExecuted
 
@@ -58,4 +80,9 @@ class ResponseStateCall<T>(private val call: Call<T>) : Call<ResponseState<T>> {
     override fun request(): Request = call.request()
 
     override fun timeout(): Timeout = call.timeout()
+
+    companion object {
+        private const val RETURN_TYPE_NOT_UNIT_ERROR =
+            "Body가 존재하지 않지만, Unit 이외의 타입으로 정의했습니다. ResponseState<Unit>로 정의하세요"
+    }
 }
