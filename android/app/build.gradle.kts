@@ -23,6 +23,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField(
+            "String",
+            "TRIP_DRAW_BASE_URL",
+            properties.getProperty("TRIP_DRAW_BASE_URL")
+        )
+
         manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
             properties.getProperty("NAVER_MAP_CLIENT_ID")
     }
