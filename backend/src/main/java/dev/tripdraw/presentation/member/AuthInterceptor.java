@@ -27,6 +27,10 @@ public class AuthInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) throws Exception {
+        if (isSwaggerUrl(request)) {
+            return true;
+        }
+
         LoginUser loginUser = authExtractor.extract(request);
 
         if (!memberService.existsByNickname(loginUser.nickname())) {
@@ -34,5 +38,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         return true;
+    }
+
+    private boolean isSwaggerUrl(HttpServletRequest request) {
+        String url = request.getRequestURI();
+
+        if (url.contains("swagger") || url.contains("api-docs") || url.contains("webjars")) {
+            return true;
+        }
+        return false;
     }
 }
