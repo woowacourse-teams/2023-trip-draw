@@ -12,7 +12,8 @@ public record PointCreateRequest(
         Double latitude,
         Double longitude,
         @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-        @Schema(description = "yyyy-MM-dd'T'HH:mm:ss 형식") LocalDateTime recordedAt
+        @Schema(description = "yyyy-MM-dd'T'HH:mm:ss 형식")
+        LocalDateTime recordedAt
 ) {
 
     public Point toPoint() {
