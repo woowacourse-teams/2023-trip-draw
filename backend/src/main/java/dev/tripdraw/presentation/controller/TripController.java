@@ -1,5 +1,7 @@
 package dev.tripdraw.presentation.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import dev.tripdraw.application.TripService;
 import dev.tripdraw.config.swagger.SwaggerLoginRequired;
 import dev.tripdraw.dto.auth.LoginUser;
@@ -9,7 +11,6 @@ import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class TripController {
     @PostMapping("/trips")
     public ResponseEntity<TripResponse> create(@Auth LoginUser loginUser) {
         TripResponse response = tripService.create(loginUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(CREATED).body(response);
     }
 
     @SwaggerLoginRequired
@@ -41,6 +42,6 @@ public class TripController {
             @RequestBody PointCreateRequest pointCreateRequest
     ) {
         PointResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(CREATED).body(response);
     }
 }

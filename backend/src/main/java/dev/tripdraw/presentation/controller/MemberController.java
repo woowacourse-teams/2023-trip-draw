@@ -3,10 +3,10 @@ package dev.tripdraw.presentation.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import dev.tripdraw.application.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
 import dev.tripdraw.dto.member.MemberCreateRequest;
 import dev.tripdraw.dto.member.MemberResponse;
 import jakarta.validation.Valid;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +29,6 @@ public class MemberController {
     @PostMapping
     public ResponseEntity<MemberResponse> create(@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
         MemberResponse response = memberService.register(memberCreateRequest);
-
         return ResponseEntity.status(CREATED).body(response);
     }
 }
