@@ -10,8 +10,8 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
-import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.TripCreateResponse;
+import dev.tripdraw.dto.trip.PointResponse;
+import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,13 +43,13 @@ class TripServiceTest {
     @Test
     void 여행을_생성한다() {
         // given
-        TripCreateResponse tripCreateResponse = tripService.create(loginUser);
+        TripResponse tripResponse = tripService.create(loginUser);
 
         // expect
         assertSoftly(softly -> {
-            softly.assertThat(tripCreateResponse.tripId()).isNotNull();
-            softly.assertThat(tripCreateResponse.name()).isNotNull();
-            softly.assertThat(tripCreateResponse.routes()).isEmpty();
+            softly.assertThat(tripResponse.tripId()).isNotNull();
+            softly.assertThat(tripResponse.name()).isNotNull();
+            softly.assertThat(tripResponse.routes()).isEmpty();
         });
     }
 
@@ -59,14 +59,14 @@ class TripServiceTest {
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
 
         // when
-        PointCreateResponse pointCreateResponse = tripService.addPoint(loginUser, pointCreateRequest);
+        PointResponse pointResponse = tripService.addPoint(loginUser, pointCreateRequest);
 
         // then
         assertSoftly(softly -> {
-            softly.assertThat(pointCreateResponse.pointId()).isNotNull();
-            softly.assertThat(pointCreateResponse.latitude()).isEqualTo(pointCreateRequest.latitude());
-            softly.assertThat(pointCreateResponse.longitude()).isEqualTo(pointCreateRequest.longitude());
-            softly.assertThat(pointCreateResponse.recordedAt()).isEqualTo(pointCreateRequest.recordedAt());
+            softly.assertThat(pointResponse.pointId()).isNotNull();
+            softly.assertThat(pointResponse.latitude()).isEqualTo(pointCreateRequest.latitude());
+            softly.assertThat(pointResponse.longitude()).isEqualTo(pointCreateRequest.longitude());
+            softly.assertThat(pointResponse.recordedAt()).isEqualTo(pointCreateRequest.recordedAt());
         });
     }
 

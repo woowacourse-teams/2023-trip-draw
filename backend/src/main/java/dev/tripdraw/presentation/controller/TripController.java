@@ -1,13 +1,12 @@
 package dev.tripdraw.presentation.controller;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
 import dev.tripdraw.application.TripService;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
-import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.TripCreateResponse;
+import dev.tripdraw.dto.trip.PointResponse;
+import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.presentation.member.Auth;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,17 +22,17 @@ public class TripController {
     }
 
     @PostMapping("/trips")
-    public ResponseEntity<TripCreateResponse> create(@Auth LoginUser loginUser) {
-        TripCreateResponse response = tripService.create(loginUser);
-        return ResponseEntity.status(CREATED).body(response);
+    public ResponseEntity<TripResponse> create(@Auth LoginUser loginUser) {
+        TripResponse response = tripService.create(loginUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/points")
-    public ResponseEntity<PointCreateResponse> addPoint(
+    public ResponseEntity<PointResponse> addPoint(
             @Auth LoginUser loginUser,
             @RequestBody PointCreateRequest pointCreateRequest
     ) {
-        PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        return ResponseEntity.status(CREATED).body(response);
+        PointResponse response = tripService.addPoint(loginUser, pointCreateRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

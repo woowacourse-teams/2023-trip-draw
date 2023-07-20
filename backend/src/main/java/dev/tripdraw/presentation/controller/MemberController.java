@@ -4,7 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 import dev.tripdraw.application.MemberService;
 import dev.tripdraw.dto.member.MemberCreateRequest;
-import dev.tripdraw.dto.member.MemberCreateResponse;
+import dev.tripdraw.dto.member.MemberResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +23,8 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<MemberCreateResponse> create(@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
-        MemberCreateResponse response = memberService.register(memberCreateRequest);
+    public ResponseEntity<MemberResponse> create(@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
+        MemberResponse response = memberService.register(memberCreateRequest);
 
         return ResponseEntity.status(CREATED).body(response);
     }
