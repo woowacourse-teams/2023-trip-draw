@@ -61,6 +61,10 @@ fragmentKtx = "1.5.5"
 # gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
 gmsPlayServicesLocation = "20.0.0"
 
+# fireBase
+fireBasePlugIn = "4.3.15"
+fireBaseBom = "32.2.0"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -116,6 +120,11 @@ fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragme
 # gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
 gmsPlayServicesLocation = { module = "com.google.android.gms:play-services-location", version.ref = "gmsPlayServicesLocation" }
 
+# fireBase
+fireBaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "fireBaseBom" }
+fireBaseAnalyticsKtx = { module = "com.google.firebase:firebase-analytics-ktx" }
+
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk"]
@@ -123,6 +132,7 @@ androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mock
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
 naverMap = ["naverMap", "gmsPlayServicesLocation"]
+fireBase = ["fireBaseBom", "fireBaseAnalyticsKtx"]
 
 
 [plugins]
@@ -133,6 +143,8 @@ kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 # addKtlintFormatGitPreCommitHook
 jlleitschuh = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "jlleitschuh" }
+# fireBase
+fireBasePlugIn = { id = "com.google.gms.google-services", version.ref = "fireBasePlugIn" }
 
 # use junit5 for test
 mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus" }
