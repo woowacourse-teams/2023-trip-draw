@@ -1,6 +1,5 @@
 package com.teamtripdraw.android.domain.user
 
-import androidx.core.app.RemoteInput.Source
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -58,4 +57,3 @@ internal class NicknameValidStateTest {
         assertThat(actual).isEqualTo(expected)
     }
 }
-
