@@ -6,7 +6,7 @@ import com.teamtripdraw.android.data.httpClient.dto.response.SetNickNameResponse
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseState
 import com.teamtripdraw.android.data.httpClient.service.SetNickNameService
 
-class SetNickNameDataSourceImpl(private val setNickNameService: SetNickNameService) :
+class RemoteSetNickNameDataSourceImpl(private val setNickNameService: SetNickNameService) :
     SetNickNameDataSource.Remote {
     override suspend fun setNickName(nickName: String): ResponseState<SetNickNameResponse> =
         setNickNameService.setNickName(SetNickNameRequest(nickName))
