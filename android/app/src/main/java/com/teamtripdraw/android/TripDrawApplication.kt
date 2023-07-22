@@ -1,11 +1,29 @@
 package com.teamtripdraw.android
 
 import android.app.Application
+import com.teamtripdraw.android.di.DataSourceContainer
+import com.teamtripdraw.android.di.RepositoryContainer
+import com.teamtripdraw.android.di.RetrofitContainer
+import com.teamtripdraw.android.di.ServiceContainer
 
-class TripDrawApplication : Application(){
+class TripDrawApplication : Application() {
 
+    override fun onCreate() {
+        super.onCreate()
+        initContainer()
+    }
 
-    companion object{
+    private fun initContainer() {
+        retrofitContainer = RetrofitContainer()
+        serviceContainer = ServiceContainer(retrofitContainer)
+        dataSourceContainer = DataSourceContainer(serviceContainer)
+        repositoryContainer = RepositoryContainer(dataSourceContainer, retrofitContainer)
+    }
 
+    companion object {
+        lateinit var retrofitContainer: RetrofitContainer
+        lateinit var serviceContainer: ServiceContainer
+        lateinit var dataSourceContainer: DataSourceContainer
+        lateinit var repositoryContainer: RepositoryContainer
     }
 }
