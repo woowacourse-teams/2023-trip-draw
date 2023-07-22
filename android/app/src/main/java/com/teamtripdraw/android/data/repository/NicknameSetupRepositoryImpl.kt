@@ -2,8 +2,8 @@ package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
 import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureReponse
-import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
-import com.teamtripdraw.android.domain.exception.InvalidNickNameException
+import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickNameException
+import com.teamtripdraw.android.domain.exception.nicknameSetup.InvalidNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.ResponseBody
