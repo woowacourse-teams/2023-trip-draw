@@ -1,17 +1,17 @@
 package com.teamtripdraw.android.ui.signUp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
+import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 
 class NicknameSetupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNicknameSetupBinding
-    private val viewModel: NicknameSetupViewModel by viewModels()
+    private val viewModel: NicknameSetupViewModel by viewModels { tripDrawViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

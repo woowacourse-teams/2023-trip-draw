@@ -20,7 +20,7 @@ class TripDrawApplication : Application() {
         repositoryContainer = RepositoryContainer(dataSourceContainer, retrofitContainer)
     }
 
-    companion object {
+    companion object DependencyContainer {
         lateinit var retrofitContainer: RetrofitContainer
         lateinit var serviceContainer: ServiceContainer
         lateinit var dataSourceContainer: DataSourceContainer
