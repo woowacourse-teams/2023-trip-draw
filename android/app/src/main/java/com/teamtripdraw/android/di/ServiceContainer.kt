@@ -1,8 +1,8 @@
 package com.teamtripdraw.android.di
 
-import com.teamtripdraw.android.data.httpClient.service.SetNickNameService
+import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 
 class ServiceContainer(retrofitContainer: RetrofitContainer) {
-    val setNickNameService: SetNickNameService =
-        retrofitContainer.tripDrawRetrofit.create(SetNickNameService::class.java)
+    val nicknameSetupService: NicknameSetupService =
+        retrofitContainer.tripDrawRetrofit.create(NicknameSetupService::class.java)
 }
