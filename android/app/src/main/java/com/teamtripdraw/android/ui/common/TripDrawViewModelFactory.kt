@@ -16,7 +16,7 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
             val repositoryContainer = dependencyContainer.repositoryContainer
             when {
                 isAssignableFrom(NicknameSetupViewModel::class.java) ->
-                    NicknameSetupViewModel(repositoryContainer.setNickNameRepository)
+                    NicknameSetupViewModel(repositoryContainer.nicknameSetupRepository)
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }

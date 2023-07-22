@@ -1,5 +1,5 @@
 package com.teamtripdraw.android.domain.repository
 
-interface SetNickNameRepository {
+interface NicknameSetupRepository {
     suspend fun setNickName(nickName: String): Result<Unit>
 }

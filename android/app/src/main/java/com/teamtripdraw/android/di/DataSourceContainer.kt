@@ -1,12 +1,12 @@
 package com.teamtripdraw.android.di
 
-import com.teamtripdraw.android.data.dataSource.setNickName.SetNickNameDataSource
-import com.teamtripdraw.android.data.dataSource.setNickName.remote.RemoteSetNickNameDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
+import com.teamtripdraw.android.data.dataSource.nicknameSetup.remote.RemoteNicknameSetupDataSourceImpl
 
 class DataSourceContainer(serviceContainer: ServiceContainer) {
     // remote
-    val remoteSetNickNameDataSource: SetNickNameDataSource.Remote =
-        RemoteSetNickNameDataSourceImpl(serviceContainer.setNickNameService)
+    val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote =
+        RemoteNicknameSetupDataSourceImpl(serviceContainer.nicknameSetupService)
 
     // local
 }

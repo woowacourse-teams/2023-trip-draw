@@ -1,14 +1,14 @@
 package com.teamtripdraw.android.di
 
-import com.teamtripdraw.android.data.repository.SetNickNameRepositoryImpl
-import com.teamtripdraw.android.domain.repository.SetNickNameRepository
+import com.teamtripdraw.android.data.repository.NicknameSetupRepositoryImpl
+import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 
 class RepositoryContainer(
     dataSourceContainer: DataSourceContainer,
     retrofitContainer: RetrofitContainer
 ) {
-    val setNickNameRepository: SetNickNameRepository = SetNickNameRepositoryImpl(
-        dataSourceContainer.remoteSetNickNameDataSource,
+    val nicknameSetupRepository: NicknameSetupRepository = NicknameSetupRepositoryImpl(
+        dataSourceContainer.remoteNicknameSetupDataSource,
         retrofitContainer.tripDrawRetrofit
     )
 }

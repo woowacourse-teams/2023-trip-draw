@@ -1,21 +1,21 @@
 package com.teamtripdraw.android.data.repository
 
-import com.teamtripdraw.android.data.dataSource.setNickName.SetNickNameDataSource
-import com.teamtripdraw.android.data.httpClient.dto.failureResponse.SetNickNameFailureReponse
+import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
+import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureReponse
 import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
 import com.teamtripdraw.android.domain.exception.InvalidNickNameException
-import com.teamtripdraw.android.domain.repository.SetNickNameRepository
+import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 
-class SetNickNameRepositoryImpl(
-    private val setNickNameDataSource: SetNickNameDataSource.Remote,
+class NicknameSetupRepositoryImpl(
+    private val nicknameSetupDataSource: NicknameSetupDataSource.Remote,
     private val retrofit: Retrofit
 ) :
-    SetNickNameRepository {
+    NicknameSetupRepository {
     override suspend fun setNickName(nickName: String): Result<Unit> {
-        return setNickNameDataSource.setNickName(nickName)
+        return nicknameSetupDataSource.setNickName(nickName)
             .process(failureListener = this::setNickNameFailureListener) { body, headers ->
                 Result.success(Unit)
                 // todo local property를 세팅하여 닉네임 값을 저장하고 인터셉터에 붙이는 로직 작성 (#59)
@@ -24,7 +24,7 @@ class SetNickNameRepositoryImpl(
 
     private fun setNickNameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
         if (code == 409) {
-            val message = retrofit.getParsedErrorBody<SetNickNameFailureReponse>(errorBody)?.message
+            val message = retrofit.getParsedErrorBody<NicknameSetupFailureReponse>(errorBody)?.message
             return Result.failure(
                 DuplicateNickNameException(
                     message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE
