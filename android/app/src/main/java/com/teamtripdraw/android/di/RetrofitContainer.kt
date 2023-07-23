@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitContainer() {
+class RetrofitContainer(localPreferenceContainer: LocalPreferenceContainer) {
     //    로그인 작업시 유저 토큰 붙여주는 역할
 //    private val authorizationInterceptor: Interceptor =
 //        Interceptor { chain ->
