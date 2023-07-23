@@ -11,7 +11,7 @@ class LocalPreferenceContainer(context: Context) {
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
-    val loginInfoPreference: SharedPreferences =
+    val userIdentifyInfoPreference: SharedPreferences =
         EncryptedSharedPreferences.create(
             context,
             "encryptedLoginInfoPreference",
