@@ -31,6 +31,12 @@ android {
             properties.getProperty("TRIP_DRAW_BASE_URL")
         )
 
+        buildConfigField(
+            "String",
+            "ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS",
+            properties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS")
+        )
+
         manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
             properties.getProperty("NAVER_MAP_CLIENT_ID")
     }
@@ -97,4 +103,7 @@ dependencies {
     // FireBase
     implementation(platform(libs.fireBaseBom))
     implementation(libs.fireBaseAnalyticsKtx)
+
+    // EncryptedSharedPreference
+    implementation(libs.encryptedSharedPreference)
 }
