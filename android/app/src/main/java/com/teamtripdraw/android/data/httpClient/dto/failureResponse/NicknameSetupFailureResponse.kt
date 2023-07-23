@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class NicknameSetupFailureReponse(
+data class NicknameSetupFailureResponse(
     @Json(name = "exceptionCode")
     val exceptionCode: String,
     @Json(name = "message")
