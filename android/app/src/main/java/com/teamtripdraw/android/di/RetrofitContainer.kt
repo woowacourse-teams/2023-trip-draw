@@ -13,14 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitContainer() {
-
-    private lateinit var userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local
-
-    fun setUserIdentifyInfoDataSource(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local) {
-        this.userIdentifyInfoDataSource = userIdentifyInfoDataSource
-    }
-
+class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local) {
     private val authorizationInterceptor: Interceptor =
         Interceptor { chain ->
             with(chain) {

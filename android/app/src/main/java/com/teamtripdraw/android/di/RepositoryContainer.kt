@@ -4,12 +4,13 @@ import com.teamtripdraw.android.data.repository.NicknameSetupRepositoryImpl
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 
 class RepositoryContainer(
-    dataSourceContainer: DataSourceContainer,
+    localDataSourceContainer: LocalDataSourceContainer,
+    remoteDataSourceContainer: RemoteDataSourceContainer,
     retrofitContainer: RetrofitContainer
 ) {
     val nicknameSetupRepository: NicknameSetupRepository = NicknameSetupRepositoryImpl(
-        dataSourceContainer.userIdentifyInfoDataSource,
-        dataSourceContainer.remoteNicknameSetupDataSource,
+        localDataSourceContainer.userIdentifyInfoDataSource,
+        remoteDataSourceContainer.remoteNicknameSetupDataSource,
         retrofitContainer.tripDrawRetrofit
     )
 }
