@@ -8,6 +8,7 @@ class RepositoryContainer(
     retrofitContainer: RetrofitContainer
 ) {
     val nicknameSetupRepository: NicknameSetupRepository = NicknameSetupRepositoryImpl(
+        dataSourceContainer.userIdentifyInfoDataSource,
         dataSourceContainer.remoteNicknameSetupDataSource,
         retrofitContainer.tripDrawRetrofit
     )
