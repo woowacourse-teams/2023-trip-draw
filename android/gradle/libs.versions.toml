@@ -61,6 +61,9 @@ fragmentKtx = "1.5.5"
 # gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
 gmsPlayServicesLocation = "20.0.0"
 
+#EncryptedSharedPreference
+encryptedSharedPreference = "1.1.0-alpha06"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -115,6 +118,9 @@ fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragme
 
 # gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
 gmsPlayServicesLocation = { module = "com.google.android.gms:play-services-location", version.ref = "gmsPlayServicesLocation" }
+
+#EncryptedSharedPreference
+encryptedSharedPreference = { module = "androidx.security:security-crypto", version.ref = "encryptedSharedPreference" }
 
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
