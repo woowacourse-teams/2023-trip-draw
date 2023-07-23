@@ -8,6 +8,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    // FireBase
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -97,6 +99,10 @@ dependencies {
 
     // NaverMap
     implementation(libs.bundles.naverMap)
+
+    // FireBase
+    implementation(platform(libs.fireBaseBom))
+    implementation(libs.fireBaseAnalyticsKtx)
 
     // EncryptedSharedPreference
     implementation(libs.encryptedSharedPreference)

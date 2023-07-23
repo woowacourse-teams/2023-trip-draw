@@ -2,7 +2,7 @@ package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
 import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
-import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureReponse
+import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureResponse
 import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickNameException
 import com.teamtripdraw.android.domain.exception.nicknameSetup.InvalidNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
@@ -11,6 +11,7 @@ import okhttp3.ResponseBody
 import retrofit2.Retrofit
 
 class NicknameSetupRepositoryImpl(
+
     private val localUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
     private val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote,
     private val retrofit: Retrofit
@@ -27,8 +28,7 @@ class NicknameSetupRepositoryImpl(
     private fun setNickNameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
         // todo error sealed class화 시키기
         if (code == 409) {
-            val message =
-                retrofit.getParsedErrorBody<NicknameSetupFailureReponse>(errorBody)?.message
+            val message = retrofit.getParsedErrorBody<NicknameSetupFailureResponse>(errorBody)?.message
             return Result.failure(
                 DuplicateNickNameException(
                     message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE

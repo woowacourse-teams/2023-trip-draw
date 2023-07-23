@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinKapt) apply false
     alias(libs.plugins.mannodermaus) apply false
     alias(libs.plugins.jlleitschuh) apply false
+    alias(libs.plugins.fireBasePlugIn) apply false
 }
 
 allprojects {
