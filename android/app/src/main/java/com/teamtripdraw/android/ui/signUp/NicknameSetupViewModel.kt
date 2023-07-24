@@ -27,8 +27,8 @@ class NicknameSetupViewModel(
     val nicknameSetupCompleteEvent: LiveData<Event<Boolean>>
         get() = _nicknameSetupCompletedEvent
 
-    fun updateNickNameState(nickname: String) {
-        _nicknameState.value = NicknameValidState.getValidState(nickname)
+    fun textChangedEvent() {
+        _nicknameState.value = NicknameValidState.getValidState(requireNotNull(nickname.value))
     }
 
     suspend fun onNicknameSetupComplete() {
