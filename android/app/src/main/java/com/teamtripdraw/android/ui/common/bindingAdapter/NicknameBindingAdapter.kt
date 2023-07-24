@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.signUp
+package com.teamtripdraw.android.ui.common.bindingAdapter
 
 import android.view.View
 import android.widget.EditText
@@ -13,7 +13,7 @@ import com.teamtripdraw.android.domain.user.NicknameValidState
 fun AppCompatButton.setDrawable(state: NicknameValidState) {
     val btnEnabled: Boolean = when (state) {
         NicknameValidState.AVAILABLE -> true
-        NicknameValidState.EMPTY, NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK -> false
+        NicknameValidState.EMPTY, NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK, NicknameValidState.DUPLICATE -> false
     }
     val btnBackground =
         if (btnEnabled) R.drawable.shape_td_sub_blue_fill_12_rect
@@ -26,7 +26,7 @@ fun AppCompatButton.setDrawable(state: NicknameValidState) {
 @BindingAdapter("nicknameEditTextState")
 fun EditText.setDrawable(state: NicknameValidState) {
     val etLineColor = when (state) {
-        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> R.drawable.shape_td_dark_gray_line_12_rect
+        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE, NicknameValidState.DUPLICATE -> R.drawable.shape_td_dark_gray_line_12_rect
         NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK -> R.drawable.shape_td_red_line_12_rect
     }
 
@@ -36,7 +36,7 @@ fun EditText.setDrawable(state: NicknameValidState) {
 @BindingAdapter("nicknameValidStateTextView")
 fun TextView.setDrawable(state: NicknameValidState) {
     when (state) {
-        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> {
+        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE, NicknameValidState.DUPLICATE -> {
             this.visibility = View.GONE
         }
         NicknameValidState.EXCEED_LIMIT -> {
