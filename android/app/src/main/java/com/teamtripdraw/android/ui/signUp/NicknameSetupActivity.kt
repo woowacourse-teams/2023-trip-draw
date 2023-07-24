@@ -1,12 +1,20 @@
 package com.teamtripdraw.android.ui.signUp
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
+import com.teamtripdraw.android.domain.user.NicknameValidState
+import com.teamtripdraw.android.ui.common.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.main.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NicknameSetupActivity : AppCompatActivity() {
 
@@ -23,5 +31,40 @@ class NicknameSetupActivity : AppCompatActivity() {
         viewModel.nickname.observe(this) {
             viewModel.updateNickNameState(it)
         }
+
+        viewModel.nicknameState.observe(this) {
+            if (it == NicknameValidState.DUPLICATE) {
+                AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.duplicate_nickname))
+                    .setPositiveButton(
+                        getString(R.string.dialog_positive_button_default_text)
+                    ) { dialog, _ ->
+                        dialog.dismiss()
+                    }.setCancelable(false)
+                    .show()
+            }
+        }
+
+        binding.btnSetupComplete.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                viewModel.onNicknameSetupComplete()
+            }
+        }
+
+        viewModel.nicknameSetupCompleteEvent.observe(
+            this, EventObserver(this@NicknameSetupActivity::startCallApp)
+        )
+    }
+
+    private fun startCallApp(isNicknameSetupCompleted: Boolean) {
+        if (isNicknameSetupCompleted) {
+            MainActivity.startActivity(this)
+        } else {
+            Toast.makeText(this, UNKNOWN_EXCEPTION, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object {
+        private const val UNKNOWN_EXCEPTION = "UnknownException"
     }
 }
