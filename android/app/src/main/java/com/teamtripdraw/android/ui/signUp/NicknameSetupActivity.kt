@@ -1,6 +1,5 @@
 package com.teamtripdraw.android.ui.signUp
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -41,14 +40,7 @@ class NicknameSetupActivity : AppCompatActivity() {
 
     private fun showDuplicateNicknameDialog(it: NicknameValidState?) {
         if (it == NicknameValidState.DUPLICATE) {
-            AlertDialog.Builder(this)
-                .setMessage(getString(R.string.duplicate_nickname))
-                .setPositiveButton(
-                    getString(R.string.dialog_positive_button_default_text)
-                ) { dialog, _ ->
-                    dialog.dismiss()
-                }.setCancelable(false)
-                .show()
+            Toast.makeText(this, R.string.duplicate_nickname, Toast.LENGTH_SHORT).show()
         }
     }
 
