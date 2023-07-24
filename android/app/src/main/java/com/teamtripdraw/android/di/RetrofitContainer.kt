@@ -13,7 +13,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-
 class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local) {
     private val authorizationInterceptor: Interceptor =
         Interceptor { chain ->
@@ -21,10 +20,7 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
                 proceed(
                     request()
                         .newBuilder()
-                        .addHeader(
-                            "Basic",
-                            AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getIdentifyInfo())
-                        )
+                        .addHeader("Authorization", userIdentifyInfoDataSource.getIdentifyInfo())
                         .build()
                 )
             }
@@ -58,8 +54,4 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
             .addCallAdapterFactory(ResponseStateCallAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-
-    companion object {
-        private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "basic %s"
-    }
 }
