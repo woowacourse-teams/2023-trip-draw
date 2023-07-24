@@ -8,16 +8,16 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class BasicAuthorizationDecoderTest {
+class Base64DecoderTest {
 
     @Test
     void base64로_암호화된_문자열을_해독한다() {
         // given
-        BasicAuthorizationDecoder basicAuthorizationDecoder = new BasicAuthorizationDecoder();
-        String encoded = "BASIC 7Ya17ZuE7LaU";
+        Base64Decoder base64Decoder = new Base64Decoder();
+        String encoded = "7Ya17ZuE7LaU";
 
         // when
-        String decoded = basicAuthorizationDecoder.decode(encoded);
+        String decoded = base64Decoder.decode(encoded);
 
         // then
         assertThat(decoded).isEqualTo("통후추");

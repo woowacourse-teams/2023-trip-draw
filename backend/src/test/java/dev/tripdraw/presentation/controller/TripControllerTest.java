@@ -49,7 +49,7 @@ class TripControllerTest extends ControllerTest {
     void 여행을_생성한다() {
         // given & when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .header("BASIC", "basic " + 통후추_BASE64)
+                .header("Authorization", 통후추_BASE64)
                 .when().post("/trips")
                 .then().log().all()
                 .extract();
@@ -69,7 +69,7 @@ class TripControllerTest extends ControllerTest {
     void 여행_생성시_인증에_실패하면_예외를_발생시킨다() {
         // given & expect
         RestAssured.given().log().all()
-                .header("BASIC", "basic " + 순후추_BASE64)
+                .header("Authorization", 순후추_BASE64)
                 .when().post("/trips")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -88,7 +88,7 @@ class TripControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("BASIC", "basic " + 통후추_BASE64)
+                .header("Authorization", 통후추_BASE64)
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
@@ -119,7 +119,7 @@ class TripControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("BASIC", "basic " + 순후추_BASE64)
+                .header("Authorization", 순후추_BASE64)
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
