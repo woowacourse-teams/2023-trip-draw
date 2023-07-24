@@ -28,35 +28,45 @@ class NicknameSetupActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.nicknameSetupViewModel = viewModel
 
-        viewModel.nickname.observe(this) {
-            viewModel.updateNickNameState(it)
-        }
+        setupDuplicateNicknameDialog()
+        setupNicknameCompleteButton()
+        setupNavigation()
+    }
 
+    private fun setupDuplicateNicknameDialog() {
         viewModel.nicknameState.observe(this) {
-            if (it == NicknameValidState.DUPLICATE) {
-                AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.duplicate_nickname))
-                    .setPositiveButton(
-                        getString(R.string.dialog_positive_button_default_text)
-                    ) { dialog, _ ->
-                        dialog.dismiss()
-                    }.setCancelable(false)
-                    .show()
-            }
+            showDuplicateNicknameDialog(it)
         }
+    }
 
+    private fun showDuplicateNicknameDialog(it: NicknameValidState?) {
+        if (it == NicknameValidState.DUPLICATE) {
+            AlertDialog.Builder(this)
+                .setMessage(getString(R.string.duplicate_nickname))
+                .setPositiveButton(
+                    getString(R.string.dialog_positive_button_default_text)
+                ) { dialog, _ ->
+                    dialog.dismiss()
+                }.setCancelable(false)
+                .show()
+        }
+    }
+
+    private fun setupNicknameCompleteButton() {
         binding.btnSetupComplete.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 viewModel.onNicknameSetupComplete()
             }
         }
+    }
 
+    private fun setupNavigation() {
         viewModel.nicknameSetupCompleteEvent.observe(
-            this, EventObserver(this@NicknameSetupActivity::startCallApp)
+            this, EventObserver(this@NicknameSetupActivity::navigateNextPage)
         )
     }
 
-    private fun startCallApp(isNicknameSetupCompleted: Boolean) {
+    private fun navigateNextPage(isNicknameSetupCompleted: Boolean) {
         if (isNicknameSetupCompleted) {
             MainActivity.startActivity(this)
         } else {

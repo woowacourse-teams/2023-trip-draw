@@ -38,6 +38,7 @@
         <EditText
             android:id="@+id/et_nickname"
             nicknameEditTextState="@{nicknameSetupViewModel.nicknameState}"
+            android:afterTextChanged="@{() -> nicknameSetupViewModel.textChangedEvent()}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_default"
