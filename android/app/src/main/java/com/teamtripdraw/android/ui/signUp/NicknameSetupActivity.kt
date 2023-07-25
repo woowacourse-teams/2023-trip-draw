@@ -1,7 +1,6 @@
 package com.teamtripdraw.android.ui.signUp
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -35,12 +34,6 @@ class NicknameSetupActivity : AppCompatActivity() {
     private fun navigateNextPage(isNicknameSetupCompleted: Boolean) {
         if (isNicknameSetupCompleted) {
             MainActivity.startActivity(this)
-        } else {
-            Toast.makeText(this, UNKNOWN_EXCEPTION, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    companion object {
-        private const val UNKNOWN_EXCEPTION = "UnknownException"
     }
 }

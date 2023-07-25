@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickNameException
-import com.teamtripdraw.android.domain.exception.nicknameSetup.InvalidNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.domain.user.NicknameValidState
 import com.teamtripdraw.android.support.framework.presentation.event.Event
@@ -42,8 +41,6 @@ class NicknameSetupViewModel(
                     when (it) {
                         is DuplicateNickNameException ->
                             _nicknameState.value = NicknameValidState.DUPLICATE
-                        is InvalidNickNameException ->
-                            _nicknameState.value = NicknameValidState.EMPTY
                     }
                 }
         }
