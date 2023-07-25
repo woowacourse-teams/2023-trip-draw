@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
-import com.teamtripdraw.android.ui.common.EventObserver
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
