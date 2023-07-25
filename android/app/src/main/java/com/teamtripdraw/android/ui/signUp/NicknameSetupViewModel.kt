@@ -32,7 +32,7 @@ class NicknameSetupViewModel(
         _nicknameState.value = NicknameValidState.getValidState(requireNotNull(nickname.value))
     }
 
-    suspend fun onNicknameSetupComplete() {
+    fun onNicknameSetupComplete() {
         viewModelScope.launch {
             nicknameSetupRepository.setNickName(requireNotNull(nickname.value))
                 .onSuccess {
