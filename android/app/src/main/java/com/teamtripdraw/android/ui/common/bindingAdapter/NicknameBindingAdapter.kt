@@ -26,8 +26,8 @@ fun AppCompatButton.setDrawable(state: NicknameValidState) {
 @BindingAdapter("nicknameEditTextState")
 fun EditText.setDrawable(state: NicknameValidState) {
     val etLineColor = when (state) {
-        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE, NicknameValidState.DUPLICATE -> R.drawable.shape_td_dark_gray_line_12_rect
-        NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK -> R.drawable.shape_td_red_line_12_rect
+        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> R.drawable.shape_td_dark_gray_line_12_rect
+        NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK, NicknameValidState.DUPLICATE -> R.drawable.shape_td_red_line_12_rect
     }
 
     this.background = ResourcesCompat.getDrawable(resources, etLineColor, null)
@@ -36,7 +36,7 @@ fun EditText.setDrawable(state: NicknameValidState) {
 @BindingAdapter("nicknameValidStateTextView")
 fun TextView.setDrawable(state: NicknameValidState) {
     when (state) {
-        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE, NicknameValidState.DUPLICATE -> {
+        NicknameValidState.EMPTY, NicknameValidState.AVAILABLE -> {
             this.visibility = View.GONE
         }
         NicknameValidState.EXCEED_LIMIT -> {
@@ -46,6 +46,10 @@ fun TextView.setDrawable(state: NicknameValidState) {
         NicknameValidState.CONTAIN_BLANK -> {
             this.visibility = View.VISIBLE
             this.text = resources.getString(R.string.warning_contain_blank)
+        }
+        NicknameValidState.DUPLICATE -> {
+            this.visibility = View.VISIBLE
+            this.text = resources.getString(R.string.warning_duplicate_nickname)
         }
     }
 }
