@@ -8,7 +8,7 @@ import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickName
 import com.teamtripdraw.android.domain.exception.nicknameSetup.InvalidNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.domain.user.NicknameValidState
-import com.teamtripdraw.android.ui.common.Event
+import com.teamtripdraw.android.support.framework.presentation.event.Event
 import kotlinx.coroutines.launch
 
 class NicknameSetupViewModel(
