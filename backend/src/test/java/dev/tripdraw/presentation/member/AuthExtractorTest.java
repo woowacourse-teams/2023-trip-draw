@@ -57,6 +57,6 @@ class AuthExtractorTest {
 
         // expect
         Assertions.assertThatThrownBy(() -> authExtractor.extract(request))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(AuthException.class);
     }
 }
