@@ -16,6 +16,7 @@ class NicknameSetupViewModel(
 ) : ViewModel() {
 
     val MAX_INPUT_NAME_LENGTH = NicknameValidState.MAX_NAME_LENGTH + 1
+    val MAX_NAME_LENGTH = NicknameValidState.MAX_NAME_LENGTH
 
     val nickname: MutableLiveData<String> = MutableLiveData("")
 
