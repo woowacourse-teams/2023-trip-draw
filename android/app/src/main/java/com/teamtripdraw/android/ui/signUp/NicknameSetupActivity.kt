@@ -10,9 +10,6 @@ import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class NicknameSetupActivity : AppCompatActivity() {
 
@@ -26,16 +23,7 @@ class NicknameSetupActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.nicknameSetupViewModel = viewModel
 
-        setupNicknameCompleteButton()
         setupNavigation()
-    }
-
-    private fun setupNicknameCompleteButton() {
-        binding.btnSetupComplete.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                viewModel.onNicknameSetupComplete()
-            }
-        }
     }
 
     private fun setupNavigation() {
