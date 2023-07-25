@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.domain.user
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
@@ -10,7 +10,7 @@ internal class NicknameValidStateTest {
     @Test
     fun `이름의 길이가 0이라면 비어있는 상태이다`() {
         // given
-        val nickname: String = ""
+        val nickname = ""
 
         // when
         val actual: NicknameValidState = NicknameValidState.getValidState(nickname)
@@ -34,7 +34,7 @@ internal class NicknameValidStateTest {
     @Test
     fun `이름의 길이가 10 초과인 경우 제한 초과 상태이다`() {
         // given
-        val nickname: String = "핑구수달멧돼지는브레멘"
+        val nickname = "핑구수달멧돼지는브레멘"
 
         // when
         val actual: NicknameValidState = NicknameValidState.getValidState(nickname)
@@ -47,7 +47,7 @@ internal class NicknameValidStateTest {
     @Test
     fun `이름에 공백이 있을 경우 공백 포함 상태이다`() {
         // given
-        val nickname: String = "핑구수달멧돼지 "
+        val nickname = "핑구수달멧돼지 "
 
         // when
         val actual: NicknameValidState = NicknameValidState.getValidState(nickname)
