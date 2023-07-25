@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
-import com.teamtripdraw.android.domain.user.NicknameValidState
 import com.teamtripdraw.android.ui.common.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
@@ -27,21 +26,8 @@ class NicknameSetupActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.nicknameSetupViewModel = viewModel
 
-        setupDuplicateNicknameDialog()
         setupNicknameCompleteButton()
         setupNavigation()
-    }
-
-    private fun setupDuplicateNicknameDialog() {
-        viewModel.nicknameState.observe(this) {
-            showDuplicateNicknameDialog(it)
-        }
-    }
-
-    private fun showDuplicateNicknameDialog(it: NicknameValidState?) {
-        if (it == NicknameValidState.DUPLICATE) {
-            Toast.makeText(this, R.string.duplicate_nickname, Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun setupNicknameCompleteButton() {
