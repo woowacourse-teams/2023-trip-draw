@@ -9,9 +9,11 @@ import static org.mockito.Mockito.when;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -20,10 +22,10 @@ class AuthExtractorTest {
     @Test
     void 요청의_헤더에서_LoginUser를_추출한다() {
         // given
-        AuthExtractor authExtractor = new AuthExtractor(new BasicAuthorizationDecoder());
+        AuthExtractor authExtractor = new AuthExtractor();
         HttpServletRequest request = mock(HttpServletRequest.class);
-        String encoded = "BASIC 7Ya17ZuE7LaU";
-        when(request.getHeader(HttpServletRequest.BASIC_AUTH)).thenReturn(encoded);
+        String encoded = "7Ya17ZuE7LaU";
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(encoded);
 
         // when
         LoginUser loginUser = authExtractor.extract(request);
@@ -35,13 +37,26 @@ class AuthExtractorTest {
     @Test
     void 요청의_헤더에_인증_정보가_없을_경우_예외를_발생시킨다() {
         // given
-        AuthExtractor authExtractor = new AuthExtractor(new BasicAuthorizationDecoder());
+        AuthExtractor authExtractor = new AuthExtractor();
         HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getHeader(HttpServletRequest.BASIC_AUTH)).thenReturn(null);
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(null);
 
         // expect
         assertThatThrownBy(() -> authExtractor.extract(request))
                 .isInstanceOf(AuthException.class)
                 .hasMessage(NO_AUTH_HEADER.getMessage());
+    }
+
+    @Test
+    void 헤더의_내용이_base64로_암호화된_문자열이_아닌_경우_예외를_발생시킨다() {
+        // given
+        AuthExtractor authExtractor = new AuthExtractor();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        String notEncoded = "통후추";
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(notEncoded);
+
+        // expect
+        Assertions.assertThatThrownBy(() -> authExtractor.extract(request))
+                .isInstanceOf(AuthException.class);
     }
 }

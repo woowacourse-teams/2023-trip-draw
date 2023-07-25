@@ -20,7 +20,7 @@ public class SwaggerConfig {
                 .addServersItem(new Server().url("/"))
                 .components(
                         new Components()
-                                .addHeaders("Basic", createCustomizedHeader()))
+                                .addHeaders("Authorization", createCustomizedHeader()))
                 .info(info);
     }
 
@@ -34,7 +34,7 @@ public class SwaggerConfig {
 
     private Header createCustomizedHeader() {
         Header customHeader = new Header();
-        customHeader.setDescription("Basic : Basic BASE64(nickname)");
+        customHeader.setDescription("Authorization : BASE64(nickname)");
         customHeader.schema(new StringSchema());
         return customHeader;
     }

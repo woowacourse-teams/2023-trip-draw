@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Parameter(
         in = HEADER,
-        name = "Basic",
-        description = "Basic: basic BASE64(nickname) / default : 인코딩 된 \"통후추\"",
-        schema = @Schema(type = "string", defaultValue = "basic 7Ya17ZuE7LaU"))
+        name = "Authorization",
+        description = "Authorization: BASE64(nickname) / default : 인코딩 된 \"통후추\"",
+        schema = @Schema(type = "string", defaultValue = "7Ya17ZuE7LaU"))
 public @interface SwaggerLoginRequired {
 }
