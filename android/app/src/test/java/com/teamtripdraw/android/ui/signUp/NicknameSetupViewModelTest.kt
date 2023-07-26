@@ -1,31 +1,21 @@
 package com.teamtripdraw.android.ui.signUp
 
-import com.teamtripdraw.android.rule.InstantTaskExecutorRule
-import com.teamtripdraw.android.rule.MainDispatcherRule
+import com.teamtripdraw.android.DefaultTest
 import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.domain.user.NicknameValidState
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
-internal class NicknameSetupViewModelTest {
+internal class NicknameSetupViewModelTest: DefaultTest() {
 
     // system under test
     private lateinit var sut: NicknameSetupViewModel
     private lateinit var repository: NicknameSetupRepository
 
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    @Before
-    internal fun setUp() {
+    override fun setUp() {
         repository = mockk()
         sut = NicknameSetupViewModel(repository)
     }

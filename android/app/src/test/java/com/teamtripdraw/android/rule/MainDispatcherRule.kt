@@ -11,7 +11,7 @@ import org.junit.runner.Description
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(), // Scheduler를 새로 생성한다.
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 ) : TestWatcher() {
     override fun starting(description: Description) {
         Dispatchers.setMain(testDispatcher)
