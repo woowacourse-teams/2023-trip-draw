@@ -19,4 +19,9 @@
     <string name="warning_contain_blank">닉네임은 공백을 포함할 수 없습니다</string>
     <string name="warning_exceed_limit">닉네임은 10자를 초과할 수 없습니다</string>
     <string name="tv_nickname_length">%d/10</string>
+
+    <!-- PostActivity -->
+    <string name="page_name">감상 남기기</string>
+    <string name="et_post_title">제목</string>
+    <string name="btn_post_complete">저장</string>
 </resources>
