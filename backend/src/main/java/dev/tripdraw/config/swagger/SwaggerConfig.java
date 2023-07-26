@@ -1,5 +1,7 @@
 package dev.tripdraw.config.swagger;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.headers.Header;
@@ -14,28 +16,32 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        final Info info = createInfo();
-
         return new OpenAPI()
-                .addServersItem(new Server().url("/"))
-                .components(
-                        new Components()
-                                .addHeaders("Authorization", createCustomizedHeader()))
-                .info(info);
+                .addServersItem(url())
+                .components(authorization())
+                .info(info());
     }
 
-    private Info createInfo() {
-        final Info info = new Info()
+    private Server url() {
+        return new Server()
+                .url("/");
+    }
+
+    private Components authorization() {
+        return new Components()
+                .addHeaders(AUTHORIZATION, authorzationHeader());
+    }
+
+    private Header authorzationHeader() {
+        return new Header()
+                .description("Authorization : BASE64(nickname)")
+                .schema(new StringSchema());
+    }
+
+    private Info info() {
+        return new Info()
                 .title("트립드로우 서버 API 명세서")
                 .version("v0.0.1")
                 .description("API Description");
-        return info;
-    }
-
-    private Header createCustomizedHeader() {
-        Header customHeader = new Header();
-        customHeader.setDescription("Authorization : BASE64(nickname)");
-        customHeader.schema(new StringSchema());
-        return customHeader;
     }
 }
