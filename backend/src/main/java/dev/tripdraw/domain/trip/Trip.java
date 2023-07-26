@@ -6,6 +6,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.exception.trip.TripException;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -25,6 +26,7 @@ public class Trip extends BaseEntity {
     @Embedded
     private Route route = new Route();
 
+    @Column(nullable = false)
     private boolean isFinished = false;
 
     protected Trip() {
