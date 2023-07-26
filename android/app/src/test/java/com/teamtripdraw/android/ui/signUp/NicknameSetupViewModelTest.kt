@@ -1,21 +1,27 @@
 package com.teamtripdraw.android.ui.signUp
 
-import com.teamtripdraw.android.DefaultTest
+import com.teamtripdraw.android.DefaultViewModelTest
 import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.domain.user.NicknameValidState
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-internal class NicknameSetupViewModelTest: DefaultTest() {
+internal class NicknameSetupViewModelTest: DefaultViewModelTest() {
 
     // system under test
     private lateinit var sut: NicknameSetupViewModel
     private lateinit var repository: NicknameSetupRepository
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun setUp() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         repository = mockk()
         sut = NicknameSetupViewModel(repository)
     }

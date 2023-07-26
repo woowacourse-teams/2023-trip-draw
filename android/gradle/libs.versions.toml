@@ -22,6 +22,7 @@ junit = "4.13.2"
 androidTestJunit = "1.1.5"
 androidxTestEspresso = "3.5.1"
 assertj = "3.22.0"
+coreTest = "2.2.0"
 
 # Test juit5 support
 mannodermaus = "1.9.3.0"
@@ -84,6 +85,7 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 androidTestJunit = { module = "androidx.test.ext:junit", version.ref = "androidTestJunit" }
 androidxTestEspresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxTestEspresso" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+coreTest = { module = "androidx.arch.core:core-testing", version.ref = "coreTest" }
 
 # Test juit5 support
 # if you want to use junit5 for Instrumentation Test add jupiterApi to android module
@@ -136,9 +138,11 @@ encryptedSharedPreference = { module = "androidx.security:security-crypto", vers
 # CoroutineTest
 coroutineTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineTest" }
 
+
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
-androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest"]
+androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest", "coreTest"]
 androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
