@@ -2,6 +2,9 @@
     <!-- common -->
     <string name="app_name">TripDraw</string>
 
+    <!-- RecordingPointService -->
+    <string name="recording_point_service_description">TripDraw 위치 기록 저장을 위한 서비스 입니다</string>
+
     <!-- bottom navigation -->
     <string name="menu_bn_home">홈</string>
     <string name="menu_bn_history">나의 여행</string>
@@ -19,4 +22,5 @@
     <string name="warning_contain_blank">닉네임은 공백을 포함할 수 없습니다</string>
     <string name="warning_exceed_limit">닉네임은 10자를 초과할 수 없습니다</string>
     <string name="tv_nickname_length">%d/10</string>
+
 </resources>

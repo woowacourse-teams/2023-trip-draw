@@ -9,13 +9,13 @@ import java.util.concurrent.TimeUnit
 
 class RecordingPointAlarmManager(private val context: Context) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    private val intent = Intent(context, RecordingPointReceiver::class.java)
+    private val intent = Intent(context, RecordingPointService::class.java)
 
     fun startRecord(tripId: Long) {
-        val pendingIntent = PendingIntent.getBroadcast(
+        val pendingIntent = PendingIntent.getService(
             context,
             RECORD_REQUEST_CODE,
-            RecordingPointReceiver.getInfoPackedIntent(intent, tripId),
+            RecordingPointService.getInfoPackedIntent(intent, tripId),
             PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.setRepeating(
