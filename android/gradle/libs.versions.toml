@@ -68,6 +68,9 @@ fireBaseBom = "32.2.0"
 #EncryptedSharedPreference
 encryptedSharedPreference = "1.1.0-alpha06"
 
+# CoroutineTest
+coroutineTest = "1.7.2"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -130,9 +133,12 @@ fireBaseAnalyticsKtx = { module = "com.google.firebase:firebase-analytics-ktx" }
 #EncryptedSharedPreference
 encryptedSharedPreference = { module = "androidx.security:security-crypto", version.ref = "encryptedSharedPreference" }
 
+# CoroutineTest
+coroutineTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineTest" }
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
-androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk"]
+androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest"]
 androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
