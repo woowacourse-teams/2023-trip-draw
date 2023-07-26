@@ -19,7 +19,7 @@ class PostTest {
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추");
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
 
         // expect
         assertThat(post.pointRecordedAt()).isEqualTo(recordedAt);

@@ -31,15 +31,19 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(nullable = false)
+    private Long tripId;
+
     protected Post() {
     }
 
-    public Post(String title, Point point, String address, String writing, Member member) {
+    public Post(String title, Point point, String address, String writing, Member member, Long tripId) {
         this.title = title;
         this.point = point;
         this.address = address;
         this.writing = writing;
         this.member = member;
+        this.tripId = tripId;
     }
 
     public LocalDateTime pointRecordedAt() {
@@ -64,5 +68,9 @@ public class Post extends BaseEntity {
 
     public Member member() {
         return member;
+    }
+
+    public Long tripId() {
+        return tripId;
     }
 }
