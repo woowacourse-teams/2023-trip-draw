@@ -54,6 +54,10 @@ public class Trip extends BaseEntity {
         isFinished = true;
     }
 
+    public void changeName(String name) {
+        this.name.change(name);
+    }
+
     public TripName name() {
         return name;
     }
