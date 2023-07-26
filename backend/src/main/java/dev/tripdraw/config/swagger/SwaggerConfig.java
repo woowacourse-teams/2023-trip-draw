@@ -1,5 +1,7 @@
 package dev.tripdraw.config.swagger;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.headers.Header;
@@ -8,7 +10,6 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 
 @Configuration
 public class SwaggerConfig {
@@ -28,7 +29,7 @@ public class SwaggerConfig {
 
     private Components authorization() {
         return new Components()
-                .addHeaders(HttpHeaders.AUTHORIZATION, authorzationHeader());
+                .addHeaders(AUTHORIZATION, authorzationHeader());
     }
 
     private Header authorzationHeader() {
