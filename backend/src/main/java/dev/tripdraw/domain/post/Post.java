@@ -8,6 +8,7 @@ import dev.tripdraw.domain.trip.Point;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
+    @Lob
     private String writing;
 
     @ManyToOne(fetch = LAZY)
