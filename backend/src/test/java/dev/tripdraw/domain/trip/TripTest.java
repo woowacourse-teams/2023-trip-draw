@@ -65,7 +65,7 @@ class TripTest {
     }
 
     @Test
-    void 경로에_해당하는_모든_위치을_반환한다() {
+    void 경로에_해당하는_모든_위치를_반환한다() {
         // given
         Member member = new Member("통후추");
         Trip trip = Trip.from(member);
@@ -79,5 +79,18 @@ class TripTest {
 
         // then
         assertThat(result).containsExactly(point1, point2);
+    }
+
+    @Test
+    void 여행을_종료한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+
+        // when
+        trip.finish();
+
+        // then
+        assertThat(trip.isFinished()).isTrue();
     }
 }

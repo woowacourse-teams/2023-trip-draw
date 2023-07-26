@@ -15,8 +15,6 @@ import java.util.List;
 @Entity
 public class Trip extends BaseEntity {
 
-    private static final String TRIP_NAME_PREFIX = "의 여행";
-
     @Embedded
     private TripName name;
 
@@ -27,6 +25,8 @@ public class Trip extends BaseEntity {
     @Embedded
     private Route route = new Route();
 
+    private boolean isFinished = false;
+
     protected Trip() {
     }
 
@@ -36,7 +36,8 @@ public class Trip extends BaseEntity {
     }
 
     public static Trip from(Member member) {
-        return new Trip(TripName.from(member), member);
+        TripName tripName = TripName.from(member.nickname());
+        return new Trip(tripName, member);
     }
 
     public void add(Point point) {
@@ -47,6 +48,10 @@ public class Trip extends BaseEntity {
         if (!this.member.equals(member)) {
             throw new TripException(NOT_AUTHORIZED);
         }
+    }
+
+    public void finish() {
+        isFinished = true;
     }
 
     public TripName name() {
@@ -67,5 +72,9 @@ public class Trip extends BaseEntity {
 
     public List<Point> points() {
         return route.points();
+    }
+
+    public boolean isFinished() {
+        return isFinished;
     }
 }
