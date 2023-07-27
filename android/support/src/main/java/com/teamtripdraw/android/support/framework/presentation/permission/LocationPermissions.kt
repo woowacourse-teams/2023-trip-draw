@@ -1,13 +1,13 @@
-package com.teamtripdraw.android.support.framework.presentation.extensions
+package com.teamtripdraw.android.support.framework.presentation.permission
 
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
-import com.teamtripdraw.android.support.framework.presentation.extensions.LocationPermissionState.ALL_PERMISSION
-import com.teamtripdraw.android.support.framework.presentation.extensions.LocationPermissionState.HAS_COARSE
-import com.teamtripdraw.android.support.framework.presentation.extensions.LocationPermissionState.NO_PERMISSION
+import com.teamtripdraw.android.support.framework.presentation.permission.LocationPermissionState.ALL_PERMISSION
+import com.teamtripdraw.android.support.framework.presentation.permission.LocationPermissionState.HAS_COARSE
+import com.teamtripdraw.android.support.framework.presentation.permission.LocationPermissionState.NO_PERMISSION
 
 private const val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
 private const val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
