@@ -1,5 +1,6 @@
 package dev.tripdraw.presentation.controller;
 
+import static dev.tripdraw.domain.trip.Status.ONGOING;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -62,6 +63,7 @@ class TripControllerTest extends ControllerTest {
             softly.assertThat(tripResponse.tripId()).isNotNull();
             softly.assertThat(tripResponse.name()).isNotNull();
             softly.assertThat(tripResponse.routes()).isEmpty();
+            softly.assertThat(tripResponse.status()).isEqualTo(ONGOING);
         });
     }
 
