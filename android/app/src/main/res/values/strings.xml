@@ -2,6 +2,14 @@
     <!-- common -->
     <string name="app_name">TripDraw</string>
 
+    <!-- RecordingPointService -->
+    <string name="recording_point_service_description">TripDraw 위치 기록 저장을 위한 서비스 입니다</string>
+    <string name="recording_point_service_alarm_channel_id">channel_recording_point</string>
+    <string name="recording_point_service_alarm_channel_name">위치 기록(여행중)</string>
+    <string name="recording_point_service_alarm_channel_description">여행중 위치 기록 서비스 입니다</string>
+
+
+
     <!-- bottom navigation -->
     <string name="menu_bn_home">홈</string>
     <string name="menu_bn_history">나의 여행</string>
