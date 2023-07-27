@@ -25,11 +25,10 @@ public class Post extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private Long tripId;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "point_id")
-    private Point point;
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable = false)
     private String address;
@@ -37,12 +36,13 @@ public class Post extends BaseEntity {
     @Lob
     private String writing;
 
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "point_id")
+    private Point point;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @Column(nullable = false)
-    private Long tripId;
 
     protected Post() {
     }
