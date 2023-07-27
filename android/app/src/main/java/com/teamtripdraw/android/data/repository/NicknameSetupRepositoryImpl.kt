@@ -3,8 +3,8 @@ package com.teamtripdraw.android.data.repository
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
 import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureResponse
-import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickNameException
-import com.teamtripdraw.android.domain.exception.nicknameSetup.InvalidNickNameException
+import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
+import com.teamtripdraw.android.domain.exception.InvalidNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.ResponseBody
@@ -36,7 +36,11 @@ class NicknameSetupRepositoryImpl(
             )
         }
         // 중복 닉네임을 제외한 오류들은 code400으로 분기되어있다.(#43 참고)
-        return Result.failure(InvalidNickNameException(DEFAULT_INVALID_NICKNAME_EXCEPTION_MESSAGE))
+        return Result.failure(
+            InvalidNickNameException(
+                DEFAULT_INVALID_NICKNAME_EXCEPTION_MESSAGE
+            )
+        )
     }
 
     companion object {

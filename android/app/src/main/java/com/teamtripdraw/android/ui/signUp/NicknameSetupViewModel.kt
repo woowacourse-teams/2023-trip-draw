@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamtripdraw.android.domain.exception.nicknameSetup.DuplicateNickNameException
+import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 import com.teamtripdraw.android.domain.user.NicknameValidState
 import com.teamtripdraw.android.support.framework.presentation.event.Event
