@@ -43,10 +43,10 @@ public class TripController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    @Operation(summary = "위치정보 저장 API", description = "현재 진행 중인 여행의 경로에 위치정보를 저장합니다.")
+    @Operation(summary = "위치 정보 저장 API", description = "현재 진행 중인 여행의 경로에 위치 정보를 저장합니다.")
     @ApiResponse(
             responseCode = "201",
-            description = "위치정보 저장 성공."
+            description = "위치 정보 저장 성공."
     )
     @PostMapping("/points")
     public ResponseEntity<PointResponse> addPoint(
