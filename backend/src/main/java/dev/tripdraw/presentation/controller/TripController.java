@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Trip", description = "여행 관련 API 명세")
+@SwaggerLoginRequired
 @RestController
 public class TripController {
 
@@ -28,7 +29,6 @@ public class TripController {
         this.tripService = tripService;
     }
 
-    @SwaggerLoginRequired
     @Operation(summary = "여행 생성 API", description = "현재 로그인한 사용자의 여행을 생성합니다.")
     @PostMapping("/trips")
     public ResponseEntity<TripResponse> create(@Auth LoginUser loginUser) {
@@ -36,7 +36,6 @@ public class TripController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    @SwaggerLoginRequired
     @Operation(summary = "위치 정보 저장 API", description = "현재 진행 중인 여행의 경로에 위치 정보를 저장합니다.")
     @PostMapping("/points")
     public ResponseEntity<PointResponse> addPoint(
