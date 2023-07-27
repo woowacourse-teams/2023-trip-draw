@@ -33,7 +33,8 @@ class NicknameSetupActivity : AppCompatActivity() {
 
     private fun navigateNextPage(isNicknameSetupCompleted: Boolean) {
         if (isNicknameSetupCompleted) {
-            MainActivity.startActivity(this)
+            startActivity(MainActivity.getIntent(this))
+            finish()
         }
     }
 }

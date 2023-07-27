@@ -22,6 +22,8 @@ junit = "4.13.2"
 androidTestJunit = "1.1.5"
 androidxTestEspresso = "3.5.1"
 assertj = "3.22.0"
+
+# LiveData Test
 coreTest = "2.2.0"
 
 # Test juit5 support
@@ -85,6 +87,8 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 androidTestJunit = { module = "androidx.test.ext:junit", version.ref = "androidTestJunit" }
 androidxTestEspresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxTestEspresso" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+
+# LiveData Test
 coreTest = { module = "androidx.arch.core:core-testing", version.ref = "coreTest" }
 
 # Test juit5 support
@@ -138,8 +142,6 @@ encryptedSharedPreference = { module = "androidx.security:security-crypto", vers
 # CoroutineTest
 coroutineTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineTest" }
 
-
-
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest", "coreTest"]
@@ -148,7 +150,6 @@ httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingIntercept
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
 naverMap = ["naverMap", "gmsPlayServicesLocation"]
 fireBase = ["fireBaseBom", "fireBaseAnalyticsKtx"]
-
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradleplugin" }

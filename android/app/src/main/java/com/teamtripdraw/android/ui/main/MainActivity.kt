@@ -70,9 +70,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun startActivity(context: Context) {
-            val intent = Intent(context, MainActivity::class.java)
-            context.startActivity(intent)
-        }
+        fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
     }
 }
