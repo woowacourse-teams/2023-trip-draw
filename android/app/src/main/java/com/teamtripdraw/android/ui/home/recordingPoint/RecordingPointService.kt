@@ -64,7 +64,7 @@ class RecordingPointService : Service() {
         private const val TRIP_ID = "TRIP_ID"
         private const val NOTIFICATION_ID = 1001
 
-        fun getInfoPackedIntent(intent: Intent, tripId: Long): Intent =
+        fun getTripIdIntent(intent: Intent, tripId: Long): Intent =
             intent.apply { putExtra(TRIP_ID, tripId) }
     }
 }

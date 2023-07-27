@@ -15,7 +15,7 @@ class RecordingPointAlarmManager(private val context: Context) {
         val pendingIntent = PendingIntent.getService(
             context,
             RECORD_REQUEST_CODE,
-            RecordingPointService.getInfoPackedIntent(intent, tripId),
+            RecordingPointService.getTripIdIntent(intent, tripId),
             PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.setRepeating(
