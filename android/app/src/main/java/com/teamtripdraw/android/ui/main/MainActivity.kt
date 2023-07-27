@@ -1,5 +1,7 @@
 package com.teamtripdraw.android.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
@@ -65,5 +67,9 @@ class MainActivity : AppCompatActivity() {
             private const val WRONG_BOTTOM_NAVIGATION_RESOURCE_ID_ERROR =
                 "잘못된 바텀 네비게이션 resourceId 입니다."
         }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
     }
 }
