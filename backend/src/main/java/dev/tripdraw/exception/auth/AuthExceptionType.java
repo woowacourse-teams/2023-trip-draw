@@ -7,9 +7,9 @@ import dev.tripdraw.exception.common.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum AuthExceptionType implements ExceptionType {
-    NO_AUTH_HEADER(BAD_REQUEST, "Auth 헤더가 없습니다."),
+    INVALID_AUTH_HEADER(BAD_REQUEST, "Authoriztion 헤더가 올바르지 않습니다."),
     AUTH_FAIL(FORBIDDEN, "접근 권한이 없습니다."),
-    NOT_ENCODED_BY_BASE64(BAD_REQUEST, "Auth 헤더가 올바르지 않습니다.");
+    ;
 
     private final HttpStatus httpStatus;
     private final String errorMessage;
