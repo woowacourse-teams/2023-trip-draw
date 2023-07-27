@@ -29,4 +29,7 @@
     <string name="tv_nickname_length">%d/%d</string>
     <string name="warning_duplicate_nickname">중복된 닉네임입니다</string>
     <string name="dialog_positive_button_default_text">확인</string>
+
+    <!-- PostViewerActivity -->
+    <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
 </resources>
