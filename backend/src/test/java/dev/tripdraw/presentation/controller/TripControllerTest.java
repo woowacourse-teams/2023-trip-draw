@@ -1,14 +1,18 @@
 package dev.tripdraw.presentation.controller;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import io.restassured.RestAssured;
@@ -35,14 +39,16 @@ class TripControllerTest extends ControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private Trip trip;
+    private Trip trip1;
+    private Trip trip2;
 
     @BeforeEach
     void setUp() {
         super.setUp();
 
         Member member = memberRepository.save(new Member("통후추"));
-        trip = tripRepository.save(Trip.from(member));
+        trip1 = tripRepository.save(Trip.from(member));
+        trip2 = tripRepository.save(Trip.from(member));
     }
 
     @Test
@@ -79,7 +85,7 @@ class TripControllerTest extends ControllerTest {
     void 여행에_위치_정보를_추가한다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
-                trip.id(),
+                trip1.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
@@ -110,7 +116,7 @@ class TripControllerTest extends ControllerTest {
     void 위치_정보_추가시_인증에_실패하면_예외를_발생시킨다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
-                trip.id(),
+                trip1.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
@@ -124,5 +130,139 @@ class TripControllerTest extends ControllerTest {
                 .when().post("/points")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    void 특정_위치정보를_삭제한다() {
+        // given
+        PointCreateRequest pointCreateRequest = new PointCreateRequest(
+                trip1.id(),
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointCreateRequest)
+                .when().post("/points")
+                .then().log().all()
+                .extract();
+
+        PointResponse pointResponse = response.as(PointResponse.class);
+
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip1.id(), pointResponse.pointId());
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointDeleteRequest)
+                .when().delete("/points")
+                .then().log().all()
+                .statusCode(NO_CONTENT.value());
+    }
+
+    @Test
+    void 특정_위치정보_삭제시_인증에_실패하면_예외를_발생시킨다() {
+        // given
+        PointCreateRequest pointCreateRequest = new PointCreateRequest(
+                trip1.id(),
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointCreateRequest)
+                .when().post("/points")
+                .then().log().all()
+                .extract();
+
+        PointResponse pointResponse = response.as(PointResponse.class);
+
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip1.id(), pointResponse.pointId());
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 순후추_BASE64)
+                .body(pointDeleteRequest)
+                .when().delete("/points")
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    void 특정_위치정보_삭제시_해당_여행에_존재하는_위치정보가_아니면_예외를_발생시킨다() {
+        // given
+        PointCreateRequest pointCreateRequest = new PointCreateRequest(
+                trip1.id(),
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointCreateRequest)
+                .when().post("/points")
+                .then().log().all()
+                .extract();
+
+        PointResponse pointResponse = response.as(PointResponse.class);
+
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip2.id(), pointResponse.pointId());
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointDeleteRequest)
+                .when().delete("/points")
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 삭제된_위치정보를_삭제시_예외를_발생시킨다() {
+        // given
+        PointCreateRequest pointCreateRequest = new PointCreateRequest(
+                trip1.id(),
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointCreateRequest)
+                .when().post("/points")
+                .then().log().all()
+                .extract();
+
+        PointResponse pointResponse = response.as(PointResponse.class);
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip1.id(), pointResponse.pointId());
+
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointDeleteRequest)
+                .when().delete("/points")
+                .then().log().all();
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(pointDeleteRequest)
+                .when().delete("/points")
+                .then().log().all()
+                .statusCode(CONFLICT.value());
     }
 }
