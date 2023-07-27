@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="postWritingViewModel"
+            type="com.teamtripdraw.android.ui.post.PostWritingViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,6 +69,8 @@
             android:layout_marginBottom="16dp"
             android:background="@null"
             android:hint="@string/et_post_title"
+            android:maxLength="@{postWritingViewModel.MAX_INPUT_TITLE_LENGTH}"
+            android:text="@={postWritingViewModel.title}"
             android:textAppearance="@style/title_2M"
             android:textColor="@color/td_black"
             android:textColorHint="@color/td_gray"
@@ -114,12 +120,13 @@
             android:layout_marginBottom="18dp"
             android:background="@null"
             android:gravity="top"
+            android:maxLength="@{postWritingViewModel.MAX_INPUT_CONTENT_LENGTH}"
+            android:text="@={postWritingViewModel.content}"
             android:textAppearance="@style/body2"
             app:layout_constraintBottom_toTopOf="@id/divider2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_location"
-            tools:text="sdfjsdfjksdjfs" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_location" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider2"
