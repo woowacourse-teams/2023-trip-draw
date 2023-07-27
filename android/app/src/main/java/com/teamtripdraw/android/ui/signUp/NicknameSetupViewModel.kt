@@ -24,8 +24,7 @@ class NicknameSetupViewModel(
     val nicknameState: LiveData<NicknameValidState> = _nicknameState
 
     private val _nicknameSetupCompletedEvent = MutableLiveData<Event<Boolean>>()
-    val nicknameSetupCompleteEvent: LiveData<Event<Boolean>>
-        get() = _nicknameSetupCompletedEvent
+    val nicknameSetupCompleteEvent: LiveData<Event<Boolean>> = _nicknameSetupCompletedEvent
 
     fun nicknameChangedEvent() {
         _nicknameState.value = NicknameValidState.getValidState(requireNotNull(nickname.value))

@@ -9,6 +9,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -24,6 +25,11 @@ internal class NicknameSetupViewModelTest: DefaultViewModelTest() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         repository = mockk()
         sut = NicknameSetupViewModel(repository)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
