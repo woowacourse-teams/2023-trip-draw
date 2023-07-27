@@ -36,7 +36,7 @@ public class SwaggerConfig {
         return new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme(BEARER_TYPE)
-                .description("Base64로 인코딩된 닉네임을 입력해주세요.");
+                .description("Base64로 인코딩된 닉네임을 입력해주세요. 통후추 예시) 7Ya17ZuE7LaU");
     }
 
     private Info info() {
