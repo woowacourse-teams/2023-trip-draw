@@ -1,8 +1,10 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import dev.tripdraw.domain.common.BaseEntity;
+import dev.tripdraw.exception.trip.TripException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,9 @@ public class Point extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime recordedAt;
 
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
+
     protected Point() {
     }
 
@@ -44,6 +49,14 @@ public class Point extends BaseEntity {
         return id;
     }
 
+    public void delete() {
+        if (isDeleted) {
+            throw new TripException(POINT_ALREADY_DELETED);
+        }
+
+        isDeleted = true;
+    }
+
     public Double latitude() {
         return latitude;
     }
@@ -54,5 +67,9 @@ public class Point extends BaseEntity {
 
     public LocalDateTime recordedAt() {
         return recordedAt;
+    }
+
+    public Boolean isDeleted() {
+        return isDeleted;
     }
 }

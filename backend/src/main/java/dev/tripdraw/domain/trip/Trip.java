@@ -80,6 +80,10 @@ public class Trip extends BaseEntity {
         return id;
     }
 
+    public void deletePointById(Long pointId) {
+        route.deletePointById(pointId);
+    }
+
     public TripName name() {
         return name;
     }
