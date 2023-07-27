@@ -1,18 +1,18 @@
 package dev.tripdraw.config.swagger;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
+
+    private static final String BEARER_TYPE = "bearer";
+    static final String BEARER_SECURITY_SCHEME_KEY = "Authorization Bearer";
 
     @Bean
     public OpenAPI openAPI() {
@@ -29,13 +29,14 @@ public class SwaggerConfig {
 
     private Components authorization() {
         return new Components()
-                .addHeaders(AUTHORIZATION, authorzationHeader());
+                .addSecuritySchemes(BEARER_SECURITY_SCHEME_KEY, securityScheme());
     }
 
-    private Header authorzationHeader() {
-        return new Header()
-                .description("Authorization : BASE64(nickname)")
-                .schema(new StringSchema());
+    private SecurityScheme securityScheme() {
+        return new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme(BEARER_TYPE)
+                .description("Base64로 인코딩된 닉네임을 입력해주세요.");
     }
 
     private Info info() {
