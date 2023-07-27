@@ -6,12 +6,14 @@ import dev.tripdraw.application.TripService;
 import dev.tripdraw.config.swagger.SwaggerLoginRequired;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +45,16 @@ public class TripController {
     ) {
         PointResponse response = tripService.addPoint(loginUser, pointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
+    }
+
+    @SwaggerLoginRequired
+    @Operation(summary = "위치 정보 삭제 API", description = "특정 위치 정보를 삭제합니다.")
+    @DeleteMapping("/points")
+    public ResponseEntity<Void> deletePoint(
+            @Auth LoginUser loginUser,
+            @RequestBody PointDeleteRequest pointDeleteRequest
+    ) {
+        tripService.deletePoint(loginUser, pointDeleteRequest);
+        return ResponseEntity.noContent().build();
     }
 }

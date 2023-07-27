@@ -10,6 +10,7 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.member.MemberException;
@@ -24,7 +25,10 @@ public class TripService {
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
 
-    public TripService(TripRepository tripRepository, MemberRepository memberRepository) {
+    public TripService(
+            TripRepository tripRepository,
+            MemberRepository memberRepository
+    ) {
         this.tripRepository = tripRepository;
         this.memberRepository = memberRepository;
     }
@@ -38,8 +42,8 @@ public class TripService {
 
     public PointResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
         Member member = getByNickname(loginUser.nickname());
-        Trip trip = tripRepository.findById(pointCreateRequest.tripId())
-                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+        Long tripId = pointCreateRequest.tripId();
+        Trip trip = getByTripId(tripId);
 
         Point point = pointCreateRequest.toPoint();
         trip.validateAuthorization(member);
@@ -47,6 +51,22 @@ public class TripService {
 
         tripRepository.flush();
         return PointResponse.from(point);
+    }
+
+    public void deletePoint(LoginUser loginUser, PointDeleteRequest pointDeleteRequest) {
+        Member member = getByNickname(loginUser.nickname());
+        Long tripId = pointDeleteRequest.tripId();
+        Long pointId = pointDeleteRequest.pointId();
+
+        Trip trip = getByTripId(tripId);
+        trip.validateAuthorization(member);
+
+        trip.deletePointById(pointId);
+    }
+
+    private Trip getByTripId(Long tripId) {
+        return tripRepository.findById(tripId)
+                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
 
     private Member getByNickname(String nickname) {
