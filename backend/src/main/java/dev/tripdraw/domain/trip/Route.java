@@ -31,10 +31,11 @@ public class Route {
     }
 
     public void deletePointById(Long pointId) {
-        points.stream()
+        Point pointToDelete = points.stream()
                 .filter(point -> Objects.equals(point.id(), pointId))
                 .findFirst()
-                .orElseThrow(() -> new TripException(POINT_NOT_FOUND))
-                .delete();
+                .orElseThrow(() -> new TripException(POINT_NOT_FOUND));
+
+        pointToDelete.delete();
     }
 }

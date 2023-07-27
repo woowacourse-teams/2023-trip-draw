@@ -50,11 +50,15 @@ public class Point extends BaseEntity {
     }
 
     public void delete() {
+        validateNotDeleted();
+
+        isDeleted = true;
+    }
+
+    private void validateNotDeleted() {
         if (isDeleted) {
             throw new TripException(POINT_ALREADY_DELETED);
         }
-
-        isDeleted = true;
     }
 
     public Double latitude() {
