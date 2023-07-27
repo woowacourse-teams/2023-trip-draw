@@ -37,19 +37,17 @@ public class PostService {
     }
 
     public PostResponse createOfCurrentLocation(LoginUser loginUser, PostPointCreateRequest postPointCreateRequest) {
-        // Trip 조회하고 loginUser의 소유가 맞는지 확인
         Member member = findMemberByNickname(loginUser.nickname());
         Long tripId = postPointCreateRequest.tripId();
         Trip trip = findTripById(tripId);
         trip.validateAuthorization(member);
-        // Point 생성 -> 연관관계 : Trip에 add 해주기 -> TripRepository save -> 저장 확인 필요
+
         Point point = postPointCreateRequest.toPoint();
         trip.add(point);
         tripRepository.flush();
-        // Post 생성 -> 연관관계 : Point 넣어주면 됨 -> PostRepository save -> 저장 확인 필요
+
         Post post = createPost(postPointCreateRequest, member, point);
         Post savedPost = postRepository.save(post);
-        // 반환
         return PostResponse.from(savedPost);
     }
 
