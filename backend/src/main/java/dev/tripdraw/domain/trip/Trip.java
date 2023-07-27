@@ -2,6 +2,7 @@ package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
@@ -9,12 +10,19 @@ import dev.tripdraw.exception.trip.TripException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
 
 @Entity
 public class Trip extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "trip_id")
+    private Long id;
 
     @Embedded
     private TripName name;
@@ -27,14 +35,20 @@ public class Trip extends BaseEntity {
     private Route route = new Route();
 
     @Column(nullable = false)
-    private boolean isFinished = false;
+    private boolean isFinished;
 
     protected Trip() {
     }
 
     public Trip(TripName name, Member member) {
+        this(null, name, member, false);
+    }
+
+    public Trip(Long id, TripName name, Member member, boolean isFinished) {
+        this.id = id;
         this.name = name;
         this.member = member;
+        this.isFinished = isFinished;
     }
 
     public static Trip from(Member member) {
@@ -58,6 +72,10 @@ public class Trip extends BaseEntity {
 
     public void changeName(String name) {
         this.name.change(name);
+    }
+
+    public Long id() {
+        return id;
     }
 
     public TripName name() {
