@@ -26,7 +26,7 @@ public class Point extends BaseEntity {
     private Double longitude;
 
     @Column(nullable = false)
-    private boolean hasPost = false;
+    private boolean hasPost;
 
     @Column(nullable = false)
     private LocalDateTime recordedAt;
@@ -38,13 +38,14 @@ public class Point extends BaseEntity {
     }
 
     public Point(Double latitude, Double longitude, LocalDateTime recordedAt) {
-        this(null, latitude, longitude, recordedAt);
+        this(null, latitude, longitude, false, recordedAt);
     }
 
-    public Point(Long id, Double latitude, Double longitude, LocalDateTime recordedAt) {
+    public Point(Long id, Double latitude, Double longitude, boolean hasPost, LocalDateTime recordedAt) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.hasPost = hasPost;
         this.recordedAt = recordedAt;
     }
 
