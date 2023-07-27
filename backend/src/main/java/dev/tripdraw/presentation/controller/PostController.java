@@ -10,6 +10,7 @@ import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class PostController {
     @PostMapping("/posts/current-location")
     public ResponseEntity<PostResponse> createOfCurrentLocation(
             @Auth LoginUser loginUser,
-            @RequestBody PostPointCreateRequest postPointCreateRequest
+            @Valid @RequestBody PostPointCreateRequest postPointCreateRequest
     ) {
         PostResponse response = postService.createOfCurrentLocation(loginUser, postPointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);

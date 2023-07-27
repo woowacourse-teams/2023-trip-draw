@@ -1,6 +1,7 @@
 package dev.tripdraw.presentation.controller;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -122,5 +123,74 @@ class PostControllerTest extends ControllerTest {
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 현재_위치에_대한_감상을_생성할_때_제목이_비어있으면_예외를_발생시킨다() {
+        // given
+        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+                trip.id(),
+                "",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postPointCreateRequest)
+                .when().post("/posts/current-location")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    void 현재_위치에_대한_감상을_생성할_때_제목이_100자를_초과하면_예외를_발생시킨다() {
+        // given
+        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+                trip.id(),
+                "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 a",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postPointCreateRequest)
+                .when().post("/posts/current-location")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    void 현재_위치에_대한_감상을_생성할_때_위도가_존재하지_않으면_예외를_발생시킨다() {
+        // given
+        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+                trip.id(),
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                null,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postPointCreateRequest)
+                .when().post("/posts/current-location")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
     }
 }
