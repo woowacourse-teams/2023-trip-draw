@@ -1,23 +1,24 @@
-package dev.tripdraw.dto.request;
+package dev.tripdraw.dto.post;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.tripdraw.domain.trip.Point;
-import dev.tripdraw.dto.trip.PointCreateRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class PointCreateRequestTest {
+class PostPointCreateRequestTest {
 
     @Test
     void point_객체로_변환한다() {
         // given
-        PointCreateRequest request = new PointCreateRequest(
+        PostPointCreateRequest request = new PostPointCreateRequest(
                 1L,
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
