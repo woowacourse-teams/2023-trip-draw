@@ -1,5 +1,6 @@
 package dev.tripdraw.domain.post;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -36,7 +37,7 @@ public class Post extends BaseEntity {
     @Lob
     private String writing;
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = EAGER)
     @JoinColumn(name = "point_id")
     private Point point;
 
