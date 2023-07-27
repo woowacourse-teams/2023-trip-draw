@@ -83,4 +83,18 @@ class TripServiceTest {
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
+
+    @Test
+    void trip_id로_여행을_조회한다() {
+        // given & when
+        TripResponse tripResponse = tripService.readById(loginUser, trip.id());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(tripResponse.tripId()).isNotNull();
+            softly.assertThat(tripResponse.name()).isNotNull();
+            softly.assertThat(tripResponse.routes()).isNotNull();
+            softly.assertThat(tripResponse.status()).isNotNull();
+        });
+    }
 }
