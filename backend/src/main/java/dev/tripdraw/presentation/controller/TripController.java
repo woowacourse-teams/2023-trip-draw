@@ -3,7 +3,7 @@ package dev.tripdraw.presentation.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import dev.tripdraw.application.TripService;
-import dev.tripdraw.config.swagger.SwaggerLoginRequired;
+import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Trip", description = "여행 관련 API 명세")
-@SwaggerLoginRequired
+@SwaggerAuthorizationRequired
 @RestController
 public class TripController {
 

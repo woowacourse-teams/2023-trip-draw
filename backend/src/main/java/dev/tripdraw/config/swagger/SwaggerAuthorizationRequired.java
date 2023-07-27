@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @SecurityRequirement(name = BEARER_SECURITY_SCHEME_KEY)
-public @interface SwaggerLoginRequired {
+public @interface SwaggerAuthorizationRequired {
 }
