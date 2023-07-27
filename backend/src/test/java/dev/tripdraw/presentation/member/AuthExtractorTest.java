@@ -1,6 +1,6 @@
 package dev.tripdraw.presentation.member;
 
-import static dev.tripdraw.exception.auth.AuthExceptionType.NO_AUTH_HEADER;
+import static dev.tripdraw.exception.auth.AuthExceptionType.INVALID_AUTH_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -20,11 +20,11 @@ import org.springframework.http.HttpHeaders;
 class AuthExtractorTest {
 
     @Test
-    void 요청의_헤더에서_LoginUser를_추출한다() {
+    void 요청_헤더에서_LoginUser를_추출한다() {
         // given
         AuthExtractor authExtractor = new AuthExtractor();
         HttpServletRequest request = mock(HttpServletRequest.class);
-        String encoded = "7Ya17ZuE7LaU";
+        String encoded = "Bearer 7Ya17ZuE7LaU";
         when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(encoded);
 
         // when
@@ -35,7 +35,21 @@ class AuthExtractorTest {
     }
 
     @Test
-    void 요청의_헤더에_인증_정보가_없을_경우_예외를_발생시킨다() {
+    void 요청_헤더에_Bearer_형식이_아닌_다른_인증정보를_사용하는_경우_예외가_발생한다() {
+        // given
+        AuthExtractor authExtractor = new AuthExtractor();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        String encoded = "Basic 7Ya17ZuE7LaU";
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(encoded);
+
+        // expect
+        assertThatThrownBy(() -> authExtractor.extract(request))
+                .isInstanceOf(AuthException.class)
+                .hasMessage(INVALID_AUTH_HEADER.getMessage());
+    }
+
+    @Test
+    void 요청_헤더에_인증_정보가_없을_경우_예외를_발생시킨다() {
         // given
         AuthExtractor authExtractor = new AuthExtractor();
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -44,7 +58,7 @@ class AuthExtractorTest {
         // expect
         assertThatThrownBy(() -> authExtractor.extract(request))
                 .isInstanceOf(AuthException.class)
-                .hasMessage(NO_AUTH_HEADER.getMessage());
+                .hasMessage(INVALID_AUTH_HEADER.getMessage());
     }
 
     @Test
@@ -52,7 +66,7 @@ class AuthExtractorTest {
         // given
         AuthExtractor authExtractor = new AuthExtractor();
         HttpServletRequest request = mock(HttpServletRequest.class);
-        String notEncoded = "통후추";
+        String notEncoded = "Bearer 통후추";
         when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(notEncoded);
 
         // expect

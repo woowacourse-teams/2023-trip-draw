@@ -1,7 +1,6 @@
 package dev.tripdraw.presentation.member;
 
-import static dev.tripdraw.exception.auth.AuthExceptionType.NOT_ENCODED_BY_BASE64;
-import static dev.tripdraw.exception.auth.AuthExceptionType.NO_AUTH_HEADER;
+import static dev.tripdraw.exception.auth.AuthExceptionType.INVALID_AUTH_HEADER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -15,26 +14,38 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthExtractor {
 
+    private static final String KEYWORD = "Bearer ";
+    private static final String EMPTY = "";
+
+    private final Decoder decoder = Base64.getDecoder();
+
     public LoginUser extract(HttpServletRequest request) {
-        String encodedNickname = getEncodedNickname(request);
-        return getLoginUser(encodedNickname);
+        String credential = parse(request);
+        return new LoginUser(credential);
     }
 
-    private String getEncodedNickname(HttpServletRequest request) {
-        String encodedNickname = request.getHeader(AUTHORIZATION);
-        if (!hasText(encodedNickname)) {
-            throw new AuthException(NO_AUTH_HEADER);
+    private String parse(HttpServletRequest request) {
+        String header = request.getHeader(AUTHORIZATION);
+        validate(header);
+        return parseCredential(header);
+    }
+
+    private static void validate(String header) {
+        if (!hasText(header) || !header.startsWith(KEYWORD)) {
+            throw new AuthException(INVALID_AUTH_HEADER);
         }
-        return encodedNickname;
     }
 
-    private LoginUser getLoginUser(String encodedNickname) {
-        Decoder decoder = Base64.getDecoder();
+    private String parseCredential(String header) {
+        final String credential = header.replace(KEYWORD, EMPTY);
+        return decodeBase64(credential);
+    }
+
+    private String decodeBase64(String credential) {
         try {
-            String nickname = new String(decoder.decode(encodedNickname));
-            return new LoginUser(nickname);
+            return new String(decoder.decode(credential));
         } catch (IllegalArgumentException e) {
-            throw new AuthException(NOT_ENCODED_BY_BASE64);
+            throw new AuthException(INVALID_AUTH_HEADER);
         }
     }
 }
