@@ -145,7 +145,7 @@ class TripServiceTest {
     void 여행에서_위치정보를_삭제시_여행에_해당_위치정보가_존재하지_않으면_예외를_발생시킨다() {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
-        PointResponse pointResponse = tripService.addPoint(loginUser, pointCreateRequest);
+        tripService.addPoint(loginUser, pointCreateRequest);
 
         Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, LocalDateTime.now());
         PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), inExistentPoint.id());

@@ -134,7 +134,6 @@ class TripTest {
         Member member = new Member("통후추");
         Trip trip = Trip.from(member);
         Point point1 = new Point(1L, 1.1, 2.2, LocalDateTime.now());
-        Point point2 = new Point(2L, 3.3, 4.4, LocalDateTime.now());
         trip.add(point1);
         trip.deletePointById(point1.id());
 
