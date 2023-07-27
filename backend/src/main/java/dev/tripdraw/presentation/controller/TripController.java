@@ -11,6 +11,7 @@ import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +31,10 @@ public class TripController {
     }
 
     @Operation(summary = "여행 생성 API", description = "현재 로그인한 사용자의 여행을 생성합니다.")
+    @ApiResponse(
+            responseCode = "201",
+            description = "여행 생성 성공."
+    )
     @PostMapping("/trips")
     public ResponseEntity<TripResponse> create(@Auth LoginUser loginUser) {
         TripResponse response = tripService.create(loginUser);
@@ -37,6 +42,10 @@ public class TripController {
     }
 
     @Operation(summary = "위치 정보 저장 API", description = "현재 진행 중인 여행의 경로에 위치 정보를 저장합니다.")
+    @ApiResponse(
+            responseCode = "201",
+            description = "위치 정보 저장 성공."
+    )
     @PostMapping("/points")
     public ResponseEntity<PointResponse> addPoint(
             @Auth LoginUser loginUser,

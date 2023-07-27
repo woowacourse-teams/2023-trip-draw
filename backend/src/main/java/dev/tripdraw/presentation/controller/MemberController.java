@@ -6,6 +6,7 @@ import dev.tripdraw.application.MemberService;
 import dev.tripdraw.dto.member.MemberCreateRequest;
 import dev.tripdraw.dto.member.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,10 @@ public class MemberController {
     }
 
     @Operation(summary = "사용자 등록 API", description = "사용자를 등록합니다.")
+    @ApiResponse(
+            responseCode = "201",
+            description = "사용자 등록 성공."
+    )
     @PostMapping
     public ResponseEntity<MemberResponse> create(@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
         MemberResponse response = memberService.register(memberCreateRequest);
