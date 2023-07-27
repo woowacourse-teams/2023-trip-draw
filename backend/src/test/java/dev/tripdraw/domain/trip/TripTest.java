@@ -1,5 +1,6 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.domain.trip.Status.FINISHED;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
@@ -104,6 +105,6 @@ class TripTest {
         trip.finish();
 
         // then
-        assertThat(trip.isFinished()).isTrue();
+        assertThat(trip.status()).isEqualTo(FINISHED);
     }
 }
