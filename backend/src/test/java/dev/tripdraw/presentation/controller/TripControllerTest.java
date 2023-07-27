@@ -4,6 +4,7 @@ import static dev.tripdraw.domain.trip.Status.ONGOING;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -126,5 +127,26 @@ class TripControllerTest extends ControllerTest {
                 .when().post("/points")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    void trip_id로_여행을_조회한다() {
+        // given & when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .header("Authorization", 통후추_BASE64)
+                .when().get("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .extract();
+
+        // then
+        TripResponse tripResponse = response.as(TripResponse.class);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(tripResponse.tripId()).isNotNull();
+            softly.assertThat(tripResponse.name()).isNotNull();
+            softly.assertThat(tripResponse.routes()).isNotNull();
+            softly.assertThat(tripResponse.status()).isNotNull();
+        });
     }
 }

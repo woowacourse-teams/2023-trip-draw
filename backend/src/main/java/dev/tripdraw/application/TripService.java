@@ -38,8 +38,7 @@ public class TripService {
 
     public PointResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
         Member member = getByNickname(loginUser.nickname());
-        Trip trip = tripRepository.findById(pointCreateRequest.tripId())
-                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+        Trip trip = getById(pointCreateRequest.tripId());
 
         Point point = pointCreateRequest.toPoint();
         trip.validateAuthorization(member);
@@ -52,5 +51,17 @@ public class TripService {
     private Member getByNickname(String nickname) {
         return memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    private Trip getById(Long id) {
+        return tripRepository.findById(id)
+                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+    }
+
+    public TripResponse readById(LoginUser loginUser, Long id) {
+        Member member = getByNickname(loginUser.nickname());
+        Trip trip = getById(id);
+        trip.validateAuthorization(member);
+        return TripResponse.from(trip);
     }
 }
