@@ -20,7 +20,7 @@ class RecordingPointAlarmManager(private val context: Context) {
         )
         alarmManager.setRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime(),
+            SystemClock.elapsedRealtime() + RECORD_INTERVAL_TIME,
             RECORD_INTERVAL_TIME,
             pendingIntent
         )

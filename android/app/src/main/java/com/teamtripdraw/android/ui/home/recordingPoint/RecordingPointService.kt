@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 
@@ -19,10 +20,12 @@ class RecordingPointService : Service() {
     }
 
     private fun initNotification(): Notification =
-        Notification.Builder(
+        NotificationCompat.Builder(
             this,
             this.getString(R.string.recording_point_service_alarm_channel_id)
         )
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setOngoing(true)
             .setSmallIcon(R.drawable.ic_home) // todo 팀아이콘으로 변경 해야 한다.
             .setShowWhen(false)
             .setContentTitle("여행중입니다.") // todo 문구 기획측으로 부터 받아서 변경 해야 한다.
