@@ -7,7 +7,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class NicknameSetupResponse(
     @Json(name = "memberId")
-    val memberId: String,
-    @Json(name = "nickname")
-    val nickname: String
+    val memberId: String
 )
