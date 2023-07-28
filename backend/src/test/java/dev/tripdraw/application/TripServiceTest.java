@@ -16,8 +16,8 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
-import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
@@ -69,15 +69,10 @@ class TripServiceTest {
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
 
         // when
-        PointResponse pointResponse = tripService.addPoint(loginUser, pointCreateRequest);
+        PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
 
         // then
-        assertSoftly(softly -> {
-            softly.assertThat(pointResponse.pointId()).isNotNull();
-            softly.assertThat(pointResponse.latitude()).isEqualTo(pointCreateRequest.latitude());
-            softly.assertThat(pointResponse.longitude()).isEqualTo(pointCreateRequest.longitude());
-            softly.assertThat(pointResponse.recordedAt()).isEqualTo(pointCreateRequest.recordedAt());
-        });
+        assertThat(response.pointId()).isNotNull();
     }
 
     @Test
@@ -110,8 +105,8 @@ class TripServiceTest {
     void 여행에서_위치정보를_삭제한다() {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
-        PointResponse pointResponse = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
+        PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
 
         // when
         tripService.deletePoint(loginUser, pointDeleteRequest);
@@ -119,10 +114,10 @@ class TripServiceTest {
         // then
         Point deletedPoint = trip.route().points()
                 .stream()
-                .filter(point -> Objects.equals(point.id(), pointResponse.pointId()))
+                .filter(point -> Objects.equals(point.id(), response.pointId()))
                 .findFirst()
                 .get();
-        
+
         assertThat(deletedPoint.isDeleted()).isTrue();
     }
 
@@ -130,8 +125,8 @@ class TripServiceTest {
     void 여행에서_위치정보를_삭제시_인가에_실패하면_예외를_발생시킨다() {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
-        PointResponse pointResponse = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
+        PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
         LoginUser otherUser = new LoginUser("순후추");
 
         // expect
@@ -159,8 +154,8 @@ class TripServiceTest {
     void 여행에서_위치정보를_삭제시_이미_삭제된_위치정보면_예외를_발생시킨다() {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
-        PointResponse pointResponse = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
+        PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
         tripService.deletePoint(loginUser, pointDeleteRequest);
 
         // expect

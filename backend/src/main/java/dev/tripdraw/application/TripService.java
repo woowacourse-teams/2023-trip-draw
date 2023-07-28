@@ -10,8 +10,8 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
-import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
@@ -37,7 +37,7 @@ public class TripService {
         return TripResponse.from(savedTrip);
     }
 
-    public PointResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
+    public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
         Member member = getByNickname(loginUser.nickname());
         Trip trip = getByTripId(pointCreateRequest.tripId());
 
@@ -46,7 +46,7 @@ public class TripService {
         trip.add(point);
 
         tripRepository.flush();
-        return PointResponse.from(point);
+        return PointCreateResponse.from(point);
     }
 
     public void deletePoint(LoginUser loginUser, PointDeleteRequest pointDeleteRequest) {
