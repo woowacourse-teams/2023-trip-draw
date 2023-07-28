@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class PointCreateRequestTest {
 
     @Test
-    void point_객체로_변환한다() {
+    void 위치_객체로_변환한다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
                 1L,

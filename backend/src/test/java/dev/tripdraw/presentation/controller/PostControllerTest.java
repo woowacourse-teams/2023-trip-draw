@@ -156,7 +156,7 @@ class PostControllerTest extends ControllerTest {
         // given
         PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
                 trip.id(),
-                "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 a",
+                "a".repeat(101),
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
@@ -329,7 +329,7 @@ class PostControllerTest extends ControllerTest {
         PostRequest postRequest = new PostRequest(
                 trip.id(),
                 pointResponse.pointId(),
-                "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 a",
+                "a".repeat(101),
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
