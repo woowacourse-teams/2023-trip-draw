@@ -13,4 +13,7 @@ class TripRepositoryImpl(
             localTripDataSource.setTripId(body.tripId)
             Result.success(Unit)
         }
+
+    override fun getStoredTripId(): Long =
+        localTripDataSource.getTripId()
 }

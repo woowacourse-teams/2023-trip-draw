@@ -15,7 +15,10 @@ class HomeViewModel(
     val homeUiState: LiveData<HomeUiState> = _homeUiState
 
     init {
-        // todo: Local의 trip Id 조사하여 없다면 여행전 업데이트 있다면 여행중 업데이트 로직
+        _homeUiState.value = when (tripRepository.getStoredTripId()) {
+            -1L -> HomeUiState.BEFORE_TRIP
+            else -> HomeUiState.ON_TRIP
+        }
     }
 
     fun startTrip() {
