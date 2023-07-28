@@ -46,14 +46,14 @@ class RouteTest {
     @Test
     void 경로에_존재하지_않는_위치정보를_삭제하면_예외를_발생시킨다() {
         // given
-        Route route1 = new Route();
-        Point point1 = new Point(1L, 1.1, 2.2, LocalDateTime.now());
-        Point point2 = new Point(2L, 1.1, 2.2, LocalDateTime.now());
+        Route route = new Route();
+        Point point = new Point(1L, 1.1, 2.2, LocalDateTime.now());
+        Point inexistentPoint = new Point(2L, 1.1, 2.2, LocalDateTime.now());
 
-        route1.add(point1);
+        route.add(point);
 
         // expect
-        assertThatThrownBy(() -> route1.deletePointById(point2.id()))
+        assertThatThrownBy(() -> route.deletePointById(inexistentPoint.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_FOUND.getMessage());
     }
@@ -61,14 +61,14 @@ class RouteTest {
     @Test
     void 이미_삭제된_위치정보를_삭제하면_예외를_발생시킨다() {
         // given
-        Route route1 = new Route();
-        Point point1 = new Point(1L, 1.1, 2.2, LocalDateTime.now());
+        Route route = new Route();
+        Point point = new Point(1L, 1.1, 2.2, LocalDateTime.now());
 
-        route1.add(point1);
-        route1.deletePointById(point1.id());
+        route.add(point);
+        route.deletePointById(point.id());
 
         // expect
-        assertThatThrownBy(() -> route1.deletePointById(point1.id()))
+        assertThatThrownBy(() -> route.deletePointById(point.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_ALREADY_DELETED.getMessage());
     }

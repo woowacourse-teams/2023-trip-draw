@@ -41,16 +41,14 @@ class TripControllerTest extends ControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private Trip trip1;
-    private Trip trip2;
+    private Trip trip;
 
     @BeforeEach
     void setUp() {
         super.setUp();
 
         Member member = memberRepository.save(new Member("통후추"));
-        trip1 = tripRepository.save(Trip.from(member));
-        trip2 = tripRepository.save(Trip.from(member));
+        trip = tripRepository.save(Trip.from(member));
     }
 
     @Test
@@ -88,7 +86,7 @@ class TripControllerTest extends ControllerTest {
     void 여행에_위치_정보를_추가한다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
-                trip1.id(),
+                trip.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
@@ -119,7 +117,7 @@ class TripControllerTest extends ControllerTest {
     void 위치_정보_추가_시_인증에_실패하면_예외를_발생시킨다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
-                trip1.id(),
+                trip.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
@@ -160,7 +158,7 @@ class TripControllerTest extends ControllerTest {
     void 특정_위치정보를_삭제한다() {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(
-                trip1.id(),
+                trip.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
@@ -176,7 +174,7 @@ class TripControllerTest extends ControllerTest {
 
         PointResponse pointResponse = response.as(PointResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip1.id(), pointResponse.pointId());
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
 
         // expect
         RestAssured.given().log().all()
@@ -192,7 +190,7 @@ class TripControllerTest extends ControllerTest {
     void 특정_위치정보_삭제시_인증에_실패하면_예외를_발생시킨다() {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(
-                trip1.id(),
+                trip.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
@@ -208,7 +206,7 @@ class TripControllerTest extends ControllerTest {
 
         PointResponse pointResponse = response.as(PointResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip1.id(), pointResponse.pointId());
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
 
         // expect
         RestAssured.given().log().all()
@@ -223,24 +221,31 @@ class TripControllerTest extends ControllerTest {
     @Test
     void 특정_위치정보_삭제시_해당_여행에_존재하는_위치정보가_아니면_예외를_발생시킨다() {
         // given
+
         PointCreateRequest pointCreateRequest = new PointCreateRequest(
-                trip1.id(),
+                trip.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
+        PointResponse pointResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
-                .extract();
+                .extract()
+                .as(PointResponse.class);
 
-        PointResponse pointResponse = response.as(PointResponse.class);
+        TripResponse tripResponse = RestAssured.given().log().all()
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().post("/trips")
+                .then().log().all()
+                .extract()
+                .as(TripResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip2.id(), pointResponse.pointId());
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(tripResponse.tripId(), pointResponse.pointId());
 
         // expect
         RestAssured.given().log().all()
@@ -256,7 +261,7 @@ class TripControllerTest extends ControllerTest {
     void 삭제된_위치정보를_삭제시_예외를_발생시킨다() {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(
-                trip1.id(),
+                trip.id(),
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
@@ -271,7 +276,7 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         PointResponse pointResponse = response.as(PointResponse.class);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip1.id(), pointResponse.pointId());
+        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
 
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
