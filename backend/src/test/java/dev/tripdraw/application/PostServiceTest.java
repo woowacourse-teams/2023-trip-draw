@@ -52,7 +52,6 @@ class PostServiceTest {
         loginUser = new LoginUser("통후추");
     }
 
-
     @Test
     void 현재_위치에_대한_감상을_생성한다() {
         // given
