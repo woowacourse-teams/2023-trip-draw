@@ -88,7 +88,7 @@ class TripServiceTest {
     @Test
     void 여행을_ID로_조회한다() {
         // given & when
-        TripResponse tripResponse = tripService.readById(loginUser, trip.id());
+        TripResponse tripResponse = tripService.readTripById(loginUser, trip.id());
 
         // then
         assertSoftly(softly -> {
