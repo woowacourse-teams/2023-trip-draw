@@ -6,6 +6,7 @@ import dev.tripdraw.application.PostService;
 import dev.tripdraw.config.swagger.SwaggerLoginRequired;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostPointCreateRequest;
+import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,17 @@ public class PostController {
             @Valid @RequestBody PostPointCreateRequest postPointCreateRequest
     ) {
         PostResponse response = postService.createOfCurrentLocation(loginUser, postPointCreateRequest);
+        return ResponseEntity.status(CREATED).body(response);
+    }
+
+    @SwaggerLoginRequired
+    @Operation(summary = "사용자가 선택한 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 사용자가 선택한 위치에 대한 감상 생성")
+    @PostMapping("/posts")
+    public ResponseEntity<PostResponse> create(
+            @Auth LoginUser loginUser,
+            @Valid @RequestBody PostRequest postRequest
+    ) {
+        PostResponse response = postService.create(loginUser, postRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 }

@@ -11,7 +11,10 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.post.PostPointCreateRequest;
+import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -192,5 +195,171 @@ class PostControllerTest extends ControllerTest {
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    void 사용자가_선택한_위치에_대한_감상을_생성한다() {
+        // given
+        PointResponse pointResponse = createPoint();
+
+        PostRequest postRequest = new PostRequest(
+                trip.id(),
+                pointResponse.pointId(),
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+        );
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postRequest)
+                .when().post("/posts")
+                .then().log().all()
+                .extract();
+
+        // then
+        PostResponse postResponse = response.as(PostResponse.class);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
+            softly.assertThat(postResponse.postId()).isNotNull();
+            softly.assertThat(postResponse.title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(postResponse.pointResponse().pointId()).isNotNull();
+            softly.assertThat(postResponse.pointResponse().latitude()).isEqualTo(1.1);
+        });
+    }
+
+    @Test
+    void 사용자가_선택한_위치에_대한_감상을_생성할_때_인증에_실패하면_예외를_발생시킨다() {
+        // given
+        PointResponse pointResponse = createPoint();
+
+        PostRequest postRequest = new PostRequest(
+                trip.id(),
+                pointResponse.pointId(),
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 순후추_BASE64)
+                .body(postRequest)
+                .when().post("/posts")
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
+        // given
+        PointResponse pointResponse = createPoint();
+
+        PostRequest postRequest = new PostRequest(
+                -1L,
+                pointResponse.pointId(),
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postRequest)
+                .when().post("/posts")
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_위치의_ID이면_예외를_발생시킨다() {
+        // given
+        PostRequest postRequest = new PostRequest(
+                trip.id(),
+                -1L,
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postRequest)
+                .when().post("/posts")
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 사용자가_선택한_위치에_대한_감상을_생성할_때_주소가_비어있으면_예외를_발생시킨다() {
+        // given
+        PointResponse pointResponse = createPoint();
+
+        PostRequest postRequest = new PostRequest(
+                trip.id(),
+                pointResponse.pointId(),
+                "우도의 바닷가",
+                null,
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postRequest)
+                .when().post("/posts")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    void 사용자가_선택한_위치에_대한_감상을_생성할_때_제목이_100자를_초과하면_예외를_발생시킨다() {
+        // given
+        PointResponse pointResponse = createPoint();
+
+        PostRequest postRequest = new PostRequest(
+                trip.id(),
+                pointResponse.pointId(),
+                "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 a",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+        );
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(postRequest)
+                .when().post("/posts")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
+    }
+
+    private PointResponse createPoint() {
+        PointCreateRequest request = new PointCreateRequest(
+                trip.id(),
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", 통후추_BASE64)
+                .body(request)
+                .when().post("/points")
+                .then().log().all()
+                .extract();
+
+        return response.as(PointResponse.class);
     }
 }
