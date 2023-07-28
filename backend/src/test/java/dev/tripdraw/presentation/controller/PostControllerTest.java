@@ -29,8 +29,8 @@ import org.springframework.http.MediaType;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
 
-    private static final String 통후추_BASE64 = "7Ya17ZuE7LaU";
-    private static final String 순후추_BASE64 = "7Iic7ZuE7LaU";
+    private static final String 통후추_BASE64 = "Bearer 7Ya17ZuE7LaU";
+    private static final String 순후추_BASE64 = "Bearer 7Iic7ZuE7LaU";
 
     @Autowired
     private TripRepository tripRepository;
