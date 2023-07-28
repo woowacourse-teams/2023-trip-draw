@@ -14,6 +14,7 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -102,14 +103,11 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        PointResponse pointResponse = response.as(PointResponse.class);
+        PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(pointResponse.pointId()).isNotNull();
-            softly.assertThat(pointResponse.latitude()).isEqualTo(request.latitude());
-            softly.assertThat(pointResponse.longitude()).isEqualTo(request.longitude());
-            softly.assertThat(pointResponse.recordedAt()).isEqualTo(request.recordedAt());
+            softly.assertThat(pointCreateResponse.pointId()).isNotNull();
         });
     }
 
