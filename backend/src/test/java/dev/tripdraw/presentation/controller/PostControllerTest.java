@@ -11,8 +11,8 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
+import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
-import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import io.restassured.RestAssured;
@@ -71,14 +71,11 @@ class PostControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        PostResponse postResponse = response.as(PostResponse.class);
+        PostCreateResponse postCreateResponse = response.as(PostCreateResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(postResponse.postId()).isNotNull();
-            softly.assertThat(postResponse.title()).isEqualTo("우도의 바닷가");
-            softly.assertThat(postResponse.pointResponse().pointId()).isNotNull();
-            softly.assertThat(postResponse.pointResponse().latitude()).isEqualTo(1.1);
+            softly.assertThat(postCreateResponse.postId()).isNotNull();
         });
     }
 
@@ -220,14 +217,11 @@ class PostControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        PostResponse postResponse = response.as(PostResponse.class);
+        PostCreateResponse postCreateResponse = response.as(PostCreateResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(postResponse.postId()).isNotNull();
-            softly.assertThat(postResponse.title()).isEqualTo("우도의 바닷가");
-            softly.assertThat(postResponse.pointResponse().pointId()).isNotNull();
-            softly.assertThat(postResponse.pointResponse().latitude()).isEqualTo(1.1);
+            softly.assertThat(postCreateResponse.postId()).isNotNull();
         });
     }
 
