@@ -79,7 +79,7 @@ class PostServiceTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser("상한 통후추");
+        LoginUser wrongUser = new LoginUser("상한후추");
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
@@ -100,7 +100,7 @@ class PostServiceTest {
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
         PostAndPointCreateRequest requestOfNotExistedTripId = new PostAndPointCreateRequest(
-                -1L,
+                Long.MIN_VALUE,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
@@ -140,7 +140,7 @@ class PostServiceTest {
     @Test
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser("상한 통후추");
+        LoginUser wrongUser = new LoginUser("상한후추");
         PostRequest postRequest = new PostRequest(
                 trip.id(),
                 point.id(),
@@ -159,7 +159,7 @@ class PostServiceTest {
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
         PostRequest requestOfNotExistedTripId = new PostRequest(
-                -1L,
+                Long.MIN_VALUE,
                 point.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -177,7 +177,7 @@ class PostServiceTest {
         // given
         PostRequest requestOfNotExistedPointId = new PostRequest(
                 trip.id(),
-                -1L,
+                Long.MIN_VALUE,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."

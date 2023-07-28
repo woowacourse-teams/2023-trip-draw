@@ -109,7 +109,7 @@ class PostControllerTest extends ControllerTest {
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                -1L,
+                Long.MIN_VALUE,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
@@ -260,7 +260,7 @@ class PostControllerTest extends ControllerTest {
         PointResponse pointResponse = createPoint();
 
         PostRequest postRequest = new PostRequest(
-                -1L,
+                Long.MIN_VALUE,
                 pointResponse.pointId(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -282,7 +282,7 @@ class PostControllerTest extends ControllerTest {
         // given
         PostRequest postRequest = new PostRequest(
                 trip.id(),
-                -1L,
+                Long.MIN_VALUE,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
