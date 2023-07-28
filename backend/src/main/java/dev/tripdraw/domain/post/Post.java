@@ -1,11 +1,13 @@
 package dev.tripdraw.domain.post;
 
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.exception.post.PostException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -60,6 +62,12 @@ public class Post extends BaseEntity {
         this.writing = writing;
         this.member = member;
         this.tripId = tripId;
+    }
+
+    public void validateAuthorization(Member member) {
+        if (!this.member.equals(member)) {
+            throw new PostException(NOT_AUTHORIZED);
+        }
     }
 
     public LocalDateTime pointRecordedAt() {
