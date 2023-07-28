@@ -3,7 +3,7 @@ package dev.tripdraw.application;
 import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -122,7 +122,7 @@ class TripServiceTest {
                 .filter(point -> Objects.equals(point.id(), pointResponse.pointId()))
                 .findFirst()
                 .get();
-        
+
         assertThat(deletedPoint.isDeleted()).isTrue();
     }
 
@@ -146,13 +146,13 @@ class TripServiceTest {
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         tripService.addPoint(loginUser, pointCreateRequest);
 
-        Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, LocalDateTime.now());
+        Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, false, LocalDateTime.now());
         PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), inExistentPoint.id());
 
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(loginUser, pointDeleteRequest))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_FOUND.getMessage());
+                .hasMessage(POINT_NOT_IN_TRIP.getMessage());
     }
 
     @Test
