@@ -10,6 +10,7 @@ import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,10 @@ public class PostController {
     }
 
     @Operation(summary = "현재 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 현재 위치에 대한 감상 생성")
+    @ApiResponse(
+            responseCode = "201",
+            description = "현재 위치에 대한 감상 생성 성공."
+    )
     @PostMapping("/posts/current-location")
     public ResponseEntity<PostResponse> createOfCurrentLocation(
             @Auth LoginUser loginUser,
@@ -39,6 +44,10 @@ public class PostController {
     }
 
     @Operation(summary = "사용자가 선택한 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 사용자가 선택한 위치에 대한 감상 생성")
+    @ApiResponse(
+            responseCode = "201",
+            description = "사용자가 선택한 위치에 대한 감상 생성 성공."
+    )
     @PostMapping("/posts")
     public ResponseEntity<PostResponse> create(
             @Auth LoginUser loginUser,
