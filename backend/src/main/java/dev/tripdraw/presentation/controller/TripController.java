@@ -56,6 +56,10 @@ public class TripController {
     }
 
     @Operation(summary = "여행 조회 API", description = "단일 여행의 정보를 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "여행 조회 성공."
+    )
     @GetMapping("/trips/{tripId}")
     public ResponseEntity<TripResponse> readById(@Auth LoginUser loginUser, @PathVariable Long tripId) {
         TripResponse response = tripService.readById(loginUser, tripId);
