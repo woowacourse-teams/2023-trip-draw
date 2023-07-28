@@ -168,7 +168,7 @@ class TripControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
@@ -181,7 +181,7 @@ class TripControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointDeleteRequest)
                 .when().delete("/points")
                 .then().log().all()
@@ -200,7 +200,7 @@ class TripControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
@@ -213,7 +213,7 @@ class TripControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 순후추_BASE64)
+                .auth().preemptive().oauth2(순후추_BASE64)
                 .body(pointDeleteRequest)
                 .when().delete("/points")
                 .then().log().all()
@@ -232,7 +232,7 @@ class TripControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
@@ -245,7 +245,7 @@ class TripControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointDeleteRequest)
                 .when().delete("/points")
                 .then().log().all()
@@ -264,7 +264,7 @@ class TripControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
@@ -275,7 +275,7 @@ class TripControllerTest extends ControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointDeleteRequest)
                 .when().delete("/points")
                 .then().log().all();
@@ -283,7 +283,7 @@ class TripControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(pointDeleteRequest)
                 .when().delete("/points")
                 .then().log().all()
