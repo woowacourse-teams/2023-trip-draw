@@ -3,8 +3,11 @@ package com.teamtripdraw.android.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.teamtripdraw.android.domain.repository.CreateTripRepository
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val createTripRepository: CreateTripRepository
+) : ViewModel() {
 
     private val _homeUiState: MutableLiveData<HomeUiState> = MutableLiveData()
     val homeUiState: LiveData<HomeUiState> = _homeUiState
