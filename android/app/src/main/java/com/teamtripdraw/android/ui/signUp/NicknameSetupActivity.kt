@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.main.MainActivity
 
 class NicknameSetupActivity : AppCompatActivity() {
 
@@ -20,8 +22,19 @@ class NicknameSetupActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.nicknameSetupViewModel = viewModel
 
-        viewModel.nickname.observe(this) {
-            viewModel.updateNickNameState(it)
+        setupNavigation()
+    }
+
+    private fun setupNavigation() {
+        viewModel.nicknameSetupCompleteEvent.observe(
+            this, EventObserver(this@NicknameSetupActivity::navigateNextPage)
+        )
+    }
+
+    private fun navigateNextPage(isNicknameSetupCompleted: Boolean) {
+        if (isNicknameSetupCompleted) {
+            startActivity(MainActivity.getIntent(this))
+            finish()
         }
     }
 }

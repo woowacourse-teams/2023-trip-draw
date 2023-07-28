@@ -13,10 +13,11 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
-import com.teamtripdraw.android.support.framework.presentation.extensions.checkForeGroundPermission
 import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION_PERMISSION_REQUEST_CODE
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserLocationOption
+import com.teamtripdraw.android.support.framework.presentation.permission.checkForeGroundPermission
+import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -35,6 +36,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             else -> {
                 // todo: 권한 받아야 한다는 다이얼로그 띄워주기 #15
             }
+        }
+    }
+    private val notificationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (!isGranted) {
+            // todo: 알림 권한 받아야 notification 보여줄 수 있다는 다이얼로그 #75
         }
     }
 
@@ -70,6 +78,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE),
             requireContext()
         )
+        this.naverMap.setContentPadding(0, 0, 0, toPixel(requireContext(), 67))
     }
 
     override fun onDestroyView() {

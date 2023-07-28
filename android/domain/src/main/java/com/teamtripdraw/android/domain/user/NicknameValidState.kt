@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.domain.user
 
 enum class NicknameValidState {
-    EMPTY, AVAILABLE, EXCEED_LIMIT, CONTAIN_BLANK;
+    EMPTY, AVAILABLE, EXCEED_LIMIT, CONTAIN_BLANK, DUPLICATE;
 
     companion object {
         const val MAX_NAME_LENGTH = 10
