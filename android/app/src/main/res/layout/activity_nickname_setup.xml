@@ -87,7 +87,7 @@
             android:layout_height="52dp"
             android:layout_margin="@dimen/margin_default"
             android:enabled="false"
-            android:onClick="@{() -> nicknameSetupViewModel.onNicknameSetupComplete()}"
+            android:onClick="@{() -> nicknameSetupViewModel.setNickname()}"
             android:text="@string/btn_setup_complete"
             android:textAppearance="@style/title_2M"
             android:textColor="@color/td_white"

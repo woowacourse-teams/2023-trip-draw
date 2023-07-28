@@ -30,9 +30,9 @@ class NicknameSetupViewModel(
         _nicknameState.value = NicknameValidState.getValidState(requireNotNull(nickname.value))
     }
 
-    fun onNicknameSetupComplete() {
+    fun setNickname() {
         viewModelScope.launch {
-            nicknameSetupRepository.setNickName(requireNotNull(nickname.value))
+            nicknameSetupRepository.setNickname(requireNotNull(nickname.value))
                 .onSuccess {
                     _nicknameSetupCompletedEvent.value = Event(true)
                 }
@@ -41,6 +41,8 @@ class NicknameSetupViewModel(
                         is DuplicateNickNameException ->
                             _nicknameState.value = NicknameValidState.DUPLICATE
                     }
+                }.getOrNull()?.let {
+                    nicknameSetupRepository.getNickname(it)
                 }
         }
     }

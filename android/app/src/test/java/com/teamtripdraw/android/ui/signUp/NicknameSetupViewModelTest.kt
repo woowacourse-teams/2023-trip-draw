@@ -51,10 +51,10 @@ internal class NicknameSetupViewModelTest: DefaultViewModelTest() {
         // given
         sut.nickname.value = "pingter"
         val result: Result<Unit> = Result.success(Unit)
-        coEvery { repository.setNickName(sut.nickname.value!!) } returns result
+        coEvery { repository.setNickname(sut.nickname.value!!) } returns result
 
         // when
-        sut.onNicknameSetupComplete()
+        sut.setNickname()
 
         // then
         assertThat(sut.nicknameSetupCompleteEvent.value?.content).isTrue
@@ -65,10 +65,10 @@ internal class NicknameSetupViewModelTest: DefaultViewModelTest() {
         // given
         sut.nickname.value = "pingter"
         val result: Result<Unit> = Result.failure(DuplicateNickNameException("중복된 닉네임 입니다."))
-        coEvery { repository.setNickName(sut.nickname.value!!) } returns result
+        coEvery { repository.setNickname(sut.nickname.value!!) } returns result
 
         // when
-        sut.onNicknameSetupComplete()
+        sut.setNickname()
 
         // then
         assertThat(sut.nicknameState.value).isEqualTo(NicknameValidState.DUPLICATE)
