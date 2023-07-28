@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-public record PostPointCreateRequest(
+public record PostAndPointCreateRequest(
         @Schema(description = "감상이 속하는 여행의 Id", example = "1")
         @NotNull
         Long tripId,

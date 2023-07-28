@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import dev.tripdraw.application.PostService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.dto.auth.LoginUser;
-import dev.tripdraw.dto.post.PostPointCreateRequest;
+import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.presentation.member.Auth;
@@ -37,9 +37,9 @@ public class PostController {
     @PostMapping("/posts/current-location")
     public ResponseEntity<PostResponse> createOfCurrentLocation(
             @Auth LoginUser loginUser,
-            @Valid @RequestBody PostPointCreateRequest postPointCreateRequest
+            @Valid @RequestBody PostAndPointCreateRequest postAndPointCreateRequest
     ) {
-        PostResponse response = postService.addAtCurrentPoint(loginUser, postPointCreateRequest);
+        PostResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 

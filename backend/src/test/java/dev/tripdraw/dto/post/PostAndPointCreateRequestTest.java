@@ -9,12 +9,12 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class PostPointCreateRequestTest {
+class PostAndPointCreateRequestTest {
 
     @Test
     void 위치_객체로_변환한다() {
         // given
-        PostPointCreateRequest request = new PostPointCreateRequest(
+        PostAndPointCreateRequest request = new PostAndPointCreateRequest(
                 1L,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",

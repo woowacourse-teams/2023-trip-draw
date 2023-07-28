@@ -10,7 +10,7 @@ import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
-import dev.tripdraw.dto.post.PostPointCreateRequest;
+import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.trip.PointCreateRequest;
@@ -51,7 +51,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성한다() {
         // given
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -65,7 +65,7 @@ class PostControllerTest extends ControllerTest {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", 통후추_BASE64)
-                .body(postPointCreateRequest)
+                .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .extract();
@@ -85,7 +85,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_인증에_실패하면_예외를_발생시킨다() {
         // given
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -99,7 +99,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", 순후추_BASE64)
-                .body(postPointCreateRequest)
+                .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -108,7 +108,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 -1L,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -122,7 +122,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", 통후추_BASE64)
-                .body(postPointCreateRequest)
+                .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -131,7 +131,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_제목이_비어있으면_예외를_발생시킨다() {
         // given
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -145,7 +145,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", 통후추_BASE64)
-                .body(postPointCreateRequest)
+                .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -154,7 +154,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_제목이_100자를_초과하면_예외를_발생시킨다() {
         // given
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "a".repeat(101),
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -168,7 +168,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", 통후추_BASE64)
-                .body(postPointCreateRequest)
+                .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -177,7 +177,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_위도가_존재하지_않으면_예외를_발생시킨다() {
         // given
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -191,7 +191,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", 통후추_BASE64)
-                .body(postPointCreateRequest)
+                .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());

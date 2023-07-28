@@ -13,7 +13,7 @@ import dev.tripdraw.domain.trip.Point;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
-import dev.tripdraw.dto.post.PostPointCreateRequest;
+import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
@@ -55,7 +55,7 @@ class PostServiceTest {
     @Test
     void 현재_위치에_대한_감상을_생성한다() {
         // given
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -66,7 +66,7 @@ class PostServiceTest {
         );
 
         // when
-        PostResponse postResponse = postService.addAtCurrentPoint(loginUser, postPointCreateRequest);
+        PostResponse postResponse = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
 
         // then
         assertSoftly(softly -> {
@@ -80,7 +80,7 @@ class PostServiceTest {
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
         LoginUser wrongUser = new LoginUser("상한 통후추");
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -91,7 +91,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.addAtCurrentPoint(wrongUser, postPointCreateRequest))
+        assertThatThrownBy(() -> postService.addAtCurrentPoint(wrongUser, postAndPointCreateRequest))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
@@ -99,7 +99,7 @@ class PostServiceTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
-        PostPointCreateRequest requestOfNotExistedTripId = new PostPointCreateRequest(
+        PostAndPointCreateRequest requestOfNotExistedTripId = new PostAndPointCreateRequest(
                 -1L,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
