@@ -18,7 +18,7 @@ class NicknameSetupRepositoryImpl(
 ) :
     NicknameSetupRepository {
     override suspend fun setNickName(nickName: String): Result<Unit> {
-        return remoteNicknameSetupDataSource.setNickName(nickName)
+        return remoteNicknameSetupDataSource.setNickname(nickName)
             .process(failureListener = this::setNickNameFailureListener) { body, headers ->
 //                localUserIdentifyInfoDataSource.setIdentifyInfo()
                 Result.success(Unit)
