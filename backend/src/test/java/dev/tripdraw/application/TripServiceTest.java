@@ -1,9 +1,5 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
@@ -13,10 +9,16 @@ import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.trip.TripException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+
+import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @ServiceTest
 class TripServiceTest {
@@ -50,6 +52,7 @@ class TripServiceTest {
             softly.assertThat(tripResponse.tripId()).isNotNull();
             softly.assertThat(tripResponse.name()).isNotNull();
             softly.assertThat(tripResponse.routes()).isEmpty();
+            softly.assertThat(tripResponse.status()).isEqualTo(ONGOING);
         });
     }
 
@@ -80,5 +83,19 @@ class TripServiceTest {
         assertThatThrownBy(() -> tripService.addPoint(loginUser, pointCreateRequest))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 여행을_ID로_조회한다() {
+        // given & when
+        TripResponse tripResponse = tripService.readTripById(loginUser, trip.id());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(tripResponse.tripId()).isNotNull();
+            softly.assertThat(tripResponse.name()).isNotNull();
+            softly.assertThat(tripResponse.routes()).isNotNull();
+            softly.assertThat(tripResponse.status()).isNotNull();
+        });
     }
 }

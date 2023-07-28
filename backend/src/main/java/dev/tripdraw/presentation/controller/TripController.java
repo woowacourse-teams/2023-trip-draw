@@ -1,7 +1,5 @@
 package dev.tripdraw.presentation.controller;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
 import dev.tripdraw.application.TripService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.dto.auth.LoginUser;
@@ -13,9 +11,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Tag(name = "Trip", description = "여행 관련 API 명세")
 @SwaggerAuthorizationRequired
@@ -51,5 +49,16 @@ public class TripController {
     ) {
         PointResponse response = tripService.addPoint(loginUser, pointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
+    }
+
+    @Operation(summary = "여행 조회 API", description = "단일 여행의 정보를 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "여행 조회 성공."
+    )
+    @GetMapping("/trips/{tripId}")
+    public ResponseEntity<TripResponse> readById(@Auth LoginUser loginUser, @PathVariable Long tripId) {
+        TripResponse response = tripService.readTripById(loginUser, tripId);
+        return ResponseEntity.ok(response);
     }
 }

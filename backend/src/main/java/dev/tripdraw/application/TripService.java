@@ -1,8 +1,5 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
-
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
@@ -16,6 +13,9 @@ import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 @Transactional
 @Service
@@ -38,8 +38,7 @@ public class TripService {
 
     public PointResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
         Member member = getByNickname(loginUser.nickname());
-        Trip trip = tripRepository.findById(pointCreateRequest.tripId())
-                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+        Trip trip = getByTripId(pointCreateRequest.tripId());
 
         Point point = pointCreateRequest.toPoint();
         trip.validateAuthorization(member);
@@ -52,5 +51,17 @@ public class TripService {
     private Member getByNickname(String nickname) {
         return memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    private Trip getByTripId(Long tripId) {
+        return tripRepository.findById(tripId)
+                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+    }
+
+    public TripResponse readTripById(LoginUser loginUser, Long id) {
+        Member member = getByNickname(loginUser.nickname());
+        Trip trip = getByTripId(id);
+        trip.validateAuthorization(member);
+        return TripResponse.from(trip);
     }
 }

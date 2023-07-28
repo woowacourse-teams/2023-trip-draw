@@ -1,9 +1,5 @@
 package dev.tripdraw.presentation.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
-
 import dev.tripdraw.dto.member.MemberCreateRequest;
 import dev.tripdraw.dto.member.MemberResponse;
 import io.restassured.RestAssured;
@@ -15,6 +11,10 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -48,7 +48,7 @@ class MemberControllerTest extends ControllerTest {
     }
 
     @Test
-    void 회원가입시_닉네임에_공백이_있으면_예외를_발생시킨다() {
+    void 회원가입_시_닉네임에_공백이_있으면_예외를_발생시킨다() {
         // given
         MemberCreateRequest invalidRequest = new MemberCreateRequest("통 후추");
 
