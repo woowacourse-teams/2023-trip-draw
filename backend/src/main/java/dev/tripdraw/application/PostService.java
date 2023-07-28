@@ -12,6 +12,7 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostPointCreateRequest;
+import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
@@ -38,20 +39,43 @@ public class PostService {
 
     public PostResponse createOfCurrentLocation(LoginUser loginUser, PostPointCreateRequest postPointCreateRequest) {
         Member member = findMemberByNickname(loginUser.nickname());
-        Long tripId = postPointCreateRequest.tripId();
-        Trip trip = findTripById(tripId);
+        Trip trip = findTripById(postPointCreateRequest.tripId());
         trip.validateAuthorization(member);
 
         Point point = postPointCreateRequest.toPoint();
         trip.add(point);
         tripRepository.flush();
 
-        Post post = createPost(postPointCreateRequest, member, point);
+        Post post = createPostOf(postPointCreateRequest, member, point);
         Post savedPost = postRepository.save(post);
         return PostResponse.from(savedPost);
     }
 
-    private Post createPost(PostPointCreateRequest postPointCreateRequest, Member member, Point point) {
+    public PostResponse create(LoginUser loginUser, PostRequest postRequest) {
+        Member member = findMemberByNickname(loginUser.nickname());
+        Trip trip = findTripById(postRequest.tripId());
+        trip.validateAuthorization(member);
+
+        Point point = trip.findPointById(postRequest.pointId());
+        
+        Post post = createPostOf(postRequest, member, point);
+        Post savedPost = postRepository.save(post);
+        return PostResponse.from(savedPost);
+    }
+
+    private Post createPostOf(PostRequest postRequest, Member member, Point point) {
+        Post post = new Post(
+                postRequest.title(),
+                point,
+                postRequest.address(),
+                postRequest.writing(),
+                member,
+                postRequest.tripId()
+        );
+        return post;
+    }
+
+    private Post createPostOf(PostPointCreateRequest postPointCreateRequest, Member member, Point point) {
         Post post = new Post(
                 postPointCreateRequest.title(),
                 point,
