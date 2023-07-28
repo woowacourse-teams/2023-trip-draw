@@ -1,7 +1,7 @@
 package dev.tripdraw.dto.trip;
 
-import dev.tripdraw.domain.trip.Status;
 import dev.tripdraw.domain.trip.Trip;
+import dev.tripdraw.domain.trip.TripStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public record TripResponse(
         List<PointResponse> routes,
 
         @Schema(description = "여행 상태", example = "ONGOING")
-        Status status
+        TripStatus status
 ) {
 
     public static TripResponse from(Trip trip) {

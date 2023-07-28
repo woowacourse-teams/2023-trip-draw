@@ -1,5 +1,5 @@
 package dev.tripdraw.domain.trip;
 
-public enum Status {
+public enum TripStatus {
     ONGOING, FINISHED
 }

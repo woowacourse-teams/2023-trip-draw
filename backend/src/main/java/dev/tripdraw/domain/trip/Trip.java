@@ -1,7 +1,7 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.domain.trip.Status.FINISHED;
-import static dev.tripdraw.domain.trip.Status.ONGOING;
+import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
+import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -37,7 +37,7 @@ public class Trip extends BaseEntity {
     private Route route = new Route();
 
     @Column(nullable = false)
-    private Status status;
+    private TripStatus status;
 
     protected Trip() {
     }
@@ -46,7 +46,7 @@ public class Trip extends BaseEntity {
         this(null, name, member, ONGOING);
     }
 
-    public Trip(Long id, TripName name, Member member, Status status) {
+    public Trip(Long id, TripName name, Member member, TripStatus status) {
         this.id = id;
         this.name = name;
         this.member = member;
@@ -100,7 +100,7 @@ public class Trip extends BaseEntity {
         return route.points();
     }
 
-    public Status status() {
+    public TripStatus status() {
         return status;
     }
 }

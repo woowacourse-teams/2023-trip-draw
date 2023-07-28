@@ -1,6 +1,6 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.domain.trip.Status.ONGOING;
+import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
