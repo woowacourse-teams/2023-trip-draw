@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
 public record PointCreateRequest(
-        @Schema(description = "여행 Id", example = "1")
+        @Schema(description = "위치가 속하는 여행의 Id", example = "1")
         Long tripId,
 
         @Schema(description = "위도", example = "37.56663888630603")

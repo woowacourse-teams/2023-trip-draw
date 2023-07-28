@@ -1,6 +1,7 @@
 package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -26,6 +27,13 @@ public class Route {
         points.add(point);
     }
 
+    public Point findPointById(Long pointIdToFind) {
+        return points.stream()
+                .filter(point -> Objects.equals(point.id(), pointIdToFind))
+                .findAny()
+                .orElseThrow(() -> new TripException(POINT_NOT_FOUND));
+    }
+
     public List<Point> points() {
         return points;
     }
@@ -34,7 +42,7 @@ public class Route {
         Point pointToDelete = points.stream()
                 .filter(point -> Objects.equals(point.id(), pointId))
                 .findFirst()
-                .orElseThrow(() -> new TripException(POINT_NOT_FOUND));
+                .orElseThrow(() -> new TripException(POINT_NOT_IN_TRIP));
 
         pointToDelete.delete();
     }

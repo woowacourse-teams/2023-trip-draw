@@ -3,7 +3,7 @@ package dev.tripdraw.domain.trip;
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -133,7 +133,7 @@ class TripTest {
         // given
         Member member = new Member("통후추");
         Trip trip = Trip.from(member);
-        Point point1 = new Point(1L, 1.1, 2.2, LocalDateTime.now());
+        Point point1 = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
         trip.add(point1);
         trip.deletePointById(point1.id());
 
@@ -148,13 +148,13 @@ class TripTest {
         // given
         Member member = new Member("통후추");
         Trip trip = Trip.from(member);
-        Point point1 = new Point(1L, 1.1, 2.2, LocalDateTime.now());
-        Point point2 = new Point(2L, 3.3, 4.4, LocalDateTime.now());
+        Point point1 = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
+        Point point2 = new Point(2L, 3.3, 4.4, false, LocalDateTime.now());
         trip.add(point1);
 
         // expect
         assertThatThrownBy(() -> trip.deletePointById(point2.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_FOUND.getMessage());
+                .hasMessage(POINT_NOT_IN_TRIP.getMessage());
     }
 }

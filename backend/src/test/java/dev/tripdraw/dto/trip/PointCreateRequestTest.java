@@ -1,9 +1,8 @@
-package dev.tripdraw.dto.request;
+package dev.tripdraw.dto.trip;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.tripdraw.domain.trip.Point;
-import dev.tripdraw.dto.trip.PointCreateRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class PointCreateRequestTest {
 
     @Test
-    void point_객체로_변환한다() {
+    void 위치_객체로_변환한다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
                 1L,
@@ -27,10 +26,8 @@ class PointCreateRequestTest {
         Point point = request.toPoint();
 
         // then
-        assertThat(point).usingRecursiveComparison().isEqualTo(new Point(
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        ));
+        assertThat(point).usingRecursiveComparison().isEqualTo(
+                new Point(1.1, 2.2, LocalDateTime.of(2023, 7, 18, 20, 24))
+        );
     }
 }
