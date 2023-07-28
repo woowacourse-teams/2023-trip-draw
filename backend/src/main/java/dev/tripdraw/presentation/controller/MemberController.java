@@ -4,7 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 import dev.tripdraw.application.MemberService;
 import dev.tripdraw.dto.member.MemberCreateRequest;
-import dev.tripdraw.dto.member.MemberResponse;
+import dev.tripdraw.dto.member.MemberCreateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +32,8 @@ public class MemberController {
             description = "사용자 등록 성공."
     )
     @PostMapping
-    public ResponseEntity<MemberResponse> create(@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
-        MemberResponse response = memberService.register(memberCreateRequest);
+    public ResponseEntity<MemberCreateResponse> create(@Valid @RequestBody MemberCreateRequest memberCreateRequest) {
+        MemberCreateResponse response = memberService.register(memberCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 }
