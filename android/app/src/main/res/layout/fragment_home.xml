@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/tb_main"
-        layout="@layout/layout_logo_tool_bar"
+    <data>
+
+        <variable
+            name="homeViewModel"
+            type="com.teamtripdraw.android.ui.home.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_default"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment">
+
+        <include
+            android:id="@+id/tb_main"
+            layout="@layout/layout_logo_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_default"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_map"
-        android:name="com.naver.maps.map.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_main"
-        tools:layout="@layout/map_preview" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_map"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_main"
+            tools:layout="@layout/map_preview" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_trip_start"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginHorizontal="@dimen/margin_default"
-        android:layout_marginBottom="@dimen/margin_default"
-        android:background="@drawable/shape_td_main_blue_line_12_rect"
-        android:text="@string/btn_trip_start"
-        android:textAppearance="@style/title_2M"
-        android:textColor="@color/td_main_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_trip_start"
+            android:layout_width="0dp"
+            android:layout_height="51dp"
+            android:layout_marginHorizontal="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:background="@drawable/shape_td_main_blue_line_12_rect"
+            android:onClickListener="@{()->homeViewModel.startTrip()}"
+            android:text="@string/btn_trip_start"
+            android:textAppearance="@style/title_2M"
+            android:textColor="@color/td_main_blue"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
