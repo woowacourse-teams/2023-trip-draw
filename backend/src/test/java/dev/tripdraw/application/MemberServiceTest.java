@@ -1,17 +1,17 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.member.MemberCreateRequest;
-import dev.tripdraw.dto.member.MemberResponse;
+import dev.tripdraw.dto.member.MemberCreateResponse;
 import dev.tripdraw.exception.member.MemberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ServiceTest
 class MemberServiceTest {
@@ -34,10 +34,10 @@ class MemberServiceTest {
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest("순후추");
 
         // when
-        MemberResponse response = memberService.register(memberCreateRequest);
+        MemberCreateResponse response = memberService.register(memberCreateRequest);
 
         // then
-        assertThat(memberRepository.existsByNickname(response.nickname())).isTrue();
+        assertThat(memberRepository.existsByNickname(memberCreateRequest.nickname())).isTrue();
     }
 
     @Test
