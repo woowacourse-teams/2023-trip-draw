@@ -1,5 +1,5 @@
 package com.teamtripdraw.android.domain.repository
 
-interface CreateTripRepository {
+interface TripRepository {
     suspend fun startTrip(): Result<Long>
 }

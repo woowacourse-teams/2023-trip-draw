@@ -1,8 +1,8 @@
 package com.teamtripdraw.android.di
 
-import com.teamtripdraw.android.data.repository.CreateTripRepositoryImpl
+import com.teamtripdraw.android.data.repository.TripRepositoryImpl
 import com.teamtripdraw.android.data.repository.NicknameSetupRepositoryImpl
-import com.teamtripdraw.android.domain.repository.CreateTripRepository
+import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
 
 class RepositoryContainer(
@@ -15,7 +15,7 @@ class RepositoryContainer(
         remoteDataSourceContainer.remoteNicknameSetupDataSource,
         retrofitContainer.tripDrawRetrofit
     )
-    val createTripRepository: CreateTripRepository = CreateTripRepositoryImpl(
-        remoteDataSourceContainer.remoteCreateTripDataSource
+    val tripRepository: TripRepository = TripRepositoryImpl(
+        remoteDataSourceContainer.remoteTripDataSource
     )
 }
