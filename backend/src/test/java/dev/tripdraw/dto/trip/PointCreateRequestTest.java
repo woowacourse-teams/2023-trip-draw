@@ -26,10 +26,8 @@ class PointCreateRequestTest {
         Point point = request.toPoint();
 
         // then
-        assertThat(point).usingRecursiveComparison().isEqualTo(new Point(
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        ));
+        assertThat(point).usingRecursiveComparison().isEqualTo(
+                new Point(1.1, 2.2, LocalDateTime.of(2023, 7, 18, 20, 24))
+        );
     }
 }
