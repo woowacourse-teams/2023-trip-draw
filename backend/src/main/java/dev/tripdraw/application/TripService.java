@@ -25,10 +25,7 @@ public class TripService {
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
 
-    public TripService(
-            TripRepository tripRepository,
-            MemberRepository memberRepository
-    ) {
+    public TripService(TripRepository tripRepository, MemberRepository memberRepository) {
         this.tripRepository = tripRepository;
         this.memberRepository = memberRepository;
     }
