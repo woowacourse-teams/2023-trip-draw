@@ -29,8 +29,8 @@ import org.springframework.http.MediaType;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
 
-    private static final String 통후추_BASE64 = "Bearer 7Ya17ZuE7LaU";
-    private static final String 순후추_BASE64 = "Bearer 7Iic7ZuE7LaU";
+    private static final String 통후추_BASE64 = "7Ya17ZuE7LaU";
+    private static final String 순후추_BASE64 = "7Iic7ZuE7LaU";
 
     @Autowired
     private TripRepository tripRepository;
@@ -64,7 +64,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -98,7 +98,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 순후추_BASE64)
+                .auth().preemptive().oauth2(순후추_BASE64)
                 .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -121,7 +121,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -144,7 +144,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -167,7 +167,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -190,7 +190,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postAndPointCreateRequest)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -213,7 +213,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postRequest)
                 .when().post("/posts")
                 .then().log().all()
@@ -247,7 +247,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 순후추_BASE64)
+                .auth().preemptive().oauth2(순후추_BASE64)
                 .body(postRequest)
                 .when().post("/posts")
                 .then().log().all()
@@ -270,7 +270,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postRequest)
                 .when().post("/posts")
                 .then().log().all()
@@ -291,7 +291,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postRequest)
                 .when().post("/posts")
                 .then().log().all()
@@ -314,7 +314,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postRequest)
                 .when().post("/posts")
                 .then().log().all()
@@ -337,7 +337,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(postRequest)
                 .when().post("/posts")
                 .then().log().all()
@@ -354,7 +354,7 @@ class PostControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", 통후추_BASE64)
+                .auth().preemptive().oauth2(통후추_BASE64)
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
