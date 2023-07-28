@@ -16,7 +16,7 @@ class NicknameSetupRepositoryImpl(
     private val retrofit: Retrofit
 ) :
     NicknameSetupRepository {
-    override suspend fun setNickName(nickname: String): Result<Long> {
+    override suspend fun setNickname(nickname: String): Result<Long> {
         return remoteNicknameSetupDataSource.setNickname(nickname)
             .process(failureListener = this::setNickNameFailureListener) { body, headers ->
                 Result.success(body.memberId)
@@ -42,7 +42,7 @@ class NicknameSetupRepositoryImpl(
         )
     }
 
-    override suspend fun getNickName(nicknameId: Long): Result<Unit> =
+    override suspend fun getNickname(nicknameId: Long): Result<Unit> =
         remoteNicknameSetupDataSource.getNickname(nicknameId).process { body, headers ->
             localUserIdentifyInfoDataSource.setIdentifyInfo(body.nickname)
             Result.success(Unit)
