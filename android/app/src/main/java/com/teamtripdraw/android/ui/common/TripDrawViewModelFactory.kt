@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.teamtripdraw.android.TripDrawApplication
+import com.teamtripdraw.android.ui.post.writing.PostWritingViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.signUp.NicknameSetupViewModel
 
@@ -18,6 +19,8 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
             when {
                 isAssignableFrom(NicknameSetupViewModel::class.java) ->
                     NicknameSetupViewModel(repositoryContainer.nicknameSetupRepository)
+                isAssignableFrom(PostWritingViewModel::class.java) ->
+                    PostWritingViewModel() // todo 추후 repo 추가 필요
                 isAssignableFrom(HomeViewModel::class.java) ->
                     HomeViewModel()
                 else ->

@@ -27,4 +27,10 @@
     <string name="tv_nickname_length">%d/%d</string>
     <string name="warning_duplicate_nickname">중복된 닉네임입니다</string>
     <string name="dialog_positive_button_default_text">확인</string>
+
+    <!-- PostWritingActivity -->
+    <string name="page_name">감상 남기기</string>
+    <string name="et_post_title">제목</string>
+    <string name="btn_post_complete">저장</string>
+
 </resources>
