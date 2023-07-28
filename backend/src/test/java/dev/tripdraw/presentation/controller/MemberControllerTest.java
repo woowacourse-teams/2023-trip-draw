@@ -92,7 +92,7 @@ class MemberControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/members/" + member.id())
+                .when().get("/members/{memberId}", member.id())
                 .then().log().all()
                 .statusCode(OK.value())
                 .extract();
@@ -107,7 +107,7 @@ class MemberControllerTest extends ControllerTest {
         // expect
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/members/" + Long.MAX_VALUE)
+                .when().get("/members/{memberId}", Long.MAX_VALUE)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value())
                 .extract();
