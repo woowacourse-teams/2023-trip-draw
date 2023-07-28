@@ -1,10 +1,5 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
@@ -14,10 +9,16 @@ import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.trip.TripException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+
+import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @ServiceTest
 class TripServiceTest {
@@ -85,7 +86,7 @@ class TripServiceTest {
     }
 
     @Test
-    void trip_id로_여행을_조회한다() {
+    void 여행을_ID로_조회한다() {
         // given & when
         TripResponse tripResponse = tripService.readById(loginUser, trip.id());
 

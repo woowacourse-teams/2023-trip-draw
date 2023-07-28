@@ -1,11 +1,5 @@
 package dev.tripdraw.presentation.controller;
 
-import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.OK;
-
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
@@ -16,13 +10,18 @@ import dev.tripdraw.dto.trip.TripResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+
+import java.time.LocalDateTime;
+
+import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.http.HttpStatus.*;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -69,7 +68,7 @@ class TripControllerTest extends ControllerTest {
     }
 
     @Test
-    void 여행_생성시_인증에_실패하면_예외를_발생시킨다() {
+    void 여행_생성_시_인증에_실패하면_예외를_발생시킨다() {
         // given & expect
         RestAssured.given().log().all()
                 .auth().preemptive().oauth2(순후추_BASE64)
@@ -110,7 +109,7 @@ class TripControllerTest extends ControllerTest {
     }
 
     @Test
-    void 위치_정보_추가시_인증에_실패하면_예외를_발생시킨다() {
+    void 위치_정보_추가_시_인증에_실패하면_예외를_발생시킨다() {
         // given
         PointCreateRequest request = new PointCreateRequest(
                 trip.id(),
@@ -130,7 +129,7 @@ class TripControllerTest extends ControllerTest {
     }
 
     @Test
-    void trip_id로_여행을_조회한다() {
+    void 여행을_ID로_조회한다() {
         // given & when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .auth().preemptive().oauth2(통후추_BASE64)

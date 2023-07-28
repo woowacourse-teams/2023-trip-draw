@@ -1,9 +1,5 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.member.MemberCreateRequest;
@@ -12,6 +8,10 @@ import dev.tripdraw.exception.member.MemberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ServiceTest
 class MemberServiceTest {
@@ -41,7 +41,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 이미_존재하는_닉네임으로_회원_가입시_예외를_발생시킨다() {
+    void 이미_존재하는_닉네임으로_회원_가입_시_예외를_발생시킨다() {
         // given
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest("통후추");
 

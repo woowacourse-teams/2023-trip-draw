@@ -3,6 +3,7 @@ package dev.tripdraw.dto.trip;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 
 public record TripResponse(
@@ -15,7 +16,7 @@ public record TripResponse(
         @Schema(description = "경로")
         List<PointResponse> routes,
 
-        @Schema(description = "여행 상태", example = "ONGOING")
+        @Schema(description = "여행 상태 (option : ONGOING, FINISHED)", example = "ONGOING")
         TripStatus status
 ) {
 
