@@ -1,8 +1,8 @@
 package com.teamtripdraw.android.ui.post.writing
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
@@ -19,6 +19,5 @@ class PostWritingActivity : AppCompatActivity() {
 
         binding.lifecycleOwner = this
         binding.postWritingViewModel = viewModel
-
     }
 }

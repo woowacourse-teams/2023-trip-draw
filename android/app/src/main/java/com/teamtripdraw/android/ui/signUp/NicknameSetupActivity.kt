@@ -27,7 +27,8 @@ class NicknameSetupActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
         viewModel.nicknameSetupCompleteEvent.observe(
-            this, EventObserver(this@NicknameSetupActivity::navigateNextPage)
+            this,
+            EventObserver(this@NicknameSetupActivity::navigateNextPage)
         )
     }
 
