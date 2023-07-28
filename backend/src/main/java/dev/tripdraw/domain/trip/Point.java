@@ -26,6 +26,9 @@ public class Point extends BaseEntity {
     private Double longitude;
 
     @Column(nullable = false)
+    private boolean hasPost = false;
+
+    @Column(nullable = false)
     private LocalDateTime recordedAt;
 
     @Column(nullable = false)
@@ -67,6 +70,10 @@ public class Point extends BaseEntity {
 
     public Double longitude() {
         return longitude;
+    }
+
+    public boolean hasPost() {
+        return hasPost;
     }
 
     public LocalDateTime recordedAt() {
