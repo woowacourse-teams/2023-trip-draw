@@ -48,8 +48,8 @@ class RouteTest {
     void 경로에_존재하지_않는_위치정보를_삭제하면_예외를_발생시킨다() {
         // given
         Route route = new Route();
-        Point point = new Point(1L, 1.1, 2.2, LocalDateTime.now());
-        Point inexistentPoint = new Point(2L, 1.1, 2.2, LocalDateTime.now());
+        Point point = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
+        Point inexistentPoint = new Point(2L, 1.1, 2.2, false, LocalDateTime.now());
 
         route.add(point);
 
@@ -63,7 +63,7 @@ class RouteTest {
     void 이미_삭제된_위치정보를_삭제하면_예외를_발생시킨다() {
         // given
         Route route = new Route();
-        Point point = new Point(1L, 1.1, 2.2, LocalDateTime.now());
+        Point point = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
 
         route.add(point);
         route.deletePointById(point.id());

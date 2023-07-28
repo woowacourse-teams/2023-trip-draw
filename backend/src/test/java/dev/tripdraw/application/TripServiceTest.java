@@ -146,7 +146,7 @@ class TripServiceTest {
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         tripService.addPoint(loginUser, pointCreateRequest);
 
-        Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, LocalDateTime.now());
+        Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, false, LocalDateTime.now());
         PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), inExistentPoint.id());
 
         // expect
