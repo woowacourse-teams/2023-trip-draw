@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 
 public enum TripExceptionType implements ExceptionType {
     TRIP_NOT_FOUND(NOT_FOUND, "존재하지 않는 여행입니다."),
-    NOT_AUTHORIZED(FORBIDDEN, "해당 여행에 대한 접근 권한이 없습니다."),
-    ;
+    POINT_NOT_FOUND(NOT_FOUND, "존재하지 않는 위치입니다."),
+    NOT_AUTHORIZED(FORBIDDEN, "해당 여행에 대한 접근 권한이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;

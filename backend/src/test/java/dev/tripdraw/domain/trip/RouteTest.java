@@ -1,7 +1,10 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -22,6 +25,35 @@ class RouteTest {
 
         // then
         assertThat(route.points()).hasSize(1);
+    }
+
+    @Test
+    void 위치를_ID로_조회한다() {
+        // given
+        Route route = new Route();
+        Point point1 = new Point(1L, 1.1, 2.1, false, LocalDateTime.now());
+        Point point2 = new Point(2L, 1.2, 2.2, false, LocalDateTime.now());
+        route.add(point1);
+        route.add(point2);
+
+        // when
+        Point foundPoint = route.findPointById(1L);
+
+        // then
+        assertThat(foundPoint).isEqualTo(point1);
+    }
+
+    @Test
+    void 위치를_존재하지_않는_ID로_조회하면_예외가_발생한다() {
+        // given
+        Route route = new Route();
+        Point point = new Point(1L, 1.1, 2.1, false, LocalDateTime.now());
+        route.add(point);
+
+        // expect
+        assertThatThrownBy(() -> route.findPointById(2L))
+                .isInstanceOf(TripException.class)
+                .hasMessage(POINT_NOT_FOUND.getMessage());
     }
 }
 
