@@ -18,7 +18,8 @@ public record PostAndPointCreateRequest(
         Long tripId,
 
         @Schema(description = "제목", example = "우도의 바닷가")
-        @NotBlank @Size(max = 100)
+        @NotBlank
+        @Size(max = 100)
         String title,
 
         @Schema(description = "현재 위치의 주소", example = "제주도 제주시 우도면")
