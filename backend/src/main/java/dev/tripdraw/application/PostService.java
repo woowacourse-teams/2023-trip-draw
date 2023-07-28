@@ -46,7 +46,7 @@ public class PostService {
         trip.add(point);
         tripRepository.flush();
 
-        Post post = createPostOf(postPointCreateRequest, member, point);
+        Post post = postPointCreateRequest.toPost(member, point);
         Post savedPost = postRepository.save(post);
         return PostResponse.from(savedPost);
     }
@@ -57,34 +57,10 @@ public class PostService {
         trip.validateAuthorization(member);
 
         Point point = trip.findPointById(postRequest.pointId());
-        
-        Post post = createPostOf(postRequest, member, point);
+
+        Post post = postRequest.toPost(member, point);
         Post savedPost = postRepository.save(post);
         return PostResponse.from(savedPost);
-    }
-
-    private Post createPostOf(PostRequest postRequest, Member member, Point point) {
-        Post post = new Post(
-                postRequest.title(),
-                point,
-                postRequest.address(),
-                postRequest.writing(),
-                member,
-                postRequest.tripId()
-        );
-        return post;
-    }
-
-    private Post createPostOf(PostPointCreateRequest postPointCreateRequest, Member member, Point point) {
-        Post post = new Post(
-                postPointCreateRequest.title(),
-                point,
-                postPointCreateRequest.address(),
-                postPointCreateRequest.writing(),
-                member,
-                postPointCreateRequest.tripId()
-        );
-        return post;
     }
 
     private Trip findTripById(Long tripId) {

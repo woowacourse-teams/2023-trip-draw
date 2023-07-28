@@ -3,6 +3,8 @@ package dev.tripdraw.dto.post;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.trip.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -31,5 +33,9 @@ public record PostPointCreateRequest(
 
     public Point toPoint() {
         return new Point(latitude, longitude, recordedAt);
+    }
+
+    public Post toPost(Member member, Point point) {
+        return new Post(title, point, address, writing, member, tripId);
     }
 }
