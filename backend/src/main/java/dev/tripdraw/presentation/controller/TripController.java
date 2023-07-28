@@ -55,7 +55,6 @@ public class TripController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    @SwaggerLoginRequired
     @Operation(summary = "위치 정보 삭제 API", description = "특정 위치 정보를 삭제합니다.")
     @DeleteMapping("/points")
     public ResponseEntity<Void> deletePoint(
