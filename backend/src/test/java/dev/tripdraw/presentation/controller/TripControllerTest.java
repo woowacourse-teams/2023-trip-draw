@@ -92,7 +92,6 @@ class TripControllerTest extends ControllerTest {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
