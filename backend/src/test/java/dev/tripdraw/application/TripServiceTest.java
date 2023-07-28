@@ -1,6 +1,5 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
@@ -18,6 +17,7 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
+import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
@@ -52,15 +52,10 @@ class TripServiceTest {
     @Test
     void 여행을_생성한다() {
         // given
-        TripResponse tripResponse = tripService.create(loginUser);
+        TripCreateResponse tripCreateResponse = tripService.create(loginUser);
 
         // expect
-        assertSoftly(softly -> {
-            softly.assertThat(tripResponse.tripId()).isNotNull();
-            softly.assertThat(tripResponse.name()).isNotNull();
-            softly.assertThat(tripResponse.routes()).isEmpty();
-            softly.assertThat(tripResponse.status()).isEqualTo(ONGOING);
-        });
+        assertThat(tripCreateResponse.tripId()).isNotNull();
     }
 
     @Test
