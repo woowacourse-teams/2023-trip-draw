@@ -3,9 +3,14 @@ package dev.tripdraw.presentation.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
+import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.member.MemberCreateRequest;
 import dev.tripdraw.dto.member.MemberCreateResponse;
+import dev.tripdraw.dto.member.MemberSearchResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -13,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
@@ -22,6 +28,9 @@ class MemberControllerTest extends ControllerTest {
 
     @LocalServerPort
     int port;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
@@ -73,5 +82,34 @@ class MemberControllerTest extends ControllerTest {
                 .when().post("/members")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    void 사용자를_조회한다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추"));
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/members/" + member.id())
+                .then().log().all()
+                .statusCode(OK.value())
+                .extract();
+        MemberSearchResponse memberSearchResponse = response.as(MemberSearchResponse.class);
+
+        // expect
+        assertThat(memberSearchResponse.nickname()).isEqualTo("통후추");
+    }
+
+    @Test
+    void id에_해당하는_사용자가_없는_경우_예외가_발생한다() {
+        // expect
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/members/" + Long.MAX_VALUE)
+                .then().log().all()
+                .statusCode(NOT_FOUND.value())
+                .extract();
     }
 }
