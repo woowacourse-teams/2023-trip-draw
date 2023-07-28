@@ -37,7 +37,7 @@ public class PostService {
         this.memberRepository = memberRepository;
     }
 
-    public PostResponse createOfCurrentLocation(LoginUser loginUser, PostPointCreateRequest postPointCreateRequest) {
+    public PostResponse addAtCurrentPoint(LoginUser loginUser, PostPointCreateRequest postPointCreateRequest) {
         Member member = findMemberByNickname(loginUser.nickname());
         Trip trip = findTripById(postPointCreateRequest.tripId());
         trip.validateAuthorization(member);
@@ -51,7 +51,7 @@ public class PostService {
         return PostResponse.from(savedPost);
     }
 
-    public PostResponse create(LoginUser loginUser, PostRequest postRequest) {
+    public PostResponse addAtExistingLocation(LoginUser loginUser, PostRequest postRequest) {
         Member member = findMemberByNickname(loginUser.nickname());
         Trip trip = findTripById(postRequest.tripId());
         trip.validateAuthorization(member);

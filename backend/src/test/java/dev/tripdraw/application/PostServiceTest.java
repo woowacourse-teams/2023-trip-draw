@@ -66,7 +66,7 @@ class PostServiceTest {
         );
 
         // when
-        PostResponse postResponse = postService.createOfCurrentLocation(loginUser, postPointCreateRequest);
+        PostResponse postResponse = postService.addAtCurrentPoint(loginUser, postPointCreateRequest);
 
         // then
         assertSoftly(softly -> {
@@ -91,7 +91,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.createOfCurrentLocation(wrongUser, postPointCreateRequest))
+        assertThatThrownBy(() -> postService.addAtCurrentPoint(wrongUser, postPointCreateRequest))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
@@ -110,7 +110,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.createOfCurrentLocation(loginUser, requestOfNotExistedTripId))
+        assertThatThrownBy(() -> postService.addAtCurrentPoint(loginUser, requestOfNotExistedTripId))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
@@ -127,7 +127,7 @@ class PostServiceTest {
         );
 
         // when
-        PostResponse postResponse = postService.create(loginUser, postRequest);
+        PostResponse postResponse = postService.addAtExistingLocation(loginUser, postRequest);
 
         // then
         assertSoftly(softly -> {
@@ -150,7 +150,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.create(wrongUser, postRequest))
+        assertThatThrownBy(() -> postService.addAtExistingLocation(wrongUser, postRequest))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
@@ -167,7 +167,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.create(loginUser, requestOfNotExistedTripId))
+        assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedTripId))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
@@ -184,7 +184,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.create(loginUser, requestOfNotExistedPointId))
+        assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedPointId))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_FOUND.getMessage());
     }

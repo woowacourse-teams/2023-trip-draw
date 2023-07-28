@@ -39,7 +39,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             @Valid @RequestBody PostPointCreateRequest postPointCreateRequest
     ) {
-        PostResponse response = postService.createOfCurrentLocation(loginUser, postPointCreateRequest);
+        PostResponse response = postService.addAtCurrentPoint(loginUser, postPointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -53,7 +53,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             @Valid @RequestBody PostRequest postRequest
     ) {
-        PostResponse response = postService.create(loginUser, postRequest);
+        PostResponse response = postService.addAtExistingLocation(loginUser, postRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 }
