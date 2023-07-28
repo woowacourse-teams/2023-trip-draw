@@ -24,6 +24,9 @@ class HomeViewModel(
     fun startTrip() {
         viewModelScope.launch {
             tripRepository.startTrip()
+                .onSuccess {
+                    _homeUiState.value = HomeUiState.ON_TRIP
+                }
         }
     }
 }
