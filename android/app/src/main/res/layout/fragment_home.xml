@@ -33,7 +33,7 @@
             tools:layout="@layout/map_preview" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_trip_start"
+            android:id="@+id/btn_start_trip"
             android:layout_width="0dp"
             android:layout_height="51dp"
             android:layout_marginHorizontal="@dimen/margin_default"
@@ -43,6 +43,7 @@
             android:text="@string/btn_trip_start"
             android:textAppearance="@style/title_2M"
             android:textColor="@color/td_main_blue"
+            app:HomeUiStateBeforeTrip="@{homeViewModel.homeUiState}"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_map"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
