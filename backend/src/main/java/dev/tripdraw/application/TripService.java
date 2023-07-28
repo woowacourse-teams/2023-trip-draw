@@ -1,5 +1,8 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
+
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
@@ -7,15 +10,13 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 @Transactional
 @Service
@@ -46,6 +47,17 @@ public class TripService {
 
         tripRepository.flush();
         return PointResponse.from(point);
+    }
+
+    public void deletePoint(LoginUser loginUser, PointDeleteRequest pointDeleteRequest) {
+        Member member = getByNickname(loginUser.nickname());
+        Long tripId = pointDeleteRequest.tripId();
+        Long pointId = pointDeleteRequest.pointId();
+
+        Trip trip = getByTripId(tripId);
+        trip.validateAuthorization(member);
+
+        trip.deletePointById(pointId);
     }
 
     private Member getByNickname(String nickname) {

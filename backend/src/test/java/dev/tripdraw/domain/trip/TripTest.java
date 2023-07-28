@@ -2,6 +2,8 @@ package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -106,5 +108,53 @@ class TripTest {
 
         // then
         assertThat(trip.status()).isEqualTo(FINISHED);
+    }
+
+    @Test
+    void 여행에_존재하는_위치정보를_삭제한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
+        Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
+        trip.add(point1);
+        trip.add(point2);
+        Long point1Id = point1.id();
+
+        // when
+        trip.deletePointById(point1Id);
+
+        // then
+        assertThat(point1.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 삭제된_위치정보를_삭제하면_예외를_발생시킨다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        Point point1 = new Point(1L, 1.1, 2.2, LocalDateTime.now());
+        trip.add(point1);
+        trip.deletePointById(point1.id());
+
+        // expect
+        assertThatThrownBy(() -> trip.deletePointById(point1.id()))
+                .isInstanceOf(TripException.class)
+                .hasMessage(POINT_ALREADY_DELETED.getMessage());
+    }
+
+    @Test
+    void 여행에_존재하지_않는_위치정보를_삭제하면_예외를_발생시킨다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        Point point1 = new Point(1L, 1.1, 2.2, LocalDateTime.now());
+        Point point2 = new Point(2L, 3.3, 4.4, LocalDateTime.now());
+        trip.add(point1);
+
+        // expect
+        assertThatThrownBy(() -> trip.deletePointById(point2.id()))
+                .isInstanceOf(TripException.class)
+                .hasMessage(POINT_NOT_FOUND.getMessage());
     }
 }
