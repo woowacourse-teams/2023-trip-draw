@@ -12,8 +12,8 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
+import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
-import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
@@ -37,7 +37,10 @@ public class PostService {
         this.memberRepository = memberRepository;
     }
 
-    public PostResponse addAtCurrentPoint(LoginUser loginUser, PostAndPointCreateRequest postAndPointCreateRequest) {
+    public PostCreateResponse addAtCurrentPoint(
+            LoginUser loginUser,
+            PostAndPointCreateRequest postAndPointCreateRequest
+    ) {
         Member member = findMemberByNickname(loginUser.nickname());
         Trip trip = findTripById(postAndPointCreateRequest.tripId());
         trip.validateAuthorization(member);
@@ -48,10 +51,10 @@ public class PostService {
 
         Post post = postAndPointCreateRequest.toPost(member, point);
         Post savedPost = postRepository.save(post);
-        return PostResponse.from(savedPost);
+        return PostCreateResponse.from(savedPost);
     }
 
-    public PostResponse addAtExistingLocation(LoginUser loginUser, PostRequest postRequest) {
+    public PostCreateResponse addAtExistingLocation(LoginUser loginUser, PostRequest postRequest) {
         Member member = findMemberByNickname(loginUser.nickname());
         Trip trip = findTripById(postRequest.tripId());
         trip.validateAuthorization(member);
@@ -60,7 +63,7 @@ public class PostService {
 
         Post post = postRequest.toPost(member, point);
         Post savedPost = postRepository.save(post);
-        return PostResponse.from(savedPost);
+        return PostCreateResponse.from(savedPost);
     }
 
     private Trip findTripById(Long tripId) {

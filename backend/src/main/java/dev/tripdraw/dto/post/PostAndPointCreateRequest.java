@@ -40,7 +40,7 @@ public record PostAndPointCreateRequest(
 
         @NotNull
         @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-        @Schema(description = "yyyy-MM-dd'T'HH:mm:ss 형식")
+        @Schema(description = "yyyy-MM-dd'T'HH:mm:ss 형식", example = "2023-07-23T19:48:27", type = "string")
         LocalDateTime recordedAt
 ) {
 

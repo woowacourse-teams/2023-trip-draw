@@ -6,8 +6,8 @@ import dev.tripdraw.application.PostService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
+import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
-import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,11 +35,11 @@ public class PostController {
             description = "현재 위치에 대한 감상 생성 성공."
     )
     @PostMapping("/posts/current-location")
-    public ResponseEntity<PostResponse> createOfCurrentLocation(
+    public ResponseEntity<PostCreateResponse> createOfCurrentLocation(
             @Auth LoginUser loginUser,
             @Valid @RequestBody PostAndPointCreateRequest postAndPointCreateRequest
     ) {
-        PostResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
+        PostCreateResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -49,11 +49,11 @@ public class PostController {
             description = "사용자가 선택한 위치에 대한 감상 생성 성공."
     )
     @PostMapping("/posts")
-    public ResponseEntity<PostResponse> create(
+    public ResponseEntity<PostCreateResponse> create(
             @Auth LoginUser loginUser,
             @Valid @RequestBody PostRequest postRequest
     ) {
-        PostResponse response = postService.addAtExistingLocation(loginUser, postRequest);
+        PostCreateResponse response = postService.addAtExistingLocation(loginUser, postRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 }

@@ -6,8 +6,9 @@ import dev.tripdraw.application.TripService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
-import dev.tripdraw.dto.trip.PointResponse;
+import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,8 +39,8 @@ public class TripController {
             description = "여행 생성 성공."
     )
     @PostMapping("/trips")
-    public ResponseEntity<TripResponse> create(@Auth LoginUser loginUser) {
-        TripResponse response = tripService.create(loginUser);
+    public ResponseEntity<TripCreateResponse> create(@Auth LoginUser loginUser) {
+        TripCreateResponse response = tripService.create(loginUser);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -49,11 +50,11 @@ public class TripController {
             description = "위치 정보 저장 성공."
     )
     @PostMapping("/points")
-    public ResponseEntity<PointResponse> addPoint(
+    public ResponseEntity<PointCreateResponse> addPoint(
             @Auth LoginUser loginUser,
             @RequestBody PointCreateRequest pointCreateRequest
     ) {
-        PointResponse response = tripService.addPoint(loginUser, pointCreateRequest);
+        PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
     }
 

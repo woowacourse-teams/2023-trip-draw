@@ -3,8 +3,8 @@ package dev.tripdraw.application;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -14,8 +14,8 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
+import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
-import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
@@ -66,14 +66,10 @@ class PostServiceTest {
         );
 
         // when
-        PostResponse postResponse = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
+        PostCreateResponse postCreateResponse = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
 
         // then
-        assertSoftly(softly -> {
-            softly.assertThat(postResponse.postId()).isNotNull();
-            softly.assertThat(postResponse.title()).isEqualTo("우도의 바닷가");
-            softly.assertThat(postResponse.pointResponse().pointId()).isNotNull();
-        });
+        assertThat(postCreateResponse.postId()).isNotNull();
     }
 
     @Test
@@ -127,14 +123,10 @@ class PostServiceTest {
         );
 
         // when
-        PostResponse postResponse = postService.addAtExistingLocation(loginUser, postRequest);
+        PostCreateResponse postCreateResponse = postService.addAtExistingLocation(loginUser, postRequest);
 
         // then
-        assertSoftly(softly -> {
-            softly.assertThat(postResponse.postId()).isNotNull();
-            softly.assertThat(postResponse.title()).isEqualTo("우도의 바닷가");
-            softly.assertThat(postResponse.pointResponse().pointId()).isNotNull();
-        });
+        assertThat(postCreateResponse.postId()).isNotNull();
     }
 
     @Test

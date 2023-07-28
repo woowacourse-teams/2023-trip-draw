@@ -1,6 +1,5 @@
 package dev.tripdraw.presentation.controller;
 
-import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -14,8 +13,10 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.trip.PointCreateRequest;
+import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
+import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -61,14 +62,11 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        TripResponse tripResponse = response.as(TripResponse.class);
+        TripCreateResponse tripCreateResponse = response.as(TripCreateResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(tripResponse.tripId()).isNotNull();
-            softly.assertThat(tripResponse.name()).isNotNull();
-            softly.assertThat(tripResponse.routes()).isEmpty();
-            softly.assertThat(tripResponse.status()).isEqualTo(ONGOING);
+            softly.assertThat(tripCreateResponse.tripId()).isNotNull();
         });
     }
 
@@ -102,14 +100,11 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        PointResponse pointResponse = response.as(PointResponse.class);
+        PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(pointResponse.pointId()).isNotNull();
-            softly.assertThat(pointResponse.latitude()).isEqualTo(request.latitude());
-            softly.assertThat(pointResponse.longitude()).isEqualTo(request.longitude());
-            softly.assertThat(pointResponse.recordedAt()).isEqualTo(request.recordedAt());
+            softly.assertThat(pointCreateResponse.pointId()).isNotNull();
         });
     }
 

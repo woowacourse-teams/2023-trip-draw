@@ -1,7 +1,11 @@
 package dev.tripdraw.presentation.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
+
 import dev.tripdraw.dto.member.MemberCreateRequest;
-import dev.tripdraw.dto.member.MemberResponse;
+import dev.tripdraw.dto.member.MemberCreateResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -11,10 +15,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -41,10 +41,10 @@ class MemberControllerTest extends ControllerTest {
                 .then().log().all()
                 .statusCode(CREATED.value())
                 .extract();
-        MemberResponse memberResponse = response.as(MemberResponse.class);
+        MemberCreateResponse memberCreateResponse = response.as(MemberCreateResponse.class);
 
         // expect
-        assertThat(memberResponse.nickname()).isEqualTo("통후추");
+        assertThat(memberCreateResponse.memberId()).isNotNull();
     }
 
     @Test
