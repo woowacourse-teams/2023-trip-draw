@@ -32,4 +32,6 @@
 
     <!-- PostViewerActivity -->
     <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
+    <string name="tv_post_viewer_toolbar_title">감상 목록</string>
+    <string name="btn_post_viewer_back_description">감상 목록 뒤로가기</string>
 </resources>

@@ -12,6 +12,34 @@
         android:layout_height="match_parent"
         tools:context=".ui.postViewer.PostViewerActivity">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_post_viewer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--            아이콘 적용하기-->
+            <ImageView
+                android:id="@+id/btn_post_viewer_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:contentDescription="@string/btn_post_viewer_back_description"
+                android:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/tv_post_viewer_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/tv_post_viewer_toolbar_title"
+                android:textAppearance="@style/subtitle_2"
+                android:textColor="@color/td_black" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_post_viewer"
             android:layout_width="0dp"
@@ -20,7 +48,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_post_viewer"
             tools:listitem="@layout/item_post_viewer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
