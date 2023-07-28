@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-internal class NicknameSetupViewModelTest: DefaultViewModelTest() {
+internal class NicknameSetupViewModelTest : DefaultViewModelTest() {
 
     // system under test
     private lateinit var sut: NicknameSetupViewModel
