@@ -10,5 +10,6 @@ class PostWritingViewModel : ViewModel() {
 
     val title: MutableLiveData<String> = MutableLiveData("")
 
-    val content: MutableLiveData<String> = MutableLiveData("")
+    val writing: MutableLiveData<String> = MutableLiveData("")
+
 }
