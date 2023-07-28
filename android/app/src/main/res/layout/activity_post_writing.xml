@@ -7,7 +7,7 @@
 
         <variable
             name="postWritingViewModel"
-            type="com.teamtripdraw.android.ui.post.PostWritingViewModel" />
+            type="com.teamtripdraw.android.ui.post.writing.PostWritingViewModel" />
 
     </data>
 

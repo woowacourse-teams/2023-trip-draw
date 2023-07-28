@@ -36,7 +36,7 @@
         </activity>
 
         <activity
-            android:name=".ui.post.PostWritingActivity"
+            android:name=".ui.post.writing.PostWritingActivity"
             android:exported="false" />
     </application>
 
