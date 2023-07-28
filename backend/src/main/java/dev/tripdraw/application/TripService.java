@@ -38,7 +38,7 @@ public class TripService {
 
     public PointResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
         Member member = getByNickname(loginUser.nickname());
-        Trip trip = getById(pointCreateRequest.tripId());
+        Trip trip = getByTripId(pointCreateRequest.tripId());
 
         Point point = pointCreateRequest.toPoint();
         trip.validateAuthorization(member);
@@ -53,14 +53,14 @@ public class TripService {
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
-    private Trip getById(Long id) {
-        return tripRepository.findById(id)
+    private Trip getByTripId(Long tripId) {
+        return tripRepository.findById(tripId)
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
 
     public TripResponse readTripById(LoginUser loginUser, Long id) {
         Member member = getByNickname(loginUser.nickname());
-        Trip trip = getById(id);
+        Trip trip = getByTripId(id);
         trip.validateAuthorization(member);
         return TripResponse.from(trip);
     }
