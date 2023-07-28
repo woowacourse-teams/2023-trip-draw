@@ -29,7 +29,7 @@ public class Route {
 
     public Point findPointById(Long pointIdToFind) {
         return points.stream()
-                .filter(point -> point.id().equals(pointIdToFind))
+                .filter(point -> Objects.equals(point.id(), pointIdToFind))
                 .findAny()
                 .orElseThrow(() -> new TripException(POINT_NOT_FOUND));
     }
