@@ -3,7 +3,7 @@ package dev.tripdraw.domain.trip;
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -155,6 +155,6 @@ class TripTest {
         // expect
         assertThatThrownBy(() -> trip.deletePointById(point2.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_FOUND.getMessage());
+                .hasMessage(POINT_NOT_IN_TRIP.getMessage());
     }
 }

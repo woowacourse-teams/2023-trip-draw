@@ -76,6 +76,10 @@ public class Trip extends BaseEntity {
         this.name.change(name);
     }
 
+    public Point findPointById(Long pointId) {
+        return route.findPointById(pointId);
+    }
+
     public Long id() {
         return id;
     }
