@@ -1,8 +1,7 @@
-package com.teamtripdraw.android.data.dataSource.userIdentifyInfo.local
+package com.teamtripdraw.android.data.dataSource.userIdentifyInfo
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
 import java.util.Base64
 
 class LocalUserIdentifyInfoDataSourceImpl(private val userIdentifyInfoPreference: SharedPreferences) :
