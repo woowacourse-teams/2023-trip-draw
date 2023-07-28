@@ -20,7 +20,7 @@ class NicknameSetupRepositoryImpl(
     override suspend fun setNickName(nickName: String): Result<Unit> {
         return remoteNicknameSetupDataSource.setNickName(nickName)
             .process(failureListener = this::setNickNameFailureListener) { body, headers ->
-                localUserIdentifyInfoDataSource.setIdentifyInfo(body.nickname)
+//                localUserIdentifyInfoDataSource.setIdentifyInfo()
                 Result.success(Unit)
             }
     }
