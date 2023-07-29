@@ -13,10 +13,10 @@ import java.util.stream.IntStream;
 
 public class Coordinates {
 
-    private final List<Coordinate> coordinates;
+    private final List<Coordinate> items;
 
     private Coordinates(List<Coordinate> coordinates) {
-        this.coordinates = coordinates;
+        items = new ArrayList<>(coordinates);
     }
 
     public static Coordinates of(List<Double> xValues, List<Double> yValues) {
@@ -32,32 +32,25 @@ public class Coordinates {
         }
     }
 
-    public List<Position> calculatePositions(Integer routeImageSize) {
+    public Positions calculatePositions(Integer routeImageSize) {
         List<Double> xValues = mapCoordinatesToValues(Coordinate::x);
         List<Double> yValues = mapCoordinatesToValues(Coordinate::y);
 
-        return toPositions(xValues, yValues, routeImageSize);
+        Double maxDifference = calculateMaxDifference(xValues, yValues);
+
+        List<Integer> xPositions = toPositions(xValues, maxDifference, routeImageSize);
+        List<Integer> yPositions = toPositions(yValues, maxDifference, routeImageSize);
+
+        return IntStream.range(0, items.size())
+                .mapToObj(index -> new Position(xPositions.get(index), yPositions.get(index)))
+                .collect(collectingAndThen(toList(), Positions::new));
     }
 
     private List<Double> mapCoordinatesToValues(ToDoubleFunction<Coordinate> coordinateToDoubleFunction) {
-        return coordinates.stream()
+        return items.stream()
                 .mapToDouble(coordinateToDoubleFunction)
                 .boxed()
                 .toList();
-    }
-
-    private List<Position> toPositions(List<Double> xValues, List<Double> yValues, Integer routeImageSize) {
-        Double maxDifference = calculateMaxDifference(xValues, yValues);
-
-        List<Integer> xPositions = toSinglePositions(xValues, maxDifference, routeImageSize);
-        List<Integer> yPositions = toSinglePositions(yValues, maxDifference, routeImageSize);
-
-        List<Position> positions = new ArrayList<>();
-        for (int index = 0; index < xPositions.size(); index++) {
-            Position position = new Position(xPositions.get(index), yPositions.get(index));
-            positions.add(position);
-        }
-        return positions;
     }
 
     private Double calculateMaxDifference(List<Double> xValues, List<Double> yValues) {
@@ -67,7 +60,7 @@ public class Coordinates {
         return Math.max(xDifference, yDifference);
     }
 
-    private List<Integer> toSinglePositions(List<Double> values, Double maxDifference, Integer routeImageSize) {
+    private List<Integer> toPositions(List<Double> values, Double maxDifference, Integer routeImageSize) {
         Double minValue = Collections.min(values);
         return values.stream()
                 .map(value -> normalizeCoordinate(value, maxDifference, minValue))
@@ -81,5 +74,9 @@ public class Coordinates {
 
     private int mapToGrid(Double coordinate, Integer graphSize) {
         return (int) (coordinate * graphSize);
+    }
+
+    public List<Coordinate> items() {
+        return items;
     }
 }

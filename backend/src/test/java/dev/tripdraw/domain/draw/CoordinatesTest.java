@@ -51,13 +51,12 @@ class CoordinatesTest {
         Coordinates coordinates = Coordinates.of(xValues, yValues);
 
         // when
-        List<Position> result = coordinates.calculatePositions(800);
+        Positions positions = coordinates.calculatePositions(600);
 
         // then
-        assertThat(result).containsExactly(
-                new Position(0, 800), new Position(64, 734), new Position(180, 750),
-                new Position(305, 715), new Position(356, 566), new Position(389, 485),
-                new Position(198, 365), new Position(84, 0)
+        assertThat(positions.items()).containsExactly(
+                new Position(0, 600), new Position(48, 550), new Position(135, 562), new Position(228, 536),
+                new Position(267, 424), new Position(292, 364), new Position(148, 274), new Position(63, 0)
         );
     }
 }
