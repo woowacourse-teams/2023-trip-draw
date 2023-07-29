@@ -1,6 +1,5 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
@@ -15,6 +14,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -97,17 +98,18 @@ class TripTest {
         assertThat(result).containsExactly(point1, point2);
     }
 
-    @Test
-    void 여행을_종료한다() {
+    @ParameterizedTest
+    @CsvSource({"ONGOING, ONGOING", "FINISHED, FINISHED"})
+    void 여행_상태를_변경한다(TripStatus target, TripStatus expected) {
         // given
         Member member = new Member("통후추");
         Trip trip = Trip.from(member);
 
         // when
-        trip.finish();
+        trip.changeStatus(target);
 
         // then
-        assertThat(trip.status()).isEqualTo(FINISHED);
+        assertThat(trip.status()).isEqualTo(expected);
     }
 
     @Test

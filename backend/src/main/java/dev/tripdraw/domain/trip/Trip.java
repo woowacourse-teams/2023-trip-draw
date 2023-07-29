@@ -1,6 +1,5 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
@@ -68,8 +67,8 @@ public class Trip extends BaseEntity {
         }
     }
 
-    public void finish() {
-        status = FINISHED;
+    public void changeStatus(TripStatus status) {
+        this.status = status;
     }
 
     public void changeName(String name) {
