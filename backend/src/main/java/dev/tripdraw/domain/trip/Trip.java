@@ -39,6 +39,8 @@ public class Trip extends BaseEntity {
     @Column(nullable = false)
     private TripStatus status;
 
+    private String imageUrl;
+
     protected Trip() {
     }
 
@@ -117,5 +119,13 @@ public class Trip extends BaseEntity {
 
     public TripStatus status() {
         return status;
+    }
+
+    public String imageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

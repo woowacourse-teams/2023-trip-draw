@@ -43,6 +43,8 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private String imageUrl;
+
     protected Post() {
     }
 
@@ -90,5 +92,13 @@ public class Post extends BaseEntity {
 
     public Long tripId() {
         return tripId;
+    }
+
+    public String imageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

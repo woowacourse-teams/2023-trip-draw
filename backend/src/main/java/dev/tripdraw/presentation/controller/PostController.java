@@ -15,8 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Post", description = "감상 관련 API 명세")
 @SwaggerAuthorizationRequired
@@ -37,9 +38,10 @@ public class PostController {
     @PostMapping("/posts/current-location")
     public ResponseEntity<PostCreateResponse> createOfCurrentLocation(
             @Auth LoginUser loginUser,
-            @Valid @RequestBody PostAndPointCreateRequest postAndPointCreateRequest
+            @Valid @RequestPart(value = "dto") PostAndPointCreateRequest postAndPointCreateRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        PostCreateResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
+        PostCreateResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, file);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -51,9 +53,10 @@ public class PostController {
     @PostMapping("/posts")
     public ResponseEntity<PostCreateResponse> create(
             @Auth LoginUser loginUser,
-            @Valid @RequestBody PostRequest postRequest
+            @Valid @RequestPart(value = "dto") PostRequest postRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        PostCreateResponse response = postService.addAtExistingLocation(loginUser, postRequest);
+        PostCreateResponse response = postService.addAtExistingLocation(loginUser, postRequest, file);
         return ResponseEntity.status(CREATED).body(response);
     }
 }
