@@ -6,7 +6,8 @@ import dev.tripdraw.exception.common.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum DrawExceptionType implements ExceptionType {
-    INVALID_COORDINATE(BAD_REQUEST, "Coordinate를 생성할 수 없습니다."),
+    INVALID_COORDINATES(BAD_REQUEST, "Coordinates를 생성할 수 없습니다."),
+    IMAGE_SAVE_FAIL(BAD_REQUEST, "이미지를_저장할_수_없습니다."),
     ;
 
     private final HttpStatus httpStatus;

@@ -1,6 +1,6 @@
 package dev.tripdraw.domain.draw;
 
-import static dev.tripdraw.exception.draw.DrawExceptionType.INVALID_COORDINATE;
+import static dev.tripdraw.exception.draw.DrawExceptionType.INVALID_COORDINATES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,7 +24,7 @@ class CoordinatesTest {
         // expect
         assertThatThrownBy(() -> Coordinates.of(xValues, yValues))
                 .isInstanceOf(DrawException.class)
-                .hasMessage(INVALID_COORDINATE.getMessage());
+                .hasMessage(INVALID_COORDINATES.getMessage());
     }
 
     @Test
@@ -58,5 +58,32 @@ class CoordinatesTest {
                 new Position(0, 600), new Position(48, 550), new Position(135, 562), new Position(228, 536),
                 new Position(267, 424), new Position(292, 364), new Position(148, 274), new Position(63, 0)
         );
+    }
+
+    @Test
+    void Coordinates를_입력받아_동일한_위치_값에_대한_인덱스를_반환한다() {
+        // given
+        List<Double> xValues = List.of(
+                126.96352960597338, 126.96987292787792, 126.98128481452298, 126.99360339342958,
+                126.99867565340067, 127.001935378366117, 126.9831048919687, 126.97189273528845
+        );
+        List<Double> yValues = List.of(
+                37.590841000217125, 37.58435564234159, 37.58594375113966, 37.58248524741927,
+                37.56778118088622, 37.55985240444085, 37.548030119488665, 37.5119879225856
+        );
+        Coordinates coordinates = Coordinates.of(xValues, yValues);
+        List<Double> xPoints = List.of(
+                126.96352960597338, 126.96987292787792
+        );
+        List<Double> yPoints = List.of(
+                37.590841000217125, 37.58435564234159
+        );
+        Coordinates other = Coordinates.of(xPoints, yPoints);
+
+        // when
+        List<Integer> result = coordinates.indexOf(other);
+
+        // then
+        assertThat(result).containsExactly(0, 1);
     }
 }

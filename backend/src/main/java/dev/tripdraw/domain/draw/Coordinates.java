@@ -1,6 +1,6 @@
 package dev.tripdraw.domain.draw;
 
-import static dev.tripdraw.exception.draw.DrawExceptionType.INVALID_COORDINATE;
+import static dev.tripdraw.exception.draw.DrawExceptionType.INVALID_COORDINATES;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
@@ -27,8 +27,8 @@ public class Coordinates {
     }
 
     private static void validate(List<Double> xValues, List<Double> yValues) {
-        if (xValues.size() != yValues.size()) {
-            throw new DrawException(INVALID_COORDINATE);
+        if (xValues == null || yValues == null || xValues.size() != yValues.size()) {
+            throw new DrawException(INVALID_COORDINATES);
         }
     }
 
@@ -74,6 +74,12 @@ public class Coordinates {
 
     private int mapToGrid(Double coordinate, Integer graphSize) {
         return (int) (coordinate * graphSize);
+    }
+
+    public List<Integer> indexOf(Coordinates other) {
+        return other.items.stream()
+                .map(items::indexOf)
+                .toList();
     }
 
     public List<Coordinate> items() {
