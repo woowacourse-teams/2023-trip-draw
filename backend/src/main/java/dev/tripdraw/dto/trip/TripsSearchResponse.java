@@ -1,5 +1,7 @@
 package dev.tripdraw.dto.trip;
 
+import static java.util.stream.Collectors.collectingAndThen;
+
 import dev.tripdraw.domain.trip.Trip;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -11,12 +13,8 @@ public record TripsSearchResponse(
 ) {
 
     public static TripsSearchResponse from(List<Trip> trips) {
-        return new TripsSearchResponse(generateTripSearchResponses(trips));
-    }
-
-    private static List<TripSearchResponse> generateTripSearchResponses(List<Trip> trips) {
         return trips.stream()
                 .map(TripSearchResponse::from)
-                .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
+                .collect(collectingAndThen(Collectors.toList(), TripsSearchResponse::new));
     }
 }
