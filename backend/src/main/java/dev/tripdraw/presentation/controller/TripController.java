@@ -10,6 +10,7 @@ import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
+import dev.tripdraw.dto.trip.TripsReadResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -81,5 +82,16 @@ public class TripController {
     ) {
         tripService.deletePoint(loginUser, pointDeleteRequest);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "여행 전체 조회 API", description = "모든 여행의 정보를 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "여행 전체 조회 성공."
+    )
+    @GetMapping("/trips")
+    public ResponseEntity<TripsReadResponse> readAll(@Auth LoginUser loginUser) {
+        TripsReadResponse response = tripService.readAllTrips(loginUser);
+        return ResponseEntity.ok(response);
     }
 }
