@@ -3,7 +3,7 @@ package dev.tripdraw.dto.trip;
 import dev.tripdraw.domain.trip.Trip;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record TripReadResponse(
+public record TripSearchResponse(
         @Schema(description = "여행 Id", example = "1")
         Long tripId,
 
@@ -11,7 +11,7 @@ public record TripReadResponse(
         String name
 ) {
 
-    public static TripReadResponse from(Trip trip) {
-        return new TripReadResponse(trip.id(), trip.nameValue());
+    public static TripSearchResponse from(Trip trip) {
+        return new TripSearchResponse(trip.id(), trip.nameValue());
     }
 }

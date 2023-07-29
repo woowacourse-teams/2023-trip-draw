@@ -18,9 +18,9 @@ import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
-import dev.tripdraw.dto.trip.TripReadResponse;
 import dev.tripdraw.dto.trip.TripResponse;
-import dev.tripdraw.dto.trip.TripsReadResponse;
+import dev.tripdraw.dto.trip.TripSearchResponse;
+import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
@@ -165,11 +165,11 @@ class TripServiceTest {
     @Test
     void 전체_여행을_조회한다() {
         // given & when
-        TripsReadResponse tripsReadResponse = tripService.readAllTrips(loginUser);
+        TripsSearchResponse tripsSearchResponse = tripService.readAllTrips(loginUser);
 
         // then
-        assertThat(tripsReadResponse).usingRecursiveComparison().isEqualTo(
-                new TripsReadResponse(List.of(new TripReadResponse(trip.id(), trip.nameValue())))
+        assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
+                new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
         );
     }
 }

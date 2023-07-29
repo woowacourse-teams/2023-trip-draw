@@ -17,9 +17,9 @@ import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
-import dev.tripdraw.dto.trip.TripReadResponse;
 import dev.tripdraw.dto.trip.TripResponse;
-import dev.tripdraw.dto.trip.TripsReadResponse;
+import dev.tripdraw.dto.trip.TripSearchResponse;
+import dev.tripdraw.dto.trip.TripsSearchResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -303,12 +303,12 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        TripsReadResponse tripsReadResponse = response.as(TripsReadResponse.class);
+        TripsSearchResponse tripsSearchResponse = response.as(TripsSearchResponse.class);
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
-            softly.assertThat(tripsReadResponse).usingRecursiveComparison().isEqualTo(
-                    new TripsReadResponse(List.of(new TripReadResponse(trip.id(), trip.nameValue())))
+            softly.assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
+                    new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
             );
         });
     }

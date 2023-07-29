@@ -10,7 +10,7 @@ import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
-import dev.tripdraw.dto.trip.TripsReadResponse;
+import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -90,8 +90,8 @@ public class TripController {
             description = "여행 전체 조회 성공."
     )
     @GetMapping("/trips")
-    public ResponseEntity<TripsReadResponse> readAll(@Auth LoginUser loginUser) {
-        TripsReadResponse response = tripService.readAllTrips(loginUser);
+    public ResponseEntity<TripsSearchResponse> readAll(@Auth LoginUser loginUser) {
+        TripsSearchResponse response = tripService.readAllTrips(loginUser);
         return ResponseEntity.ok(response);
     }
 }

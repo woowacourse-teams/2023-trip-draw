@@ -14,7 +14,7 @@ import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
-import dev.tripdraw.dto.trip.TripsReadResponse;
+import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import jakarta.transaction.Transactional;
@@ -80,9 +80,9 @@ public class TripService {
         return TripResponse.from(trip);
     }
 
-    public TripsReadResponse readAllTrips(LoginUser loginUser) {
+    public TripsSearchResponse readAllTrips(LoginUser loginUser) {
         Member member = getByNickname(loginUser.nickname());
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
-        return TripsReadResponse.from(trips);
+        return TripsSearchResponse.from(trips);
     }
 }
