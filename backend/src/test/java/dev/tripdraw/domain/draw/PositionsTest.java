@@ -28,4 +28,43 @@ class PositionsTest {
                 new Position(521, 276), new Position(546, 336), new Position(402, 426), new Position(317, 700)
         );
     }
+
+    @Test
+    void x값을_반환한다() {
+        // given
+        Positions positions = new Positions(
+                List.of(new Position(0, 600), new Position(48, 550), new Position(135, 562))
+        );
+
+        // when
+        List<Integer> result = positions.xPositions();
+
+        // then
+        assertThat(result).containsExactly(0, 48, 135);
+    }
+
+    @Test
+    void y값을_반환한다() {
+        // given
+        Positions positions = new Positions(
+                List.of(new Position(0, 600), new Position(48, 550), new Position(135, 562))
+        );
+
+        // when
+        List<Integer> result = positions.yPositions();
+
+        // then
+        assertThat(result).containsExactly(600, 550, 562);
+    }
+
+    @Test
+    void size를_반환한다() {
+        // given
+        Positions positions = new Positions(
+                List.of(new Position(0, 600), new Position(48, 550), new Position(135, 562))
+        );
+
+        // expect
+        assertThat(positions.size()).isEqualTo(3);
+    }
 }
