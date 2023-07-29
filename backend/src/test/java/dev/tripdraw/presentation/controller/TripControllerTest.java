@@ -1,5 +1,7 @@
 package dev.tripdraw.presentation.controller;
 
+import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -18,6 +20,7 @@ import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -288,5 +291,23 @@ class TripControllerTest extends ControllerTest {
                 .when().delete("/points")
                 .then().log().all()
                 .statusCode(CONFLICT.value());
+    }
+
+    @Test
+    void 여행의_이름과_상태를_수정한다() {
+        // given
+        TripUpdateRequest tripUpdateRequest = new TripUpdateRequest("제주도 여행", FINISHED);
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .body(tripUpdateRequest)
+                .when().patch("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
     }
 }
