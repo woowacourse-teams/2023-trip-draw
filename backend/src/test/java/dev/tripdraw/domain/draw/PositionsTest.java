@@ -20,7 +20,7 @@ class PositionsTest {
         ));
 
         // when
-        Positions alignedPositions = positions.alignPositions(800, 600);
+        Positions alignedPositions = positions.align(800, 600);
 
         // then
         assertThat(alignedPositions.items()).containsExactly(

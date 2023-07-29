@@ -16,7 +16,7 @@ public class Positions {
         items = new ArrayList<>(positions);
     }
 
-    public Positions alignPositions(int imageSize, int routeSize) {
+    public Positions align(int imageSize, int routeSize) {
         int xOffset = calculateOffset(Position::x, imageSize);
         int yOffset = calculateOffset(Position::y, imageSize);
 
