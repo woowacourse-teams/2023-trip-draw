@@ -18,10 +18,13 @@ import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
+import dev.tripdraw.dto.trip.TripReadResponse;
 import dev.tripdraw.dto.trip.TripResponse;
+import dev.tripdraw.dto.trip.TripsReadResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -157,5 +160,16 @@ class TripServiceTest {
         assertThatThrownBy(() -> tripService.deletePoint(loginUser, pointDeleteRequest))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_ALREADY_DELETED.getMessage());
+    }
+
+    @Test
+    void 전체_여행을_조회한다() {
+        // given & when
+        TripsReadResponse tripsReadResponse = tripService.readAllTrips(loginUser);
+
+        // then
+        assertThat(tripsReadResponse).usingRecursiveComparison().isEqualTo(
+                new TripsReadResponse(List.of(new TripReadResponse(trip.id(), trip.nameValue())))
+        );
     }
 }
