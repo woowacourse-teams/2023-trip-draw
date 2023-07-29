@@ -30,6 +30,22 @@ class PositionsTest {
     }
 
     @Test
+    void 입력받은_인덱스에_해당하는_값을_반환한다() {
+        // given
+        Positions positions = new Positions(List.of(
+                new Position(0, 600), new Position(48, 550), new Position(135, 562), new Position(228, 536),
+                new Position(267, 424), new Position(292, 364), new Position(148, 274), new Position(63, 0)
+        ));
+        List<Integer> indexes = List.of(0, 3);
+
+        // when
+        Positions positionsByIndexes = positions.getPositionsByIndexes(indexes);
+
+        // then
+        assertThat(positionsByIndexes.items()).containsExactly(new Position(0, 600), new Position(228, 536));
+    }
+
+    @Test
     void x값을_반환한다() {
         // given
         Positions positions = new Positions(

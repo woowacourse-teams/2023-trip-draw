@@ -35,6 +35,12 @@ public class Positions {
         return imageSize / 2 - midValue;
     }
 
+    public Positions getPositionsByIndexes(List<Integer> indexes) {
+        return indexes.stream()
+                .map(items::get)
+                .collect(collectingAndThen(toList(), Positions::new));
+    }
+
     public int size() {
         return items.size();
     }
