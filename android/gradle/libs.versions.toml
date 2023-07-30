@@ -74,6 +74,9 @@ encryptedSharedPreference = "1.1.0-alpha06"
 # CoroutineTest
 coroutineTest = "1.7.2"
 
+# Stfalcon
+stfalcon = "v1.0.1"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -141,6 +144,9 @@ encryptedSharedPreference = { module = "androidx.security:security-crypto", vers
 
 # CoroutineTest
 coroutineTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineTest" }
+
+# Stfalcon
+stfalcon = { module = "com.github.stfalcon-studio:StfalconImageViewer", version.ref = "stfalcon" }
 
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
