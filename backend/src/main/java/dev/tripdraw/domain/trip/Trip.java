@@ -2,6 +2,7 @@ package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -68,7 +69,14 @@ public class Trip extends BaseEntity {
     }
 
     public void changeStatus(TripStatus status) {
+        validateStatus(status);
         this.status = status;
+    }
+
+    private void validateStatus(TripStatus status) {
+        if (status == null) {
+            throw new TripException(TRIP_INVALID_STATUS);
+        }
     }
 
     public void changeName(String name) {
