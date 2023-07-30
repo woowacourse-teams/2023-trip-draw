@@ -20,7 +20,7 @@ class RouteImageUploaderTest {
     @Test
     void 파일을_업로드하고_파일명을_반환한다() {
         // given
-        BufferedImage bufferedImage = new BufferedImage(0, 0, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bufferedImage = new BufferedImage(800, 800, BufferedImage.TYPE_INT_ARGB);
         RouteImageUploader routeImageUploader = new RouteImageUploader();
 
         // expect
