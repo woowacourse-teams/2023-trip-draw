@@ -76,6 +76,10 @@ public class RouteImageDrawer {
         return new Line2D.Double(xPositions.get(i), yPositions.get(i), xPositions.get(i), yPositions.get(i));
     }
 
+    public void dispose() {
+        graphics2D.dispose();
+    }
+
     public BufferedImage bufferedImage() {
         return bufferedImage;
     }

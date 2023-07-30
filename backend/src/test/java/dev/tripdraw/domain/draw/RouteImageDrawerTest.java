@@ -65,4 +65,17 @@ public class RouteImageDrawerTest {
         // then
         Mockito.verify(graphics2D, times(positions.size())).draw(any(Line2D.Double.class));
     }
+
+    @Test
+    void 자원할당을_해제한다() {
+        // given
+        Graphics2D graphics2D = Mockito.mock(Graphics2D.class);
+        RouteImageDrawer routeImageDrawer = new RouteImageDrawer(null, graphics2D);
+        
+        // when
+        routeImageDrawer.dispose();
+
+        // then
+        Mockito.verify(graphics2D, times(1)).dispose();
+    }
 }

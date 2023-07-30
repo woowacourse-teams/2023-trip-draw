@@ -30,7 +30,9 @@ public class RouteImageGenerator {
 
         drawImage(coordinates, routeImageDrawer, pointCoordinates);
 
-        return routeImageUploader.upload(routeImageDrawer.bufferedImage());
+        String imageName = routeImageUploader.upload(routeImageDrawer.bufferedImage());
+        routeImageDrawer.dispose();
+        return imageName;
     }
 
     private void drawImage(Coordinates coordinates, RouteImageDrawer routeImageDrawer, Coordinates pointCoordinates) {
