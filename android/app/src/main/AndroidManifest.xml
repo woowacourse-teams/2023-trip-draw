@@ -33,7 +33,11 @@
 
         <activity
             android:name=".ui.signUp.NicknameSetupActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.teamtripdraw.android.ui.postViewer.PostViewerActivity"
             android:exported="false" />
 
         <activity
@@ -45,6 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.post.writing.PostWritingActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

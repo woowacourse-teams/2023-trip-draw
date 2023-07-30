@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="postItem"
+            type="com.teamtripdraw.android.ui.model.UiPostItem" />
+
+        <variable
+            name="onPostClick"
+            type="kotlin.jvm.functions.Function1" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_td_gray_line_0_rect"
+        android:onClick="@{()->onPostClick.invoke(postItem.id)}"
+        android:paddingHorizontal="@dimen/margin_default"
+        android:paddingVertical="12dp">
+
+        <ImageView
+            android:id="@+id/iv_post_thumbnail"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@string/iv_post_thumbnail_description"
+            app:layout_constraintEnd_toStartOf="@id/tv_post_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_post_title"
+            app:setThumbnail="@{postItem.thumbnail}"
+            tools:background="@drawable/shape_td_gray_fill_12_rect" />
+
+        <TextView
+            android:id="@+id/tv_post_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{postItem.title}"
+            android:textAppearance="@style/title_3M"
+            android:textColor="@color/td_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_post_thumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="여수 밤바다" />
+
+        <TextView
+            android:id="@+id/tv_post_writing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{postItem.writing}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_deep_gray"
+            app:layout_constraintEnd_toEndOf="@id/tv_post_title"
+            app:layout_constraintStart_toStartOf="@id/tv_post_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_title"
+            tools:text="내용이 이렇게 쭉쭉\n이렇게 쯕쭉쭉" />
+
+        <TextView
+            android:id="@+id/tv_post_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{postItem.address}"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintEnd_toStartOf="@id/tv_post_recorded_at"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_writing"
+            tools:text="제주특별자치도 제주시 애월읍 소길리" />
+
+        <TextView
+            android:id="@+id/tv_post_recorded_at"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@{postItem.recordedAt}"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintBottom_toBottomOf="@id/tv_post_address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_post_address"
+            app:layout_constraintTop_toTopOf="@id/tv_post_address"
+            tools:text="2023.07.18 | 21:00" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

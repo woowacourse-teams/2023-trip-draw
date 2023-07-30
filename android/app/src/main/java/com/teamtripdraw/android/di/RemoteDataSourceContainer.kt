@@ -9,7 +9,10 @@ class RemoteDataSourceContainer(
     serviceContainer: ServiceContainer
 ) {
     val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote =
-        RemoteNicknameSetupDataSourceImpl(serviceContainer.nicknameSetupService)
+        RemoteNicknameSetupDataSourceImpl(
+            serviceContainer.nicknameSetupService,
+            serviceContainer.getNicknameService
+        )
     val remoteTripDataSource: TripDataSource.Remote =
         RemoteTripDataSourceImpl(serviceContainer.createTripService)
 }
