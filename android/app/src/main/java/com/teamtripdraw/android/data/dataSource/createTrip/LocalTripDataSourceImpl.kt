@@ -6,18 +6,18 @@ import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 
 class LocalTripDataSourceImpl(private val tripPreference: SharedPreferences) :
     TripDataSource.Local {
-    override fun setTripId(tripId: Long) {
-        tripPreference.edit { putLong(TRIP_ID, tripId) }
+    override fun setCurrentTripId(tripId: Long) {
+        tripPreference.edit { putLong(CURRENT_TRIP_ID, tripId) }
     }
 
-    override fun getTripId(): Long =
-        tripPreference.getLong(TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
+    override fun getCurrentTripId(): Long =
+        tripPreference.getLong(CURRENT_TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
 
-    override fun deleteTripId() {
-        tripPreference.edit { remove(TRIP_ID) }
+    override fun deleteCurrentTripId() {
+        tripPreference.edit { remove(CURRENT_TRIP_ID) }
     }
 
     companion object TripKey {
-        private const val TRIP_ID = "TRIP_ID"
+        private const val CURRENT_TRIP_ID = "CURRENT_TRIP_ID"
     }
 }

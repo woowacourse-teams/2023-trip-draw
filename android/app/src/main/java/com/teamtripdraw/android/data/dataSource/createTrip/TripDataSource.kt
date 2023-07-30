@@ -5,11 +5,11 @@ import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseState
 
 interface TripDataSource {
     interface Local {
-        fun setTripId(tripId: Long)
+        fun setCurrentTripId(tripId: Long)
 
-        fun getTripId(): Long
+        fun getCurrentTripId(): Long
 
-        fun deleteTripId()
+        fun deleteCurrentTripId()
     }
 
     interface Remote {

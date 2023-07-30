@@ -15,7 +15,7 @@ class HomeViewModel(
     val homeUiState: LiveData<HomeUiState> = _homeUiState
 
     init {
-        _homeUiState.value = when (tripRepository.getStoredTripId()) {
+        _homeUiState.value = when (tripRepository.getCurrentTripId()) {
             -1L -> HomeUiState.BEFORE_TRIP
             else -> HomeUiState.ON_TRIP
         }

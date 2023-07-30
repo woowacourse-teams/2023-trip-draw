@@ -10,10 +10,10 @@ class TripRepositoryImpl(
     TripRepository {
     override suspend fun startTrip(): Result<Unit> =
         remoteTripDataSource.startTrip().process { body, headers ->
-            localTripDataSource.setTripId(body.tripId)
+            localTripDataSource.setCurrentTripId(body.tripId)
             Result.success(Unit)
         }
 
-    override fun getStoredTripId(): Long =
-        localTripDataSource.getTripId()
+    override fun getCurrentTripId(): Long =
+        localTripDataSource.getCurrentTripId()
 }
