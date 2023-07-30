@@ -3,6 +3,7 @@ package dev.tripdraw.domain.trip;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -110,6 +111,18 @@ class TripTest {
 
         // then
         assertThat(trip.status()).isEqualTo(expected);
+    }
+
+    @Test
+    void 여행_상태를_null로_변경하려할_경우_예외를_발생시킨다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        
+        // expect
+        assertThatThrownBy(() -> trip.changeStatus(null))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_INVALID_STATUS.getMessage());
     }
 
     @Test
