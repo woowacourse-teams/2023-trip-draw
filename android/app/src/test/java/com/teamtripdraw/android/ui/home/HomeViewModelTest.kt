@@ -57,4 +57,19 @@ class HomeViewModelTest : DefaultViewModelTest() {
         // then
         assertEquals(cut.homeUiState.value, ON_TRIP)
     }
+
+    @Test
+    fun `현재 사용자가 여행 시작 전 일때 여행 시작시 UiState가 여행중 상태로 변경된다`() {
+        // given
+        // 사용자 여행 시작전 상태 초기화 코드
+        coEvery { tripRepository.getCurrentTripId() } returns NULL_SUBSTITUTE_TRIP_ID
+        cut = HomeViewModel(tripRepository)
+        coEvery { tripRepository.startTrip() } returns Result.success(Unit)
+
+        // when
+        cut.startTrip()
+
+        // then
+        assertEquals(cut.homeUiState.value, ON_TRIP)
+    }
 }
