@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.di
 
-import com.teamtripdraw.android.data.dataSource.createTrip.TripDataSource
-import com.teamtripdraw.android.data.dataSource.createTrip.RemoteTripDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
+import com.teamtripdraw.android.data.dataSource.trip.RemoteTripDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.RemoteNicknameSetupDataSourceImpl
 

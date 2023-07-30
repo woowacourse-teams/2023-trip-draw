@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.data.dataSource.createTrip
+package com.teamtripdraw.android.data.dataSource.trip
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

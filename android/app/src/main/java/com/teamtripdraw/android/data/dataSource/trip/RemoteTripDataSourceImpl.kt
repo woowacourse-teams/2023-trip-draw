@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.data.dataSource.createTrip
+package com.teamtripdraw.android.data.dataSource.trip
 
 import com.teamtripdraw.android.data.httpClient.dto.response.CreateTripResponse
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseState

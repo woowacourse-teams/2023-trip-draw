@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.data.repository
 
-import com.teamtripdraw.android.data.dataSource.createTrip.TripDataSource
+import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
 import com.teamtripdraw.android.domain.repository.TripRepository
 
 class TripRepositoryImpl(

@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.di
 
-import com.teamtripdraw.android.data.dataSource.createTrip.LocalTripDataSourceImpl
-import com.teamtripdraw.android.data.dataSource.createTrip.TripDataSource
+import com.teamtripdraw.android.data.dataSource.trip.LocalTripDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
 import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.LocalUserIdentifyInfoDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
 
