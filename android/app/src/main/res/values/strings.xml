@@ -28,6 +28,11 @@
     <string name="warning_duplicate_nickname">중복된 닉네임입니다</string>
     <string name="dialog_positive_button_default_text">확인</string>
 
+    <!-- PostViewerActivity -->
+    <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
+    <string name="tv_post_viewer_toolbar_title">감상 목록</string>
+    <string name="btn_post_viewer_back_description">감상 목록 뒤로가기</string>
+
     <!-- PostWritingActivity -->
     <string name="page_name">감상 남기기</string>
     <string name="et_post_title">제목</string>

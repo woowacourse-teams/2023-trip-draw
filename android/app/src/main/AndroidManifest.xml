@@ -33,7 +33,11 @@
 
         <activity
             android:name=".ui.signUp.NicknameSetupActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.teamtripdraw.android.ui.postViewer.PostViewerActivity"
             android:exported="false" />
 
         <activity
