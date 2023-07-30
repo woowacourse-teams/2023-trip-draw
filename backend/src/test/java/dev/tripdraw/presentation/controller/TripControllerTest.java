@@ -1,7 +1,6 @@
 package dev.tripdraw.presentation.controller;
 
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -331,6 +330,12 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
+        Trip updatedTrip = tripRepository.findById(trip.id()).get();
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
+            softly.assertThat(updatedTrip.nameValue()).isEqualTo("제주도 여행");
+            softly.assertThat(updatedTrip.status()).isEqualTo(FINISHED);
+        });
     }
 }
