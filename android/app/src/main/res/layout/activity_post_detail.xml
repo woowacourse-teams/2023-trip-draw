@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="postDetail"
-            type="com.teamtripdraw.android.ui.model.UiPostDetail" />
+            name="postDetailViewModel"
+            type="com.teamtripdraw.android.ui.post.detail.PostDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="@{postDetail.title}"
+                    android:text="@{postDetailViewModel.postDetail.title}"
                     android:textAppearance="@style/title_2M"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -92,7 +92,7 @@
                     android:id="@+id/tv_post_detail_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{postDetail.address}"
+                    android:text="@{postDetailViewModel.postDetail.address}"
                     android:textAppearance="@style/caption_1"
                     app:layout_constraintStart_toEndOf="@id/btn_post_detail_location_icon"
                     app:layout_constraintTop_toTopOf="@id/btn_post_detail_location_icon"
@@ -106,7 +106,7 @@
                     android:contentDescription="@string/iv_route_description"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:setImage="@{postDetail.routeImageUrl}"
+                    app:setImage="@{postDetailViewModel.postDetail.routeImageUrl}"
                     tools:background="@color/td_gray" />
 
                 <com.google.android.material.divider.MaterialDivider
@@ -129,8 +129,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_1"
-                    app:onClickImage="@{postDetail.postImageUrl}"
-                    app:setImage="@{postDetail.postImageUrl}"
+                    app:onClickImage="@{postDetailViewModel.postDetail.postImageUrl}"
+                    app:setImage="@{postDetailViewModel.postDetail.postImageUrl}"
                     tools:background="@color/td_gray" />
 
                 <TextView
@@ -139,7 +139,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="52dp"
                     android:paddingHorizontal="16dp"
-                    android:text="@{postDetail.writing}"
+                    android:text="@{postDetailViewModel.postDetail.writing}"
                     android:textAppearance="@style/body2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
