@@ -42,10 +42,11 @@ class NicknameSetupRepositoryImpl(
         )
     }
 
-    override suspend fun getNickname(nicknameId: Long): Result<Unit> =
+    override suspend fun getNickname(nicknameId: Long): Result<String> =
+        // todo #107 기준 로그인이 구현 안 되어 있는 문제로 임시로 닉네임을 통한 인증 상태 추후 로직 변경 필수(이슈 참고)
         remoteNicknameSetupDataSource.getNickname(nicknameId).process { body, headers ->
             localUserIdentifyInfoDataSource.setIdentifyInfo(body.nickname)
-            Result.success(Unit)
+            Result.success(body.nickname)
         }
 
     companion object {
