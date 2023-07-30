@@ -64,7 +64,7 @@ public class Coordinates {
         Double minValue = Collections.min(values);
         return values.stream()
                 .map(value -> normalizeCoordinate(value, maxDifference, minValue))
-                .map(value -> mapToGrid(value, routeImageSize))
+                .map(value -> mapToPosition(value, routeImageSize))
                 .toList();
     }
 
@@ -72,8 +72,8 @@ public class Coordinates {
         return (coordinate - minValue) / maxDifference;
     }
 
-    private int mapToGrid(Double coordinate, Integer graphSize) {
-        return (int) (coordinate * graphSize);
+    private int mapToPosition(Double coordinate, Integer routeImageSize) {
+        return (int) (coordinate * routeImageSize);
     }
 
     public List<Integer> indexOf(Coordinates other) {
