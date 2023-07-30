@@ -8,12 +8,15 @@ import com.teamtripdraw.android.ui.model.UiPostItem
 
 class PostViewerViewHolder(
     private val binding: ItemPostViewerBinding,
-    private val onPostClick: (postId: Long) -> Unit
+    onPostClick: (postId: Long) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.onPostClick = onPostClick
+    }
 
     fun bind(item: UiPostItem) {
         binding.postItem = item
-        binding.onPostClick = onPostClick
     }
 
     companion object {

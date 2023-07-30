@@ -24,15 +24,15 @@
 
         <ImageView
             android:id="@+id/iv_post_thumbnail"
-            setThumbnail="@{postItem.thumbnail}"
             android:layout_width="68dp"
             android:layout_height="68dp"
             android:layout_marginEnd="12dp"
-            android:background="@drawable/shape_td_gray_fill_12_rect"
             android:contentDescription="@string/iv_post_thumbnail_description"
             app:layout_constraintEnd_toStartOf="@id/tv_post_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_post_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_post_title"
+            app:setThumbnail="@{postItem.thumbnail}"
+            tools:background="@drawable/shape_td_gray_fill_12_rect" />
 
         <TextView
             android:id="@+id/tv_post_title"

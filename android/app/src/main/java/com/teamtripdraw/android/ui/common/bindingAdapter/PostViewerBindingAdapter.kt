@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 
-@BindingAdapter("setThumbnail")
+@BindingAdapter("app:setThumbnail")
 fun setImgUrl(imageView: ImageView, imgUrl: String) {
     Glide.with(imageView.context)
         .load(imgUrl)
