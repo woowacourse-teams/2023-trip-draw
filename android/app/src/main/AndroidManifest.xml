@@ -37,7 +37,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.teamtripdraw.android.ui.postViewer.PostViewerActivity"
+            android:name="com.teamtripdraw.android.ui.post.viewer.PostViewerActivity"
             android:exported="false" />
 
         <activity
