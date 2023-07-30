@@ -14,7 +14,7 @@ class RemoteNicknameSetupDataSourceImpl(
 ) :
     NicknameSetupDataSource.Remote {
     override suspend fun setNickname(nickname: String): ResponseState<NicknameSetupResponse> =
-        nicknameSetupService.setNickName(NicknameSetUpRequest(nickname))
+        nicknameSetupService.setNickname(NicknameSetUpRequest(nickname))
 
     override suspend fun getNickname(nicknameId: Long): ResponseState<GetNicknameResponse> =
         getNicknameService.getNickname(nicknameId)

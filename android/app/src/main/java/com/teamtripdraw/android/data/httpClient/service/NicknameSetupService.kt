@@ -8,7 +8,7 @@ import retrofit2.http.POST
 
 interface NicknameSetupService {
     @POST("/members")
-    suspend fun setNickName(
+    suspend fun setNickname(
         @Body body: NicknameSetUpRequest
     ): ResponseState<NicknameSetupResponse>
 }

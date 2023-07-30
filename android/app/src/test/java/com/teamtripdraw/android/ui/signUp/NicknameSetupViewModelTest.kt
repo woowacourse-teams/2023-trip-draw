@@ -50,7 +50,8 @@ internal class NicknameSetupViewModelTest : DefaultViewModelTest() {
     fun `닉네임 설정이 완료될 경우 닉네임 설정 완료 상태를 true로 변경한다`() {
         // given
         sut.nickname.value = "pingter"
-        val result: Result<Unit> = Result.success(Unit)
+        val successStatusTripId = 1L
+        val result: Result<Long> = Result.success(successStatusTripId)
         coEvery { repository.setNickname(sut.nickname.value!!) } returns result
 
         // when
@@ -64,7 +65,7 @@ internal class NicknameSetupViewModelTest : DefaultViewModelTest() {
     fun `닉네임이 중복될 경우 닉네임 유효성 상태를 중복 상태로 변경한다`() {
         // given
         sut.nickname.value = "pingter"
-        val result: Result<Unit> = Result.failure(DuplicateNickNameException("중복된 닉네임 입니다."))
+        val result: Result<Long> = Result.failure(DuplicateNickNameException("중복된 닉네임 입니다."))
         coEvery { repository.setNickname(sut.nickname.value!!) } returns result
 
         // when
