@@ -37,7 +37,7 @@ public class RouteImageGenerator {
 
     private void drawImage(Coordinates coordinates, RouteImageDrawer routeImageDrawer, Coordinates pointCoordinates) {
         Positions alignedPositions = coordinates.calculatePositions(ROUTE_SIZE)
-                .align(IMAGE_SIZE, ROUTE_SIZE);
+                .align(IMAGE_SIZE);
         routeImageDrawer.drawLine(alignedPositions);
 
         List<Integer> pointIndexes = coordinates.indexOf(pointCoordinates);

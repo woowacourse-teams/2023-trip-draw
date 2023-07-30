@@ -16,12 +16,12 @@ public class Positions {
         items = new ArrayList<>(positions);
     }
 
-    public Positions align(int imageSize, int routeSize) {
+    public Positions align(int imageSize) {
         int xOffset = calculateOffset(Position::x, imageSize);
         int yOffset = calculateOffset(Position::y, imageSize);
 
         return items.stream()
-                .map(item -> new Position(item.x() + xOffset, routeSize - item.y() + yOffset))
+                .map(item -> new Position(item.x() + xOffset, imageSize - (item.y() + yOffset)))
                 .collect(collectingAndThen(toList(), Positions::new));
     }
 
