@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="postWritingViewModel"
+            type="com.teamtripdraw.android.ui.post.writing.PostWritingViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.post.PostActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:liftOnScroll="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/tool_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btn_back"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="start"
+                    android:src="@drawable/ic_back" />
+
+                <TextView
+                    android:id="@+id/page_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/page_name"
+                    android:textAppearance="@style/subtitle_2"
+                    android:textColor="@color/td_black" />
+
+                <TextView
+                    android:id="@+id/btn_post_complete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:text="@string/btn_post_complete"
+                    android:textColor="@color/td_black" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_default"
+            android:layout_marginVertical="@dimen/margin_default"
+            android:background="@null"
+            android:hint="@string/et_post_title"
+            android:inputType="text"
+            android:maxLength="@{postWritingViewModel.MAX_INPUT_TITLE_LENGTH}"
+            android:text="@={postWritingViewModel.title}"
+            android:textAppearance="@style/title_2M"
+            android:textColor="@color/td_black"
+            android:textColorHint="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_title_content"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/margin_default"
+            android:layout_marginTop="16dp"
+            app:dividerColor="@color/td_light_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_title" />
+
+        <ImageView
+            android:id="@+id/btn_location_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_default"
+            android:src="@drawable/ic_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_title_content" />
+
+        <TextView
+            android:id="@+id/btn_location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_location_icon"
+            app:layout_constraintStart_toEndOf="@id/btn_location_icon"
+            app:layout_constraintTop_toTopOf="@+id/btn_location_icon"
+            tools:text="관동지방 태초마을" />
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/margin_default"
+            android:layout_marginVertical="@dimen/margin_default"
+            android:background="@null"
+            android:gravity="top"
+            android:maxLength="@{postWritingViewModel.MAX_INPUT_CONTENT_LENGTH}"
+            android:text="@={postWritingViewModel.content}"
+            android:textAppearance="@style/body2"
+            app:layout_constraintBottom_toTopOf="@id/divider_content_file"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_location_icon" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_content_file"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintBottom_toTopOf="@id/btn_camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_content" />
+
+        <ImageView
+            android:id="@+id/btn_camera"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_mike"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="18dp"
+            android:src="@drawable/ic_mike"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_camera"
+            app:layout_constraintStart_toEndOf="@+id/btn_camera"
+            app:layout_constraintTop_toTopOf="@+id/btn_camera" />
+
+        <ImageView
+            android:id="@+id/btn_video"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="18dp"
+            android:src="@drawable/ic_video"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_mike"
+            app:layout_constraintStart_toEndOf="@+id/btn_mike"
+            app:layout_constraintTop_toTopOf="@+id/btn_mike" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

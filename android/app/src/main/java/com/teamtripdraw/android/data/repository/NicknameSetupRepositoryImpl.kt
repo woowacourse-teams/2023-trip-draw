@@ -11,24 +11,23 @@ import okhttp3.ResponseBody
 import retrofit2.Retrofit
 
 class NicknameSetupRepositoryImpl(
-
     private val localUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
     private val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote,
     private val retrofit: Retrofit
 ) :
     NicknameSetupRepository {
-    override suspend fun setNickName(nickName: String): Result<Unit> {
-        return remoteNicknameSetupDataSource.setNickName(nickName)
+    override suspend fun setNickname(nickname: String): Result<Long> {
+        return remoteNicknameSetupDataSource.setNickname(nickname)
             .process(failureListener = this::setNickNameFailureListener) { body, headers ->
-                localUserIdentifyInfoDataSource.setIdentifyInfo(body.nickname)
-                Result.success(Unit)
+                Result.success(body.memberId)
             }
     }
 
     private fun setNickNameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
         // todo error sealed class화 시키기
         if (code == 409) {
-            val message = retrofit.getParsedErrorBody<NicknameSetupFailureResponse>(errorBody)?.message
+            val message =
+                retrofit.getParsedErrorBody<NicknameSetupFailureResponse>(errorBody)?.message
             return Result.failure(
                 DuplicateNickNameException(
                     message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE
@@ -42,6 +41,13 @@ class NicknameSetupRepositoryImpl(
             )
         )
     }
+
+    override suspend fun getNickname(nicknameId: Long): Result<String> =
+        // todo #107 기준 로그인이 구현 안 되어 있는 문제로 임시로 닉네임을 통한 인증 상태 추후 로직 변경 필수(이슈 참고)
+        remoteNicknameSetupDataSource.getNickname(nicknameId).process { body, headers ->
+            localUserIdentifyInfoDataSource.setIdentifyInfo(body.nickname)
+            Result.success(body.nickname)
+        }
 
     companion object {
         private const val DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE = "중복된 닉네임 입니다."

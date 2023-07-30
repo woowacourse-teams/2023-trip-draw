@@ -8,15 +8,13 @@
     <string name="recording_point_service_alarm_channel_name">위치 기록(여행중)</string>
     <string name="recording_point_service_alarm_channel_description">여행중 위치 기록 서비스 입니다</string>
 
-
-
     <!-- bottom navigation -->
     <string name="menu_bn_home">홈</string>
     <string name="menu_bn_history">나의 여행</string>
     <string name="menu_bn_my_page">마이페이지</string>
 
     <!-- HomeFragment -->
-    <string name="tv_record_start">기록 시작</string>
+    <string name="btn_trip_start">여행시작</string>
 
     <!-- NicknameSetupActivity -->
     <string name="tv_main_title">닉네임을 알려주세요</string>
@@ -34,4 +32,10 @@
     <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
     <string name="tv_post_viewer_toolbar_title">감상 목록</string>
     <string name="btn_post_viewer_back_description">감상 목록 뒤로가기</string>
+
+    <!-- PostWritingActivity -->
+    <string name="page_name">감상 남기기</string>
+    <string name="et_post_title">제목</string>
+    <string name="btn_post_complete">저장</string>
+
 </resources>

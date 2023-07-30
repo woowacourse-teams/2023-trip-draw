@@ -20,7 +20,10 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
                 proceed(
                     request()
                         .newBuilder()
-                        .addHeader("Authorization", userIdentifyInfoDataSource.getIdentifyInfo())
+                        .addHeader(
+                            "Authorization",
+                            AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getIdentifyInfo())
+                        )
                         .build()
                 )
             }
@@ -54,4 +57,8 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
             .addCallAdapterFactory(ResponseStateCallAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
+
+    companion object {
+        private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
+    }
 }

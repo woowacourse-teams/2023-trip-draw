@@ -19,19 +19,22 @@
         android:name="com.naver.maps.map.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="87dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tb_main"
         tools:layout="@layout/map_preview" />
 
-    <include
-        android:id="@+id/btn_record_start"
-        layout="@layout/layout_record_start_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_trip_start"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
         android:layout_marginHorizontal="@dimen/margin_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_map" />
-
+        android:layout_marginBottom="@dimen/margin_default"
+        android:background="@drawable/shape_td_main_blue_line_12_rect"
+        android:text="@string/btn_trip_start"
+        android:textAppearance="@style/title_2M"
+        android:textColor="@color/td_main_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

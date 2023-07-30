@@ -17,7 +17,7 @@ import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserLocationOption
 import com.teamtripdraw.android.support.framework.presentation.permission.checkForeGroundPermission
-import com.teamtripdraw.android.support.framework.presentation.permission.checkNotificationPermission
+import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -78,6 +78,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE),
             requireContext()
         )
+        this.naverMap.setContentPadding(0, 0, 0, toPixel(requireContext(), 67))
     }
 
     override fun onDestroyView() {
