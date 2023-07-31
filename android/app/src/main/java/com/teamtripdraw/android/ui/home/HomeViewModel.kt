@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.repository.TripRepository
 import kotlinx.coroutines.launch
 
@@ -16,7 +17,7 @@ class HomeViewModel(
 
     init {
         _homeUiState.value = when (tripRepository.getCurrentTripId()) {
-            -1L -> HomeUiState.BEFORE_TRIP
+            NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
             else -> HomeUiState.ON_TRIP
         }
     }
