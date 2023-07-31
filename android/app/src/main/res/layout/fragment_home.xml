@@ -43,7 +43,7 @@
             android:text="@string/btn_trip_start"
             android:textAppearance="@style/title_2M"
             android:textColor="@color/td_main_blue"
-            app:HomeUiStateBeforeTrip="@{homeViewModel.homeUiState}"
+            app:homeUiStateBeforeTrip="@{homeViewModel.homeUiState}"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_map"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

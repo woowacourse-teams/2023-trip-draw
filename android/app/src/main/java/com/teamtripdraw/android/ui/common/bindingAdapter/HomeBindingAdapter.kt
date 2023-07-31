@@ -7,7 +7,7 @@ import com.teamtripdraw.android.ui.home.HomeUiState.BEFORE_TRIP
 import com.teamtripdraw.android.ui.home.HomeUiState.EDIT_TRIP
 import com.teamtripdraw.android.ui.home.HomeUiState.ON_TRIP
 
-@BindingAdapter("app:HomeUiStateBeforeTrip")
+@BindingAdapter("app:homeUiStateBeforeTrip")
 fun View.setHomeUiStateBeforeTrip(homeUiState: HomeUiState) {
     when (homeUiState) {
         BEFORE_TRIP -> {
