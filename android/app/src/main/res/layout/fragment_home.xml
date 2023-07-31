@@ -21,8 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_default"
             app:layout_constraintTop_toTopOf="parent" />
-
-
+        
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_map"
             android:name="com.naver.maps.map.MapFragment"
