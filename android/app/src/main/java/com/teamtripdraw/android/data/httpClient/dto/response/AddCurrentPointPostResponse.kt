@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class CurrentPointPostResponse(
+data class AddCurrentPointPostResponse(
     @Json(name = "postId")
     val postId: Long
 )
