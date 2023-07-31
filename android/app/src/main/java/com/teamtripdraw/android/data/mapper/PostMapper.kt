@@ -4,8 +4,8 @@ import com.teamtripdraw.android.data.httpClient.dto.response.AddCurrentPointPost
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.AddSelectedPointPostResponse
-import com.teamtripdraw.android.domain.point.Point
-import com.teamtripdraw.android.domain.post.Post
+import com.teamtripdraw.android.domain.model.point.Point
+import com.teamtripdraw.android.domain.model.post.Post
 import java.time.LocalDateTime
 
 fun AddCurrentPointPostResponse.toDomain(): Long {
