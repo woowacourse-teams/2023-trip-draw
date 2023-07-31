@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SelectedPointPostResponse(
+data class AddSelectedPointPostResponse(
     @Json(name = "postId")
     val postId: Long
 )

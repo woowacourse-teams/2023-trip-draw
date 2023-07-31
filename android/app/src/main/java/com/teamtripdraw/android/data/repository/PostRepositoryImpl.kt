@@ -1,8 +1,8 @@
 package com.teamtripdraw.android.data.repository
 
-import com.teamtripdraw.android.data.dataSource.PostDataSource
-import com.teamtripdraw.android.data.httpClient.dto.request.CurrentPointPostRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.SelectedPointPostRequest
+import com.teamtripdraw.android.data.dataSource.post.PostDataSource
+import com.teamtripdraw.android.data.httpClient.dto.request.AddCurrentPointPostRequest
+import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
 import com.teamtripdraw.android.data.mapper.toDomain
 import com.teamtripdraw.android.domain.post.Post
 import com.teamtripdraw.android.domain.repository.PostRepository
@@ -24,7 +24,7 @@ class PostRepositoryImpl(
         longitude: Double,
         recordedAt: LocalDateTime
     ): Result<Long> {
-        val currentPointPostRequest = CurrentPointPostRequest(
+        val addCurrentPointPostRequest = AddCurrentPointPostRequest(
             tripId = tripId,
             title = title,
             address = address,
@@ -33,7 +33,7 @@ class PostRepositoryImpl(
             longitude = longitude,
             recordedAt = recordedAt
         )
-        return remotePostDataSource.addCurrentPointPost(currentPointPostRequest)
+        return remotePostDataSource.addCurrentPointPost(addCurrentPointPostRequest)
             .process { body, headers ->
                 Result.success(body.toDomain())
             }
@@ -46,10 +46,10 @@ class PostRepositoryImpl(
         address: String,
         writing: String
     ): Result<Long> {
-        val selectedPointPostRequest = SelectedPointPostRequest(
+        val addSelectedPointPostRequest = AddSelectedPointPostRequest(
             tripId = tripId, pointId = pointId, title = title, address = address, writing = writing
         )
-        return remotePostDataSource.addSelectedPointPost(selectedPointPostRequest)
+        return remotePostDataSource.addSelectedPointPost(addSelectedPointPostRequest)
             .process { body, headers ->
                 Result.success(body.toDomain())
             }

@@ -4,11 +4,11 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class PostResponse(
+data class GetPostResponse(
     @Json(name = "address")
     val address: String,
     @Json(name = "pointResponse")
-    val pointResponse: PointResponse,
+    val getPostPointResponse: GetPostPointResponse,
     @Json(name = "postId")
     val postId: Long,
     @Json(name = "postImageUrl")

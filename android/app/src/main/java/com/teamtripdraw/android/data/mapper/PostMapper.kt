@@ -1,22 +1,22 @@
 package com.teamtripdraw.android.data.mapper
 
-import com.teamtripdraw.android.data.httpClient.dto.response.CurrentPointPostResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.PointResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.PostResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.SelectedPointPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.AddCurrentPointPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.AddSelectedPointPostResponse
 import com.teamtripdraw.android.domain.point.Point
 import com.teamtripdraw.android.domain.post.Post
 import java.time.LocalDateTime
 
-fun CurrentPointPostResponse.toDomain(): Long {
+fun AddCurrentPointPostResponse.toDomain(): Long {
     return postId
 }
 
-fun SelectedPointPostResponse.toDomain(): Long {
+fun AddSelectedPointPostResponse.toDomain(): Long {
     return postId
 }
 
-fun PointResponse.toDomain(): Point {
+fun GetPostPointResponse.toDomain(): Point {
     return Point(
         pointId = pointId,
         latitude = latitude,
@@ -25,16 +25,15 @@ fun PointResponse.toDomain(): Point {
     )
 }
 
-fun PostResponse.toDomain(): Post {
+fun GetPostResponse.toDomain(): Post {
     return Post(
         postId = postId,
         tripId = tripId,
         title = title,
         writing = writing,
         address = address,
-        point = pointResponse.toDomain(),
+        point = getPostPointResponse.toDomain(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl
-
     )
 }
