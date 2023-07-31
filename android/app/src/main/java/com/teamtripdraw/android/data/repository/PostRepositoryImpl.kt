@@ -1,8 +1,6 @@
 package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
-import com.teamtripdraw.android.data.httpClient.dto.request.AddCurrentPointPostRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
 import com.teamtripdraw.android.data.mapper.toDomain
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PostRepository
@@ -24,19 +22,15 @@ class PostRepositoryImpl(
         longitude: Double,
         recordedAt: LocalDateTime
     ): Result<Long> {
-        val addCurrentPointPostRequest = AddCurrentPointPostRequest(
+        return remotePostDataSource.addCurrentPointPost(
             tripId = tripId,
             title = title,
             address = address,
             writing = writing,
             latitude = latitude,
             longitude = longitude,
-            recordedAt = recordedAt.toString()
+            recordedAt = recordedAt
         )
-        return remotePostDataSource.addCurrentPointPost(addCurrentPointPostRequest)
-            .process { body, headers ->
-                Result.success(body.toDomain())
-            }
     }
 
     override suspend fun addSelectedPointPost(
@@ -46,30 +40,21 @@ class PostRepositoryImpl(
         address: String,
         writing: String
     ): Result<Long> {
-        val addSelectedPointPostRequest = AddSelectedPointPostRequest(
+        return remotePostDataSource.addSelectedPointPost(
             tripId = tripId, pointId = pointId, title = title, address = address, writing = writing
         )
-        return remotePostDataSource.addSelectedPointPost(addSelectedPointPostRequest)
-            .process { body, headers ->
-                Result.success(body.toDomain())
-            }
     }
 
     override suspend fun getPost(postId: Long): Result<Post> {
-        return remotePostDataSource.getPost(postId).process { body, headers ->
-            Result.success(body.toDomain())
-        }
+        return remotePostDataSource.getPost(postId).map { it.toDomain() }
     }
 
     override suspend fun getAllPosts(tripId: Long): Result<List<Post>> {
-        return remotePostDataSource.getAllPosts(tripId).process { body, headers ->
-            Result.success(body.map { it.toDomain() })
-        }
+        return remotePostDataSource.getAllPosts(tripId)
+            .map { dataPosts -> dataPosts.map { it.toDomain() } }
     }
 
     override suspend fun deletePost(postId: Long): Result<Unit> {
-        return remotePostDataSource.getAllPosts(postId).process { body, headers ->
-            Result.success(Unit)
-        }
+        return remotePostDataSource.deletePost(postId)
     }
 }
