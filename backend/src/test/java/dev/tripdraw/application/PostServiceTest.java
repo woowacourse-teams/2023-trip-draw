@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.domain.post.PostRepository;
 import dev.tripdraw.domain.trip.Point;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
@@ -28,9 +27,6 @@ class PostServiceTest {
 
     @Autowired
     private PostService postService;
-
-    @Autowired
-    private PostRepository postRepository;
 
     @Autowired
     private TripRepository tripRepository;

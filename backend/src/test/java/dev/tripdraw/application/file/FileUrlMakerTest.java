@@ -1,6 +1,5 @@
-package dev.tripdraw.domain.image;
+package dev.tripdraw.application.file;
 
-import dev.tripdraw.application.file.FileUrlMaker;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
