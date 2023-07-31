@@ -6,12 +6,14 @@ import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataS
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.RemoteNicknameSetupDataSourceImpl
 
 class RemoteDataSourceContainer(
-    serviceContainer: ServiceContainer
+    serviceContainer: ServiceContainer,
+    retrofitContainer: RetrofitContainer
 ) {
     val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote =
         RemoteNicknameSetupDataSourceImpl(
             serviceContainer.nicknameSetupService,
-            serviceContainer.getNicknameService
+            serviceContainer.getNicknameService,
+            retrofitContainer.tripDrawRetrofit
         )
     val remoteTripDataSource: TripDataSource.Remote =
         RemoteTripDataSourceImpl(serviceContainer.createTripService)
