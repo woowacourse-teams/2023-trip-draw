@@ -2,7 +2,6 @@ package com.teamtripdraw.android.data.httpClient.dto.request
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
 data class AddCurrentPointPostRequest(
@@ -19,5 +18,5 @@ data class AddCurrentPointPostRequest(
     @Json(name = "longitude")
     val longitude: Double,
     @Json(name = "recordedAt")
-    val recordedAt: LocalDateTime
+    val recordedAt: String
 )
