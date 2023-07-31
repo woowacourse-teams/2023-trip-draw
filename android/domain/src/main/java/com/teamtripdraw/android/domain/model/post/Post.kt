@@ -1,6 +1,6 @@
-package com.teamtripdraw.android.domain.post
+package com.teamtripdraw.android.domain.model.post
 
-import com.teamtripdraw.android.domain.point.Point
+import com.teamtripdraw.android.domain.model.point.Point
 
 data class Post(
     val postId: Long,

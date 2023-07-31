@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.domain.user
+package com.teamtripdraw.android.domain.model.user
 
 enum class NicknameValidState {
     EMPTY, AVAILABLE, EXCEED_LIMIT, CONTAIN_BLANK, DUPLICATE;

@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.domain.repository
 
-import com.teamtripdraw.android.domain.post.Post
+import com.teamtripdraw.android.domain.model.post.Post
 import java.time.LocalDateTime
 
 interface PostRepository {

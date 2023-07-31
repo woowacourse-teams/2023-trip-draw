@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.domain.point
+package com.teamtripdraw.android.domain.model.point
 
 import java.time.LocalDateTime
 

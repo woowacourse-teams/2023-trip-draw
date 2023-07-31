@@ -4,7 +4,7 @@ import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.httpClient.dto.request.AddCurrentPointPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
 import com.teamtripdraw.android.data.mapper.toDomain
-import com.teamtripdraw.android.domain.post.Post
+import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PostRepository
 import retrofit2.Retrofit
 import java.time.LocalDateTime
@@ -31,7 +31,7 @@ class PostRepositoryImpl(
             writing = writing,
             latitude = latitude,
             longitude = longitude,
-            recordedAt = recordedAt
+            recordedAt = recordedAt.toString()
         )
         return remotePostDataSource.addCurrentPointPost(addCurrentPointPostRequest)
             .process { body, headers ->
