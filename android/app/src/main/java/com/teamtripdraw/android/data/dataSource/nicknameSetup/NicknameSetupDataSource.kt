@@ -7,7 +7,7 @@ import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseState
 interface NicknameSetupDataSource {
     interface Local
     interface Remote {
-        suspend fun setNickname(nickname: String): ResponseState<NicknameSetupResponse>
-        suspend fun getNickname(nicknameId: Long): ResponseState<GetNicknameResponse>
+        suspend fun setNickname(nickname: String): Result<Long>
+        suspend fun getNickname(nicknameId: Long): Result<String>
     }
 }

@@ -8,12 +8,10 @@ import com.teamtripdraw.android.domain.repository.TripRepository
 class RepositoryContainer(
     localDataSourceContainer: LocalDataSourceContainer,
     remoteDataSourceContainer: RemoteDataSourceContainer,
-    retrofitContainer: RetrofitContainer
 ) {
     val nicknameSetupRepository: NicknameSetupRepository = NicknameSetupRepositoryImpl(
         localDataSourceContainer.localUserIdentifyInfoDataSource,
-        remoteDataSourceContainer.remoteNicknameSetupDataSource,
-        retrofitContainer.tripDrawRetrofit
+        remoteDataSourceContainer.remoteNicknameSetupDataSource
     )
     val tripRepository: TripRepository = TripRepositoryImpl(
         remoteDataSourceContainer.remoteTripDataSource,
