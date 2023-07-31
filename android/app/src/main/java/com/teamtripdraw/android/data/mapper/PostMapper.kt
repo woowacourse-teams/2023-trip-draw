@@ -4,36 +4,60 @@ import com.teamtripdraw.android.data.httpClient.dto.response.AddCurrentPointPost
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.AddSelectedPointPostResponse
+import com.teamtripdraw.android.data.model.DataPoint
+import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
 import java.time.LocalDateTime
 
-fun AddCurrentPointPostResponse.toDomain(): Long {
+fun AddCurrentPointPostResponse.toData(): Long {
     return postId
 }
 
-fun AddSelectedPointPostResponse.toDomain(): Long {
+fun AddSelectedPointPostResponse.toData(): Long {
     return postId
 }
 
-fun GetPostPointResponse.toDomain(): Point {
-    return Point(
+fun GetPostPointResponse.toData(): DataPoint {
+    return DataPoint(
         pointId = pointId,
         latitude = latitude,
         longitude = longitude,
-        recordedAt = LocalDateTime.parse(recordedAt)
+        recordedAt = recordedAt
     )
 }
 
-fun GetPostResponse.toDomain(): Post {
+fun GetPostResponse.toData(): DataPost {
+    return DataPost(
+        postId = postId,
+        tripId = tripId,
+        title = title,
+        writing = writing,
+        address = address,
+        point = getPostPointResponse.toData(),
+        postImageUrl = postImageUrl,
+        routeImageUrl = routeImageUrl
+    )
+}
+
+fun DataPost.toDomain(): Post {
     return Post(
         postId = postId,
         tripId = tripId,
         title = title,
         writing = writing,
         address = address,
-        point = getPostPointResponse.toDomain(),
+        point = point.toDomain(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl
+    )
+}
+
+fun DataPoint.toDomain(): Point {
+    return Point(
+        pointId = pointId,
+        latitude = latitude,
+        longitude = longitude,
+        recordedAt = LocalDateTime.parse(recordedAt)
     )
 }
