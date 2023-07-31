@@ -1,22 +1,16 @@
 package dev.tripdraw.application.file;
 
 public enum FileType {
-    POST_IMAGE("jpg", "/"),
+    POST_IMAGE(".jpg"),
     ;
 
-    private final String contentType;
-    private final String dirPath;
+    private final String extension;
 
-    FileType(String contentType, String dirPath) {
-        this.contentType = contentType;
-        this.dirPath = dirPath;
+    FileType(String extension) {
+        this.extension = extension;
     }
 
-    public String contentType() {
-        return contentType;
-    }
-
-    public String dirPath() {
-        return dirPath;
+    public String extension() {
+        return extension;
     }
 }

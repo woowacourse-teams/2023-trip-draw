@@ -12,9 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileUploader {
 
+    private final FilePath filePath;
     private final FileUrlMaker fileUrlMaker;
 
-    public FileUploader(FileUrlMaker fileUrlMaker) {
+    public FileUploader(FilePath filePath, FileUrlMaker fileUrlMaker) {
+        this.filePath = filePath;
         this.fileUrlMaker = fileUrlMaker;
     }
 
@@ -24,7 +26,7 @@ public class FileUploader {
         }
 
         UUID id = UUID.randomUUID();
-        String fullPath = fileType.dirPath() + id + fileType.contentType();
+        String fullPath = filePath.getPath(fileType) + id + fileType.extension();
         fileUpload(file, fullPath);
 
         return fileUrlMaker.make(fullPath);

@@ -4,7 +4,7 @@ spring:
 
   config:
     import:
-      - classpath:/config/ip.yml
+      - classpath:/config/secret.yml
 
   datasource:
     url: jdbc:h2:mem:testdb;MODE=MySQL
