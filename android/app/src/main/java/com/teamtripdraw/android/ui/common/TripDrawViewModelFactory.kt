@@ -22,7 +22,7 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                 isAssignableFrom(PostWritingViewModel::class.java) ->
                     PostWritingViewModel() // todo 추후 repo 추가 필요
                 isAssignableFrom(HomeViewModel::class.java) ->
-                    HomeViewModel()
+                    HomeViewModel(repositoryContainer.tripRepository)
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }

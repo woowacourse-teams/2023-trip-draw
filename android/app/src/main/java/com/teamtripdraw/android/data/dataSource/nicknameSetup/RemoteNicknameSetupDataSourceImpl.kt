@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.data.dataSource.nicknameSetup.remote
+package com.teamtripdraw.android.data.dataSource.nicknameSetup
 
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
 import com.teamtripdraw.android.data.httpClient.dto.request.NicknameSetUpRequest

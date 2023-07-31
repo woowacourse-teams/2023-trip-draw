@@ -19,4 +19,11 @@ class LocalPreferenceContainer(context: Context) {
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
+
+    val tripPreference: SharedPreferences =
+        context.getSharedPreferences(TRIP_PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
+
+    companion object {
+        private const val TRIP_PREFERENCE_FILE_NAME = "TRIP_PREFERENCE"
+    }
 }

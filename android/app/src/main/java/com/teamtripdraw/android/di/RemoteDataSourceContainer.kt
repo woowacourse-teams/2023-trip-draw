@@ -1,7 +1,9 @@
 package com.teamtripdraw.android.di
 
+import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
+import com.teamtripdraw.android.data.dataSource.trip.RemoteTripDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
-import com.teamtripdraw.android.data.dataSource.nicknameSetup.remote.RemoteNicknameSetupDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.nicknameSetup.RemoteNicknameSetupDataSourceImpl
 
 class RemoteDataSourceContainer(
     serviceContainer: ServiceContainer
@@ -11,4 +13,6 @@ class RemoteDataSourceContainer(
             serviceContainer.nicknameSetupService,
             serviceContainer.getNicknameService
         )
+    val remoteTripDataSource: TripDataSource.Remote =
+        RemoteTripDataSourceImpl(serviceContainer.createTripService)
 }
