@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.ListAdapter
 import com.teamtripdraw.android.ui.model.UiPostItem
 
 class PostViewerAdapter(
-    private val onPostClick: (postId: Long) -> Unit
+    private val viewModel: PostViewerViewModel
 ) : ListAdapter<UiPostItem, PostViewerViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewerViewHolder {
-        return PostViewerViewHolder.of(parent, onPostClick)
+        return PostViewerViewHolder.of(parent, viewModel)
     }
 
     override fun onBindViewHolder(holder: PostViewerViewHolder, position: Int) {
