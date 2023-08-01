@@ -106,8 +106,8 @@ class RecordingPointService : Service() {
 
     private fun getLocationRequest() =
         LocationRequest.create().apply {
-            interval = 100
-            fastestInterval = 10
+            interval = LOCATION_REQUEST_INTERVAL
+            fastestInterval = LOCATION_REQUEST_FASTEST_INTERVAL
             priority = Priority.PRIORITY_HIGH_ACCURACY
         }
 
@@ -116,6 +116,8 @@ class RecordingPointService : Service() {
     companion object {
         private const val TRIP_ID = "TRIP_ID"
         private const val NOTIFICATION_ID = 1001
+        private const val LOCATION_REQUEST_INTERVAL = 100L
+        private const val LOCATION_REQUEST_FASTEST_INTERVAL = 10L
 
         fun getTripIdIntent(intent: Intent, tripId: Long): Intent =
             intent.apply { putExtra(TRIP_ID, tripId) }
