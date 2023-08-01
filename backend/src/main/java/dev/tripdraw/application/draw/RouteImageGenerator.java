@@ -21,27 +21,27 @@ public class RouteImageGenerator {
     public String generate(
             List<Double> latitudes,
             List<Double> longitudes,
-            List<Double> xPoints,
-            List<Double> yPoints
+            List<Double> pointedLatitudes,
+            List<Double> pointedLongitudes
     ) {
         RouteImageDrawer routeImageDrawer = RouteImageDrawer.from(IMAGE_SIZE);
         Coordinates coordinates = Coordinates.of(latitudes, longitudes);
-        Coordinates pointCoordinates = Coordinates.of(xPoints, yPoints);
+        Coordinates pointedCoordinates = Coordinates.of(pointedLatitudes, pointedLongitudes);
 
-        drawImage(coordinates, routeImageDrawer, pointCoordinates);
+        drawImage(coordinates, routeImageDrawer, pointedCoordinates);
 
         String imageName = routeImageUploader.upload(routeImageDrawer.bufferedImage());
         routeImageDrawer.dispose();
         return imageName;
     }
 
-    private void drawImage(Coordinates coordinates, RouteImageDrawer routeImageDrawer, Coordinates pointCoordinates) {
+    private void drawImage(Coordinates coordinates, RouteImageDrawer routeImageDrawer, Coordinates pointedCoordinates) {
         Positions alignedPositions = coordinates.calculatePositions(ROUTE_SIZE)
                 .align(IMAGE_SIZE);
         routeImageDrawer.drawLine(alignedPositions);
 
-        List<Integer> pointIndexes = coordinates.indexOf(pointCoordinates);
-        Positions pointPositions = alignedPositions.getPositionsByIndexes(pointIndexes);
-        routeImageDrawer.drawPoint(pointPositions);
+        List<Integer> pointedIndexes = coordinates.indexOf(pointedCoordinates);
+        Positions pointedPositions = alignedPositions.getPositionsByIndexes(pointedIndexes);
+        routeImageDrawer.drawPoint(pointedPositions);
     }
 }
