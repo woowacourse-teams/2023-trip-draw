@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
@@ -32,8 +31,8 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private String address;
-
-    @Lob
+    
+    @Column(columnDefinition = "TEXT")
     private String writing;
 
     @OneToOne

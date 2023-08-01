@@ -16,6 +16,7 @@ spring:
         format_sql: true
         use_sql_comments: true
         highlight_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: validate
 
