@@ -1,6 +1,8 @@
 package com.teamtripdraw.android.data.dataSource.post
 
 import com.teamtripdraw.android.data.model.DataPost
+import com.teamtripdraw.android.data.model.DataPreCurrentPointPost
+import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
 import java.time.LocalDateTime
 
 interface PostDataSource {
@@ -9,21 +11,11 @@ interface PostDataSource {
 
     interface Remote {
         suspend fun addCurrentPointPost(
-            tripId: Long,
-            title: String,
-            address: String,
-            writing: String,
-            latitude: Double,
-            longitude: Double,
-            recordedAt: LocalDateTime
+            dataPreCurrentPointPost: DataPreCurrentPointPost
         ): Result<Long>
 
         suspend fun addSelectedPointPost(
-            tripId: Long,
-            pointId: Long,
-            title: String,
-            address: String,
-            writing: String
+            dataPreSelectedPointPost: DataPreSelectedPointPost
         ): Result<Long>
 
         suspend fun getPost(postId: Long): Result<DataPost>

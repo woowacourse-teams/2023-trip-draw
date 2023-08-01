@@ -1,11 +1,13 @@
 package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
+import com.teamtripdraw.android.data.mapper.toData
 import com.teamtripdraw.android.data.mapper.toDomain
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PreCurrentPointPost
+import com.teamtripdraw.android.domain.model.post.PreSelectedPointPost
 import com.teamtripdraw.android.domain.repository.PostRepository
 import retrofit2.Retrofit
-import java.time.LocalDateTime
 
 class PostRepositoryImpl(
     private val localPostDataSource: PostDataSource.Local,
@@ -14,34 +16,18 @@ class PostRepositoryImpl(
 ) : PostRepository {
 
     override suspend fun addCurrentPointPost(
-        tripId: Long,
-        title: String,
-        address: String,
-        writing: String,
-        latitude: Double,
-        longitude: Double,
-        recordedAt: LocalDateTime
+        preCurrentPointPost: PreCurrentPointPost
     ): Result<Long> {
         return remotePostDataSource.addCurrentPointPost(
-            tripId = tripId,
-            title = title,
-            address = address,
-            writing = writing,
-            latitude = latitude,
-            longitude = longitude,
-            recordedAt = recordedAt
+            preCurrentPointPost.toData()
         )
     }
 
     override suspend fun addSelectedPointPost(
-        tripId: Long,
-        pointId: Long,
-        title: String,
-        address: String,
-        writing: String
+        preSelectedPointPost: PreSelectedPointPost
     ): Result<Long> {
         return remotePostDataSource.addSelectedPointPost(
-            tripId = tripId, pointId = pointId, title = title, address = address, writing = writing
+            preSelectedPointPost.toData()
         )
     }
 

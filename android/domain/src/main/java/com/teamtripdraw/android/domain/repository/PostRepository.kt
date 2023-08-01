@@ -1,25 +1,17 @@
 package com.teamtripdraw.android.domain.repository
 
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PreCurrentPointPost
+import com.teamtripdraw.android.domain.model.post.PreSelectedPointPost
 import java.time.LocalDateTime
 
 interface PostRepository {
     suspend fun addCurrentPointPost(
-        tripId: Long,
-        title: String,
-        address: String,
-        writing: String,
-        latitude: Double,
-        longitude: Double,
-        recordedAt: LocalDateTime
+        preCurrentPointPost: PreCurrentPointPost
     ): Result<Long>
 
     suspend fun addSelectedPointPost(
-        tripId: Long,
-        pointId: Long,
-        title: String,
-        address: String,
-        writing: String
+        preSelectedPointPost: PreSelectedPointPost
     ): Result<Long>
 
     suspend fun getPost(postId: Long): Result<Post>
