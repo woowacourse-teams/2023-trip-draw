@@ -1,9 +1,9 @@
 package com.teamtripdraw.android.data.dataSource.post.remote
 
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
+import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.service.PostService
-import com.teamtripdraw.android.data.mapper.toData
-import com.teamtripdraw.android.data.mapper.toHttpRequest
+import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPreCurrentPointPost
 import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
