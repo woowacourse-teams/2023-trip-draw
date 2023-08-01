@@ -1,6 +1,7 @@
 package com.teamtripdraw.android.ui.home
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,16 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION_PERMISSION_REQUEST_CODE
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserLocationOption
 import com.teamtripdraw.android.support.framework.presentation.permission.checkForeGroundPermission
+import com.teamtripdraw.android.support.framework.presentation.permission.checkNotificationPermission
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
+import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -41,6 +46,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 // todo: 권한 받아야 한다는 다이얼로그 띄워주기 #15
             }
         }
+        // todo 권한 관련 분리 필수 !!!!!!!!!!! #134 참고
+        checkNotificationPermission(requireContext(), notificationPermissionRequest)
     }
     private val notificationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -66,6 +73,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         checkForeGroundPermission(requireContext(), locationPermissionRequest)
         matchMapFragmentToNaverMap()
+        observeStartTripEvent()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -85,6 +93,31 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             requireContext()
         )
         this.naverMap.setContentPadding(0, 0, 0, toPixel(requireContext(), 67))
+    }
+
+    private fun observeStartTripEvent() {
+        homeViewModel.startTripEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this::startRecordPoint)
+        )
+    }
+
+    private fun startRecordPoint(isStartTrip: Boolean) {
+        if (isStartTrip) {
+            startRecordingPointService()
+            startRecordingPointAlarmManager()
+        }
+    }
+
+    private fun startRecordingPointAlarmManager() {
+        RecordingPointAlarmManager(requireContext()).startRecord(homeViewModel.tripId)
+    }
+
+    private fun startRecordingPointService() {
+        RecordingPointService.getTripIdIntent(
+            Intent(requireContext(), RecordingPointService::class.java),
+            homeViewModel.tripId
+        ).apply { requireContext().startService(this) }
     }
 
     override fun onDestroyView() {
