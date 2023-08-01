@@ -83,6 +83,6 @@ public class Coordinates {
     }
 
     public List<Coordinate> items() {
-        return items;
+        return new ArrayList<>(items);
     }
 }
