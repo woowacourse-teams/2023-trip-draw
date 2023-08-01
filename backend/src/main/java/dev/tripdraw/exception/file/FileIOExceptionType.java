@@ -19,11 +19,11 @@ public enum FileIOExceptionType implements ExceptionType {
 
     @Override
     public HttpStatus getHttpStatus() {
-        return null;
+        return httpStatus;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return errorMessage;
     }
 }
