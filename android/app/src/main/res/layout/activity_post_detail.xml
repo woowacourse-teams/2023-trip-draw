@@ -69,22 +69,34 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_post_detail_title"
+                    android:id="@+id/tv_post_detail_recorded_at"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_default"
                     android:layout_marginTop="@dimen/margin_default"
-                    android:text="@{postDetailViewModel.postDetail.title}"
-                    android:textAppearance="@style/title_2M"
+                    android:text="@{postDetailViewModel.postDetail.recordedAt}"
+                    android:textAppearance="@style/caption_1"
+                    android:textColor="@color/td_medium_gray"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    tools:text="2023.07.23. 21:00" />
+
+                <TextView
+                    android:id="@+id/tv_post_detail_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:text="@{postDetailViewModel.postDetail.title}"
+                    android:textAppearance="@style/title_2M"
+                    app:layout_constraintStart_toStartOf="@id/tv_post_detail_recorded_at"
+                    app:layout_constraintTop_toBottomOf="@id/tv_post_detail_recorded_at"
                     tools:text="우도의 바닷가" />
 
                 <ImageView
                     android:id="@+id/iv_post_detail_location_icon"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:contentDescription="@string/btn_post_detail_location_icon_description"
                     android:src="@drawable/ic_location"
                     app:layout_constraintStart_toStartOf="@id/tv_post_detail_title"
@@ -102,13 +114,13 @@
 
                 <ImageView
                     android:id="@+id/iv_route"
-                    android:layout_width="42dp"
-                    android:layout_height="72dp"
+                    android:layout_width="52dp"
+                    android:layout_height="92dp"
                     android:layout_marginEnd="@dimen/margin_default"
                     android:contentDescription="@string/iv_route_description"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_post_detail_title"
+                    app:layout_constraintTop_toTopOf="@id/tv_post_detail_recorded_at"
                     app:setImage="@{postDetailViewModel.postDetail.routeImageUrl}"
                     tools:background="@color/td_gray" />
 
