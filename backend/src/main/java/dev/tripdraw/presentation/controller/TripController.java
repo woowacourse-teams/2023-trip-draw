@@ -10,7 +10,9 @@ import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,5 +96,20 @@ public class TripController {
     public ResponseEntity<TripsSearchResponse> readAll(@Auth LoginUser loginUser) {
         TripsSearchResponse response = tripService.readAllTrips(loginUser);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "여행 이름 수정 및 종료 API", description = "여행 이름을 수정하고, 여행을 종료합니다.")
+    @ApiResponse(
+            responseCode = "204",
+            description = "여행 이름 수정 및 종료 성공"
+    )
+    @PatchMapping("/trips/{tripId}")
+    public ResponseEntity<Void> update(
+            @Auth LoginUser loginUser,
+            @PathVariable Long tripId,
+            @RequestBody TripUpdateRequest tripUpdateRequest
+    ) {
+        tripService.updateTripById(loginUser, tripId, tripUpdateRequest);
+        return ResponseEntity.noContent().build();
     }
 }

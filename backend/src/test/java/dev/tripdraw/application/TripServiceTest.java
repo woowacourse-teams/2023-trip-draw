@@ -1,5 +1,6 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
@@ -19,6 +20,7 @@ import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripSearchResponse;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
@@ -171,5 +173,20 @@ class TripServiceTest {
         assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
                 new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
         );
+    }
+
+    @Test
+    void 여행의_이름과_상태를_수정한다() {
+        // given
+        TripUpdateRequest request = new TripUpdateRequest("제주도 여행", FINISHED);
+
+        // when
+        tripService.updateTripById(loginUser, trip.id(), request);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
+            softly.assertThat(trip.status()).isEqualTo(FINISHED);
+        });
     }
 }
