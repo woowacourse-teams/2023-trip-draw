@@ -15,7 +15,7 @@ data class Post(
 ) {
 
     companion object {
-        fun of(
+        fun getPreCurrentPointPost(
             tripId: Long,
             title: String,
             writing: String,
@@ -35,7 +35,7 @@ data class Post(
             )
         }
 
-        fun of(
+        fun getPreSelectedPointPost(
             tripId: Long,
             pointId: Long,
             title: String,

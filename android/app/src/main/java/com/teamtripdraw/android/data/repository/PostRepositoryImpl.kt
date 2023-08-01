@@ -1,8 +1,8 @@
 package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
-import com.teamtripdraw.android.data.mapper.toData
-import com.teamtripdraw.android.data.mapper.toDomain
+import com.teamtripdraw.android.data.model.mapper.toData
+import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.model.post.PreCurrentPointPost
 import com.teamtripdraw.android.domain.model.post.PreSelectedPointPost

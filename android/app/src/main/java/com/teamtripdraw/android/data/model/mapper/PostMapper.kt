@@ -1,7 +1,5 @@
-package com.teamtripdraw.android.data.mapper
+package com.teamtripdraw.android.data.model.mapper
 
-import com.teamtripdraw.android.data.httpClient.dto.request.AddCurrentPointPostRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.response.AddCurrentPointPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
@@ -65,28 +63,6 @@ fun PreSelectedPointPost.toData(): DataPreSelectedPointPost {
         title = title,
         writing = writing,
         address = address
-    )
-}
-
-fun DataPreSelectedPointPost.toHttpRequest(): AddSelectedPointPostRequest {
-    return AddSelectedPointPostRequest(
-        tripId = tripId,
-        pointId = pointId,
-        title = title,
-        writing = writing,
-        address = address
-    )
-}
-
-fun DataPreCurrentPointPost.toHttpRequest(): AddCurrentPointPostRequest {
-    return AddCurrentPointPostRequest(
-        tripId = tripId,
-        title = title,
-        writing = writing,
-        address = address,
-        latitude = latitude,
-        longitude = longitude,
-        recordedAt = recordedAt
     )
 }
 
