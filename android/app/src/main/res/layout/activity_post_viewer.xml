@@ -20,14 +20,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--            아이콘 적용하기-->
             <ImageView
                 android:id="@+id/btn_post_viewer_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="start"
                 android:contentDescription="@string/btn_post_viewer_back_description"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ic_back" />
 
             <TextView
                 android:id="@+id/tv_post_viewer_toolbar_title"
