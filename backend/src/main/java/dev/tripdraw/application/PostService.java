@@ -21,6 +21,7 @@ import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,8 +53,7 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = findMemberByNickname(loginUser.nickname());
-        Trip trip = findTripById(postAndPointCreateRequest.tripId());
-        trip.validateAuthorization(member);
+        Trip trip = findValidatedTripById(postAndPointCreateRequest.tripId(), member);
 
         Point point = postAndPointCreateRequest.toPoint();
         trip.add(point);
@@ -70,8 +70,7 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = findMemberByNickname(loginUser.nickname());
-        Trip trip = findTripById(postRequest.tripId());
-        trip.validateAuthorization(member);
+        Trip trip = findValidatedTripById(postRequest.tripId(), member);
 
         Point point = trip.findPointById(postRequest.pointId());
 
@@ -87,9 +86,20 @@ public class PostService {
         return PostResponse.from(post);
     }
 
-    private Trip findTripById(Long tripId) {
-        return tripRepository.findById(tripId)
+    public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
+        Member member = findMemberByNickname(loginUser.nickname());
+        findValidatedTripById(tripId, member);
+
+        List<Post> posts = postRepository.findAllByTripId(tripId);
+        return PostsResponse.from(posts);
+    }
+
+    private Trip findValidatedTripById(Long tripId, Member member) {
+
+        Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+        trip.validateAuthorization(member);
+        return trip;
     }
 
     private Member findMemberByNickname(String nickname) {
