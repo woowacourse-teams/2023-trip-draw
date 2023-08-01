@@ -1,7 +1,5 @@
 package dev.tripdraw.dto.trip;
 
-import static dev.tripdraw.dto.UrlStringToStringBase64Encoder.encode;
-
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +18,7 @@ public record TripResponse(
         @Schema(description = "여행 상태 (option : ONGOING, FINISHED)", example = "ONGOING")
         TripStatus status,
 
-        @Schema(description = "Base64로 인코딩 된 여행 대표 이미지 URL", example = "")
+        @Schema(description = "Base64로 인코딩 된 여행 대표 이미지 URL", example = "tripdraw.site/post-image/AWF242FWF42.jpg")
         String encodedImageUrl
 ) {
 
@@ -30,7 +28,7 @@ public record TripResponse(
                 trip.nameValue(),
                 generateRoutes(trip),
                 trip.status(),
-                encode(trip.imageUrl())
+                trip.imageUrl()
         );
     }
 

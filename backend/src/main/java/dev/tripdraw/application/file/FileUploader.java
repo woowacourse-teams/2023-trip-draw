@@ -26,7 +26,7 @@ public class FileUploader {
         }
 
         UUID id = UUID.randomUUID();
-        String filePathWithBase = this.filePath.getPathWithBase(fileType) + id + fileType.extension();
+        String filePathWithBase = filePath.getPathWithBase(fileType) + id + fileType.extension();
         fileUpload(file, filePathWithBase);
 
         return fileUrlMaker.make(filePath.getPath(fileType) + id + fileType.extension());

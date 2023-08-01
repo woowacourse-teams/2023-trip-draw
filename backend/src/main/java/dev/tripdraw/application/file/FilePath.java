@@ -1,5 +1,7 @@
 package dev.tripdraw.application.file;
 
+import static dev.tripdraw.application.file.FileType.POST_IMAGE;
+
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,7 +19,7 @@ public class FilePath {
 
     public String getPath(FileType fileType) {
         Map<FileType, String> typeAndPath = Map.of(
-                FileType.POST_IMAGE, postImagePath
+                POST_IMAGE, postImagePath
         );
 
         return typeAndPath.get(fileType);
@@ -25,7 +27,7 @@ public class FilePath {
 
     public String getPathWithBase(FileType fileType) {
         Map<FileType, String> typeAndPath = Map.of(
-                FileType.POST_IMAGE, base + postImagePath
+                POST_IMAGE, base + postImagePath
         );
 
         return typeAndPath.get(fileType);
