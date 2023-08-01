@@ -14,7 +14,7 @@ public enum TripExceptionType implements ExceptionType {
     POINT_NOT_IN_TRIP(NOT_FOUND, "해당 여행에 존재하지 않는 위치정보입니다."),
     POINT_ALREADY_DELETED(CONFLICT, "이미 삭제된 위치정보입니다."),
     POINT_NOT_FOUND(NOT_FOUND, "존재하지 않는 위치입니다."),
-    TRIP_INVALID_STATUS(BAD_REQUEST, "유효하지 않은 여행 상태입니다."),
+    TRIP_INVALID_STATUS(BAD_REQUEST, "잘못된 여행 상태입니다."),
     ;
 
     private final HttpStatus httpStatus;
