@@ -10,9 +10,7 @@ import com.teamtripdraw.android.domain.repository.PostRepository
 import retrofit2.Retrofit
 
 class PostRepositoryImpl(
-    private val localPostDataSource: PostDataSource.Local,
     private val remotePostDataSource: PostDataSource.Remote,
-    private val retrofit: Retrofit
 ) : PostRepository {
 
     override suspend fun addCurrentPointPost(
