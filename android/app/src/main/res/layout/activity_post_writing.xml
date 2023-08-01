@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="postWritingViewModel"
             type="com.teamtripdraw.android.ui.post.writing.PostWritingViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +27,7 @@
             app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/tb_post_writing"
+                android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -37,7 +39,7 @@
                     android:src="@drawable/ic_back" />
 
                 <TextView
-                    android:id="@+id/tv_page_name"
+                    android:id="@+id/page_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -52,7 +54,8 @@
                     android:layout_gravity="end"
                     android:layout_marginEnd="@dimen/margin_default"
                     android:text="@string/btn_post_complete"
-                    android:textColor="@color/td_black" />
+                    android:textColor="@color/td_black"
+                    app:postWritingCompleteButtonState="@{postWritingViewModel.postWritingValidState}" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -64,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_default"
             android:layout_marginVertical="@dimen/margin_default"
+            android:afterTextChanged="@{() -> postWritingViewModel.textChangedEvent()}"
             android:background="@null"
             android:hint="@string/et_post_title"
             android:inputType="text"
@@ -110,14 +114,15 @@
             tools:text="관동지방 태초마을" />
 
         <EditText
-            android:id="@+id/et_writing"
+            android:id="@+id/et_content"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/margin_default"
             android:layout_marginVertical="@dimen/margin_default"
+            android:afterTextChanged="@{() -> postWritingViewModel.textChangedEvent()}"
             android:background="@null"
             android:gravity="top"
-            android:maxLength="@{postWritingViewModel.MAX_INPUT_CONTENT_LENGTH}"
+            android:maxLength="@{postWritingViewModel.MAX_INPUT_WRITING_LENGTH}"
             android:text="@={postWritingViewModel.writing}"
             android:textAppearance="@style/body2"
             app:layout_constraintBottom_toTopOf="@id/divider_content_file"
@@ -134,7 +139,7 @@
             app:layout_constraintBottom_toTopOf="@id/btn_camera"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_writing" />
+            app:layout_constraintTop_toBottomOf="@+id/et_content" />
 
         <ImageView
             android:id="@+id/btn_camera"
