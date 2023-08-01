@@ -14,6 +14,7 @@ import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
@@ -84,5 +85,14 @@ public class TripService {
         Member member = getByNickname(loginUser.nickname());
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
         return TripsSearchResponse.from(trips);
+    }
+
+    public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {
+        Member member = getByNickname(loginUser.nickname());
+        Trip trip = getByTripId(tripId);
+        trip.validateAuthorization(member);
+
+        trip.changeName(tripUpdateRequest.name());
+        trip.changeStatus(tripUpdateRequest.status());
     }
 }
