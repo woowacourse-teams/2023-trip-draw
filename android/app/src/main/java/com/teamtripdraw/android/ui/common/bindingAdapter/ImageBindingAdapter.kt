@@ -4,8 +4,8 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamtripdraw.android.R
 
@@ -47,6 +47,6 @@ fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
         .load(imgUrl)
         .placeholder(R.drawable.shape_td_gray_fill_0_rect)
         .error(R.drawable.shape_td_gray_fill_0_rect)
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(12)))
+        .transform(CenterCrop(), RoundedCorners(20))
         .into(this)
 }
