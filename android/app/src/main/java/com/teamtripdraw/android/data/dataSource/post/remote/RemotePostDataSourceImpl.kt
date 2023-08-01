@@ -1,51 +1,27 @@
 package com.teamtripdraw.android.data.dataSource.post.remote
 
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
-import com.teamtripdraw.android.data.httpClient.dto.request.AddCurrentPointPostRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.mapper.toData
+import com.teamtripdraw.android.data.mapper.toHttpRequest
 import com.teamtripdraw.android.data.model.DataPost
-import java.time.LocalDateTime
+import com.teamtripdraw.android.data.model.DataPreCurrentPointPost
+import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
 
 class RemotePostDataSourceImpl(private val postService: PostService) : PostDataSource.Remote {
     override suspend fun addCurrentPointPost(
-        tripId: Long,
-        title: String,
-        address: String,
-        writing: String,
-        latitude: Double,
-        longitude: Double,
-        recordedAt: LocalDateTime
+        dataPreCurrentPointPost: DataPreCurrentPointPost
     ): Result<Long> {
-        val addCurrentPointPostRequest = AddCurrentPointPostRequest(
-            tripId = tripId,
-            title = title,
-            address = address,
-            writing = writing,
-            latitude = latitude,
-            longitude = longitude,
-            recordedAt = recordedAt.toString()
-        )
-
-        return postService.addCurrentPointPost(addCurrentPointPostRequest)
+        return postService.addCurrentPointPost(dataPreCurrentPointPost.toHttpRequest())
             .process { body, headers ->
                 Result.success(body.toData())
             }
     }
 
     override suspend fun addSelectedPointPost(
-        tripId: Long,
-        pointId: Long,
-        title: String,
-        address: String,
-        writing: String
+        dataPreSelectedPointPost: DataPreSelectedPointPost
     ): Result<Long> {
-        val addSelectedPointPostRequest = AddSelectedPointPostRequest(
-            tripId = tripId, pointId = pointId, title = title, address = address, writing = writing
-        )
-
-        return postService.addSelectedPointPost(addSelectedPointPostRequest)
+        return postService.addSelectedPointPost(dataPreSelectedPointPost.toHttpRequest())
             .process { body, headers ->
                 Result.success(body.toData())
             }

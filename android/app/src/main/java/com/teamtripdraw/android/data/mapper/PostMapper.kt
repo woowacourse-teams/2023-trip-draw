@@ -1,13 +1,19 @@
 package com.teamtripdraw.android.data.mapper
 
+import com.teamtripdraw.android.data.httpClient.dto.request.AddCurrentPointPostRequest
+import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.response.AddCurrentPointPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.AddSelectedPointPostResponse
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
+import com.teamtripdraw.android.data.model.DataPreCurrentPointPost
+import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PreCurrentPointPost
+import com.teamtripdraw.android.domain.model.post.PreSelectedPointPost
 import java.time.LocalDateTime
 
 fun AddCurrentPointPostResponse.toData(): Long {
@@ -37,6 +43,50 @@ fun GetPostResponse.toData(): DataPost {
         point = getPostPointResponse.toData(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl
+    )
+}
+
+fun PreCurrentPointPost.toData(): DataPreCurrentPointPost {
+    return DataPreCurrentPointPost(
+        tripId = tripId,
+        title = title,
+        writing = writing,
+        address = address,
+        latitude = latitude,
+        longitude = longitude,
+        recordedAt = recordedAt.toString()
+    )
+}
+
+fun PreSelectedPointPost.toData(): DataPreSelectedPointPost {
+    return DataPreSelectedPointPost(
+        tripId = tripId,
+        pointId = pointId,
+        title = title,
+        writing = writing,
+        address = address
+    )
+}
+
+fun DataPreSelectedPointPost.toHttpRequest(): AddSelectedPointPostRequest {
+    return AddSelectedPointPostRequest(
+        tripId = tripId,
+        pointId = pointId,
+        title = title,
+        writing = writing,
+        address = address
+    )
+}
+
+fun DataPreCurrentPointPost.toHttpRequest(): AddCurrentPointPostRequest {
+    return AddCurrentPointPostRequest(
+        tripId = tripId,
+        title = title,
+        writing = writing,
+        address = address,
+        latitude = latitude,
+        longitude = longitude,
+        recordedAt = recordedAt
     )
 }
 
