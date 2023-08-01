@@ -103,8 +103,11 @@ public class TripController {
             description = "여행 이름 수정 및 종료 성공"
     )
     @PatchMapping("/trips/{tripId}")
-    public ResponseEntity<Void> update(@Auth LoginUser loginUser, @PathVariable Long tripId,
-                                       @RequestBody TripUpdateRequest tripUpdateRequest) {
+    public ResponseEntity<Void> update(
+            @Auth LoginUser loginUser,
+            @PathVariable Long tripId,
+            @RequestBody TripUpdateRequest tripUpdateRequest
+    ) {
         tripService.updateTripById(loginUser, tripId, tripUpdateRequest);
         return ResponseEntity.noContent().build();
     }
