@@ -7,7 +7,7 @@ public record TripUpdateRequest(
         @Schema(description = "여행명", example = "통후추의 여행")
         String name,
 
-        @Schema(description = "여행 상태 (option : ONGOING, FINISHED)", example = "ONGOING")
+        @Schema(description = "여행 상태", allowableValues = {"ONGOING, FINISHED"}, example = "ONGOING")
         TripStatus status
 ) {
 }
