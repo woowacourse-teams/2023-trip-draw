@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +29,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="start"
                 android:contentDescription="@string/btn_post_viewer_back_description"
+                android:onClick="@{()->onBackClick.invoke()}"
                 android:src="@drawable/ic_back" />
 
             <TextView
