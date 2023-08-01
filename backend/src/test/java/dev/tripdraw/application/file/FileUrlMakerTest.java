@@ -1,12 +1,13 @@
 package dev.tripdraw.application.file;
 
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayNameGeneration(ReplaceUnderscores.class)
 class FileUrlMakerTest {
 
     private final FileUrlMaker fileUrlMaker = new FileUrlMaker("ip");
@@ -20,6 +21,6 @@ class FileUrlMakerTest {
         String url = fileUrlMaker.make(fullPath);
 
         // then
-        Assertions.assertThat(url).isEqualTo("ip" + "/통후추/통후추의셀카.jpg");
+        assertThat(url).isEqualTo("ip" + "/통후추/통후추의셀카.jpg");
     }
 }

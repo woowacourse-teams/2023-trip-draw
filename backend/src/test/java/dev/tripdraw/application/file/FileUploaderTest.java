@@ -31,7 +31,6 @@ class FileUploaderTest {
 
         // when
         String url = fileUploader.upload(file, FileType.POST_IMAGE);
-        System.out.println(url);
 
         // then
         assertSoftly(softly -> {
