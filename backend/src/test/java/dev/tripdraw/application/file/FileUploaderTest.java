@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class FileUploaderTest {
 
-    private final FilePath filePath = new FilePath("post-image-path");
+    private final FilePath filePath = new FilePath("base", "post-image-path");
     private final FileUrlMaker fileUrlMaker = new FileUrlMaker("ip");
 
     @Test
@@ -31,6 +31,7 @@ class FileUploaderTest {
 
         // when
         String url = fileUploader.upload(file, FileType.POST_IMAGE);
+        System.out.println(url);
 
         // then
         assertSoftly(softly -> {

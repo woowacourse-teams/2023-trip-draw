@@ -26,15 +26,15 @@ public class FileUploader {
         }
 
         UUID id = UUID.randomUUID();
-        String fullPath = filePath.getPath(fileType) + id + fileType.extension();
-        fileUpload(file, fullPath);
+        String filePathWithBase = this.filePath.getPathWithBase(fileType) + id + fileType.extension();
+        fileUpload(file, filePathWithBase);
 
-        return fileUrlMaker.make(fullPath);
+        return fileUrlMaker.make(filePath.getPath(fileType) + id + fileType.extension());
     }
 
-    private void fileUpload(MultipartFile file, String fullPath) {
+    private void fileUpload(MultipartFile file, String filePathWithBase) {
         try {
-            file.transferTo(new File(fullPath));
+            file.transferTo(new File(filePathWithBase));
         } catch (IOException e) {
             throw new FileIOException(FILE_SAVE_FAIL);
         }

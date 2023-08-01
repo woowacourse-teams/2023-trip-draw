@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileUrlMaker {
 
-    private final String ip;
+    private final String domain;
 
-    public FileUrlMaker(@Value("${ip}") String ip) {
-        this.ip = ip;
+    public FileUrlMaker(@Value("${trip.domain}") String domain) {
+        this.domain = domain;
     }
 
-    public String make(String fullPath) {
-        return ip + fullPath;
+    public String make(String filePath) {
+        return domain + filePath;
     }
 }

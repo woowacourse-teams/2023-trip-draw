@@ -42,3 +42,9 @@ springdoc:
     doc-expansion: none
   paths-to-match:
     - /**
+
+trip:
+  domain:
+  base:
+  post:
+  route:
