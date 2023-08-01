@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.post.writing
+package com.teamtripdraw.android.ui.postWriting
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

@@ -51,7 +51,7 @@
         </activity>
 
         <activity
-            android:name=".ui.post.writing.PostWritingActivity"
+            android:name=".ui.postWriting.PostWritingActivity"
             android:exported="false" />
     </application>
 

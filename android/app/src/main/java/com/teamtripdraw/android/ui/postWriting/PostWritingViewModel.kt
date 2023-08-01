@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.post.writing
+package com.teamtripdraw.android.ui.postWriting
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
