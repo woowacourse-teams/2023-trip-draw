@@ -18,10 +18,13 @@ import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
+import dev.tripdraw.dto.trip.TripSearchResponse;
+import dev.tripdraw.dto.trip.TripsSearchResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -288,5 +291,25 @@ class TripControllerTest extends ControllerTest {
                 .when().delete("/points")
                 .then().log().all()
                 .statusCode(CONFLICT.value());
+    }
+
+    @Test
+    void 전체_여행을_조회한다() {
+        // given
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().get("/trips")
+                .then().log().all()
+                .extract();
+
+        // then
+        TripsSearchResponse tripsSearchResponse = response.as(TripsSearchResponse.class);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
+                    new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
+            );
+        });
     }
 }
