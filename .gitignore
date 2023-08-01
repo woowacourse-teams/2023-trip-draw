@@ -26,6 +26,10 @@ misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
 
+# private files
+/backend/src/main/resources/application-dev.yml
+/backend/src/main/resources/application-prod.yml
+
 # Keystore files
 *.jks
 *.keystore
