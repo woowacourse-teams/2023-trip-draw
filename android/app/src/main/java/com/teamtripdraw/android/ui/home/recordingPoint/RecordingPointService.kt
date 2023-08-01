@@ -82,7 +82,11 @@ class RecordingPointService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         currentTripId = intent.getLongExtra(TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
-        startUpdateLocation()
+        if (currentTripId != NULL_SUBSTITUTE_TRIP_ID) {
+            startUpdateLocation()
+        } else {
+            // todo 로그전략 수립후 잘못된 tripID임을 명시하는 로그 작성 #134
+        }
         return START_REDELIVER_INTENT
     }
 
