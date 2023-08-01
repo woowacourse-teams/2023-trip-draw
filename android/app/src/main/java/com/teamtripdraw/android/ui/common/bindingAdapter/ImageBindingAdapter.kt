@@ -24,7 +24,7 @@ fun ImageView.setImageWithVisibility(imgUrl: String?) {
 }
 
 @BindingAdapter("app:clickToShowImageViewer")
-fun ImageView.showImageViewer(imgUrl: String?) {
+fun ImageView.clickToShowImageViewer(imgUrl: String?) {
     this.setOnClickListener {
         StfalconImageViewer.Builder(this.context, listOf(imgUrl)) { view, image ->
             Glide.with(this.context)
