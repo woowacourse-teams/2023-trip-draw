@@ -34,7 +34,7 @@ public class RouteImageDrawerTest {
     }
 
     @Test
-    void positions를_입력받아_이미지에_경로를_그린다() {
+    void 위치_목록을_입력받아_이미지에_경로를_그린다() {
         // given
         Graphics2D graphics2D = Mockito.mock(Graphics2D.class);
         RouteImageDrawer routeImageDrawer = new RouteImageDrawer(null, graphics2D);
@@ -51,7 +51,7 @@ public class RouteImageDrawerTest {
     }
 
     @Test
-    void positions를_입력받아_이미지에_위치_점을_그린다() {
+    void 위치_목록을_입력받아_이미지에_위치_점을_그린다() {
         // given
         Graphics2D graphics2D = Mockito.mock(Graphics2D.class);
         RouteImageDrawer routeImageDrawer = new RouteImageDrawer(null, graphics2D);
@@ -71,7 +71,7 @@ public class RouteImageDrawerTest {
         // given
         Graphics2D graphics2D = Mockito.mock(Graphics2D.class);
         RouteImageDrawer routeImageDrawer = new RouteImageDrawer(null, graphics2D);
-        
+
         // when
         routeImageDrawer.dispose();
 
