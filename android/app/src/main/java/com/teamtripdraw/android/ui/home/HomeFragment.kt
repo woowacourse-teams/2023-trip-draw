@@ -102,8 +102,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-    private fun startRecordPoint(isStartTrip: Boolean) {
-        if (isStartTrip) {
+    private fun startRecordPoint(isStartedTrip: Boolean) {
+        if (isStartedTrip) {
             startRecordingPointService()
             startRecordingPointAlarmManager()
         }
