@@ -1,22 +1,54 @@
 package com.teamtripdraw.android.ui.home.recordingPoint
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import kotlin.properties.Delegates
 
 class RecordingPointService : Service() {
+
+    private var currentTripId by Delegates.notNull<Long>()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            recordPoint()
+            Log.d("멧돼지", "위도: ${locationResult.locations.first().latitude}")
+            Log.d("멧돼지", "경도:${locationResult.locations.first().longitude}")
+            finishUpdateLocation()
+        }
+    }
+
+    private fun recordPoint() {
+        // todo 서버통신 코드 작성
+    }
+
+    private fun finishUpdateLocation() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
     override fun onCreate() {
         super.onCreate()
         initNotificationChannelToNotificationManager()
         startForeground(NOTIFICATION_ID, initNotification())
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     private fun initNotification(): Notification =
@@ -49,14 +81,35 @@ class RecordingPointService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val tripId = intent.getLongExtra(TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
-        setRecordingPoint(tripId)
+        currentTripId = intent.getLongExtra(TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
+        startUpdateLocation()
         return START_REDELIVER_INTENT
     }
 
-    private fun setRecordingPoint(tripId: Long) {
-        Log.d("멧돼지", "서비스 실행되고있음 $tripId")
+    private fun startUpdateLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(
+            getLocationRequest(),
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
+
+    private fun getLocationRequest() =
+        LocationRequest.create().apply {
+            interval = 100
+            fastestInterval = 10
+            priority = Priority.PRIORITY_HIGH_ACCURACY
+        }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
