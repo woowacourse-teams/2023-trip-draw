@@ -18,14 +18,12 @@ class TripDrawApplication : Application() {
     private fun initContainer() {
         localPreferenceContainer = LocalPreferenceContainer(applicationContext)
         localDataSourceContainer = LocalDataSourceContainer(localPreferenceContainer)
-        retrofitContainer = RetrofitContainer(localDataSourceContainer.userIdentifyInfoDataSource)
+        retrofitContainer =
+            RetrofitContainer(localDataSourceContainer.localUserIdentifyInfoDataSource)
         serviceContainer = ServiceContainer(retrofitContainer)
-        remoteDataSourceContainer = RemoteDataSourceContainer(serviceContainer)
-        repositoryContainer = RepositoryContainer(
-            localDataSourceContainer,
-            remoteDataSourceContainer,
-            retrofitContainer
-        )
+        remoteDataSourceContainer = RemoteDataSourceContainer(serviceContainer, retrofitContainer)
+        repositoryContainer =
+            RepositoryContainer(localDataSourceContainer, remoteDataSourceContainer)
     }
 
     companion object DependencyContainer {

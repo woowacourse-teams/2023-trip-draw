@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -18,6 +19,7 @@ import com.teamtripdraw.android.support.framework.presentation.naverMap.initUser
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserLocationOption
 import com.teamtripdraw.android.support.framework.presentation.permission.checkForeGroundPermission
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
+import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -25,6 +27,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val homeViewModel: HomeViewModel by viewModels { tripDrawViewModelFactory }
 
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -52,6 +56,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.homeViewModel = homeViewModel
         return binding.root
     }
 

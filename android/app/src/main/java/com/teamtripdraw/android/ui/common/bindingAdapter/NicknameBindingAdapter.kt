@@ -7,7 +7,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.teamtripdraw.android.R
-import com.teamtripdraw.android.domain.user.NicknameValidState
+import com.teamtripdraw.android.domain.model.user.NicknameValidState
 
 @BindingAdapter("nicknameCompleteButtonState")
 fun AppCompatButton.setDrawable(state: NicknameValidState) {

@@ -3,13 +3,31 @@ package com.teamtripdraw.android.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.repository.TripRepository
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val tripRepository: TripRepository
+) : ViewModel() {
 
     private val _homeUiState: MutableLiveData<HomeUiState> = MutableLiveData()
     val homeUiState: LiveData<HomeUiState> = _homeUiState
 
     init {
-        // todo: Local의 trip Id 조사하여 없다면 여행전 업데이트 있다면 여행중 업데이트 로직
+        _homeUiState.value = when (tripRepository.getCurrentTripId()) {
+            NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
+            else -> HomeUiState.ON_TRIP
+        }
+    }
+
+    fun startTrip() {
+        viewModelScope.launch {
+            tripRepository.startTrip()
+                .onSuccess {
+                    _homeUiState.value = HomeUiState.ON_TRIP
+                }
+        }
     }
 }
