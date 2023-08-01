@@ -5,7 +5,7 @@ import dev.tripdraw.dto.trip.PointResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record PostResponse(
-        @Schema(description = "감의 Id", example = "1")
+        @Schema(description = "감상의 Id", example = "1")
         Long postId,
 
         @Schema(description = "감상이 속하는 여행의 Id", example = "1")
