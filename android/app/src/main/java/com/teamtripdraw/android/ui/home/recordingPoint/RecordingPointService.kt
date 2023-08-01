@@ -55,7 +55,7 @@ class RecordingPointService : Service() {
     }
 
     private fun setRecordingPoint(tripId: Long) {
-        Log.d("멧돼지", "서비스 실행되고있음")
+        Log.d("멧돼지", "서비스 실행되고있음 $tripId")
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
