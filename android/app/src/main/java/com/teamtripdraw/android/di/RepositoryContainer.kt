@@ -1,8 +1,10 @@
 package com.teamtripdraw.android.di
 
 import com.teamtripdraw.android.data.repository.NicknameSetupRepositoryImpl
+import com.teamtripdraw.android.data.repository.PostRepositoryImpl
 import com.teamtripdraw.android.data.repository.TripRepositoryImpl
 import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
+import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 
 class RepositoryContainer(
@@ -16,5 +18,8 @@ class RepositoryContainer(
     val tripRepository: TripRepository = TripRepositoryImpl(
         remoteDataSourceContainer.remoteTripDataSource,
         localDataSourceContainer.localTripDataSource
+    )
+    val postRepository: PostRepository = PostRepositoryImpl(
+        remoteDataSourceContainer.remotePostDataSource
     )
 }
