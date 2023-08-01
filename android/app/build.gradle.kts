@@ -106,4 +106,7 @@ dependencies {
 
     // EncryptedSharedPreference
     implementation(libs.encryptedSharedPreference)
+
+    // Stfalcon
+    implementation(libs.stfalcon)
 }

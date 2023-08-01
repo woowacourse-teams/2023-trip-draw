@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.postViewer
+package com.teamtripdraw.android.ui.post.viewer
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

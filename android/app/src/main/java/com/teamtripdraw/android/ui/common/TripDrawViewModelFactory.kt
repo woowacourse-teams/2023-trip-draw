@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.ui.home.HomeViewModel
+import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
 import com.teamtripdraw.android.ui.post.writing.PostWritingViewModel
 import com.teamtripdraw.android.ui.signUp.NicknameSetupViewModel
 
@@ -24,6 +25,8 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     PostWritingViewModel()
                 isAssignableFrom(HomeViewModel::class.java) ->
                     HomeViewModel(repositoryContainer.tripRepository)
+                isAssignableFrom(PostDetailViewModel::class.java) ->
+                    PostDetailViewModel()// todo: repo 추가
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }

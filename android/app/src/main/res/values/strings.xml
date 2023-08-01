@@ -1,6 +1,9 @@
 <resources>
     <!-- common -->
     <string name="app_name">TripDraw</string>
+    <string name="btn_post_viewer_back_description">뒤로가기</string>
+    <string name="btn_edit_description">수정하기</string>
+    <string name="btn_delete_description">삭제하기</string>
 
     <!-- RecordingPointService -->
     <string name="recording_point_service_description">TripDraw 위치 기록 저장을 위한 서비스 입니다</string>
@@ -31,11 +34,15 @@
     <!-- PostViewerActivity -->
     <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
     <string name="tv_post_viewer_toolbar_title">감상 목록</string>
-    <string name="btn_post_viewer_back_description">감상 목록 뒤로가기</string>
 
     <!-- PostWritingActivity -->
     <string name="page_name">감상 남기기</string>
     <string name="et_post_title">제목</string>
     <string name="btn_post_complete">저장</string>
+
+    <!-- PostDetailActivity -->
+    <string name="btn_post_detail_location_icon_description">주소 아이콘</string>
+    <string name="iv_route_description">경로 이미지</string>
+    <string name="iv_image_description">사진 조회</string>
 
 </resources>
