@@ -10,15 +10,15 @@
             type="com.teamtripdraw.android.ui.model.UiPostItem" />
 
         <variable
-            name="onPostClick"
-            type="kotlin.jvm.functions.Function1" />
+            name="postViewerViewModel"
+            type="com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_td_gray_line_0_rect"
-        android:onClick="@{()->onPostClick.invoke(postItem.id)}"
+        android:onClick="@{()->postViewerViewModel.showDetailPost(postItem.id)}"
         android:paddingHorizontal="@dimen/margin_default"
         android:paddingVertical="12dp">
 
@@ -53,7 +53,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:maxLines="2"
+            android:minLines="2"
             android:text="@{postItem.writing}"
             android:textAppearance="@style/body2"
             android:textColor="@color/td_deep_gray"

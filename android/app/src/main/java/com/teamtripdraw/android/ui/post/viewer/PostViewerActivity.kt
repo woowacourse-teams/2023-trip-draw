@@ -1,14 +1,21 @@
 package com.teamtripdraw.android.ui.post.viewer
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostViewerBinding
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
+import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
 
 class PostViewerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostViewerBinding
+    private val viewModel: PostViewerViewModel by viewModels { tripDrawViewModelFactory }
+    private lateinit var adapter: PostViewerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,16 +24,32 @@ class PostViewerActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_viewer)
         binding.lifecycleOwner = this
 
-        setUpAdapter()
+        initObserve()
+        setUpView()
     }
 
-    private fun setUpAdapter() {
-        val adapter = PostViewerAdapter(::onPostClick)
-//        adapter.submitList(getProductItemList())todo: 서버를 통해 받아온 데이터를 이 함수를 이용하여 리스트에 넣는다
+    private fun initObserve() {
+        viewModel.posts.observe(this) {
+            adapter.submitList(it)
+        }
+
+        viewModel.postClickedEvent.observe(
+            this,
+            EventObserver(this@PostViewerActivity::onPostClick)
+        )
+    }
+
+    private fun setUpView() {
+        adapter = PostViewerAdapter(viewModel)
         binding.rvPostViewer.adapter = adapter
+        binding.onBackClick = { finish() }
+        viewModel.getPosts()
     }
 
     private fun onPostClick(postId: Long) {
-        // todo: 포스트가 클릭되었을 때 실행되는 함수로서 상세 조회 화면으로 넘어가는 작업 필요
+        // todo: PostDetailActivity 측에서 intent 받아오도록 수정
+        val intent = Intent(this, PostDetailActivity::class.java)
+        intent.putExtra("POST_ID", postId)
+        startActivity(intent)
     }
 }
