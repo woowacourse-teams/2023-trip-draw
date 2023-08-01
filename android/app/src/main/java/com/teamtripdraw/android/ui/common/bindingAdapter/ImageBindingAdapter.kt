@@ -9,8 +9,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamtripdraw.android.R
 
-@BindingAdapter("app:setImage")
-fun ImageView.setImage(imgUrl: String?) {
+@BindingAdapter("app:setImageWithVisibility")
+fun ImageView.setImageWithVisibility(imgUrl: String?) {
     if (imgUrl == null) {
         this.visibility = View.GONE
         return
@@ -23,7 +23,7 @@ fun ImageView.setImage(imgUrl: String?) {
         .into(this)
 }
 
-@BindingAdapter("app:onClickImage")
+@BindingAdapter("app:clickToShowImageViewer")
 fun ImageView.showImageViewer(imgUrl: String?) {
     this.setOnClickListener {
         StfalconImageViewer.Builder(this.context, listOf(imgUrl)) { view, image ->
@@ -36,8 +36,8 @@ fun ImageView.showImageViewer(imgUrl: String?) {
     }
 }
 
-@BindingAdapter("app:setRoundImage")
-fun ImageView.setImgUrl(imgUrl: String?) {
+@BindingAdapter("app:setRoundImageWithVisibility")
+fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
     if (imgUrl == null) {
         this.visibility = View.GONE
         return
