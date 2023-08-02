@@ -19,8 +19,8 @@ import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
-import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripSearchResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -337,5 +337,55 @@ class TripControllerTest extends ControllerTest {
             softly.assertThat(updatedTrip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(updatedTrip.status()).isEqualTo(FINISHED);
         });
+    }
+
+    @Test
+    void 위치_정보를_조회한다() {
+        // given
+        PointCreateRequest request = new PointCreateRequest(
+                trip.id(),
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+        Long pointId = createPointAndGetId(request);
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .param("tripId", trip.id())
+                .when().get("/points/{pointId}", pointId)
+                .then().log().all()
+                .extract();
+
+        // then
+        PointResponse pointResponse = response.as(PointResponse.class);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(pointResponse).usingRecursiveComparison().isEqualTo(
+                    new PointResponse(
+                            pointId,
+                            1.1,
+                            2.2,
+                            false,
+                            LocalDateTime.of(2023, 7, 18, 20, 24)
+                    )
+            );
+        });
+    }
+
+    private Long createPointAndGetId(PointCreateRequest request) {
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .body(request)
+                .when().post("/points")
+                .then().log().all()
+                .extract();
+
+        PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
+        return pointCreateResponse.pointId();
     }
 }
