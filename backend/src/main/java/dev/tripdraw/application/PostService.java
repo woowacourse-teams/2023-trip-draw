@@ -18,6 +18,7 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
