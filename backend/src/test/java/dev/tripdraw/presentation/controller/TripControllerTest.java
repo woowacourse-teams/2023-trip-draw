@@ -352,7 +352,7 @@ class TripControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
                 .param("tripId", trip.id())
                 .when().get("/points/{pointId}", pointId)
@@ -378,7 +378,7 @@ class TripControllerTest extends ControllerTest {
 
     private Long createPointAndGetId(PointCreateRequest request) {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
                 .body(request)
                 .when().post("/points")
