@@ -11,6 +11,8 @@ data class GetPostPointResponse(
     val longitude: Double,
     @Json(name = "pointId")
     val pointId: Long,
+    @Json(name = "hasPost")
+    val hasPost: Boolean,
     @Json(name = "recordedAt")
     val recordedAt: String
 )

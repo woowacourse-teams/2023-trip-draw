@@ -27,6 +27,7 @@ fun GetPostPointResponse.toData(): DataPoint {
         pointId = pointId,
         latitude = latitude,
         longitude = longitude,
+        hasPost = hasPost,
         recordedAt = recordedAt
     )
 }
@@ -38,7 +39,7 @@ fun GetPostResponse.toData(): DataPost {
         title = title,
         writing = writing,
         address = address,
-        point = getPostPointResponse.toData(),
+        point = point.toData(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl
     )
@@ -84,6 +85,7 @@ fun DataPoint.toDomain(): Point {
         pointId = pointId,
         latitude = latitude,
         longitude = longitude,
+        hasPost = hasPost,
         recordedAt = LocalDateTime.parse(recordedAt)
     )
 }
