@@ -348,7 +348,7 @@ class TripControllerTest extends ControllerTest {
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
-        Long pointId = createPointAndGetId(request);
+        Long pointId = createPointAndGetId(request).pointId();
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -376,7 +376,7 @@ class TripControllerTest extends ControllerTest {
         });
     }
 
-    private Long createPointAndGetId(PointCreateRequest request) {
+    private PointCreateResponse createPointAndGetId(PointCreateRequest request) {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
@@ -386,6 +386,6 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
-        return pointCreateResponse.pointId();
+        return pointCreateResponse;
     }
 }
