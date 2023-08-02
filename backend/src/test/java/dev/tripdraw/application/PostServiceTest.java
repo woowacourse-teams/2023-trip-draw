@@ -7,6 +7,7 @@ import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -17,6 +18,7 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
+import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
@@ -187,7 +189,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회한다() {
         // given
-        PostResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost();
 
         // when
         PostResponse postResponse = postService.read(loginUser, postCreateResponse.postId());
@@ -211,7 +213,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        PostResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost();
         LoginUser wrongUser = new LoginUser("상한 통후추");
 
         // expect
@@ -223,7 +225,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
         // given
-        PostResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost();
 
         // expect
         assertThatThrownBy(() -> postService.read(loginUser2, postCreateResponse.postId()))
@@ -231,8 +233,8 @@ class PostServiceTest {
                 .hasMessage(NOT_AUTHORIZED.getMessage());
     }
 
-    private PostResponse createPost() {
-        PostPointCreateRequest postPointCreateRequest = new PostPointCreateRequest(
+    private PostCreateResponse createPost() {
+        PostAndPointCreateRequest postPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -242,6 +244,6 @@ class PostServiceTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
-        return postService.createOfCurrentLocation(loginUser, postPointCreateRequest);
+        return postService.addAtCurrentPoint(loginUser, postPointCreateRequest, null);
     }
 }
