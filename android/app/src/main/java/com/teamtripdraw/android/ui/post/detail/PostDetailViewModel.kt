@@ -22,14 +22,14 @@ class PostDetailViewModel(
     private val _postDeletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val postDeletedEvent: LiveData<Event<Boolean>> = _postDeletedEvent
 
-    fun getPostDetail() {
+    fun getPost() {
         viewModelScope.launch {
             repository.getPost(requireNotNull(postId.value))
                 .onSuccess {
                     _postDetail.value = it.toDetailPresentation()
                 }
                 .onFailure {
-
+                    // todo 오류 처리
                 }
         }
     }
@@ -41,7 +41,7 @@ class PostDetailViewModel(
                     _postDeletedEvent.value = Event(true)
                 }
                 .onFailure {
-
+                    // todo 오류 처리
                 }
         }
     }

@@ -37,7 +37,7 @@ class PostDetailActivity : AppCompatActivity() {
 
     private fun setUpView() {
         viewModel.postId.value = postId
-        viewModel.getPostDetail()
+        viewModel.getPost()
         binding.onBackClick = { finish() }
     }
 
