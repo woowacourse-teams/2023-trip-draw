@@ -34,6 +34,7 @@
     <!-- PostViewerActivity -->
     <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
     <string name="tv_post_viewer_toolbar_title">감상 목록</string>
+    <string name="post_viewer_error_description">오류가 발생했습니다</string>
 
     <!-- PostWritingActivity -->
     <string name="page_name">감상 남기기</string>
