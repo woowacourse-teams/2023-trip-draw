@@ -89,6 +89,6 @@ public class PostController {
             @PathVariable Long tripId
     ) {
         PostsResponse response = postService.readAllByTripId(loginUser, tripId);
-        return ResponseEntity.status(OK).body(response);
+        return ResponseEntity.ok(response);
     }
 }

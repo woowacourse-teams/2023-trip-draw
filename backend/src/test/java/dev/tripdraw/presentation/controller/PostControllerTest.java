@@ -28,6 +28,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
@@ -401,7 +402,7 @@ class PostControllerTest extends ControllerTest {
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .when().get("/trips/" + trip.id() + "/posts")
+                .when().get("/trips/{tripId}/posts", trip.id())
                 .then().log().all()
                 .extract();
 
@@ -427,7 +428,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .when().get("/trips/" + trip.id() + "/posts")
+                .when().get("/trips/{tripId}/posts", trip.id())
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
     }
@@ -438,7 +439,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .when().get("/trips/" + Long.MIN_VALUE + "/posts")
+                .when().get("/trips/{tripId}/posts", Long.MIN_VALUE)
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
     }
