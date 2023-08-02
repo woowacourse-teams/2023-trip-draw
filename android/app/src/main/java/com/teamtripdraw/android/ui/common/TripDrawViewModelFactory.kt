@@ -22,7 +22,10 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                 isAssignableFrom(NicknameSetupViewModel::class.java) ->
                     NicknameSetupViewModel(repositoryContainer.nicknameSetupRepository)
                 isAssignableFrom(PostWritingViewModel::class.java) ->
-                    PostWritingViewModel(repositoryContainer.postRepository)
+                    PostWritingViewModel(
+                        repositoryContainer.tripRepository,
+                        repositoryContainer.postRepository
+                    )
                 isAssignableFrom(HomeViewModel::class.java) ->
                     HomeViewModel(repositoryContainer.tripRepository)
                 isAssignableFrom(PostDetailViewModel::class.java) ->

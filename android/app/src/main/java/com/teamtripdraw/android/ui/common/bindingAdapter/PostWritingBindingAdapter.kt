@@ -7,7 +7,7 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
 
 @BindingAdapter("app:postWritingCompleteButtonState")
-fun TextView.setDrawable(state: PostWritingValidState) {
+fun TextView.setPostWritingCompleteButtonState(state: PostWritingValidState) {
     val btnEnabled: Boolean = when (state) {
         PostWritingValidState.AVAILABLE -> true
         PostWritingValidState.EMPTY_TITLE, PostWritingValidState.EMPTY_WRITING -> false
