@@ -8,11 +8,11 @@ import com.teamtripdraw.android.ui.model.UiPostItem
 
 class PostViewerViewHolder(
     private val binding: ItemPostViewerBinding,
-    onPostClick: (postId: Long) -> Unit
+    viewModel: PostViewerViewModel
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.onPostClick = onPostClick
+        binding.postViewerViewModel = viewModel
     }
 
     fun bind(item: UiPostItem) {
@@ -22,14 +22,14 @@ class PostViewerViewHolder(
     companion object {
         fun of(
             parent: ViewGroup,
-            onPostClick: (postId: Long) -> Unit,
+            viewModel: PostViewerViewModel,
         ): PostViewerViewHolder {
             val binding = ItemPostViewerBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return PostViewerViewHolder(binding, onPostClick)
+            return PostViewerViewHolder(binding, viewModel)
         }
     }
 }
