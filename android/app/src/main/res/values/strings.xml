@@ -21,6 +21,8 @@
     <string name="tv_marker_mode">화면 변경</string>
     <string name="tv_post_list">감상 목록</string>
     <string name="tv_write_post">감상 기록</string>
+    <string name="btn_finish_trip">여행 저장</string>
+
 
     <!-- NicknameSetupActivity -->
     <string name="tv_main_title">닉네임을 알려주세요</string>
