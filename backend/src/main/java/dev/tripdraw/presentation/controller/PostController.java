@@ -44,6 +44,9 @@ public class PostController {
             @Valid @RequestPart(value = "dto") PostAndPointCreateRequest postAndPointCreateRequest,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println(postAndPointCreateRequest.title());
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         PostCreateResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, file);
         return ResponseEntity.status(CREATED).body(response);
     }
