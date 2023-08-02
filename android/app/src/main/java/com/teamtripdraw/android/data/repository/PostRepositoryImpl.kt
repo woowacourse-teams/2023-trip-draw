@@ -4,22 +4,12 @@ import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.post.Post
-import com.teamtripdraw.android.domain.model.post.PreCurrentPointPost
 import com.teamtripdraw.android.domain.model.post.PreSelectedPointPost
 import com.teamtripdraw.android.domain.repository.PostRepository
-import retrofit2.Retrofit
 
 class PostRepositoryImpl(
     private val remotePostDataSource: PostDataSource.Remote,
 ) : PostRepository {
-
-    override suspend fun addCurrentPointPost(
-        preCurrentPointPost: PreCurrentPointPost
-    ): Result<Long> {
-        return remotePostDataSource.addCurrentPointPost(
-            preCurrentPointPost.toData()
-        )
-    }
 
     override suspend fun addSelectedPointPost(
         preSelectedPointPost: PreSelectedPointPost
