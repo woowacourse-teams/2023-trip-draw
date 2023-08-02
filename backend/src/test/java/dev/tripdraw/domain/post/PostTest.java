@@ -94,7 +94,7 @@ class PostTest {
         Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
 
         // when
-        post.changeFileUrl("/통후추셀카.jpg");
+        post.changePostImageUrl("/통후추셀카.jpg");
 
         // then
         assertThat(post.postImageUrl()).isEqualTo("/통후추셀카.jpg");
