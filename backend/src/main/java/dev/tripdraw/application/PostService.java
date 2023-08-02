@@ -1,11 +1,11 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.application.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 import dev.tripdraw.application.file.FileUploader;
+import dev.tripdraw.domain.file.FileType;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.post.Post;
@@ -61,7 +61,7 @@ public class PostService {
         tripRepository.flush();
 
         Post post = postAndPointCreateRequest.toPost(member, point);
-        Post savedPost = savePostWithImageUrl(file, post);
+        Post savedPost = registerFileToPost(file, post);
         return PostCreateResponse.from(savedPost);
     }
 
@@ -76,7 +76,7 @@ public class PostService {
         Point point = trip.findPointById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
-        Post savedPost = savePostWithImageUrl(file, post);
+        Post savedPost = registerFileToPost(file, post);
         return PostCreateResponse.from(savedPost);
     }
 
@@ -108,9 +108,11 @@ public class PostService {
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
-    private Post savePostWithImageUrl(MultipartFile file, Post post) {
-        String imageUrl = fileUploader.upload(file, POST_IMAGE);
-        post.changePostImageUrl(imageUrl);
+    private Post registerFileToPost(MultipartFile file, Post post) {
+        FileType type = FileType.from(file.getContentType());
+        String fileUrl = fileUploader.upload(file, type);
+
+        post.changePostImageUrl(fileUrl);
 
         Post savedPost = postRepository.save(post);
         return savedPost;

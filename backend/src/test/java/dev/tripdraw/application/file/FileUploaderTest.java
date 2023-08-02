@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
+import dev.tripdraw.domain.file.FileType;
 import dev.tripdraw.exception.file.FileIOException;
 import dev.tripdraw.exception.file.FileIOExceptionType;
 import java.io.File;
