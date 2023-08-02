@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.MediaType;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -44,7 +44,7 @@ class MemberControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .body(request)
                 .when().post("/members")
                 .then().log().all()
@@ -63,7 +63,7 @@ class MemberControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .body(invalidRequest)
                 .when().post("/members")
                 .then().log().all()
@@ -77,7 +77,7 @@ class MemberControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .body(invalidRequest)
                 .when().post("/members")
                 .then().log().all()
@@ -91,7 +91,7 @@ class MemberControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .when().get("/members/{memberId}", member.id())
                 .then().log().all()
                 .statusCode(OK.value())
@@ -106,7 +106,7 @@ class MemberControllerTest extends ControllerTest {
     void id에_해당하는_사용자가_없는_경우_예외가_발생한다() {
         // expect
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .when().get("/members/{memberId}", Long.MAX_VALUE)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value())
