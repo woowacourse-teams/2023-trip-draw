@@ -10,8 +10,9 @@ import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 
 class PostWritingViewModel(
-    private val tripRepository: TripRepository,
-    private val postRepository: PostRepository
+    private val pointRepository: PointRepository,
+    private val postRepository: PostRepository,
+    private val tripRepository: TripRepository
 ) : ViewModel() {
 
     val MAX_INPUT_TITLE_LENGTH = PostWritingValidState.MAX_TITLE_LENGTH

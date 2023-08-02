@@ -65,12 +65,3 @@ fun DataPost.toDomain(): Post {
     )
 }
 
-fun DataPoint.toDomain(): Point {
-    return Point(
-        pointId = pointId,
-        latitude = latitude,
-        longitude = longitude,
-        hasPost = hasPost,
-        recordedAt = LocalDateTime.parse(recordedAt)
-    )
-}
