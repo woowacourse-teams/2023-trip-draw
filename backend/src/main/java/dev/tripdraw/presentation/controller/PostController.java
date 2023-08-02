@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -108,6 +109,20 @@ public class PostController {
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         postService.update(loginUser, postId, postUpdateRequest, file);
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
+
+    @Operation(summary = "감상 삭제 API", description = "감상 삭제")
+    @ApiResponse(
+            responseCode = "204",
+            description = "감상 삭제 성공."
+    )
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<Void> delete(
+            @Auth LoginUser loginUser,
+            @PathVariable Long postId
+    ) {
+        postService.delete(loginUser, postId);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 }

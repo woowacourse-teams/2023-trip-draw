@@ -505,14 +505,11 @@ class PostControllerTest extends ControllerTest {
                 .when().patch("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
-
     }
 
     @Test
     void 감상을_수정할_때_존재하지_않는_여행의_ID이면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
-
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
                 "수정한 내용입니다."
@@ -526,6 +523,53 @@ class PostControllerTest extends ControllerTest {
                 .auth().preemptive().oauth2(통후추_BASE64)
                 .multiPart(multiPartSpecification)
                 .when().patch("/posts/{postId}", Long.MIN_VALUE)
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 감상을_삭제한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+
+        // expect1 : 삭제하면 204 NO_CONTENT 응답
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().delete("/posts/{postId}", postCreateResponse.postId())
+                .then().log().all()
+                .statusCode(NO_CONTENT.value());
+
+        // expect2 : 다시 조회하면 404 NOT_FOUND 응답
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().get("/posts/{postId}", postCreateResponse.postId())
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 감상을_삭제할_때_인증에_실패하면_예외가_발생한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(순후추_BASE64)
+                .when().delete("/posts/{postId}", postCreateResponse.postId())
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    void 감상을_삭제할_때_존재하지_않는_여행의_ID이면_예외가_발생한다() {
+        // given & expect
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().delete("/posts/{postId}", Long.MIN_VALUE)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }
