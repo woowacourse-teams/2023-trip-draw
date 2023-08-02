@@ -26,7 +26,7 @@ class RemotePostDataSourceImpl(private val postService: PostService) : PostDataS
 
     override suspend fun getAllPosts(tripId: Long): Result<List<DataPost>> {
         return postService.getAllPosts(tripId).process { body, headers ->
-            Result.success(body.map { it.toData() })
+            Result.success(body.toData())
         }
     }
 

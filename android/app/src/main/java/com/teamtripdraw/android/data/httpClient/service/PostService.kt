@@ -3,6 +3,7 @@ package com.teamtripdraw.android.data.httpClient.service
 import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetPostListResponse
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseState
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -21,7 +22,7 @@ interface PostService {
     suspend fun getPost(@Path("postId") postId: Long): ResponseState<GetPostResponse>
 
     @GET("/trips/{tripId}/posts")
-    suspend fun getAllPosts(@Path("tripId") tripId: Long): ResponseState<List<GetPostResponse>>
+    suspend fun getAllPosts(@Path("tripId") tripId: Long): ResponseState<GetPostListResponse>
 
     @DELETE("/posts/{postId}")
     suspend fun deletePost(@Path("postId") postId: Long): ResponseState<Unit>

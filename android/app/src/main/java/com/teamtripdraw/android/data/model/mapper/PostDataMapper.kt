@@ -3,6 +3,7 @@ package com.teamtripdraw.android.data.model.mapper
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetPostListResponse
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPrePost
@@ -37,6 +38,9 @@ fun GetPostResponse.toData(): DataPost {
         routeImageUrl = routeImageUrl
     )
 }
+
+fun GetPostListResponse.toData(): List<DataPost> =
+    this.posts.map { it.toData() }
 
 fun PrePost.toData(): DataPrePost {
     return DataPrePost(
