@@ -1,6 +1,6 @@
 package dev.tripdraw.domain.post;
 
-import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
