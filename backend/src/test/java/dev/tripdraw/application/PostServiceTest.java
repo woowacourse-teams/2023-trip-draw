@@ -47,7 +47,7 @@ class PostServiceTest {
     @BeforeEach
     void setUp() {
         Member member = memberRepository.save(new Member("통후추"));
-        Member member2 = memberRepository.save(new Member("순후추"));
+        memberRepository.save(new Member("순후추"));
         trip = tripRepository.save(Trip.from(member));
         point = new Point(1.1, 2.1, LocalDateTime.now());
         trip.add(point);
