@@ -5,12 +5,15 @@
 
     <data>
 
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.postViewer.PostViewerActivity">
+        tools:context=".ui.post.viewer.PostViewerActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_post_viewer"
@@ -20,14 +23,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--            아이콘 적용하기-->
             <ImageView
                 android:id="@+id/btn_post_viewer_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="start"
                 android:contentDescription="@string/btn_post_viewer_back_description"
-                android:src="@drawable/ic_launcher_background" />
+                android:onClick="@{()->onBackClick.invoke()}"
+                android:src="@drawable/ic_back" />
 
             <TextView
                 android:id="@+id/tv_post_viewer_toolbar_title"
