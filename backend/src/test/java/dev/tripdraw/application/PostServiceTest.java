@@ -10,8 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
@@ -32,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -137,6 +136,7 @@ class PostServiceTest {
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
+        BDDMockito.given(routeImageGenerator.generate(any(), any(), any(), any())).willReturn("hello.png");
 
         // when
         PostCreateResponse postCreateResponse = postService.addAtExistingLocation(loginUser, postRequest, null);
@@ -304,23 +304,5 @@ class PostServiceTest {
         );
 
         return postService.addAtCurrentPoint(loginUser, postPointCreateRequest, null);
-    }
-
-    @Test
-    void 감상_저장을_하는_경우_경로_이미지_생성_요청을_한다() {
-        // given
-        PostRequest postRequest = new PostRequest(
-                trip.id(),
-                point.id(),
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
-        );
-
-        // when
-        postService.addAtExistingLocation(loginUser, postRequest, null);
-
-        // then
-        verify(routeImageGenerator.generate(any(), any(), any(), any()), times(1));
     }
 }

@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -46,6 +48,9 @@ class TripControllerTest extends ControllerTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @MockBean
+    private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
 

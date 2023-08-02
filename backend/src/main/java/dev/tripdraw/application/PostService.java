@@ -65,7 +65,7 @@ public class PostService {
         tripRepository.flush();
 
         Post post = postAndPointCreateRequest.toPost(member, point);
-        Post savedPost = registerFileToPost(file, post);
+        Post savedPost = postRepository.save(registerFileToPost(file, post));
 
         String routeImageName = generateRouteImage(trip, point);
         savedPost.changeRouteImageUrl(routeImageName);
@@ -93,8 +93,8 @@ public class PostService {
         Point point = trip.findPointById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
-        Post savedPost = registerFileToPost(file, post);
-        
+        Post savedPost = postRepository.save(registerFileToPost(file, post));
+
         String routeImageName = generateRouteImage(trip, point);
         savedPost.changeRouteImageUrl(routeImageName);
 
@@ -130,13 +130,14 @@ public class PostService {
     }
 
     private Post registerFileToPost(MultipartFile file, Post post) {
+        if (file == null) {
+            return post;
+        }
         FileType type = FileType.from(file.getContentType());
         String fileUrl = fileUploader.upload(file, type);
 
         post.changePostImageUrl(fileUrl);
-
-        Post savedPost = postRepository.save(post);
-        return savedPost;
+        return post;
     }
 
     private Post findPostById(Long postId) {

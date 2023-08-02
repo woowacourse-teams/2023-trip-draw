@@ -9,7 +9,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
@@ -31,6 +31,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
@@ -44,8 +45,8 @@ class PostControllerTest extends ControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @MockBean
+    private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
 
