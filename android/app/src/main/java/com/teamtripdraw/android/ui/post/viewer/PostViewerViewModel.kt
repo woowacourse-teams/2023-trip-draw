@@ -22,6 +22,8 @@ class PostViewerViewModel(
     private val _postClickedEvent = MutableLiveData<Event<Long>>()
     val postClickedEvent: LiveData<Event<Long>> = _postClickedEvent
 
+    private val _postErrorEvent = MutableLiveData<Event<Boolean>>()
+    val postErrorEvent: LiveData<Event<Boolean>> = _postErrorEvent
 
     fun getPosts() {
         viewModelScope.launch {
@@ -31,12 +33,12 @@ class PostViewerViewModel(
                     _posts.value = posts.map { post -> post.toPresentation() }
                 }
                 .onFailure {
-                    // todo : 에러 발생 시 스낵바 보이기
+                    _postErrorEvent.value = Event(true)
                 }
         }
     }
 
-    fun showDetailPost(id: Long) {
+    fun itemClickedEvent(id: Long) {
         _postClickedEvent.value = Event(id)
     }
 }
