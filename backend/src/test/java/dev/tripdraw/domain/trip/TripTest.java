@@ -172,4 +172,30 @@ class TripTest {
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_IN_TRIP.getMessage());
     }
+
+    @Test
+    void 감상_사진_URL을_변경한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+
+        // when
+        trip.changeImageUrl("/통후추셀카.jpg");
+
+        // then
+        assertThat(trip.imageUrl()).isEqualTo("/통후추셀카.jpg");
+    }
+
+    @Test
+    void 경로_이미지_URL을_변경한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+
+        // when
+        trip.changeRouteImageUrl("/통후추여행경로.png");
+
+        // then
+        assertThat(trip.routeImageUrl()).isEqualTo("/통후추여행경로.png");
+    }
 }

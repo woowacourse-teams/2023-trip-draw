@@ -41,6 +41,8 @@ public class Trip extends BaseEntity {
 
     private String imageUrl;
 
+    private String routeImageUrl;
+
     protected Trip() {
     }
 
@@ -89,6 +91,14 @@ public class Trip extends BaseEntity {
         return route.findPointById(pointId);
     }
 
+    public void changeImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void changeRouteImageUrl(String routeImageUrl) {
+        this.routeImageUrl = routeImageUrl;
+    }
+
     public Long id() {
         return id;
     }
@@ -125,7 +135,7 @@ public class Trip extends BaseEntity {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public String routeImageUrl() {
+        return routeImageUrl;
     }
 }

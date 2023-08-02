@@ -110,7 +110,7 @@ public class PostService {
 
     private Post savePostWithImageUrl(MultipartFile file, Post post) {
         String imageUrl = fileUploader.upload(file, POST_IMAGE);
-        post.setImageUrl(imageUrl);
+        post.changePostImageUrl(imageUrl);
 
         Post savedPost = postRepository.save(post);
         return savedPost;
