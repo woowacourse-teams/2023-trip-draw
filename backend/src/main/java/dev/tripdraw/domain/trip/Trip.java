@@ -99,6 +99,32 @@ public class Trip extends BaseEntity {
         this.routeImageUrl = routeImageUrl;
     }
 
+    public List<Double> getLatitudes() {
+        return route.points().stream()
+                .map(Point::latitude)
+                .toList();
+    }
+
+    public List<Double> getLongitudes() {
+        return route.points().stream()
+                .map(Point::longitude)
+                .toList();
+    }
+
+    public List<Double> getPointedLatitudes() {
+        return route.points().stream()
+                .filter(Point::hasPost)
+                .map(Point::latitude)
+                .toList();
+    }
+
+    public List<Double> getPointedLongitudes() {
+        return route.points().stream()
+                .filter(Point::hasPost)
+                .map(Point::longitude)
+                .toList();
+    }
+
     public Long id() {
         return id;
     }
