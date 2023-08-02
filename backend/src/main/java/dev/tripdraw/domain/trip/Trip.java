@@ -1,7 +1,7 @@
 package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
-import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -66,7 +66,7 @@ public class Trip extends BaseEntity {
 
     public void validateAuthorization(Member member) {
         if (!this.member.equals(member)) {
-            throw new TripException(NOT_AUTHORIZED);
+            throw new TripException(NOT_AUTHORIZED_TO_TRIP);
         }
     }
 

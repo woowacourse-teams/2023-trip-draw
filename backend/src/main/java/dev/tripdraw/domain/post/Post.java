@@ -1,6 +1,6 @@
 package dev.tripdraw.domain.post;
 
-import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -67,7 +67,7 @@ public class Post extends BaseEntity {
 
     public void validateAuthorization(Member member) {
         if (!this.member.equals(member)) {
-            throw new PostException(NOT_AUTHORIZED);
+            throw new PostException(NOT_AUTHORIZED_TO_POST);
         }
     }
 

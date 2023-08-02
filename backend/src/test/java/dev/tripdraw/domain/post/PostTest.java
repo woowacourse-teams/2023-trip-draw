@@ -1,6 +1,6 @@
 package dev.tripdraw.domain.post;
 
-import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_HAS_POST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
@@ -54,7 +54,7 @@ class PostTest {
         // expect
         assertThatThrownBy(() -> post.validateAuthorization(new Member("순후추")))
                 .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
     }
 
     @Test

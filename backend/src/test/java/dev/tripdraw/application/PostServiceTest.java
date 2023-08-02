@@ -1,8 +1,9 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +24,6 @@ import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
-import dev.tripdraw.exception.trip.TripExceptionType;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -233,7 +233,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.read(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
     }
 
     @Test
@@ -280,7 +280,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.readAllByTripId(otherUser, trip.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TripExceptionType.NOT_AUTHORIZED.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.getMessage());
     }
 
     private PostCreateResponse createPost() {

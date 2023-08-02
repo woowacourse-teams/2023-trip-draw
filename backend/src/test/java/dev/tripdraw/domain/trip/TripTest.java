@@ -1,6 +1,6 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
@@ -56,7 +56,7 @@ class TripTest {
         // expect
         assertThatThrownBy(() -> trip.validateAuthorization(new Member("other")))
                 .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.getMessage());
     }
 
     @Test
@@ -118,7 +118,7 @@ class TripTest {
         // given
         Member member = new Member("통후추");
         Trip trip = Trip.from(member);
-        
+
         // expect
         assertThatThrownBy(() -> trip.changeStatus(null))
                 .isInstanceOf(TripException.class)
