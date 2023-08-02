@@ -8,11 +8,11 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
+import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
-import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Trip", description = "여행 관련 API 명세")
@@ -60,6 +61,21 @@ public class TripController {
     ) {
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
         return ResponseEntity.status(CREATED).body(response);
+    }
+
+    @Operation(summary = "위치 정보 조회 API", description = "위치 정보를 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "위치 정보 조회 성공."
+    )
+    @GetMapping("/points/{pointId}")
+    public ResponseEntity<PointResponse> readPointById(
+            @Auth LoginUser loginUser,
+            @PathVariable Long pointId,
+            @RequestParam Long tripId
+    ) {
+        PointResponse response = tripService.readPointByTripAndPointId(loginUser, tripId, pointId);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "여행 조회 API", description = "단일 여행의 정보를 조회합니다.")

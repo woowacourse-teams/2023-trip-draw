@@ -12,15 +12,16 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
+import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
@@ -74,6 +75,7 @@ public class TripService {
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public TripResponse readTripById(LoginUser loginUser, Long id) {
         Member member = getByNickname(loginUser.nickname());
         Trip trip = getByTripId(id);
@@ -81,6 +83,7 @@ public class TripService {
         return TripResponse.from(trip);
     }
 
+    @Transactional(readOnly = true)
     public TripsSearchResponse readAllTrips(LoginUser loginUser) {
         Member member = getByNickname(loginUser.nickname());
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
@@ -94,5 +97,15 @@ public class TripService {
 
         trip.changeName(tripUpdateRequest.name());
         trip.changeStatus(tripUpdateRequest.status());
+    }
+
+    @Transactional(readOnly = true)
+    public PointResponse readPointByTripAndPointId(LoginUser loginUser, Long tripId, Long pointId) {
+        Member member = getByNickname(loginUser.nickname());
+        Trip trip = getByTripId(tripId);
+        trip.validateAuthorization(member);
+
+        Point point = trip.findPointById(pointId);
+        return PointResponse.from(point);
     }
 }
