@@ -33,7 +33,7 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private String address;
-    
+
     @Column(columnDefinition = "TEXT")
     private String writing;
 
@@ -55,6 +55,7 @@ public class Post extends BaseEntity {
     }
 
     public Post(Long id, String title, Point point, String address, String writing, Member member, Long tripId) {
+        point.registerPost();
         this.id = id;
         this.title = title;
         this.point = point;

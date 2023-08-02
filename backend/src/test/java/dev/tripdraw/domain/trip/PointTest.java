@@ -1,6 +1,7 @@
 package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_HAS_POST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -35,5 +36,29 @@ class PointTest {
         assertThatThrownBy(point::delete)
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_ALREADY_DELETED.getMessage());
+    }
+
+    @Test
+    void 위치에_감상을_등록한다() {
+        // given
+        Point point = new Point();
+
+        // when
+        point.registerPost();
+
+        // then
+        assertThat(point.hasPost()).isTrue();
+    }
+
+    @Test
+    void 위치에_감상을_등록할_때_이미_감상이_등록되어_있으면_예외가_발생한다() {
+        // given
+        Point point = new Point();
+        point.registerPost();
+
+        // expect
+        assertThatThrownBy(point::registerPost)
+                .isInstanceOf(TripException.class)
+                .hasMessage(POINT_ALREADY_HAS_POST.getMessage());
     }
 }
