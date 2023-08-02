@@ -241,6 +241,7 @@ class PostServiceTest {
         // given
         createPost();
         createPost();
+
         // when
         PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
 
@@ -276,7 +277,7 @@ class PostServiceTest {
     }
 
     @Test
-    void 특정_여행의_모든_감상을_조회할_때_로그인_한_사용자가_여행의_주인이_아니면_예외가_발생한() {
+    void 특정_여행의_모든_감상을_조회할_때_로그인_한_사용자가_여행의_주인이_아니면_예외가_발생한다() {
         // given & expect
         assertThatThrownBy(() -> postService.readAllByTripId(otherUser, trip.id()))
                 .isInstanceOf(TripException.class)
