@@ -81,7 +81,7 @@ public class PostService {
     }
 
     public PostResponse read(LoginUser loginUser, Long postId) {
-        dev.tripdraw.domain.post.Post post = findPostById(postId);
+        Post post = findPostById(postId);
         Member member = findMemberByNickname(loginUser.nickname());
         post.validateAuthorization(member);
         return PostResponse.from(post);

@@ -1,5 +1,6 @@
 package dev.tripdraw.dto.post;
 
+import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.dto.trip.PointResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -23,7 +24,7 @@ public record PostResponse(
         PointResponse pointResponse
 ) {
 
-    public static PostResponse from(dev.tripdraw.domain.post.Post post) {
+    public static PostResponse from(Post post) {
         return new PostResponse(
                 post.id(),
                 post.tripId(),
