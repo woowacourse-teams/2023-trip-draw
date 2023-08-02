@@ -22,6 +22,7 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
@@ -290,6 +291,74 @@ class PostServiceTest {
         assertThatThrownBy(() -> postService.readAllByTripId(otherUser, trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(NOT_AUTHORIZED_TO_TRIP.getMessage());
+    }
+
+    @Test
+    void 감상을_수정한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
+                "우도의 땅콩 아이스크림",
+                "수정한 내용입니다."
+        );
+
+        // when
+        postService.update(loginUser, postCreateResponse.postId(), postUpdateRequest, null);
+
+        // then
+        PostResponse postResponseBeforeUpdate = postService.read(loginUser, postCreateResponse.postId());
+
+        assertSoftly(softly -> {
+            softly.assertThat(postResponseBeforeUpdate.postId()).isEqualTo(postCreateResponse.postId());
+            softly.assertThat(postResponseBeforeUpdate.title()).isEqualTo("우도의 땅콩 아이스크림");
+            softly.assertThat(postResponseBeforeUpdate.writing()).isEqualTo("수정한 내용입니다.");
+        });
+    }
+
+    @Test
+    void 감상을_수정할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
+                "우도의 땅콩 아이스크림",
+                "수정한 내용입니다."
+        );
+
+        // expect
+        assertThatThrownBy(() -> postService.update(loginUser, Long.MIN_VALUE, postUpdateRequest, null))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUNT.getMessage());
+    }
+
+    @Test
+    void 감상을_수정할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
+                "우도의 땅콩 아이스크림",
+                "수정한 내용입니다."
+        );
+        LoginUser wrongUser = new LoginUser("상한후추");
+
+        // expect
+        assertThatThrownBy(() -> postService.update(wrongUser, postCreateResponse.postId(), postUpdateRequest, null))
+                .isInstanceOf(MemberException.class)
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 감상을_수정할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
+                "우도의 땅콩 아이스크림",
+                "수정한 내용입니다."
+        );
+
+        // expect
+        assertThatThrownBy(() -> postService.update(otherUser, postCreateResponse.postId(), postUpdateRequest, null))
+                .isInstanceOf(PostException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
     }
 
     private PostCreateResponse createPost() {
