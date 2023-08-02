@@ -104,6 +104,7 @@ public class TripService {
         Member member = getByNickname(loginUser.nickname());
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
+
         Point point = trip.findPointById(pointId);
         return PointResponse.from(point);
     }
