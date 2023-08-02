@@ -1,5 +1,6 @@
 package com.teamtripdraw.android.di
 
+import com.teamtripdraw.android.data.httpClient.service.CreateRecordingPointService
 import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.GetNicknameService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
@@ -15,4 +16,6 @@ class ServiceContainer(retrofitContainer: RetrofitContainer) {
         retrofitContainer.tripDrawRetrofit.create(CreateTripService::class.java)
     val postService: PostService =
         retrofitContainer.tripDrawRetrofit.create(PostService::class.java)
+    val createRecordingPointService: CreateRecordingPointService =
+        retrofitContainer.tripDrawRetrofit.create(CreateRecordingPointService::class.java)
 }
