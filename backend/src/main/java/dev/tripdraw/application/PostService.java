@@ -2,6 +2,7 @@ package dev.tripdraw.application;
 
 import static dev.tripdraw.application.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 import dev.tripdraw.application.file.FileUploader;
@@ -16,7 +17,9 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
+import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +60,6 @@ public class PostService {
         tripRepository.flush();
 
         Post post = postAndPointCreateRequest.toPost(member, point);
-
         Post savedPost = savePostWithImageUrl(file, post);
         return PostCreateResponse.from(savedPost);
     }
@@ -74,9 +76,15 @@ public class PostService {
         Point point = trip.findPointById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
-
         Post savedPost = savePostWithImageUrl(file, post);
         return PostCreateResponse.from(savedPost);
+    }
+
+    public PostResponse read(LoginUser loginUser, Long postId) {
+        Post post = findPostById(postId);
+        Member member = findMemberByNickname(loginUser.nickname());
+        post.validateAuthorization(member);
+        return PostResponse.from(post);
     }
 
     private Trip findTripById(Long tripId) {
@@ -95,6 +103,11 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
         return savedPost;
+    }
+
+    private Post findPostById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(POST_NOT_FOUNT));
     }
 }
 

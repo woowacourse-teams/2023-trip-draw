@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class PostAndPointCreateRequestTest {
+class PostResponseAndPointCreateRequestTest {
 
     @Test
     void 위치_객체로_변환한다() {

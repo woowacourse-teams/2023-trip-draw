@@ -8,12 +8,15 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
+import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +44,9 @@ public class PostController {
             @Valid @RequestPart(value = "dto") PostAndPointCreateRequest postAndPointCreateRequest,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println(postAndPointCreateRequest.title());
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         PostCreateResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, file);
         return ResponseEntity.status(CREATED).body(response);
     }
@@ -58,5 +64,19 @@ public class PostController {
     ) {
         PostCreateResponse response = postService.addAtExistingLocation(loginUser, postRequest, file);
         return ResponseEntity.status(CREATED).body(response);
+    }
+
+    @Operation(summary = "특정 감상 상세 조회 API", description = "특정한 1개 감상의 상세 정보 조회")
+    @ApiResponse(
+            responseCode = "200",
+            description = "특정 감상 상세 조회 성공."
+    )
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostResponse> read(
+            @Auth LoginUser loginUser,
+            @PathVariable Long postId
+    ) {
+        PostResponse response = postService.read(loginUser, postId);
+        return ResponseEntity.ok(response);
     }
 }

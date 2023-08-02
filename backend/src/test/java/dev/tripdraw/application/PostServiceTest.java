@@ -1,10 +1,13 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -15,7 +18,9 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
+import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,16 +41,19 @@ class PostServiceTest {
 
     private Trip trip;
     private LoginUser loginUser;
+    private LoginUser otherUser;
     private Point point;
 
     @BeforeEach
     void setUp() {
         Member member = memberRepository.save(new Member("통후추"));
+        memberRepository.save(new Member("순후추"));
         trip = tripRepository.save(Trip.from(member));
         point = new Point(1.1, 2.1, LocalDateTime.now());
         trip.add(point);
         tripRepository.flush();
         loginUser = new LoginUser("통후추");
+        otherUser = new LoginUser("순후추");
     }
 
     @Test
@@ -176,5 +184,66 @@ class PostServiceTest {
         assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedPointId, null))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 특정_감상을_조회한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+
+        // when
+        PostResponse postResponse = postService.read(loginUser, postCreateResponse.postId());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(postResponse.postId()).isNotNull();
+            softly.assertThat(postResponse.title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(postResponse.pointResponse().pointId()).isNotNull();
+        });
+    }
+
+    @Test
+    void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
+        // given & expect
+        assertThatThrownBy(() -> postService.read(loginUser, -1L))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUNT.getMessage());
+    }
+
+    @Test
+    void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+        LoginUser wrongUser = new LoginUser("상한통후추");
+
+        // expect
+        assertThatThrownBy(() -> postService.read(wrongUser, postCreateResponse.postId()))
+                .isInstanceOf(MemberException.class)
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 특정_감상을_조회할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+
+        // expect
+        assertThatThrownBy(() -> postService.read(otherUser, postCreateResponse.postId()))
+                .isInstanceOf(PostException.class)
+                .hasMessage(NOT_AUTHORIZED.getMessage());
+    }
+
+    private PostCreateResponse createPost() {
+        PostAndPointCreateRequest postPointCreateRequest = new PostAndPointCreateRequest(
+                trip.id(),
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        return postService.addAtCurrentPoint(loginUser, postPointCreateRequest, null);
     }
 }
