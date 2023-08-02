@@ -72,7 +72,6 @@
             android:text="@{postItem.address}"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_dark_gray"
-            app:layout_constraintEnd_toStartOf="@id/tv_post_recorded_at"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_post_writing"
             tools:text="제주특별자치도 제주시 애월읍 소길리" />
