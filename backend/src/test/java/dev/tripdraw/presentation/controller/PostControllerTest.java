@@ -67,11 +67,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .extract();
@@ -98,11 +100,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -121,11 +125,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -144,11 +150,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -167,11 +175,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -190,11 +200,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -213,11 +225,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .extract();
@@ -244,11 +258,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -267,11 +283,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -288,11 +306,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -311,11 +331,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -334,11 +356,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -397,8 +421,8 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 특정_여행에_대한_모든_감상을_조회한다() {
         // given
-        PostCreateResponse postResponse1 = createPost();
-        PostCreateResponse postResponse2 = createPost();
+        createPost();
+        createPost();
 
         // when
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
@@ -465,8 +489,6 @@ class PostControllerTest extends ControllerTest {
         return response.as(PointResponse.class);
     }
 
-    // TODO 해당 메서드 실행 시, @RequestPart(value = "dto") PostAndPointCreateRequest postAndPointCreateRequest 객체가 ?로 바인딩되는 오류 해결
-    // TODO 해당 메서드를 실행하는 조회 테스트 2개에 대해서 -> 내용 검증하는 assertion 추가하여 확인하기
     private PostCreateResponse createPost() {
         // given
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
@@ -479,12 +501,7 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
-        MultiPartSpecification multiPartSpecification = new MultiPartSpecBuilder(postAndPointCreateRequest)
-                .fileName("postAndPointCreateRequest")
-                .controlName("dto")
-                .charset("UTF-8")
-                .mimeType("application/json")
-                .build();
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
 
         ExtractableResponse<Response> createResponse = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
@@ -496,5 +513,14 @@ class PostControllerTest extends ControllerTest {
 
         PostCreateResponse postResponse = createResponse.as(PostCreateResponse.class);
         return postResponse;
+    }
+
+    private MultiPartSpecification getMultiPartSpecification(Object request) {
+        return new MultiPartSpecBuilder(request)
+                .fileName("postAndPointCreateRequest")
+                .controlName("dto")
+                .mimeType("application/json")
+                .charset("UTF-8")
+                .build();
     }
 }

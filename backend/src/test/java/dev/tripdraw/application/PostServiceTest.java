@@ -1,6 +1,7 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
@@ -21,7 +22,6 @@ import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
-import dev.tripdraw.exception.post.PostExceptionType;
 import dev.tripdraw.exception.trip.TripException;
 import dev.tripdraw.exception.trip.TripExceptionType;
 import java.time.LocalDateTime;
@@ -217,7 +217,7 @@ class PostServiceTest {
     void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
         PostCreateResponse postCreateResponse = createPost();
-        LoginUser wrongUser = new LoginUser("상한통후추");
+        LoginUser wrongUser = new LoginUser("상한후추");
 
         // expect
         assertThatThrownBy(() -> postService.read(wrongUser, postCreateResponse.postId()))
@@ -233,20 +233,19 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.read(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(PostExceptionType.NOT_AUTHORIZED.getMessage());
+                .hasMessage(NOT_AUTHORIZED.getMessage());
     }
 
     @Test
     void 특정_여행의_모든_감상을_조회한다() {
         // given
-        PostCreateResponse postCreateResponse1 = createPost();
-        PostCreateResponse postCreateResponse2 = createPost();
-
+        createPost();
+        createPost();
         // when
         PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
-        List<PostResponse> posts = postsResponse.posts();
 
         // then
+        List<PostResponse> posts = postsResponse.posts();
         assertSoftly(softly -> {
             softly.assertThat(posts.get(0).postId()).isNotNull();
             softly.assertThat(posts.get(0).title()).isEqualTo("우도의 바닷가");
@@ -260,7 +259,7 @@ class PostServiceTest {
     @Test
     void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser("상한 통후추");
+        LoginUser wrongUser = new LoginUser("상한후추");
 
         // expect
         assertThatThrownBy(() -> postService.readAllByTripId(wrongUser, trip.id()))
