@@ -41,7 +41,7 @@ class PostServiceTest {
 
     private Trip trip;
     private LoginUser loginUser;
-    private LoginUser loginUser2;
+    private LoginUser otherUser;
     private Point point;
 
     @BeforeEach
@@ -53,7 +53,7 @@ class PostServiceTest {
         trip.add(point);
         tripRepository.flush();
         loginUser = new LoginUser("통후추");
-        loginUser2 = new LoginUser("순후추");
+        otherUser = new LoginUser("순후추");
     }
 
     @Test
@@ -214,7 +214,7 @@ class PostServiceTest {
     void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
         PostCreateResponse postCreateResponse = createPost();
-        LoginUser wrongUser = new LoginUser("상한 통후추");
+        LoginUser wrongUser = new LoginUser("상한통후추");
 
         // expect
         assertThatThrownBy(() -> postService.read(wrongUser, postCreateResponse.postId()))
@@ -228,7 +228,7 @@ class PostServiceTest {
         PostCreateResponse postCreateResponse = createPost();
 
         // expect
-        assertThatThrownBy(() -> postService.read(loginUser2, postCreateResponse.postId()))
+        assertThatThrownBy(() -> postService.read(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
                 .hasMessage(NOT_AUTHORIZED.getMessage());
     }
