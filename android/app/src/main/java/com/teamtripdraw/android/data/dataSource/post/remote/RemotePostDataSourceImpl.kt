@@ -5,18 +5,9 @@ import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.DataPost
-import com.teamtripdraw.android.data.model.DataPreCurrentPointPost
 import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
 
 class RemotePostDataSourceImpl(private val postService: PostService) : PostDataSource.Remote {
-    override suspend fun addCurrentPointPost(
-        dataPreCurrentPointPost: DataPreCurrentPointPost
-    ): Result<Long> {
-        return postService.addCurrentPointPost(dataPreCurrentPointPost.toHttpRequest())
-            .process { body, headers ->
-                Result.success(body.toData())
-            }
-    }
 
     override suspend fun addSelectedPointPost(
         dataPreSelectedPointPost: DataPreSelectedPointPost
