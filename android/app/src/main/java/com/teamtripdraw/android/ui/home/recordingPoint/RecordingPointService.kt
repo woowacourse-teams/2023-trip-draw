@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -20,24 +19,47 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.teamtripdraw.android.R
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.point.PrePoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import kotlin.properties.Delegates
 
 class RecordingPointService : Service() {
 
     private var currentTripId by Delegates.notNull<Long>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
-            recordPoint()
-            Log.d("멧돼지", "위도: ${locationResult.locations.first().latitude}")
-            Log.d("멧돼지", "경도:${locationResult.locations.first().longitude}")
+            recordPoint(locationResult)
             finishUpdateLocation()
         }
     }
 
-    private fun recordPoint() {
-        // todo 서버통신 코드 작성
+    private fun recordPoint(locationResult: LocationResult) {
+        CoroutineScope(Dispatchers.IO).launch {
+            TripDrawApplication.repositoryContainer.pointRepository.createRecordingPoint(
+                getPrePoint(locationResult),
+                currentTripId
+            ).onSuccess {
+                // todo 액티비티 위치 찍어주기
+            }.onFailure {
+                // todo log전략 수립후 서버로 전송되는 로그 찍기
+            }
+        }
+    }
+
+    private fun getPrePoint(locationResult: LocationResult): PrePoint {
+        val prePoint: PrePoint = PrePoint(
+            locationResult.locations.first().latitude,
+            locationResult.locations.first().longitude,
+            LocalDateTime.now()
+        )
+        return prePoint
     }
 
     private fun finishUpdateLocation() {
