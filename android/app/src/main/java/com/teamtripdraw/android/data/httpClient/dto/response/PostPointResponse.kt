@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GetPostPointResponse(
+data class PostPointResponse(
     @Json(name = "latitude")
     val latitude: Double,
     @Json(name = "longitude")
@@ -16,4 +16,3 @@ data class GetPostPointResponse(
     @Json(name = "recordedAt")
     val recordedAt: String
 )
-
