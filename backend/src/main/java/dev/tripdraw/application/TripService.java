@@ -12,6 +12,7 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
+import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
 import dev.tripdraw.dto.trip.TripUpdateRequest;
@@ -94,5 +95,13 @@ public class TripService {
 
         trip.changeName(tripUpdateRequest.name());
         trip.changeStatus(tripUpdateRequest.status());
+    }
+
+    public PointResponse readPointByTripAndPointId(LoginUser loginUser, Long tripId, Long pointId) {
+        Member member = getByNickname(loginUser.nickname());
+        Trip trip = getByTripId(tripId);
+        trip.validateAuthorization(member);
+        Point point = trip.findPointById(pointId);
+        return PointResponse.from(point);
     }
 }

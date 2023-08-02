@@ -18,10 +18,11 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
 import dev.tripdraw.dto.trip.PointDeleteRequest;
+import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
-import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripSearchResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
@@ -188,5 +189,31 @@ class TripServiceTest {
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(trip.status()).isEqualTo(FINISHED);
         });
+    }
+
+    @Test
+    void 위치_정보를_조회한다() {
+        // given
+        PointCreateRequest pointCreateRequest = new PointCreateRequest(
+                trip.id(),
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+        Long pointId = tripService.addPoint(loginUser, pointCreateRequest).pointId();
+
+        // when
+        PointResponse pointResponse = tripService.readPointByTripAndPointId(loginUser, trip.id(), pointId);
+
+        // then
+        assertThat(pointResponse).usingRecursiveComparison().isEqualTo(
+                new PointResponse(
+                        pointId,
+                        1.1,
+                        2.2,
+                        false,
+                        LocalDateTime.of(2023, 7, 18, 20, 24)
+                )
+        );
     }
 }
