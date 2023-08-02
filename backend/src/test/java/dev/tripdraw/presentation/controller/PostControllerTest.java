@@ -350,7 +350,7 @@ class PostControllerTest extends ControllerTest {
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .when().get("/posts/" + postResponse.postId())
+                .when().get("/posts/{postId}", postResponse.postId())
                 .then().log().all()
                 .extract();
 
@@ -375,7 +375,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .when().get("/posts/" + postCreateResponse.postId())
+                .when().get("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
     }
@@ -386,7 +386,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .when().get("/posts/-1")
+                .when().get("/posts/{postId}", -1)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }

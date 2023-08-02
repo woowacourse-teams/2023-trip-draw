@@ -20,8 +20,8 @@ import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
-import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripSearchResponse;
+import dev.tripdraw.dto.trip.TripUpdateRequest;
 import dev.tripdraw.dto.trip.TripsSearchResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -322,7 +322,7 @@ class TripControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
                 .body(tripUpdateRequest)
                 .when().patch("/trips/{tripId}", trip.id())
