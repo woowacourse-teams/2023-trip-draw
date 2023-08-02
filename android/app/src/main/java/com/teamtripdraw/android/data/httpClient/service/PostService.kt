@@ -1,8 +1,8 @@
 package com.teamtripdraw.android.data.httpClient.service
 
-import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
+import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.AddSelectedPointPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseState
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -13,9 +13,9 @@ import retrofit2.http.Path
 interface PostService {
 
     @POST("/posts")
-    suspend fun addSelectedPointPost(
-        @Body addSelectedPointPostRequest: AddSelectedPointPostRequest
-    ): ResponseState<AddSelectedPointPostResponse>
+    suspend fun addPost(
+        @Body addPostRequest: AddPostRequest
+    ): ResponseState<AddPostResponse>
 
     @GET("/posts/{postId}")
     suspend fun getPost(@Path("postId") postId: Long): ResponseState<GetPostResponse>
