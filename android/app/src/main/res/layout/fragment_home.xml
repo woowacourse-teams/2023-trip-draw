@@ -138,8 +138,8 @@
             android:id="@+id/tv_post_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_post_list"
             android:layout_marginEnd="16dp"
+            android:text="@string/tv_post_list"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_main_blue"
             android:visibility="gone"
@@ -161,6 +161,22 @@
             app:layout_constraintBottom_toBottomOf="@+id/fab_home"
             app:layout_constraintEnd_toStartOf="@+id/fab_home"
             app:layout_constraintTop_toTopOf="@+id/fab_home" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_finish_trip"
+            android:layout_width="0dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:background="@drawable/shape_td_main_blue_line_12_rect"
+            android:text="@string/btn_finish_trip"
+            android:textAppearance="@style/title_2M"
+            android:textColor="@color/td_main_blue"
+            app:homeUiStateOnTrip="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
