@@ -128,6 +128,14 @@ public class PostService {
         updateFileOfPost(file, post);
     }
 
+    public void delete(LoginUser loginUser, Long postId) {
+        Post post = findPostById(postId);
+        Member member = findMemberByNickname(loginUser.nickname());
+        post.validateAuthorization(member);
+
+        postRepository.deleteById(postId);
+    }
+
     private void updateFileOfPost(MultipartFile file, Post post) {
         if (file == null) {
             post.removeImageUrl();

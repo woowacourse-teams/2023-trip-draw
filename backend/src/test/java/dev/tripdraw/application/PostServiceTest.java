@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
@@ -357,6 +358,53 @@ class PostServiceTest {
 
         // expect
         assertThatThrownBy(() -> postService.update(otherUser, postCreateResponse.postId(), postUpdateRequest, null))
+                .isInstanceOf(PostException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
+    }
+
+    @Test
+    void 감상을_삭제한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+
+        // expect
+        assertDoesNotThrow(() -> postService.delete(loginUser, postCreateResponse.postId()));
+
+        assertThatThrownBy(() -> postService.read(loginUser, postCreateResponse.postId()))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUNT.getMessage());
+    }
+
+    @Test
+    void 감상을_삭제할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+
+        // expect
+        assertThatThrownBy(() -> postService.delete(loginUser, Long.MIN_VALUE))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUNT.getMessage());
+    }
+
+    @Test
+    void 감상을_삭제할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+        LoginUser wrongUser = new LoginUser("상한후추");
+
+        // expect
+        assertThatThrownBy(() -> postService.delete(wrongUser, postCreateResponse.postId()))
+                .isInstanceOf(MemberException.class)
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 감상을_삭제할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
+        // given
+        PostCreateResponse postCreateResponse = createPost();
+
+        // expect
+        assertThatThrownBy(() -> postService.delete(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
                 .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
     }
