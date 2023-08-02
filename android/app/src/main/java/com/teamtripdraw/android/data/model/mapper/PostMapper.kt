@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.data.model.mapper
 
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.PostPointResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.PostDetailResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
@@ -15,7 +15,7 @@ fun AddPostResponse.toData(): Long {
     return postId
 }
 
-fun GetPostPointResponse.toData(): DataPoint {
+fun PostPointResponse.toData(): DataPoint {
     return DataPoint(
         pointId = pointId,
         latitude = latitude,
@@ -25,7 +25,7 @@ fun GetPostPointResponse.toData(): DataPoint {
     )
 }
 
-fun GetPostResponse.toData(): DataPost {
+fun PostDetailResponse.toData(): DataPost {
     return DataPost(
         postId = postId,
         tripId = tripId,
