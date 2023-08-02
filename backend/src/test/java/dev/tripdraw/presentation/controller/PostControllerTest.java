@@ -21,8 +21,10 @@ import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import io.restassured.RestAssured;
+import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.MultiPartSpecification;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -412,9 +414,11 @@ class PostControllerTest extends ControllerTest {
         assertSoftly(softly -> {
             softly.assertThat(findResponse.statusCode()).isEqualTo(OK.value());
             softly.assertThat(postsResponse.posts().get(0).postId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(0).title()).isEqualTo("우도의 바닷가");
             softly.assertThat(postsResponse.posts().get(0).pointResponse().pointId()).isNotNull();
             softly.assertThat(postsResponse.posts().get(0).pointResponse().latitude()).isEqualTo(1.1);
             softly.assertThat(postsResponse.posts().get(1).postId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(1).title()).isEqualTo("우도의 바닷가");
             softly.assertThat(postsResponse.posts().get(1).pointResponse().pointId()).isNotNull();
             softly.assertThat(postsResponse.posts().get(1).pointResponse().latitude()).isEqualTo(1.1);
         });
@@ -475,10 +479,17 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = new MultiPartSpecBuilder(postAndPointCreateRequest)
+                .fileName("postAndPointCreateRequest")
+                .controlName("dto")
+                .charset("UTF-8")
+                .mimeType("application/json")
+                .build();
+
         ExtractableResponse<Response> createResponse = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .extract();
