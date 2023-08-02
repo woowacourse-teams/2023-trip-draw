@@ -1,8 +1,9 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
+import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +20,12 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,7 +208,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
         // given & expect
-        assertThatThrownBy(() -> postService.read(loginUser, -1L))
+        assertThatThrownBy(() -> postService.read(loginUser, Long.MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUNT.getMessage());
     }
@@ -214,7 +217,7 @@ class PostServiceTest {
     void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
         PostCreateResponse postCreateResponse = createPost();
-        LoginUser wrongUser = new LoginUser("상한통후추");
+        LoginUser wrongUser = new LoginUser("상한후추");
 
         // expect
         assertThatThrownBy(() -> postService.read(wrongUser, postCreateResponse.postId()))
@@ -230,7 +233,55 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.read(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
+    }
+
+    @Test
+    void 특정_여행의_모든_감상을_조회한다() {
+        // given
+        createPost();
+        createPost();
+
+        // when
+        PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
+
+        // then
+        List<PostResponse> posts = postsResponse.posts();
+        assertSoftly(softly -> {
+            softly.assertThat(posts.get(0).postId()).isNotNull();
+            softly.assertThat(posts.get(0).title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(posts.get(0).pointResponse().pointId()).isNotNull();
+            softly.assertThat(posts.get(1).postId()).isNotNull();
+            softly.assertThat(posts.get(1).title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(posts.get(1).pointResponse().pointId()).isNotNull();
+        });
+    }
+
+    @Test
+    void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
+        // given
+        LoginUser wrongUser = new LoginUser("상한후추");
+
+        // expect
+        assertThatThrownBy(() -> postService.readAllByTripId(wrongUser, trip.id()))
+                .isInstanceOf(MemberException.class)
+                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_여행_ID이면_예외가_발생한다() {
+        // given & expect
+        assertThatThrownBy(() -> postService.readAllByTripId(loginUser, Long.MIN_VALUE))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 특정_여행의_모든_감상을_조회할_때_로그인_한_사용자가_여행의_주인이_아니면_예외가_발생한다() {
+        // given & expect
+        assertThatThrownBy(() -> postService.readAllByTripId(otherUser, trip.id()))
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.getMessage());
     }
 
     private PostCreateResponse createPost() {

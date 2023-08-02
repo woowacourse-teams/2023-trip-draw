@@ -1,6 +1,7 @@
 package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_HAS_POST;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import dev.tripdraw.domain.common.BaseEntity;
@@ -51,6 +52,17 @@ public class Point extends BaseEntity {
 
     public Long id() {
         return id;
+    }
+
+    public void registerPost() {
+        validateNotPosted();
+        this.hasPost = true;
+    }
+
+    private void validateNotPosted() {
+        if (hasPost) {
+            throw new TripException(POINT_ALREADY_HAS_POST);
+        }
     }
 
     public void delete() {

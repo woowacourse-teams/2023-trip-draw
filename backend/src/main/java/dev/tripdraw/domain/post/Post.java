@@ -1,6 +1,6 @@
 package dev.tripdraw.domain.post;
 
-import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED;
+import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -33,7 +33,7 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private String address;
-    
+
     @Column(columnDefinition = "TEXT")
     private String writing;
 
@@ -55,6 +55,7 @@ public class Post extends BaseEntity {
     }
 
     public Post(Long id, String title, Point point, String address, String writing, Member member, Long tripId) {
+        point.registerPost();
         this.id = id;
         this.title = title;
         this.point = point;
@@ -66,7 +67,7 @@ public class Post extends BaseEntity {
 
     public void validateAuthorization(Member member) {
         if (!this.member.equals(member)) {
-            throw new PostException(NOT_AUTHORIZED);
+            throw new PostException(NOT_AUTHORIZED_TO_POST);
         }
     }
 

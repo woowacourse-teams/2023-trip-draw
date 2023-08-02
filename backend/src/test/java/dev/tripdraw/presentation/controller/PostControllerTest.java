@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -15,11 +16,15 @@ import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
+import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import io.restassured.RestAssured;
+import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.MultiPartSpecification;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -62,11 +67,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .extract();
@@ -93,11 +100,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -116,11 +125,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -139,11 +150,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -162,11 +175,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -185,11 +200,13 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -208,11 +225,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .extract();
@@ -239,11 +258,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -262,11 +283,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -283,11 +306,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -306,11 +331,13 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -329,40 +356,42 @@ class PostControllerTest extends ControllerTest {
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postRequest);
+
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
     }
-//    TODO 해당 테스트에서, @RequestPart(value = "dto") PostAndPointCreateRequest postAndPointCreateRequest 객체가 ?로 바인딩되는 오류 해결
-//    @Test
-//    void 특정_감상을_조회한다() {
-//        // given
-//        PostCreateResponse postResponse = createPost();
-//
-//        // when
-//        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
-//                .contentType(APPLICATION_JSON_VALUE)
-//                .auth().preemptive().oauth2(통후추_BASE64)
-//                .when().get("/posts/{postId}", postResponse.postId())
-//                .then().log().all()
-//                .extract();
-//
-//        PostResponse getResponse = findResponse.as(PostResponse.class);
-//
-//        // then
-//        assertSoftly(softly -> {
-//            softly.assertThat(findResponse.statusCode()).isEqualTo(OK.value());
-//            softly.assertThat(getResponse.postId()).isNotNull();
-//            softly.assertThat(getResponse.title()).isEqualTo("우도의 바닷가");
-//            softly.assertThat(getResponse.pointResponse().pointId()).isNotNull();
-//            softly.assertThat(getResponse.pointResponse().latitude()).isEqualTo(1.1);
-//        });
-//    }
+
+    @Test
+    void 특정_감상을_조회한다() {
+        // given
+        PostCreateResponse postResponse = createPost();
+
+        // when
+        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().get("/posts/{postId}", postResponse.postId())
+                .then().log().all()
+                .extract();
+
+        PostResponse getResponse = findResponse.as(PostResponse.class);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(findResponse.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(getResponse.postId()).isNotNull();
+            softly.assertThat(getResponse.title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(getResponse.pointResponse().pointId()).isNotNull();
+            softly.assertThat(getResponse.pointResponse().latitude()).isEqualTo(1.1);
+        });
+    }
 
     @Test
     void 특정_감상을_조회할_때_인증에_실패하면_예외가_발생한다() {
@@ -387,6 +416,58 @@ class PostControllerTest extends ControllerTest {
                 .when().get("/posts/{postId}", -1)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 특정_여행에_대한_모든_감상을_조회한다() {
+        // given
+        createPost();
+        createPost();
+
+        // when
+        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().get("/trips/{tripId}/posts", trip.id())
+                .then().log().all()
+                .extract();
+
+        PostsResponse postsResponse = findResponse.as(PostsResponse.class);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(findResponse.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postsResponse.posts().get(0).postId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(0).title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(postsResponse.posts().get(0).pointResponse().pointId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(0).pointResponse().latitude()).isEqualTo(1.1);
+            softly.assertThat(postsResponse.posts().get(1).postId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(1).title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(postsResponse.posts().get(1).pointResponse().pointId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(1).pointResponse().latitude()).isEqualTo(1.1);
+        });
+    }
+
+    @Test
+    void 특정_여행에_대한_모든_감상을_조회할_때_인증에_실패하면_예외가_발생한다() {
+        // given & expect
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(순후추_BASE64)
+                .when().get("/trips/{tripId}/posts", trip.id())
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    void 특정_여행에_대한_모든_감상을_조회할_때_존재하지_않는_여행의_ID이면_예외가_발생한다() {
+        // given & expect
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(순후추_BASE64)
+                .when().get("/trips/{tripId}/posts", Long.MIN_VALUE)
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
     }
 
     private PointResponse createPoint() {
@@ -420,15 +501,26 @@ class PostControllerTest extends ControllerTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
+        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postAndPointCreateRequest);
+
         ExtractableResponse<Response> createResponse = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .extract();
 
         PostCreateResponse postResponse = createResponse.as(PostCreateResponse.class);
         return postResponse;
+    }
+
+    private MultiPartSpecification getMultiPartSpecification(Object request) {
+        return new MultiPartSpecBuilder(request)
+                .fileName("postAndPointCreateRequest")
+                .controlName("dto")
+                .mimeType("application/json")
+                .charset("UTF-8")
+                .build();
     }
 }

@@ -9,6 +9,7 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,9 +45,6 @@ public class PostController {
             @Valid @RequestPart(value = "dto") PostAndPointCreateRequest postAndPointCreateRequest,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println(postAndPointCreateRequest.title());
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         PostCreateResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, file);
         return ResponseEntity.status(CREATED).body(response);
     }
@@ -77,6 +75,20 @@ public class PostController {
             @PathVariable Long postId
     ) {
         PostResponse response = postService.read(loginUser, postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "특정 여행의 모든 감상 조회 API", description = "특정한 1개의 여행에 대해 작성한 모든 감상 정보 조회")
+    @ApiResponse(
+            responseCode = "200",
+            description = "특정 여행의 모든 감상 조회 성공."
+    )
+    @GetMapping("/trips/{tripId}/posts")
+    public ResponseEntity<PostsResponse> readAllPostsOfTrip(
+            @Auth LoginUser loginUser,
+            @PathVariable Long tripId
+    ) {
+        PostsResponse response = postService.readAllByTripId(loginUser, tripId);
         return ResponseEntity.ok(response);
     }
 }
