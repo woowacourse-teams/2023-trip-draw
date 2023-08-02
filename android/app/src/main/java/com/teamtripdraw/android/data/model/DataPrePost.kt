@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.data.model
 
-data class DataPreSelectedPointPost(
+data class DataPrePost(
     val tripId: Long,
     val pointId: Long,
     val title: String,

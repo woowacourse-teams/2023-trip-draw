@@ -15,14 +15,14 @@ data class Post(
 
     companion object {
 
-        fun getPreSelectedPointPost(
+        fun getPrePost(
             tripId: Long,
             pointId: Long,
             title: String,
             writing: String,
             address: String
-        ): PreSelectedPointPost {
-            return PreSelectedPointPost(
+        ): PrePost {
+            return PrePost(
                 tripId = tripId,
                 pointId = pointId,
                 title = title,

@@ -1,10 +1,10 @@
 package com.teamtripdraw.android.data.httpClient.dto.mapper
 
-import com.teamtripdraw.android.data.httpClient.dto.request.AddSelectedPointPostRequest
-import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
+import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
+import com.teamtripdraw.android.data.model.DataPrePost
 
-fun DataPreSelectedPointPost.toHttpRequest(): AddSelectedPointPostRequest {
-    return AddSelectedPointPostRequest(
+fun DataPrePost.toHttpRequest(): AddPostRequest {
+    return AddPostRequest(
         tripId = tripId,
         pointId = pointId,
         title = title,

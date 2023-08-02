@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.data.dataSource.post
 
 import com.teamtripdraw.android.data.model.DataPost
-import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
+import com.teamtripdraw.android.data.model.DataPrePost
 
 interface PostDataSource {
 
@@ -9,8 +9,8 @@ interface PostDataSource {
 
     interface Remote {
 
-        suspend fun addSelectedPointPost(
-            dataPreSelectedPointPost: DataPreSelectedPointPost
+        suspend fun addPost(
+            dataPrePost: DataPrePost
         ): Result<Long>
 
         suspend fun getPost(postId: Long): Result<DataPost>

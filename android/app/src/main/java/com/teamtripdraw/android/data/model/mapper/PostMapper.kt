@@ -2,16 +2,16 @@ package com.teamtripdraw.android.data.model.mapper
 
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.AddSelectedPointPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
-import com.teamtripdraw.android.data.model.DataPreSelectedPointPost
+import com.teamtripdraw.android.data.model.DataPrePost
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
-import com.teamtripdraw.android.domain.model.post.PreSelectedPointPost
+import com.teamtripdraw.android.domain.model.post.PrePost
 import java.time.LocalDateTime
 
-fun AddSelectedPointPostResponse.toData(): Long {
+fun AddPostResponse.toData(): Long {
     return postId
 }
 
@@ -38,8 +38,8 @@ fun GetPostResponse.toData(): DataPost {
     )
 }
 
-fun PreSelectedPointPost.toData(): DataPreSelectedPointPost {
-    return DataPreSelectedPointPost(
+fun PrePost.toData(): DataPrePost {
+    return DataPrePost(
         tripId = tripId,
         pointId = pointId,
         title = title,

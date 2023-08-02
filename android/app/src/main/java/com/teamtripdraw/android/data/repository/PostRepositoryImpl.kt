@@ -4,18 +4,18 @@ import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.post.Post
-import com.teamtripdraw.android.domain.model.post.PreSelectedPointPost
+import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.repository.PostRepository
 
 class PostRepositoryImpl(
     private val remotePostDataSource: PostDataSource.Remote,
 ) : PostRepository {
 
-    override suspend fun addSelectedPointPost(
-        preSelectedPointPost: PreSelectedPointPost
+    override suspend fun addPost(
+        prePost: PrePost
     ): Result<Long> {
-        return remotePostDataSource.addSelectedPointPost(
-            preSelectedPointPost.toData()
+        return remotePostDataSource.addPost(
+            prePost.toData()
         )
     }
 
