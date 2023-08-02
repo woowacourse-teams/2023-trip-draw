@@ -17,6 +17,7 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
+import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
@@ -59,7 +60,6 @@ public class PostService {
         tripRepository.flush();
 
         Post post = postAndPointCreateRequest.toPost(member, point);
-
         Post savedPost = savePostWithImageUrl(file, post);
         return PostCreateResponse.from(savedPost);
     }
@@ -76,9 +76,15 @@ public class PostService {
         Point point = trip.findPointById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
-
         Post savedPost = savePostWithImageUrl(file, post);
         return PostCreateResponse.from(savedPost);
+    }
+
+    public PostResponse read(LoginUser loginUser, Long postId) {
+        dev.tripdraw.domain.post.Post post = findPostById(postId);
+        Member member = findMemberByNickname(loginUser.nickname());
+        post.validateAuthorization(member);
+        return PostResponse.from(post);
     }
 
     private Trip findTripById(Long tripId) {
@@ -97,6 +103,11 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
         return savedPost;
+    }
+
+    private Post findPostById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(POST_NOT_FOUNT));
     }
 }
 
