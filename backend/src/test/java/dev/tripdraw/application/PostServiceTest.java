@@ -377,10 +377,7 @@ class PostServiceTest {
 
     @Test
     void 감상을_삭제할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
-        // given
-        PostCreateResponse postCreateResponse = createPost();
-
-        // expect
+        // given & expect
         assertThatThrownBy(() -> postService.delete(loginUser, Long.MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUNT.getMessage());
