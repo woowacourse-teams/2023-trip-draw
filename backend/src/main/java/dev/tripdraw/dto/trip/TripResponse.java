@@ -16,11 +16,20 @@ public record TripResponse(
         List<PointResponse> routes,
 
         @Schema(description = "여행 상태 (option : ONGOING, FINISHED)", example = "ONGOING")
-        TripStatus status
+        TripStatus status,
+
+        @Schema(description = "Base64로 인코딩 된 여행 대표 이미지 URL", example = "tripdraw.site/post-image/AWF242FWF42.jpg")
+        String encodedImageUrl
 ) {
 
     public static TripResponse from(Trip trip) {
-        return new TripResponse(trip.id(), trip.nameValue(), generateRoutes(trip), trip.status());
+        return new TripResponse(
+                trip.id(),
+                trip.nameValue(),
+                generateRoutes(trip),
+                trip.status(),
+                trip.imageUrl()
+        );
     }
 
     private static List<PointResponse> generateRoutes(Trip trip) {

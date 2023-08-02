@@ -1,8 +1,10 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.application.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
+import dev.tripdraw.application.file.FileUploader;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.post.Post;
@@ -16,8 +18,9 @@ import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
 @Service
@@ -26,20 +29,24 @@ public class PostService {
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
+    private final FileUploader fileUploader;
 
     public PostService(
             PostRepository postRepository,
             TripRepository tripRepository,
-            MemberRepository memberRepository
+            MemberRepository memberRepository,
+            FileUploader fileUploader
     ) {
         this.postRepository = postRepository;
         this.tripRepository = tripRepository;
         this.memberRepository = memberRepository;
+        this.fileUploader = fileUploader;
     }
 
     public PostCreateResponse addAtCurrentPoint(
             LoginUser loginUser,
-            PostAndPointCreateRequest postAndPointCreateRequest
+            PostAndPointCreateRequest postAndPointCreateRequest,
+            MultipartFile file
     ) {
         Member member = findMemberByNickname(loginUser.nickname());
         Trip trip = findTripById(postAndPointCreateRequest.tripId());
@@ -50,11 +57,16 @@ public class PostService {
         tripRepository.flush();
 
         Post post = postAndPointCreateRequest.toPost(member, point);
-        Post savedPost = postRepository.save(post);
+
+        Post savedPost = savePostWithImageUrl(file, post);
         return PostCreateResponse.from(savedPost);
     }
 
-    public PostCreateResponse addAtExistingLocation(LoginUser loginUser, PostRequest postRequest) {
+    public PostCreateResponse addAtExistingLocation(
+            LoginUser loginUser,
+            PostRequest postRequest,
+            MultipartFile file
+    ) {
         Member member = findMemberByNickname(loginUser.nickname());
         Trip trip = findTripById(postRequest.tripId());
         trip.validateAuthorization(member);
@@ -62,7 +74,8 @@ public class PostService {
         Point point = trip.findPointById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
-        Post savedPost = postRepository.save(post);
+
+        Post savedPost = savePostWithImageUrl(file, post);
         return PostCreateResponse.from(savedPost);
     }
 
@@ -74,6 +87,14 @@ public class PostService {
     private Member findMemberByNickname(String nickname) {
         return memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    private Post savePostWithImageUrl(MultipartFile file, Post post) {
+        String imageUrl = fileUploader.upload(file, POST_IMAGE);
+        post.setImageUrl(imageUrl);
+
+        Post savedPost = postRepository.save(post);
+        return savedPost;
     }
 }
 

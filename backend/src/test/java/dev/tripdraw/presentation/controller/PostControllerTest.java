@@ -63,9 +63,9 @@ class PostControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postAndPointCreateRequest)
+                .multiPart("dto", postAndPointCreateRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .extract();
@@ -94,9 +94,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .body(postAndPointCreateRequest)
+                .multiPart("dto", postAndPointCreateRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -117,9 +117,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postAndPointCreateRequest)
+                .multiPart("dto", postAndPointCreateRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -140,9 +140,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postAndPointCreateRequest)
+                .multiPart("dto", postAndPointCreateRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -163,9 +163,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postAndPointCreateRequest)
+                .multiPart("dto", postAndPointCreateRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -186,9 +186,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postAndPointCreateRequest)
+                .multiPart("dto", postAndPointCreateRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -209,9 +209,9 @@ class PostControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postRequest)
+                .multiPart("dto", postRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .extract();
@@ -240,9 +240,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .body(postRequest)
+                .multiPart("dto", postRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
@@ -263,9 +263,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postRequest)
+                .multiPart("dto", postRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -284,9 +284,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postRequest)
+                .multiPart("dto", postRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -307,9 +307,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postRequest)
+                .multiPart("dto", postRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -330,9 +330,9 @@ class PostControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(postRequest)
+                .multiPart("dto", postRequest, MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());

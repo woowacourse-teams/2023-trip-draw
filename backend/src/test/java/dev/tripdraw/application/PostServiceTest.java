@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.domain.post.PostRepository;
 import dev.tripdraw.domain.trip.Point;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
@@ -28,9 +27,6 @@ class PostServiceTest {
 
     @Autowired
     private PostService postService;
-
-    @Autowired
-    private PostRepository postRepository;
 
     @Autowired
     private TripRepository tripRepository;
@@ -66,7 +62,8 @@ class PostServiceTest {
         );
 
         // when
-        PostCreateResponse postCreateResponse = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest);
+        PostCreateResponse postCreateResponse = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest,
+                null);
 
         // then
         assertThat(postCreateResponse.postId()).isNotNull();
@@ -87,7 +84,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.addAtCurrentPoint(wrongUser, postAndPointCreateRequest))
+        assertThatThrownBy(() -> postService.addAtCurrentPoint(wrongUser, postAndPointCreateRequest, null))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
@@ -106,7 +103,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.addAtCurrentPoint(loginUser, requestOfNotExistedTripId))
+        assertThatThrownBy(() -> postService.addAtCurrentPoint(loginUser, requestOfNotExistedTripId, null))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
@@ -123,7 +120,7 @@ class PostServiceTest {
         );
 
         // when
-        PostCreateResponse postCreateResponse = postService.addAtExistingLocation(loginUser, postRequest);
+        PostCreateResponse postCreateResponse = postService.addAtExistingLocation(loginUser, postRequest, null);
 
         // then
         assertThat(postCreateResponse.postId()).isNotNull();
@@ -142,7 +139,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.addAtExistingLocation(wrongUser, postRequest))
+        assertThatThrownBy(() -> postService.addAtExistingLocation(wrongUser, postRequest, null))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
@@ -159,7 +156,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedTripId))
+        assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedTripId, null))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
@@ -176,7 +173,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedPointId))
+        assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedPointId, null))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_FOUND.getMessage());
     }
