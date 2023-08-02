@@ -8,12 +8,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import javax.imageio.ImageIO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RouteImageUploader {
 
     private static final String ROUTE_IMAGE_FORMAT = "png";
+
+    @Value("${trip.domain}")
+    private String domain;
+
+    @Value("${trip.base}")
+    private String base;
+
+    @Value("${trip.route}")
+    private String route;
 
     public String upload(BufferedImage bufferedImage) {
         String imageName = generateImageName();
@@ -27,6 +37,8 @@ public class RouteImageUploader {
     }
 
     private String generateImageName() {
-        return UUID.randomUUID() + "." + ROUTE_IMAGE_FORMAT;
+        String baseName = domain + base + route;
+        String routeImageName = UUID.randomUUID() + "." + ROUTE_IMAGE_FORMAT;
+        return baseName + routeImageName;
     }
 }

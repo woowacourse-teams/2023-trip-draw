@@ -4,6 +4,7 @@ import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
+import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.application.file.FileUploader;
 import dev.tripdraw.domain.file.FileType;
 import dev.tripdraw.domain.member.Member;
@@ -35,17 +36,20 @@ public class PostService {
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
     private final FileUploader fileUploader;
+    private final RouteImageGenerator routeImageGenerator;
 
     public PostService(
             PostRepository postRepository,
             TripRepository tripRepository,
             MemberRepository memberRepository,
-            FileUploader fileUploader
+            FileUploader fileUploader,
+            RouteImageGenerator routeImageGenerator
     ) {
         this.postRepository = postRepository;
         this.tripRepository = tripRepository;
         this.memberRepository = memberRepository;
         this.fileUploader = fileUploader;
+        this.routeImageGenerator = routeImageGenerator;
     }
 
     public PostCreateResponse addAtCurrentPoint(
@@ -62,7 +66,20 @@ public class PostService {
 
         Post post = postAndPointCreateRequest.toPost(member, point);
         Post savedPost = registerFileToPost(file, post);
+
+        String routeImageName = generateRouteImage(trip, point);
+        savedPost.changeRouteImageUrl(routeImageName);
+
         return PostCreateResponse.from(savedPost);
+    }
+
+    private String generateRouteImage(Trip trip, Point point) {
+        return routeImageGenerator.generate(
+                trip.getLatitudes(),
+                trip.getLongitudes(),
+                List.of(point.latitude()),
+                List.of(point.longitude())
+        );
     }
 
     public PostCreateResponse addAtExistingLocation(
@@ -77,6 +94,10 @@ public class PostService {
 
         Post post = postRequest.toPost(member, point);
         Post savedPost = registerFileToPost(file, post);
+        
+        String routeImageName = generateRouteImage(trip, point);
+        savedPost.changeRouteImageUrl(routeImageName);
+
         return PostCreateResponse.from(savedPost);
     }
 
