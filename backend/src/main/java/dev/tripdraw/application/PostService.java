@@ -2,6 +2,7 @@ package dev.tripdraw.application;
 
 import static dev.tripdraw.application.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 import dev.tripdraw.application.file.FileUploader;
@@ -17,6 +18,7 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
