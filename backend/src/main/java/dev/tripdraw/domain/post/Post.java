@@ -45,7 +45,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String imageUrl;
+    private String postImageUrl;
+
+    private String routeImageUrl;
 
     protected Post() {
     }
@@ -69,6 +71,14 @@ public class Post extends BaseEntity {
         if (!this.member.equals(member)) {
             throw new PostException(NOT_AUTHORIZED_TO_POST);
         }
+    }
+
+    public void changePostImageUrl(String postImageUrl) {
+        this.postImageUrl = postImageUrl;
+    }
+
+    public void changeRouteImageUrl(String routeImageUrl) {
+        this.routeImageUrl = routeImageUrl;
     }
 
     public LocalDateTime pointRecordedAt() {
@@ -103,11 +113,11 @@ public class Post extends BaseEntity {
         return tripId;
     }
 
-    public String imageUrl() {
-        return imageUrl;
+    public String postImageUrl() {
+        return postImageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public String routeImageUrl() {
+        return routeImageUrl;
     }
 }

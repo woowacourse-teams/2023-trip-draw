@@ -84,4 +84,34 @@ class PostTest {
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_ALREADY_HAS_POST.getMessage());
     }
+
+    @Test
+    void 감상_사진_URL을_변경한다() {
+        // given
+        LocalDateTime recordedAt = LocalDateTime.now();
+        Point point = new Point(3.14, 5.25, recordedAt);
+        Member member = new Member("통후추");
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+
+        // when
+        post.changePostImageUrl("/통후추셀카.jpg");
+
+        // then
+        assertThat(post.postImageUrl()).isEqualTo("/통후추셀카.jpg");
+    }
+
+    @Test
+    void 경로_이미지_URL을_변경한다() {
+        // given
+        LocalDateTime recordedAt = LocalDateTime.now();
+        Point point = new Point(3.14, 5.25, recordedAt);
+        Member member = new Member("통후추");
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+
+        // when
+        post.changeRouteImageUrl("/통후추여행경로.png");
+
+        // then
+        assertThat(post.routeImageUrl()).isEqualTo("/통후추여행경로.png");
+    }
 }

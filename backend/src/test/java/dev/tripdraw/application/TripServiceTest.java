@@ -8,7 +8,9 @@ import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
 
+import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
@@ -31,7 +33,9 @@ import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @ServiceTest
 class TripServiceTest {
@@ -44,6 +48,9 @@ class TripServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @MockBean
+    private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
     private LoginUser loginUser;
@@ -180,6 +187,7 @@ class TripServiceTest {
     void 여행의_이름과_상태를_수정한다() {
         // given
         TripUpdateRequest request = new TripUpdateRequest("제주도 여행", FINISHED);
+        BDDMockito.given(routeImageGenerator.generate(any(), any(), any(), any())).willReturn("hello.png");
 
         // when
         tripService.updateTripById(loginUser, trip.id(), request);
@@ -188,6 +196,7 @@ class TripServiceTest {
         assertSoftly(softly -> {
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(trip.status()).isEqualTo(FINISHED);
+            softly.assertThat(trip.routeImageUrl()).isEqualTo("hello.png");
         });
     }
 

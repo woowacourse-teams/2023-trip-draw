@@ -9,7 +9,9 @@ import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
 
+import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
@@ -28,7 +30,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @ServiceTest
 class PostServiceTest {
@@ -41,6 +45,9 @@ class PostServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @MockBean
+    private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
     private LoginUser loginUser;
@@ -129,6 +136,7 @@ class PostServiceTest {
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
+        BDDMockito.given(routeImageGenerator.generate(any(), any(), any(), any())).willReturn("hello.png");
 
         // when
         PostCreateResponse postCreateResponse = postService.addAtExistingLocation(loginUser, postRequest, null);

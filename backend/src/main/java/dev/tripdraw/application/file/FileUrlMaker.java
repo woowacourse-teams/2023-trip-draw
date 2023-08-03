@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileUrlMaker {
 
-    private final String domain;
+    private String domain;
 
     public FileUrlMaker(@Value("${trip.domain}") String domain) {
         this.domain = domain;

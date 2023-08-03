@@ -1,11 +1,12 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.application.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
+import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.application.file.FileUploader;
+import dev.tripdraw.domain.file.FileType;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.post.Post;
@@ -35,17 +36,20 @@ public class PostService {
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
     private final FileUploader fileUploader;
+    private final RouteImageGenerator routeImageGenerator;
 
     public PostService(
             PostRepository postRepository,
             TripRepository tripRepository,
             MemberRepository memberRepository,
-            FileUploader fileUploader
+            FileUploader fileUploader,
+            RouteImageGenerator routeImageGenerator
     ) {
         this.postRepository = postRepository;
         this.tripRepository = tripRepository;
         this.memberRepository = memberRepository;
         this.fileUploader = fileUploader;
+        this.routeImageGenerator = routeImageGenerator;
     }
 
     public PostCreateResponse addAtCurrentPoint(
@@ -61,8 +65,21 @@ public class PostService {
         tripRepository.flush();
 
         Post post = postAndPointCreateRequest.toPost(member, point);
-        Post savedPost = savePostWithImageUrl(file, post);
+        Post savedPost = postRepository.save(registerFileToPost(file, post));
+
+        String routeImageName = generateRouteImage(trip, point);
+        savedPost.changeRouteImageUrl(routeImageName);
+
         return PostCreateResponse.from(savedPost);
+    }
+
+    private String generateRouteImage(Trip trip, Point point) {
+        return routeImageGenerator.generate(
+                trip.getLatitudes(),
+                trip.getLongitudes(),
+                List.of(point.latitude()),
+                List.of(point.longitude())
+        );
     }
 
     public PostCreateResponse addAtExistingLocation(
@@ -76,7 +93,11 @@ public class PostService {
         Point point = trip.findPointById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
-        Post savedPost = savePostWithImageUrl(file, post);
+        Post savedPost = postRepository.save(registerFileToPost(file, post));
+
+        String routeImageName = generateRouteImage(trip, point);
+        savedPost.changeRouteImageUrl(routeImageName);
+
         return PostCreateResponse.from(savedPost);
     }
 
@@ -108,12 +129,15 @@ public class PostService {
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
-    private Post savePostWithImageUrl(MultipartFile file, Post post) {
-        String imageUrl = fileUploader.upload(file, POST_IMAGE);
-        post.setImageUrl(imageUrl);
+    private Post registerFileToPost(MultipartFile file, Post post) {
+        if (file == null) {
+            return post;
+        }
+        FileType type = FileType.from(file.getContentType());
+        String fileUrl = fileUploader.upload(file, type);
 
-        Post savedPost = postRepository.save(post);
-        return savedPost;
+        post.changePostImageUrl(fileUrl);
+        return post;
     }
 
     private Post findPostById(Long postId) {

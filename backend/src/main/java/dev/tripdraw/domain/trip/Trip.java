@@ -41,6 +41,8 @@ public class Trip extends BaseEntity {
 
     private String imageUrl;
 
+    private String routeImageUrl;
+
     protected Trip() {
     }
 
@@ -89,6 +91,40 @@ public class Trip extends BaseEntity {
         return route.findPointById(pointId);
     }
 
+    public void changeImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void changeRouteImageUrl(String routeImageUrl) {
+        this.routeImageUrl = routeImageUrl;
+    }
+
+    public List<Double> getLatitudes() {
+        return route.points().stream()
+                .map(Point::latitude)
+                .toList();
+    }
+
+    public List<Double> getLongitudes() {
+        return route.points().stream()
+                .map(Point::longitude)
+                .toList();
+    }
+
+    public List<Double> getPointedLatitudes() {
+        return route.points().stream()
+                .filter(Point::hasPost)
+                .map(Point::latitude)
+                .toList();
+    }
+
+    public List<Double> getPointedLongitudes() {
+        return route.points().stream()
+                .filter(Point::hasPost)
+                .map(Point::longitude)
+                .toList();
+    }
+
     public Long id() {
         return id;
     }
@@ -125,7 +161,7 @@ public class Trip extends BaseEntity {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public String routeImageUrl() {
+        return routeImageUrl;
     }
 }

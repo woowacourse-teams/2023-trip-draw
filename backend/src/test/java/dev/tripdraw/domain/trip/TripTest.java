@@ -172,4 +172,94 @@ class TripTest {
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_IN_TRIP.getMessage());
     }
+
+    @Test
+    void 감상_사진_URL을_변경한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+
+        // when
+        trip.changeImageUrl("/통후추셀카.jpg");
+
+        // then
+        assertThat(trip.imageUrl()).isEqualTo("/통후추셀카.jpg");
+    }
+
+    @Test
+    void 경로_이미지_URL을_변경한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+
+        // when
+        trip.changeRouteImageUrl("/통후추여행경로.png");
+
+        // then
+        assertThat(trip.routeImageUrl()).isEqualTo("/통후추여행경로.png");
+    }
+
+    @Test
+    void 위도를_반환한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        trip.add(new Point(1.1, 2.2, LocalDateTime.now()));
+        trip.add(new Point(3.3, 4.4, LocalDateTime.now()));
+        trip.add(new Point(5.5, 6.6, LocalDateTime.now()));
+
+        // when
+        List<Double> latitudes = trip.getLatitudes();
+
+        // then
+        assertThat(latitudes).containsExactly(1.1, 3.3, 5.5);
+    }
+
+    @Test
+    void 경도를_반환한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        trip.add(new Point(1.1, 2.2, LocalDateTime.now()));
+        trip.add(new Point(3.3, 4.4, LocalDateTime.now()));
+        trip.add(new Point(5.5, 6.6, LocalDateTime.now()));
+
+        // when
+        List<Double> longitudes = trip.getLongitudes();
+
+        // then
+        assertThat(longitudes).containsExactly(2.2, 4.4, 6.6);
+    }
+
+    @Test
+    void 감상을_남긴_위치_정보의_위도를_반환한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        trip.add(new Point(1L, 1.1, 2.2, true, LocalDateTime.now()));
+        trip.add(new Point(2L, 3.3, 4.4, false, LocalDateTime.now()));
+        trip.add(new Point(3L, 5.5, 6.6, true, LocalDateTime.now()));
+
+        // when
+        List<Double> pointedLatitudes = trip.getPointedLatitudes();
+
+        // then
+        assertThat(pointedLatitudes).containsExactly(1.1, 5.5);
+    }
+
+    @Test
+    void 감상을_남긴_위치_정보의_경도를_반환한다() {
+        // given
+        Member member = new Member("통후추");
+        Trip trip = Trip.from(member);
+        trip.add(new Point(1L, 1.1, 2.2, true, LocalDateTime.now()));
+        trip.add(new Point(2L, 3.3, 4.4, false, LocalDateTime.now()));
+        trip.add(new Point(3L, 5.5, 6.6, true, LocalDateTime.now()));
+
+        // when
+        List<Double> pointedLongitudes = trip.getPointedLongitudes();
+
+        // then
+        assertThat(pointedLongitudes).containsExactly(2.2, 6.6);
+    }
 }

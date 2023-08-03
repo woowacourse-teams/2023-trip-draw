@@ -3,6 +3,7 @@ package dev.tripdraw.application;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
+import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
@@ -29,10 +30,16 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
+    private final RouteImageGenerator routeImageGenerator;
 
-    public TripService(TripRepository tripRepository, MemberRepository memberRepository) {
+    public TripService(
+            TripRepository tripRepository,
+            MemberRepository memberRepository,
+            RouteImageGenerator routeImageGenerator
+    ) {
         this.tripRepository = tripRepository;
         this.memberRepository = memberRepository;
+        this.routeImageGenerator = routeImageGenerator;
     }
 
     public TripCreateResponse create(LoginUser loginUser) {
@@ -97,6 +104,17 @@ public class TripService {
 
         trip.changeName(tripUpdateRequest.name());
         trip.changeStatus(tripUpdateRequest.status());
+        String routeImageName = generateRouteImage(trip);
+        trip.changeRouteImageUrl(routeImageName);
+    }
+
+    private String generateRouteImage(Trip trip) {
+        return routeImageGenerator.generate(
+                trip.getLatitudes(),
+                trip.getLongitudes(),
+                trip.getPointedLatitudes(),
+                trip.getPointedLongitudes()
+        );
     }
 
     @Transactional(readOnly = true)
