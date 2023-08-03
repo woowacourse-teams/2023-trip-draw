@@ -19,6 +19,7 @@ public class RouteImageDrawerTest {
         // given
         int imageSize = 800;
         Color transparent = new Color(0, 0, 0, 0);
+        Color lineColor = new Color(0xD0, 0xD0, 0xDA);
         BasicStroke roundStroke = new BasicStroke(7, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
         // when
@@ -29,7 +30,7 @@ public class RouteImageDrawerTest {
             Graphics2D graphics2D = routeImageDrawer.graphics2D();
             softly.assertThat(graphics2D.getStroke()).isEqualTo(roundStroke);
             softly.assertThat(graphics2D.getBackground()).isEqualTo(transparent);
-            softly.assertThat(graphics2D.getPaint()).isEqualTo(Color.WHITE);
+            softly.assertThat(graphics2D.getPaint()).isEqualTo(lineColor);
         });
     }
 

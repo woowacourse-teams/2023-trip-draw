@@ -17,8 +17,10 @@ public class RouteImageDrawer {
 
     private static final int IMAGE_TYPE = BufferedImage.TYPE_INT_ARGB;
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+    private static final Color GRAY = new Color(0xD0, 0xD0, 0xDA);
     private static final int LINE_STROKE_WIDTH = 7;
     private static final Stroke LINE_STROKE = new BasicStroke(LINE_STROKE_WIDTH, CAP_ROUND, JOIN_ROUND);
+    private static final Color BLUE = new Color(0x17, 0x46, 0xA2);
     private static final int POINT_STROKE_WIDTH = 20;
     private static final Stroke POINT_STROKE = new BasicStroke(POINT_STROKE_WIDTH, CAP_ROUND, JOIN_ROUND);
     private static final Map<Object, Object> renderingHints = Map.of(
@@ -42,12 +44,13 @@ public class RouteImageDrawer {
         graphics2D.clearRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
         graphics2D.setRenderingHints(renderingHints);
         graphics2D.setStroke(LINE_STROKE);
-        graphics2D.setPaint(Color.WHITE);
+        graphics2D.setPaint(GRAY);
         return new RouteImageDrawer(bufferedImage, graphics2D);
     }
 
     public void drawLine(Positions positions) {
         graphics2D.setStroke(LINE_STROKE);
+        graphics2D.setPaint(GRAY);
 
         List<Integer> xPositions = positions.xPositions();
         List<Integer> yPositions = positions.yPositions();
@@ -63,6 +66,7 @@ public class RouteImageDrawer {
 
     public void drawPoint(Positions positions) {
         graphics2D.setStroke(POINT_STROKE);
+        graphics2D.setPaint(BLUE);
 
         List<Integer> xPositions = positions.xPositions();
         List<Integer> yPositions = positions.yPositions();
