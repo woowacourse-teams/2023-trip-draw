@@ -19,5 +19,5 @@ class PointRepositoryImpl(
         )
 
     override suspend fun getPoint(pointId: Long, tripId: Long): Result<Point> =
-        pointDataSource.getPint(tripId = tripId, pointId = pointId).map { it.toDomain() }
+        pointDataSource.getPoint(tripId = tripId, pointId = pointId).map { it.toDomain() }
 }
