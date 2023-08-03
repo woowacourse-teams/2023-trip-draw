@@ -100,4 +100,13 @@ private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo): Marker =
                 this.icon = markerNoPostImage
             }
         }
+        this.isVisible = false
     }
+
+@BindingAdapter("app:markerViewModeState")
+fun View.toggleMarkerMode(markerViewModeState: Boolean) {
+    if (getTag(R.id.NAVER_MAP_MARKERS_TAG) != null) {
+        val markers = getTag(R.id.NAVER_MAP_MARKERS_TAG) as List<Marker>
+        markers.forEach { it.isVisible = markerViewModeState }
+    }
+}

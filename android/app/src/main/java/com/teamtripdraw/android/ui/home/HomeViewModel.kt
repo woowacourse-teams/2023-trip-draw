@@ -24,6 +24,9 @@ class HomeViewModel(
     private val _currentTripRoute = MutableLiveData<UiRoute>()
     val currentTripRoute: LiveData<UiRoute> = _currentTripRoute
 
+    private val _markerViewModeState = MutableLiveData<Boolean>(false)
+    val markerViewModeState: LiveData<Boolean> = _markerViewModeState
+
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
 
@@ -63,5 +66,9 @@ class HomeViewModel(
                     _currentTripRoute.value = it.toUi()
                 }
         }
+    }
+
+    fun toggleMarkerViewModeState() {
+        _markerViewModeState.value = !requireNotNull(markerViewModeState.value)
     }
 }
