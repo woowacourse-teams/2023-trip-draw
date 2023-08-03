@@ -2,6 +2,7 @@ package com.teamtripdraw.android.ui.postWriting
 
 import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -10,7 +11,9 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.support.framework.presentation.extensions.getAdministrativeAddress
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import java.util.*
 
 class PostWritingActivity : AppCompatActivity() {
 
@@ -23,6 +26,7 @@ class PostWritingActivity : AppCompatActivity() {
 
         initView()
         initTripData()
+        initEvent()
     }
 
     private fun initView() {
@@ -37,6 +41,17 @@ class PostWritingActivity : AppCompatActivity() {
             throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
 
         viewModel.initTripData(pointId)
+    }
+
+    private fun initEvent() {
+        viewModel.latLngPoint.observe(this) {
+            val geocoder = Geocoder(this, Locale.KOREAN)
+            viewModel.updateAddress(geocoder.getAdministrativeAddress(it.latitude, it.longitude))
+        }
+
+        viewModel.writingCompletedEvent.observe(this) {
+            if (it == true) finish()
+        }
     }
 
     companion object {

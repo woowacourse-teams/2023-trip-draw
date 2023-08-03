@@ -53,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginEnd="@dimen/margin_default"
+                    android:onClick="@{() -> postWritingViewModel.completeWritingEvent()}"
                     android:text="@string/btn_post_complete"
                     android:textColor="@color/td_black"
                     app:postWritingCompleteButtonState="@{postWritingViewModel.postWritingValidState}" />
@@ -102,13 +103,13 @@
             app:layout_constraintTop_toBottomOf="@+id/divider_title_content" />
 
         <TextView
-            app:administrativeAreaText="@{postWritingViewModel.latLngPoint}"
             android:id="@+id/btn_location_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_dark_gray"
+            app:administrativeAreaText="@{postWritingViewModel.latLngPoint}"
             app:layout_constraintBottom_toBottomOf="@+id/btn_location_icon"
             app:layout_constraintStart_toEndOf="@id/btn_location_icon"
             app:layout_constraintTop_toTopOf="@+id/btn_location_icon"
