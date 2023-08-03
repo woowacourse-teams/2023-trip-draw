@@ -37,6 +37,10 @@ class PostWritingViewModel(
 
     fun initTripData(pointId: Long) {
         this.tripId = tripRepository.getCurrentTripId()
+        initPoint(pointId)
+    }
+
+    private fun initPoint(pointId: Long) {
         this.pointId = pointId
         viewModelScope.launch {
             pointRepository.getPoint(pointId = pointId, tripId = tripId)
