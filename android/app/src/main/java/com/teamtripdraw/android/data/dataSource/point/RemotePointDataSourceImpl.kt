@@ -19,7 +19,7 @@ class RemotePointDataSourceImpl(
         createRecordingPointService.createRecordingPoint(dataPrePoint.toHttpRequest(tripId))
             .process { body, headers -> Result.success(body.pointId) }
 
-    override suspend fun getPint(tripId: Long, pointId: Long): Result<DataPoint> =
+    override suspend fun getPoint(tripId: Long, pointId: Long): Result<DataPoint> =
         getPointService.getPoint(tripId = tripId, pointId = pointId)
             .process { body, headers -> Result.success(body.toData()) }
 

@@ -7,6 +7,6 @@ interface PointDataSource {
     interface Local
     interface Remote {
         suspend fun createRecordingPoint(dataPrePoint: DataPrePoint, tripId: Long): Result<Long>
-        suspend fun getPint(tripId: Long, pointId: Long): Result<DataPoint>
+        suspend fun getPoint(tripId: Long, pointId: Long): Result<DataPoint>
     }
 }
