@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_td_gray_line_0_rect"
-        android:onClick="@{()->postViewerViewModel.itemClickedEvent(postItem.id)}"
+        android:onClick="@{()->postViewerViewModel.openPostDetail(postItem.id)}"
         android:paddingHorizontal="@dimen/margin_default"
         android:paddingVertical="12dp">
 

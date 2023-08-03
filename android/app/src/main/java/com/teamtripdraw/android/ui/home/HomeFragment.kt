@@ -26,6 +26,7 @@ import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
+import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -78,6 +79,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         matchMapFragmentToNaverMap()
         observeStartTripEvent()
         initFloatingButtonClickListener()
+        setUpPostViewerClickEvent()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -140,6 +142,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             fabState = !fabState
             binding.fabState = fabState
         }
+    }
+
+    private fun setUpPostViewerClickEvent() {
+        homeViewModel.openPostViewerEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@HomeFragment::navigateToPostViewer)
+        )
+    }
+
+    private fun navigateToPostViewer(isClicked: Boolean) {
+        if (isClicked) startActivity(PostViewerActivity.getIntent(requireContext()))
     }
 
     override fun onDestroyView() {
