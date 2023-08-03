@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import androidx.databinding.BindingAdapter
 import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PolylineOverlay
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.support.framework.presentation.resolution.toDP
@@ -40,3 +41,7 @@ private fun setPolyLineSetting(polyLine: PolylineOverlay, context: Context): Pol
         capType = PolylineOverlay.LineCap.Round
         joinType = PolylineOverlay.LineJoin.Round
     }
+
+private val markerNoPostImage = OverlayImage.fromResource(R.drawable.ic_marker_no_post)
+private val markerHasPostImage = OverlayImage.fromResource(R.drawable.ic_marker_has_post)
+private val markerSelectedImage = OverlayImage.fromResource(R.drawable.ic_marker_selected)
