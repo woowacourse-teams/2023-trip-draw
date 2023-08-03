@@ -14,13 +14,14 @@ fun ImageView.setImageWithVisibility(imgUrl: String?) {
     if (imgUrl == null) {
         this.visibility = View.GONE
         return
+    } else {
+        this.visibility = View.VISIBLE
+        Glide.with(this.context)
+            .load(imgUrl)
+            .placeholder(R.drawable.shape_td_gray_fill_0_rect)
+            .error(R.drawable.shape_td_gray_fill_0_rect)
+            .into(this)
     }
-
-    Glide.with(this.context)
-        .load(imgUrl)
-        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
-        .into(this)
 }
 
 @BindingAdapter("app:clickToShowImageViewer")
@@ -41,12 +42,13 @@ fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
     if (imgUrl == null) {
         this.visibility = View.GONE
         return
+    } else {
+        this.visibility = View.VISIBLE
+        Glide.with(this.context)
+            .load(imgUrl)
+            .placeholder(R.drawable.shape_td_gray_fill_0_rect)
+            .error(R.drawable.shape_td_gray_fill_0_rect)
+            .transform(CenterCrop(), RoundedCorners(20))
+            .into(this)
     }
-
-    Glide.with(this.context)
-        .load(imgUrl)
-        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
-        .transform(CenterCrop(), RoundedCorners(20))
-        .into(this)
 }
