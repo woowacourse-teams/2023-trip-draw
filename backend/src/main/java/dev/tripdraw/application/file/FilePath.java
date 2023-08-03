@@ -10,13 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilePath {
 
-    private final String base;
-    private final String postImagePath;
+    @Value("${trip.base}")
+    private String base;
 
-    public FilePath(@Value("${trip.base}") String base, @Value("${trip.post}") String postImagePath) {
-        this.base = base;
-        this.postImagePath = postImagePath;
-    }
+    @Value("${trip.post}")
+    private String postImagePath;
 
     public String getPath(FileType fileType) {
         Map<FileType, String> typeAndPath = Map.of(
