@@ -5,9 +5,7 @@ import com.teamtripdraw.android.domain.model.post.PrePost
 
 interface PostRepository {
 
-    suspend fun addPost(
-        prePost: PrePost
-    ): Result<Long>
+    suspend fun addPost(prePost: PrePost): Result<Long>
 
     suspend fun getPost(postId: Long): Result<Post>
 

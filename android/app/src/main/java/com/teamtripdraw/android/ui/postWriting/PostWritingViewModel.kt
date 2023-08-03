@@ -8,6 +8,7 @@ import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.LatLngPoint
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
+import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
@@ -24,6 +25,7 @@ class PostWritingViewModel(
 
     private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
     private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
+    private var address: String = ""
 
     private val _latLngPoint: MutableLiveData<LatLngPoint> = MutableLiveData(LatLngPoint(0.0, 0.0))
     val latLngPoint: LiveData<LatLngPoint> = _latLngPoint
@@ -34,6 +36,13 @@ class PostWritingViewModel(
     private val _postWritingValidState: MutableLiveData<PostWritingValidState> =
         MutableLiveData(PostWritingValidState.EMPTY_TITLE)
     val postWritingValidState: LiveData<PostWritingValidState> = _postWritingValidState
+
+    private val _writingCompletedEvent: MutableLiveData<Boolean> = MutableLiveData(false)
+    val writingCompletedEvent: LiveData<Boolean> = _writingCompletedEvent
+
+    fun updateAddress(address: String) {
+        this.address = address
+    }
 
     fun initTripData(pointId: Long) {
         this.tripId = tripRepository.getCurrentTripId()
@@ -55,7 +64,19 @@ class PostWritingViewModel(
     }
 
     fun completeWritingEvent() {
-
+        viewModelScope.launch {
+            val prePost = PrePost(
+                tripId = tripId,
+                pointId = pointId,
+                title = title.value ?: "",
+                writing = writing.value ?: "",
+                address = address,
+                imageFile = null
+            )
+            postRepository.addPost(prePost).onSuccess {
+                _writingCompletedEvent.value = true
+            }
+        }
     }
 
 }
