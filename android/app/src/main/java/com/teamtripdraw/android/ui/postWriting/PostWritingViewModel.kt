@@ -25,7 +25,7 @@ class PostWritingViewModel(
     private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
     private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
 
-    private val _latLngPoint: MutableLiveData<LatLngPoint> = MutableLiveData()
+    private val _latLngPoint: MutableLiveData<LatLngPoint> = MutableLiveData(LatLngPoint(0.0, 0.0))
     val latLngPoint: LiveData<LatLngPoint> = _latLngPoint
 
     val title: MutableLiveData<String> = MutableLiveData("")

@@ -8,8 +8,7 @@ import com.teamtripdraw.android.support.framework.presentation.extensions.getAdm
 import java.util.Locale
 
 @BindingAdapter("app:administrativeAreaText")
-fun TextView.setAdministrativeAddress(latLngPoint: LatLngPoint?) {
-    if (latLngPoint == null) return
+fun TextView.setAdministrativeAddress(latLngPoint: LatLngPoint) {
     val geocoder = Geocoder(context, Locale.KOREAN)
     text = geocoder.getAdministrativeAddress(latLngPoint.latitude, latLngPoint.longitude)
 }
