@@ -37,7 +37,7 @@ class PostWritingActivity : AppCompatActivity() {
         if (tripId == NULL_SUBSTITUTE_TRIP_ID || pointId == NULL_SUBSTITUTE_POINT_ID)
             throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
 
-        viewModel.initData(tripId, pointId)
+        viewModel.initTripData(tripId, pointId)
     }
 
     companion object {
