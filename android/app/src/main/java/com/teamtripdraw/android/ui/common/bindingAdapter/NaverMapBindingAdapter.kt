@@ -45,15 +45,13 @@ private fun View.initializePolyLine() {
 
 private fun setPolyLineSetting(polyLine: PolylineOverlay, context: Context): PolylineOverlay =
     polyLine.apply {
-        width = toDP(context, 30)
+        width = toDP(context, POLY_LINE_WIDTH)
         color = context.getColor(R.color.td_main_blue)
         capType = PolylineOverlay.LineCap.Round
         joinType = PolylineOverlay.LineJoin.Round
     }
 
-private val markerNoPostImage = OverlayImage.fromResource(R.drawable.ic_marker_no_post)
-private val markerHasPostImage = OverlayImage.fromResource(R.drawable.ic_marker_has_post)
-private val markerSelectedImage = OverlayImage.fromResource(R.drawable.ic_marker_selected)
+private const val POLY_LINE_WIDTH = 30
 
 @BindingAdapter("app:setMarkerNaverMap", "app:setMarkerUiRoute")
 fun View.setMarker(naverMap: NaverMap?, uiRoute: UiRoute?) {
@@ -90,11 +88,11 @@ private fun View.initializeMarker(naverMap: NaverMap, uiRoute: UiRoute) {
 private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo): Marker =
     Marker().apply {
         this.position = UiMarkerInfo.latLng
-        this.anchor = PointF(0.5f, 0.5f)
+        this.anchor = PointF(ANCHOR_X_LOCATION_VALUE, ANCHOR_Y_LOCATION_VALUE)
         when (UiMarkerInfo.hasPost) {
             true -> {
                 this.icon = markerHasPostImage
-                this.zIndex = 300
+                this.zIndex = MARKER_HAS_POST_PRIORITY_DEGREE
             }
             false -> {
                 this.icon = markerNoPostImage
@@ -102,6 +100,14 @@ private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo): Marker =
         }
         this.isVisible = false
     }
+
+private val markerNoPostImage = OverlayImage.fromResource(R.drawable.ic_marker_no_post)
+private val markerHasPostImage = OverlayImage.fromResource(R.drawable.ic_marker_has_post)
+private val markerSelectedImage = OverlayImage.fromResource(R.drawable.ic_marker_selected)
+
+private const val MARKER_HAS_POST_PRIORITY_DEGREE = 300
+private const val ANCHOR_X_LOCATION_VALUE = 0.5f
+private const val ANCHOR_Y_LOCATION_VALUE = 0.5f
 
 @BindingAdapter("app:markerViewModeState")
 fun View.toggleMarkerMode(markerViewModeState: Boolean) {
