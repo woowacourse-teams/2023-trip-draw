@@ -13,6 +13,7 @@ import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import kotlinx.coroutines.launch
+import java.io.File
 
 class PostWritingViewModel(
     private val pointRepository: PointRepository,
@@ -26,6 +27,7 @@ class PostWritingViewModel(
     private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
     private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
     private var address: String = ""
+    private var imageFile: File? = null
 
     private val _latLngPoint: MutableLiveData<LatLngPoint> = MutableLiveData(LatLngPoint(0.0, 0.0))
     val latLngPoint: LiveData<LatLngPoint> = _latLngPoint
@@ -42,6 +44,10 @@ class PostWritingViewModel(
 
     fun updateAddress(address: String) {
         this.address = address
+    }
+
+    fun updateImage(file: File) {
+        this.imageFile = file
     }
 
     fun initTripData(pointId: Long) {
@@ -71,7 +77,7 @@ class PostWritingViewModel(
                 title = title.value ?: "",
                 writing = writing.value ?: "",
                 address = address,
-                imageFile = null
+                imageFile = imageFile
             )
             postRepository.addPost(prePost).onSuccess {
                 _writingCompletedEvent.value = true
