@@ -104,7 +104,7 @@ class TripServiceTest {
         assertSoftly(softly -> {
             softly.assertThat(tripResponse.tripId()).isNotNull();
             softly.assertThat(tripResponse.name()).isNotNull();
-            softly.assertThat(tripResponse.routes()).isNotNull();
+            softly.assertThat(tripResponse.route()).isNotNull();
             softly.assertThat(tripResponse.status()).isNotNull();
         });
     }
