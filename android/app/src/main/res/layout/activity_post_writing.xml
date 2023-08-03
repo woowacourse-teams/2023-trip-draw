@@ -102,6 +102,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider_title_content" />
 
         <TextView
+            app:administrativeAreaText="@{postWritingViewModel.latLngPoint}"
             android:id="@+id/btn_location_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

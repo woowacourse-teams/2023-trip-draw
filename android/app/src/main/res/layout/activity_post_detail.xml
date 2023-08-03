@@ -8,6 +8,10 @@
         <variable
             name="postDetailViewModel"
             type="com.teamtripdraw.android.ui.post.detail.PostDetailViewModel" />
+
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +31,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/btn_post_viewer_back_description"
+                android:onClick="@{()->onBackClick.invoke()}"
                 android:src="@drawable/ic_back" />
 
             <ImageView
@@ -36,6 +41,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_default"
                 android:contentDescription="@string/btn_delete_description"
+                android:onClick="@{()->postDetailViewModel.deletePost()}"
                 android:src="@drawable/ic_delete" />
 
             <ImageView
@@ -142,10 +148,10 @@
                     android:layout_marginTop="24dp"
                     android:contentDescription="@string/iv_image_description"
                     android:scaleType="centerCrop"
+                    app:clickToShowImageViewer="@{postDetailViewModel.postDetail.postImageUrl}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_1"
-                    app:clickToShowImageViewer="@{postDetailViewModel.postDetail.postImageUrl}"
                     app:setImageWithVisibility="@{postDetailViewModel.postDetail.postImageUrl}"
                     tools:background="@color/td_gray" />
 
