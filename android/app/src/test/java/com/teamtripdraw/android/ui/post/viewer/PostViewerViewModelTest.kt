@@ -81,11 +81,11 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
     @Test
     fun `특정 감상이 선택되었을 경우 감상 선택 상태를 변경한다`() {
         // given
-        val before = sut.postClickedEvent.value
+        val before = sut.openPostDetailEvent.value
 
         // when
-        sut.itemClickedEvent(0)
-        val after = sut.postClickedEvent.value
+        sut.openPostDetail(0)
+        val after = sut.openPostDetailEvent.value
 
         // then
         assertNotEquals(after, before)

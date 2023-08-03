@@ -27,8 +27,8 @@ class HomeViewModel(
     private val _markerViewModeState = MutableLiveData<Boolean>(false)
     val markerViewModeState: LiveData<Boolean> = _markerViewModeState
 
-    private val _postViewerClickedEvent = MutableLiveData<Event<Boolean>>()
-    val postViewerClickedEvent: LiveData<Event<Boolean>> = _postViewerClickedEvent
+    private val _openPostViewerEvent = MutableLiveData<Event<Boolean>>()
+    val openPostViewerEvent: LiveData<Event<Boolean>> = _openPostViewerEvent
 
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
@@ -75,7 +75,7 @@ class HomeViewModel(
         _markerViewModeState.value = !requireNotNull(markerViewModeState.value)
     }
 
-    fun onPostViewerClicked() {
-        _postViewerClickedEvent.value = Event(true)
+    fun openPostViewer() {
+        _openPostViewerEvent.value = Event(true)
     }
 }

@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:backgroundTint="@color/td_white"
-            android:onClick="@{()->homeViewModel.onPostViewerClicked()}"
+            android:onClick="@{()->homeViewModel.openPostViewer()}"
             android:src="@drawable/ic_post_list"
             app:borderWidth="0dp"
             app:fabCustomSize="44dp"

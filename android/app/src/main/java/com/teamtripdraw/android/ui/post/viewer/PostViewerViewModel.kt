@@ -19,8 +19,8 @@ class PostViewerViewModel(
     private val _posts: MutableLiveData<List<UiPostItem>> = MutableLiveData()
     val posts: LiveData<List<UiPostItem>> = _posts
 
-    private val _postClickedEvent = MutableLiveData<Event<Long>>()
-    val postClickedEvent: LiveData<Event<Long>> = _postClickedEvent
+    private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
+    val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
 
     private val _postErrorEvent = MutableLiveData<Event<Boolean>>()
     val postErrorEvent: LiveData<Event<Boolean>> = _postErrorEvent
@@ -38,7 +38,7 @@ class PostViewerViewModel(
         }
     }
 
-    fun itemClickedEvent(id: Long) {
-        _postClickedEvent.value = Event(id)
+    fun openPostDetail(id: Long) {
+        _openPostDetailEvent.value = Event(id)
     }
 }

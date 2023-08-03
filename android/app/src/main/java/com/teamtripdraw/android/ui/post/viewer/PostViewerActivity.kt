@@ -36,7 +36,7 @@ class PostViewerActivity : AppCompatActivity() {
             adapter.submitList(it)
         }
 
-        viewModel.postClickedEvent.observe(
+        viewModel.openPostDetailEvent.observe(
             this,
             EventObserver(this@PostViewerActivity::onPostClick)
         )

@@ -145,7 +145,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setUpPostViewerClickEvent() {
-        homeViewModel.postViewerClickedEvent.observe(
+        homeViewModel.openPostViewerEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@HomeFragment::navigateToPostViewer)
         )
