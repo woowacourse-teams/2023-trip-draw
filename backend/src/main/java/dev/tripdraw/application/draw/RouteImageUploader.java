@@ -30,14 +30,14 @@ public class RouteImageUploader {
         File file = new File(imageName);
         try {
             ImageIO.write(bufferedImage, ROUTE_IMAGE_FORMAT, file);
-            return imageName;
+            return domain + imageName;
         } catch (IOException e) {
             throw new DrawException(IMAGE_SAVE_FAIL);
         }
     }
 
     private String generateImageName() {
-        String baseName = domain + base + route;
+        String baseName = base + route;
         String routeImageName = UUID.randomUUID() + "." + ROUTE_IMAGE_FORMAT;
         return baseName + routeImageName;
     }
