@@ -3,15 +3,20 @@ package com.teamtripdraw.android.ui.postWriting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.point.LatLngPoint
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
+import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
+import kotlinx.coroutines.launch
 
 class PostWritingViewModel(
-    private val tripRepository: TripRepository,
-    private val postRepository: PostRepository
+    private val pointRepository: PointRepository,
+    private val postRepository: PostRepository,
+    private val tripRepository: TripRepository
 ) : ViewModel() {
 
     val MAX_INPUT_TITLE_LENGTH = PostWritingValidState.MAX_TITLE_LENGTH
@@ -20,6 +25,9 @@ class PostWritingViewModel(
     private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
     private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
 
+    private val _latLngPoint: MutableLiveData<LatLngPoint> = MutableLiveData(LatLngPoint(0.0, 0.0))
+    val latLngPoint: LiveData<LatLngPoint> = _latLngPoint
+
     val title: MutableLiveData<String> = MutableLiveData("")
     val writing: MutableLiveData<String> = MutableLiveData("")
 
@@ -27,9 +35,13 @@ class PostWritingViewModel(
         MutableLiveData(PostWritingValidState.EMPTY_TITLE)
     val postWritingValidState: LiveData<PostWritingValidState> = _postWritingValidState
 
-    fun initData(tripId: Long, pointId: Long) {
-        this.tripId = tripId
+    fun initTripData(pointId: Long) {
+        this.tripId = tripRepository.getCurrentTripId()
         this.pointId = pointId
+        viewModelScope.launch {
+            pointRepository.getPoint(pointId = pointId, tripId = tripId)
+                .onSuccess { _latLngPoint.value = LatLngPoint(it.latitude, it.longitude) }
+        }
     }
 
     fun textChangedEvent() {

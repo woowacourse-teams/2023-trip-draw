@@ -3,6 +3,8 @@ package com.teamtripdraw.android.data.repository
 import com.teamtripdraw.android.data.dataSource.point.PointDataSource
 import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
 import com.teamtripdraw.android.data.model.mapper.toData
+import com.teamtripdraw.android.data.model.mapper.toDomain
+import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.domain.repository.PointRepository
 
@@ -15,4 +17,7 @@ class PointRepositoryImpl(
             prePoint.toData(),
             tripId ?: tripDataSource.getCurrentTripId()
         )
+
+    override suspend fun getPoint(pointId: Long, tripId: Long): Result<Point> =
+        pointDataSource.getPint(tripId = tripId, pointId = pointId).map { it.toDomain() }
 }

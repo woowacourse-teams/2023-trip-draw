@@ -24,5 +24,8 @@ class RemoteDataSourceContainer(
     val remotePostDataSource: PostDataSource.Remote =
         RemotePostDataSourceImpl(serviceContainer.postService)
     val remotePointDataSource: PointDataSource.Remote =
-        RemotePointDataSourceImpl(serviceContainer.createRecordingPointService)
+        RemotePointDataSourceImpl(
+            serviceContainer.createRecordingPointService,
+            serviceContainer.getPointService
+        )
 }
