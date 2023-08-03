@@ -20,7 +20,10 @@ class RemoteDataSourceContainer(
             retrofitContainer.tripDrawRetrofit
         )
     val remoteTripDataSource: TripDataSource.Remote =
-        RemoteTripDataSourceImpl(serviceContainer.createTripService)
+        RemoteTripDataSourceImpl(
+            serviceContainer.createTripService,
+            serviceContainer.getTripInfoService
+        )
     val remotePostDataSource: PostDataSource.Remote =
         RemotePostDataSourceImpl(serviceContainer.postService)
     val remotePointDataSource: PointDataSource.Remote =
