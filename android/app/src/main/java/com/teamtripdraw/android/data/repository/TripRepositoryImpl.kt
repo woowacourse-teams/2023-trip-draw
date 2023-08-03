@@ -1,6 +1,8 @@
 package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
+import com.teamtripdraw.android.data.model.mapper.toDomainRoute
+import com.teamtripdraw.android.domain.model.point.Route
 import com.teamtripdraw.android.domain.repository.TripRepository
 
 class TripRepositoryImpl(
@@ -15,4 +17,9 @@ class TripRepositoryImpl(
 
     override fun getCurrentTripId(): Long =
         localTripDataSource.getCurrentTripId()
+
+    override suspend fun getCurrentTripRoute(tripId: Long): Result<Route> =
+        remoteTripDataSource.getTripInfo(tripId).map { dataTrip ->
+            dataTrip.toDomainRoute()
+        }
 }

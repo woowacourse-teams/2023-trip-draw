@@ -91,6 +91,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
+        binding.naverMap = this.naverMap
         this.naverMap.initUserInterface()
         this.naverMap.initUserLocationOption(
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE),
