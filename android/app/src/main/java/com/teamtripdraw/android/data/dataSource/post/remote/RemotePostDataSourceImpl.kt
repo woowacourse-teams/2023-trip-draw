@@ -27,7 +27,7 @@ class RemotePostDataSourceImpl(private val postService: PostService) : PostDataS
             moshi.adapter(AddPostRequest::class.java).toJson(dataPrePost.toHttpRequest())
         val dto = addPostRequest.toRequestBody("application/json".toMediaTypeOrNull())
 
-        val imageRequest = imageFile?.asRequestBody("image/*".toMediaTypeOrNull())
+        val imageRequest = imageFile?.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val imageBody = imageRequest?.let {
             MultipartBody.Part.createFormData("file", imageFile.name, it)
         }
