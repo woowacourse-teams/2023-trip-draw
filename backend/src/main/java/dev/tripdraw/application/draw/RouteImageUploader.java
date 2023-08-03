@@ -34,7 +34,7 @@ public class RouteImageUploader {
         String imageName = generateImageName();
         File file = new File(imageName);
         try {
-            ImageIO.write(bufferedImage, base + ROUTE_IMAGE_FORMAT, file);
+            ImageIO.write(bufferedImage, base + route + ROUTE_IMAGE_FORMAT, file);
             return domain + route + imageName;
         } catch (IOException e) {
             throw new DrawException(IMAGE_SAVE_FAIL);

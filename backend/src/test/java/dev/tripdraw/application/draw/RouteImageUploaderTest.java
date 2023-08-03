@@ -2,6 +2,7 @@ package dev.tripdraw.application.draw;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.times;
 
 import java.awt.image.BufferedImage;
@@ -21,7 +22,10 @@ class RouteImageUploaderTest {
     void 파일을_업로드한다() {
         // given
         BufferedImage bufferedImage = new BufferedImage(800, 800, BufferedImage.TYPE_INT_ARGB);
-        RouteImageUploader routeImageUploader = new RouteImageUploader("", "", "");
+        String domain = "https://tripdraw.site";
+        String base = "/image";
+        String route = "/route-images/";
+        RouteImageUploader routeImageUploader = new RouteImageUploader(domain, base, route);
 
         // expect
         try (MockedStatic<ImageIO> imageIO = Mockito.mockStatic(ImageIO.class)) {
@@ -29,7 +33,7 @@ class RouteImageUploaderTest {
 
             assertThat(imageUrl).isNotBlank();
             imageIO.verify(
-                    () -> ImageIO.write(any(BufferedImage.class), any(String.class), any(File.class)),
+                    () -> ImageIO.write(any(BufferedImage.class), startsWith(base + route), any(File.class)),
                     times(1)
             );
         }
