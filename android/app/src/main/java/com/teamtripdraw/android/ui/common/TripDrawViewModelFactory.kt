@@ -7,7 +7,7 @@ import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
 import com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel
-import com.teamtripdraw.android.ui.post.writing.PostWritingViewModel
+import com.teamtripdraw.android.ui.postWriting.PostWritingViewModel
 import com.teamtripdraw.android.ui.signUp.NicknameSetupViewModel
 
 private const val UNDEFINED_VIEW_MODEL_ERROR = "ViewModelFactory에 정의되지않은 뷰모델을 생성하였습니다 : %s"
@@ -22,8 +22,10 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                 isAssignableFrom(NicknameSetupViewModel::class.java) ->
                     NicknameSetupViewModel(repositoryContainer.nicknameSetupRepository)
                 isAssignableFrom(PostWritingViewModel::class.java) ->
-                    // PostWritingViewModel(repositoryContainer.postRepository)
-                    PostWritingViewModel()
+                    PostWritingViewModel(
+                        repositoryContainer.tripRepository,
+                        repositoryContainer.postRepository
+                    )
                 isAssignableFrom(HomeViewModel::class.java) ->
                     HomeViewModel(repositoryContainer.tripRepository)
                 isAssignableFrom(PostDetailViewModel::class.java) ->

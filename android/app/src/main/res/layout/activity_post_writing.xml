@@ -7,7 +7,7 @@
 
         <variable
             name="postWritingViewModel"
-            type="com.teamtripdraw.android.ui.post.writing.PostWritingViewModel" />
+            type="com.teamtripdraw.android.ui.postWriting.PostWritingViewModel" />
 
     </data>
 
@@ -54,7 +54,8 @@
                     android:layout_gravity="end"
                     android:layout_marginEnd="@dimen/margin_default"
                     android:text="@string/btn_post_complete"
-                    android:textColor="@color/td_black" />
+                    android:textColor="@color/td_black"
+                    app:postWritingCompleteButtonState="@{postWritingViewModel.postWritingValidState}" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -66,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_default"
             android:layout_marginVertical="@dimen/margin_default"
+            android:afterTextChanged="@{() -> postWritingViewModel.textChangedEvent()}"
             android:background="@null"
             android:hint="@string/et_post_title"
             android:inputType="text"
@@ -117,10 +119,11 @@
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/margin_default"
             android:layout_marginVertical="@dimen/margin_default"
+            android:afterTextChanged="@{() -> postWritingViewModel.textChangedEvent()}"
             android:background="@null"
             android:gravity="top"
-            android:maxLength="@{postWritingViewModel.MAX_INPUT_CONTENT_LENGTH}"
-            android:text="@={postWritingViewModel.content}"
+            android:maxLength="@{postWritingViewModel.MAX_INPUT_WRITING_LENGTH}"
+            android:text="@={postWritingViewModel.writing}"
             android:textAppearance="@style/body2"
             app:layout_constraintBottom_toTopOf="@id/divider_content_file"
             app:layout_constraintEnd_toEndOf="parent"

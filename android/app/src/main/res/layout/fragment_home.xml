@@ -8,6 +8,10 @@
         <variable
             name="homeViewModel"
             type="com.teamtripdraw.android.ui.home.HomeViewModel" />
+
+        <variable
+            name="fabState"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_default"
             app:layout_constraintTop_toTopOf="parent" />
-        
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_map"
             android:name="com.naver.maps.map.MapFragment"
@@ -45,6 +49,133 @@
             app:homeUiStateBeforeTrip="@{homeViewModel.homeUiState}"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_map"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_marker_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/td_white"
+            android:src="@drawable/ic_marker_mode"
+            app:borderWidth="0dp"
+            app:fabCustomSize="44dp"
+            app:fabSize="mini"
+            app:homeUiStateOnTrip="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toEndOf="@+id/fab_home"
+            app:layout_constraintStart_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home"
+            app:tint="@color/td_main_blue" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_post_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/td_white"
+            android:src="@drawable/ic_post_list"
+            app:borderWidth="0dp"
+            app:fabCustomSize="44dp"
+            app:fabSize="mini"
+            app:homeUiStateOnTrip="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toEndOf="@+id/fab_home"
+            app:layout_constraintStart_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home"
+            app:tint="@color/td_main_blue" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_write_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/td_white"
+            android:src="@drawable/ic_write_post"
+            app:borderWidth="0dp"
+            app:fabCustomSize="44dp"
+            app:fabSize="mini"
+            app:homeUiStateOnTrip="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toEndOf="@+id/fab_home"
+            app:layout_constraintStart_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home"
+            app:tint="@color/td_main_blue" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:elevation="0dp"
+            android:src="@drawable/ic_fab_plus"
+            app:borderWidth="0dp"
+            app:fabCustomSize="60dp"
+            app:homeUiStateOnTrip="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:setFloatingActionButtonTint="@{fabState}"
+            tools:backgroundTint="@color/td_main_blue"
+            tools:tint="@color/td_white" />
+
+        <TextView
+            android:id="@+id/tv_marker_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/tv_marker_mode"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_main_blue"
+            android:visibility="gone"
+            app:homeUiStateOnTripForFabText="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home" />
+
+        <TextView
+            android:id="@+id/tv_post_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/tv_post_list"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_main_blue"
+            android:visibility="gone"
+            app:homeUiStateOnTripForFabText="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home" />
+
+        <TextView
+            android:id="@+id/tv_write_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/tv_write_post"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_main_blue"
+            android:visibility="gone"
+            app:homeUiStateOnTripForFabText="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_finish_trip"
+            android:layout_width="0dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:background="@drawable/shape_td_main_blue_line_12_rect"
+            android:text="@string/btn_finish_trip"
+            android:textAppearance="@style/title_2M"
+            android:textColor="@color/td_main_blue"
+            app:homeUiStateOnTrip="@{homeViewModel.homeUiState}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

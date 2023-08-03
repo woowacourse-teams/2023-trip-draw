@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.domain.user
+package user
 
 import com.teamtripdraw.android.domain.model.user.NicknameValidState
 import org.assertj.core.api.Assertions.assertThat

@@ -22,6 +22,7 @@ import com.teamtripdraw.android.support.framework.presentation.naverMap.initUser
 import com.teamtripdraw.android.support.framework.presentation.permission.checkForeGroundPermission
 import com.teamtripdraw.android.support.framework.presentation.permission.checkNotificationPermission
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
+import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
@@ -29,6 +30,7 @@ import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
+    private var fabState: Boolean = false
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -65,6 +67,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.homeViewModel = homeViewModel
+        binding.fabState = fabState
         return binding.root
     }
 
@@ -74,6 +77,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         checkForeGroundPermission(requireContext(), locationPermissionRequest)
         matchMapFragmentToNaverMap()
         observeStartTripEvent()
+        initFloatingButtonClickListener()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -118,6 +122,23 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             Intent(requireContext(), RecordingPointService::class.java),
             homeViewModel.tripId
         ).apply { requireContext().startService(this) }
+    }
+
+    private fun initFloatingButtonClickListener() {
+        binding.fabHome.setOnClickListener {
+            ObjectAnimators.toggleFab(
+                binding.fabHome,
+                binding.fabWritePost,
+                binding.fabPostList,
+                binding.fabMarkerMode,
+                binding.tvWritePost,
+                binding.tvPostList,
+                binding.tvMarkerMode,
+                fabState
+            )
+            fabState = !fabState
+            binding.fabState = fabState
+        }
     }
 
     override fun onDestroyView() {
