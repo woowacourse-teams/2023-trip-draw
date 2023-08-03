@@ -13,7 +13,7 @@ public record TripResponse(
         String name,
 
         @Schema(description = "경로")
-        List<PointResponse> routes,
+        List<PointResponse> route,
 
         @Schema(description = "여행 상태 (option : ONGOING, FINISHED)", example = "ONGOING")
         TripStatus status,
@@ -29,14 +29,14 @@ public record TripResponse(
         return new TripResponse(
                 trip.id(),
                 trip.nameValue(),
-                generateRoutes(trip),
+                generateRoute(trip),
                 trip.status(),
                 trip.imageUrl(),
                 trip.routeImageUrl()
         );
     }
 
-    private static List<PointResponse> generateRoutes(Trip trip) {
+    private static List<PointResponse> generateRoute(Trip trip) {
         return trip.points().stream()
                 .map(PointResponse::from)
                 .toList();
