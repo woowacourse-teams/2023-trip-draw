@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class FileUrlMakerTest {
 
-    private final FileUrlMaker fileUrlMaker = new FileUrlMaker();
+    private final FileUrlMaker fileUrlMaker = new FileUrlMaker("");
 
     @Test
     void 이미지의_URL을_생성한다() {

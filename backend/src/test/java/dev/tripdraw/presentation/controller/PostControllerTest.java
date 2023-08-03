@@ -370,6 +370,7 @@ class PostControllerTest extends ControllerTest {
             softly.assertThat(getResponse.title()).isEqualTo("우도의 바닷가");
             softly.assertThat(getResponse.pointResponse().pointId()).isNotNull();
             softly.assertThat(getResponse.pointResponse().latitude()).isEqualTo(1.1);
+            softly.assertThat(getResponse.postImageUrl()).isNull();
         });
     }
 
