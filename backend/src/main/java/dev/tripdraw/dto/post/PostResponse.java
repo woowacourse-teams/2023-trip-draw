@@ -21,7 +21,13 @@ public record PostResponse(
         String writing,
 
         @Schema(description = "감상이 저장된 위치 정보")
-        PointResponse pointResponse
+        PointResponse pointResponse,
+
+        @Schema(description = "감상에 첨부된 사진의 URL", example = "dev.tripdraw.site/post-image/WD2FEF-EF2.jpg")
+        String postImageUrl,
+
+        @Schema(description = "감상이 있는 여행의 경로 이미지 URL", example = "dev.tripdraw.site/route-image/WD2FEF-EF2.jpg")
+        String routeImageUrl
 ) {
 
     public static PostResponse from(Post post) {
@@ -31,7 +37,9 @@ public record PostResponse(
                 post.title(),
                 post.address(),
                 post.writing(),
-                PointResponse.from(post.point())
+                PointResponse.from(post.point()),
+                post.postImageUrl(),
+                post.routeImageUrl()
         );
     }
 }
