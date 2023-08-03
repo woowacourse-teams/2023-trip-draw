@@ -2,6 +2,7 @@ package com.teamtripdraw.android.data.dataSource.post
 
 import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPrePost
+import java.io.File
 
 interface PostDataSource {
 
@@ -10,7 +11,8 @@ interface PostDataSource {
     interface Remote {
 
         suspend fun addPost(
-            dataPrePost: DataPrePost
+            dataPrePost: DataPrePost,
+            imageFile: File?
         ): Result<Long>
 
         suspend fun getPost(postId: Long): Result<DataPost>
