@@ -49,7 +49,8 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
                     pointId = 0,
                     latitude = 0.0,
                     longitude = 0.0,
-                    recordedAt = LocalDateTime.of(2023, 8, 2, 3, 27)
+                    recordedAt = LocalDateTime.of(2023, 8, 2, 3, 27),
+                    hasPost = false
                 ), postImageUrl = null, routeImageUrl = null
             )
         )

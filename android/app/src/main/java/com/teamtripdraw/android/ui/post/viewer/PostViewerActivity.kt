@@ -1,6 +1,5 @@
 package com.teamtripdraw.android.ui.post.viewer
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -54,10 +53,7 @@ class PostViewerActivity : AppCompatActivity() {
     }
 
     private fun onPostClick(postId: Long) {
-        // todo: PostDetailActivity 측에서 intent 받아오도록 수정
-        val intent = Intent(this, PostDetailActivity::class.java)
-        intent.putExtra("POST_ID", postId)
-        startActivity(intent)
+        startActivity(PostDetailActivity.getIntent(this, postId))
     }
 
     private fun onErrorOccurred(isErrorOccurred: Boolean) {
