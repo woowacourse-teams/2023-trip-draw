@@ -1,5 +1,7 @@
 package com.teamtripdraw.android.ui.post.viewer
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -69,5 +71,9 @@ class PostViewerActivity : AppCompatActivity() {
 
     companion object {
         private const val POST_VIEWER_ERROR = "감상 목록을 불러오는데 오류가 발생했습니다."
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, PostViewerActivity::class.java)
+        }
     }
 }
