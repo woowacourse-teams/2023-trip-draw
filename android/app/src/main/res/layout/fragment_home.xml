@@ -12,6 +12,10 @@
         <variable
             name="fabState"
             type="Boolean" />
+
+        <variable
+            name="naverMap"
+            type="com.naver.maps.map.NaverMap" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,6 +35,8 @@
             android:name="com.naver.maps.map.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:setPolyLineNaverMap="@{naverMap}"
+            app:setPolyLineUiRoute="@{homeViewModel.currentTripRoute}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_main"
             tools:layout="@layout/map_preview" />
