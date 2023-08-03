@@ -1,0 +1,3 @@
+[submodule "sub-2023-trip-draw"]
+	path = sub-2023-trip-draw
+	url = https://github.com/trip-draw/sub-2023-trip-draw.git
