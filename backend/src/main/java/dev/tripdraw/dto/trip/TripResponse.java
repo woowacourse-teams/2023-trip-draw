@@ -18,8 +18,11 @@ public record TripResponse(
         @Schema(description = "여행 상태 (option : ONGOING, FINISHED)", example = "ONGOING")
         TripStatus status,
 
-        @Schema(description = "Base64로 인코딩 된 여행 대표 이미지 URL", example = "tripdraw.site/post-image/AWF242FWF42.jpg")
-        String encodedImageUrl
+        @Schema(description = "Base64로 인코딩 된 여행 대표 이미지 URL", example = "https://tripdraw.site/post-image/AWF242FWF42.jpg")
+        String imageUrl,
+
+        @Schema(description = "Base64로 인코딩 된 여행 대표 이미지 URL", example = "https://tripdraw.site/post-image/AWF242FWF42.jpg")
+        String routeImageUrl
 ) {
 
     public static TripResponse from(Trip trip) {
@@ -28,7 +31,8 @@ public record TripResponse(
                 trip.nameValue(),
                 generateRoutes(trip),
                 trip.status(),
-                trip.imageUrl()
+                trip.imageUrl(),
+                trip.routeImageUrl()
         );
     }
 
