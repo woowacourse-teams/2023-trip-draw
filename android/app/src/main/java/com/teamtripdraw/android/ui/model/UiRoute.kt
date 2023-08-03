@@ -18,4 +18,7 @@ data class UiRoute(
                 it.hasPost
             )
         }
+
+    fun checkAvailablePolyLine(): Boolean =
+        value.size >= 2
 }

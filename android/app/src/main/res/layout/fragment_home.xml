@@ -35,10 +35,12 @@
             android:name="com.naver.maps.map.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:setPolyLineNaverMap="@{naverMap}"
-            app:setPolyLineUiRoute="@{homeViewModel.currentTripRoute}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_main"
+            app:setMarkerNaverMap="@{naverMap}"
+            app:setMarkerUiRoute="@{homeViewModel.currentTripRoute}"
+            app:setPolyLineNaverMap="@{naverMap}"
+            app:setPolyLineUiRoute="@{homeViewModel.currentTripRoute}"
             tools:layout="@layout/map_preview" />
 
         <androidx.appcompat.widget.AppCompatButton
