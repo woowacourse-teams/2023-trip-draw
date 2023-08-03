@@ -16,29 +16,32 @@ public class RouteImageUploader {
 
     private static final String ROUTE_IMAGE_FORMAT = "png";
 
-    @Value("${trip.domain}")
-    private String domain;
+    private final String domain;
+    private final String base;
+    private final String route;
 
-    @Value("${trip.base}")
-    private String base;
-
-    @Value("${trip.route}")
-    private String route;
+    public RouteImageUploader(
+            @Value("${trip.domain}") String domain,
+            @Value("${trip.base}") String base,
+            @Value("${trip.route}") String route
+    ) {
+        this.domain = domain;
+        this.base = base;
+        this.route = route;
+    }
 
     public String upload(BufferedImage bufferedImage) {
         String imageName = generateImageName();
         File file = new File(imageName);
         try {
-            ImageIO.write(bufferedImage, ROUTE_IMAGE_FORMAT, file);
-            return domain + imageName;
+            ImageIO.write(bufferedImage, base + ROUTE_IMAGE_FORMAT, file);
+            return domain + route + imageName;
         } catch (IOException e) {
             throw new DrawException(IMAGE_SAVE_FAIL);
         }
     }
 
     private String generateImageName() {
-        String baseName = base + route;
-        String routeImageName = UUID.randomUUID() + "." + ROUTE_IMAGE_FORMAT;
-        return baseName + routeImageName;
+        return UUID.randomUUID() + "." + ROUTE_IMAGE_FORMAT;
     }
 }
