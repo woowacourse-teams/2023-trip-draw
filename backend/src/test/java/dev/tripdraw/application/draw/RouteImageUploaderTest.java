@@ -18,10 +18,10 @@ import org.mockito.Mockito;
 class RouteImageUploaderTest {
 
     @Test
-    void 파일을_업로드하고_파일명을_반환한다() {
+    void 파일을_업로드한다() {
         // given
         BufferedImage bufferedImage = new BufferedImage(800, 800, BufferedImage.TYPE_INT_ARGB);
-        RouteImageUploader routeImageUploader = new RouteImageUploader();
+        RouteImageUploader routeImageUploader = new RouteImageUploader("", "", "");
 
         // expect
         try (MockedStatic<ImageIO> imageIO = Mockito.mockStatic(ImageIO.class)) {
@@ -32,6 +32,23 @@ class RouteImageUploaderTest {
                     () -> ImageIO.write(any(BufferedImage.class), any(String.class), any(File.class)),
                     times(1)
             );
+        }
+    }
+
+    @Test
+    void 파일의_위치를_반환한다() {
+        // given
+        BufferedImage bufferedImage = new BufferedImage(800, 800, BufferedImage.TYPE_INT_ARGB);
+        String domain = "https://tripdraw.site";
+        String base = "/image";
+        String route = "/route-images/";
+        RouteImageUploader routeImageUploader = new RouteImageUploader(domain, base, route);
+
+        // expect
+        try (MockedStatic<ImageIO> imageIO = Mockito.mockStatic(ImageIO.class)) {
+            String imageUrl = routeImageUploader.upload(bufferedImage);
+
+            assertThat(imageUrl).startsWith(domain + route);
         }
     }
 }
