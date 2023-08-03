@@ -15,7 +15,8 @@ class PostRepositoryImpl(
         prePost: PrePost
     ): Result<Long> {
         return remotePostDataSource.addPost(
-            prePost.toData()
+            prePost.toData(),
+            prePost.imageFile
         )
     }
 
