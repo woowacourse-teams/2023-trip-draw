@@ -28,7 +28,7 @@ class PostDetailViewModelTest : DefaultViewModelTest() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         postRepository = mockk()
         sut = PostDetailViewModel(postRepository)
-        sut.postId.value = 0L
+        sut.initPostId(0L)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

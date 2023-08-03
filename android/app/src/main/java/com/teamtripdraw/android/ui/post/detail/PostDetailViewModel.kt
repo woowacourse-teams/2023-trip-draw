@@ -14,13 +14,17 @@ class PostDetailViewModel(
     private val repository: PostRepository
 ) : ViewModel() {
 
-    val postId: MutableLiveData<Long> = MutableLiveData()
+    private val postId: MutableLiveData<Long> = MutableLiveData()
 
     private val _postDetail: MutableLiveData<UiPostDetail> = MutableLiveData()
     val postDetail: LiveData<UiPostDetail> = _postDetail
 
     private val _postDeletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val postDeletedEvent: LiveData<Event<Boolean>> = _postDeletedEvent
+
+    fun initPostId(postId: Long) {
+        this.postId.value = postId
+    }
 
     fun getPost() {
         viewModelScope.launch {
