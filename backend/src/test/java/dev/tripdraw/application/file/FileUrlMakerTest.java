@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class FileUrlMakerTest {
 
-    private final FileUrlMaker fileUrlMaker = new FileUrlMaker("ip");
+    private final FileUrlMaker fileUrlMaker = new FileUrlMaker();
 
     @Test
     void 이미지의_URL을_생성한다() {
@@ -21,6 +21,6 @@ class FileUrlMakerTest {
         String url = fileUrlMaker.make(fullPath);
 
         // then
-        assertThat(url).isEqualTo("ip" + "/통후추/통후추의셀카.jpg");
+        assertThat(url).isEqualTo("/통후추/통후추의셀카.jpg");
     }
 }
