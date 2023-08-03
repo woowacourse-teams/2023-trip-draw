@@ -35,8 +35,8 @@ class PostWritingViewModel(
         MutableLiveData(PostWritingValidState.EMPTY_TITLE)
     val postWritingValidState: LiveData<PostWritingValidState> = _postWritingValidState
 
-    fun initTripData(tripId: Long, pointId: Long) {
-        this.tripId = tripId
+    fun initTripData(pointId: Long) {
+        this.tripId = tripRepository.getCurrentTripId()
         this.pointId = pointId
         viewModelScope.launch {
             pointRepository.getPoint(pointId = pointId, tripId = tripId)
