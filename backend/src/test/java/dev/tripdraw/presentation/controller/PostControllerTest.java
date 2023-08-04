@@ -18,6 +18,7 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import io.restassured.RestAssured;
@@ -399,6 +400,58 @@ class PostControllerTest extends ControllerTest {
                 .statusCode(NOT_FOUND.value());
     }
 
+    @Test
+    void 특정_여행에_대한_모든_감상을_조회한다() {
+        // given
+        createPost();
+        createPost2();
+
+        // when
+        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .when().get("/trips/" + trip.id() + "/posts")
+                .then().log().all()
+                .extract();
+
+        PostsResponse postsResponse = findResponse.as(PostsResponse.class);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(findResponse.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postsResponse.posts().get(0).postId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(0).title()).isEqualTo("우도의 땅콩 아이스크림");
+            softly.assertThat(postsResponse.posts().get(0).pointResponse().pointId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(0).pointResponse().latitude()).isEqualTo(1.2);
+            softly.assertThat(postsResponse.posts().get(1).postId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(1).title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(postsResponse.posts().get(1).pointResponse().pointId()).isNotNull();
+            softly.assertThat(postsResponse.posts().get(1).pointResponse().latitude()).isEqualTo(1.1);
+        });
+    }
+
+    @Test
+    void 특정_여행에_대한_모든_감상을_조회할_때_인증에_실패하면_예외가_발생한다() {
+        // given & expect
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(순후추_BASE64)
+                .when().get("/trips/" + trip.id() + "/posts")
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    void 특정_여행에_대한_모든_감상을_조회할_때_존재하지_않는_여행의_ID이면_예외가_발생한다() {
+        // given & expect
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(순후추_BASE64)
+                .when().get("/trips/" + Long.MIN_VALUE + "/posts")
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+    }
+
     private PointResponse createPoint() {
         PointCreateRequest request = new PointCreateRequest(
                 trip.id(),
@@ -428,6 +481,37 @@ class PostControllerTest extends ControllerTest {
                 1.1,
                 2.2,
                 LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+
+        MultiPartSpecification multiPartSpecification = new MultiPartSpecBuilder(postAndPointCreateRequest)
+                .fileName("postAndPointCreateRequest")
+                .controlName("dto")
+                .mimeType("application/json")
+                .charset("UTF-8")
+                .build();
+
+        ExtractableResponse<Response> createResponse = RestAssured.given().log().all()
+                .contentType(MULTIPART_FORM_DATA_VALUE)
+                .auth().preemptive().oauth2(통후추_BASE64)
+                .multiPart(multiPartSpecification)
+                .when().post("/posts/current-location")
+                .then().log().all()
+                .extract();
+
+        PostCreateResponse postResponse = createResponse.as(PostCreateResponse.class);
+        return postResponse;
+    }
+
+    private PostCreateResponse createPost2() {
+        // given
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
+                trip.id(),
+                "우도의 땅콩 아이스크림",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                1.2,
+                2.2,
+                LocalDateTime.of(2023, 7, 20, 12, 13)
         );
 
         MultiPartSpecification multiPartSpecification = new MultiPartSpecBuilder(postAndPointCreateRequest)
