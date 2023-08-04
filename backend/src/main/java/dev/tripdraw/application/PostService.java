@@ -23,7 +23,9 @@ import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -112,7 +114,9 @@ public class PostService {
         Member member = findMemberByNickname(loginUser.nickname());
         findValidatedTripById(tripId, member);
 
-        List<Post> posts = postRepository.findAllByTripId(tripId);
+        List<Post> posts = postRepository.findAllByTripId(tripId).stream()
+                .sorted(Comparator.comparing(Post::pointRecordedAt).reversed())
+                .collect(Collectors.toList());
         return PostsResponse.from(posts);
     }
 

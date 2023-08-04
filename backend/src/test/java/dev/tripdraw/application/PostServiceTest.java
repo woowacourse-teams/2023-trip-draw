@@ -248,7 +248,7 @@ class PostServiceTest {
     void 특정_여행의_모든_감상을_조회한다() {
         // given
         createPost();
-        createPost();
+        createPost2();
 
         // when
         PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
@@ -257,7 +257,7 @@ class PostServiceTest {
         List<PostResponse> posts = postsResponse.posts();
         assertSoftly(softly -> {
             softly.assertThat(posts.get(0).postId()).isNotNull();
-            softly.assertThat(posts.get(0).title()).isEqualTo("우도의 바닷가");
+            softly.assertThat(posts.get(0).title()).isEqualTo("우도의 땅콩 아이스크림");
             softly.assertThat(posts.get(0).pointResponse().pointId()).isNotNull();
             softly.assertThat(posts.get(1).postId()).isNotNull();
             softly.assertThat(posts.get(1).title()).isEqualTo("우도의 바닷가");
@@ -293,7 +293,7 @@ class PostServiceTest {
     }
 
     private PostCreateResponse createPost() {
-        PostAndPointCreateRequest postPointCreateRequest = new PostAndPointCreateRequest(
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -303,6 +303,20 @@ class PostServiceTest {
                 LocalDateTime.of(2023, 7, 18, 20, 24)
         );
 
-        return postService.addAtCurrentPoint(loginUser, postPointCreateRequest, null);
+        return postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, null);
+    }
+
+    private PostCreateResponse createPost2() {
+        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
+                trip.id(),
+                "우도의 땅콩 아이스크림",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                1.2,
+                2.2,
+                LocalDateTime.of(2023, 7, 20, 12, 13)
+        );
+
+        return postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, null);
     }
 }
