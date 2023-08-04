@@ -28,7 +28,10 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                         repositoryContainer.tripRepository
                     )
                 isAssignableFrom(HomeViewModel::class.java) ->
-                    HomeViewModel(repositoryContainer.tripRepository)
+                    HomeViewModel(
+                        repositoryContainer.tripRepository,
+                        repositoryContainer.pointRepository
+                    )
                 isAssignableFrom(PostDetailViewModel::class.java) ->
                     PostDetailViewModel(repositoryContainer.postRepository)
                 isAssignableFrom(PostViewerViewModel::class.java) ->

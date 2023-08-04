@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
+import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION_PERMISSION_REQUEST_CODE
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
@@ -27,6 +30,7 @@ import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
+import com.teamtripdraw.android.ui.postWriting.PostWritingActivity
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -80,6 +84,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         observeStartTripEvent()
         initFloatingButtonClickListener()
         setUpPostViewerClickEvent()
+        setUpPostWritingClickEvent()
+        initPostWritingEventObserver()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -153,6 +159,30 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun navigateToPostViewer(isClicked: Boolean) {
         if (isClicked) startActivity(PostViewerActivity.getIntent(requireContext()))
+    }
+
+    private fun setUpPostWritingClickEvent() {
+        binding.fabWritePost.setOnClickListener {
+            getUpdateLocation(
+                getFusedLocationClient(),
+                requireContext(),
+                homeViewModel::createPoint
+            )
+        }
+    }
+
+    private fun getFusedLocationClient(): FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(requireContext())
+
+    private fun initPostWritingEventObserver() {
+        homeViewModel.openPostWritingEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this::navigateToPostWriting)
+        )
+    }
+
+    private fun navigateToPostWriting(pointId: Long) {
+        startActivity(PostWritingActivity.getIntent(requireContext(), pointId))
     }
 
     override fun onDestroyView() {
