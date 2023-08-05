@@ -1,7 +1,6 @@
 package com.teamtripdraw.android.ui.model
 
 import com.naver.maps.geometry.LatLng
-import com.teamtripdraw.android.ui.model.mapper.UiMarkerInfo
 
 data class UiRoute(
     val value: List<UiPoint>
