@@ -6,14 +6,17 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.TripDrawApplication
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
@@ -28,13 +31,16 @@ class RecordingPointService : Service() {
     private var currentTripId by Delegates.notNull<Long>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    private val _updatedTripId = MutableLiveData<Long>(-1)
+    val updatedTripId: LiveData<Long> = _updatedTripId
+
     private fun recordPoint(locationResult: LocationResult) {
         CoroutineScope(Dispatchers.IO).launch {
             TripDrawApplication.repositoryContainer.pointRepository.createRecordingPoint(
                 getPrePoint(locationResult),
                 currentTripId
             ).onSuccess {
-                // todo 액티비티 위치 찍어주기
+                _updatedTripId.postValue(it)
             }.onFailure {
                 // todo log전략 수립후 서버로 전송되는 로그 찍기
             }
@@ -96,7 +102,14 @@ class RecordingPointService : Service() {
         return START_REDELIVER_INTENT
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = RecordingPointBinder()
+
+    inner class RecordingPointBinder : Binder() {
+        fun getUpdatedTripIdHolder(): LiveData<Long> = updatedTripId
+        fun updatedTripIdHolderInitializeState() {
+            _updatedTripId.value = NULL_SUBSTITUTE_POINT_ID
+        }
+    }
 
     companion object {
         private const val TRIP_ID = "TRIP_ID"
