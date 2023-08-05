@@ -22,6 +22,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
@@ -227,7 +228,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun observeUpdateTripId() {
         updatedTripId.observe(viewLifecycleOwner) {
             // map 좌표 최신화 방법 #193 참고
-            homeViewModel.updateCurrentTripRoute()
+            if (it != NULL_SUBSTITUTE_POINT_ID) homeViewModel.updateCurrentTripRoute()
         }
     }
 

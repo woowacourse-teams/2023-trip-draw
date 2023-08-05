@@ -31,7 +31,7 @@ class RecordingPointService : Service() {
     private var currentTripId by Delegates.notNull<Long>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val _updatedTripId = MutableLiveData<Long>(-1)
+    private val _updatedTripId = MutableLiveData<Long>(NULL_SUBSTITUTE_POINT_ID)
     val updatedTripId: LiveData<Long> = _updatedTripId
 
     private fun recordPoint(locationResult: LocationResult) {
