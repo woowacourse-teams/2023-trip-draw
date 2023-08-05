@@ -19,6 +19,7 @@ import com.google.android.gms.location.LocationServices
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
@@ -144,6 +145,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE),
             requireContext()
         )
+        this.naverMap.locationOverlay.icon = currentLocationImage
         this.naverMap.setContentPadding(0, 0, 0, toPixel(requireContext(), 67))
     }
 
@@ -241,5 +243,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun unbindRecordingPointService() {
         requireActivity().unbindService(recordingPointServiceConnection)
         recordingPointServiceBindingState = false
+    }
+
+    companion object {
+        private val currentLocationImage = OverlayImage.fromResource(R.drawable.ic_current_location)
     }
 }
