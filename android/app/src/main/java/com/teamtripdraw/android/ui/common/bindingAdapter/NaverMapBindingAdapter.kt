@@ -96,26 +96,61 @@ private fun setMarkerSetting(
 ): Marker =
     Marker().apply {
         this.position = UiMarkerInfo.latLng
-        this.anchor = PointF(ANCHOR_X_LOCATION_VALUE, ANCHOR_Y_LOCATION_VALUE)
-        when (UiMarkerInfo.hasPost) {
-            true -> {
-                this.icon = markerHasPostImage
-                this.zIndex = MARKER_HAS_POST_PRIORITY_DEGREE
-            }
-            false -> {
-                this.icon = markerNoPostImage
-            }
-        }
+        setMarkerAnchor(this, isStartPoint)
+        selectMarkerIcon(this, isStartPoint, UiMarkerInfo)
         if (!isStartPoint) this.isVisible = markerViewModeState
     }
 
+private fun setMarkerAnchor(marker: Marker, isStartPoint: Boolean) {
+    if (isStartPoint) {
+        marker.anchor = PointF(
+            START_MARKER_ANCHOR_X_LOCATION_VALUE,
+            START_MARKER_ANCHOR_Y_LOCATION_VALUE
+        )
+    } else {
+        marker.anchor = PointF(COMMON_ANCHOR_X_LOCATION_VALUE, COMMON_ANCHOR_Y_LOCATION_VALUE)
+    }
+}
+
+private fun selectMarkerIcon(
+    marker: Marker,
+    isStartPoint: Boolean,
+    UiMarkerInfo: UiMarkerInfo
+) {
+    if (isStartPoint) {
+        marker.icon = markerFirstPoint
+        marker.zIndex = MARKER_START_POINT_PRIORITY_DEGREE
+    } else {
+        selectMarkerWithPostHoldingStatus(UiMarkerInfo, marker)
+    }
+}
+
+private fun selectMarkerWithPostHoldingStatus(
+    UiMarkerInfo: UiMarkerInfo,
+    marker: Marker
+) {
+    when (UiMarkerInfo.hasPost) {
+        true -> {
+            marker.icon = markerHasPostImage
+            marker.zIndex = MARKER_HAS_POST_PRIORITY_DEGREE
+        }
+        false -> {
+            marker.icon = markerNoPostImage
+        }
+    }
+}
+
+private val markerFirstPoint = OverlayImage.fromResource(R.drawable.ic_marker_first_point)
 private val markerNoPostImage = OverlayImage.fromResource(R.drawable.ic_marker_no_post)
 private val markerHasPostImage = OverlayImage.fromResource(R.drawable.ic_marker_has_post)
 private val markerSelectedImage = OverlayImage.fromResource(R.drawable.ic_marker_selected)
 
+private const val MARKER_START_POINT_PRIORITY_DEGREE = 600
 private const val MARKER_HAS_POST_PRIORITY_DEGREE = 300
-private const val ANCHOR_X_LOCATION_VALUE = 0.5f
-private const val ANCHOR_Y_LOCATION_VALUE = 0.5f
+private const val COMMON_ANCHOR_X_LOCATION_VALUE = 0.5f
+private const val COMMON_ANCHOR_Y_LOCATION_VALUE = 0.5f
+private const val START_MARKER_ANCHOR_X_LOCATION_VALUE = 0f
+private const val START_MARKER_ANCHOR_Y_LOCATION_VALUE = 1f
 private const val START_MARKER_INDEX = 0
 
 @BindingAdapter("app:markerViewModeState")
