@@ -53,12 +53,12 @@ private fun setPolyLineSetting(polyLine: PolylineOverlay, context: Context): Pol
 
 private const val POLY_LINE_WIDTH = 30
 
-@BindingAdapter("app:setMarkerNaverMap", "app:setMarkerUiRoute")
-fun View.setMarker(naverMap: NaverMap?, uiRoute: UiRoute?) {
+@BindingAdapter("app:setMarkerNaverMap", "app:setMarkerUiRoute", "app:setMarkerViewModeState")
+fun View.setMarker(naverMap: NaverMap?, uiRoute: UiRoute?, markerViewModeState: Boolean) {
     if (uiRoute == null) return
     if (naverMap == null) return
     removeOldMarker()
-    initializeMarker(naverMap, uiRoute)
+    initializeMarker(naverMap, uiRoute, markerViewModeState)
 }
 
 private fun View.removeOldMarker() {
@@ -68,11 +68,15 @@ private fun View.removeOldMarker() {
     }
 }
 
-private fun View.initializeMarker(naverMap: NaverMap, uiRoute: UiRoute) {
+private fun View.initializeMarker(
+    naverMap: NaverMap,
+    uiRoute: UiRoute,
+    markerViewModeState: Boolean
+) {
     CoroutineScope(Dispatchers.Default).launch {
         val deferredNewMarkers = async {
             uiRoute.getUiMarkerInfo().mapIndexed() { index, UiMarkerInfo ->
-                setMarkerSetting(UiMarkerInfo, index == START_MARKER_INDEX)
+                setMarkerSetting(UiMarkerInfo, index == START_MARKER_INDEX, markerViewModeState)
             }
         }
         val newMarkers = deferredNewMarkers.await()
@@ -85,7 +89,11 @@ private fun View.initializeMarker(naverMap: NaverMap, uiRoute: UiRoute) {
     }
 }
 
-private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo, isStartPoint: Boolean): Marker =
+private fun setMarkerSetting(
+    UiMarkerInfo: UiMarkerInfo,
+    isStartPoint: Boolean,
+    markerViewModeState: Boolean
+): Marker =
     Marker().apply {
         this.position = UiMarkerInfo.latLng
         this.anchor = PointF(ANCHOR_X_LOCATION_VALUE, ANCHOR_Y_LOCATION_VALUE)
@@ -98,7 +106,7 @@ private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo, isStartPoint: Boolean):
                 this.icon = markerNoPostImage
             }
         }
-        if (!isStartPoint) this.isVisible = false
+        if (!isStartPoint) this.isVisible = markerViewModeState
     }
 
 private val markerNoPostImage = OverlayImage.fromResource(R.drawable.ic_marker_no_post)

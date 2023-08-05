@@ -40,6 +40,7 @@
             app:markerViewModeState="@{homeViewModel.markerViewModeState}"
             app:setMarkerNaverMap="@{naverMap}"
             app:setMarkerUiRoute="@{homeViewModel.currentTripRoute}"
+            app:setMarkerViewModeState="@{homeViewModel.markerViewModeStateValue}"
             app:setPolyLineNaverMap="@{naverMap}"
             app:setPolyLineUiRoute="@{homeViewModel.currentTripRoute}"
             tools:layout="@layout/map_preview" />
