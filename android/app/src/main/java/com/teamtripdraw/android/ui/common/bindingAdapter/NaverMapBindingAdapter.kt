@@ -11,7 +11,7 @@ import com.naver.maps.map.overlay.PolylineOverlay
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.support.framework.presentation.resolution.toDP
 import com.teamtripdraw.android.ui.model.UiRoute
-import com.teamtripdraw.android.ui.model.mapper.UiMarkerInfo
+import com.teamtripdraw.android.ui.model.UiMarkerInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
