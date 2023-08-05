@@ -71,8 +71,8 @@ private fun View.removeOldMarker() {
 private fun View.initializeMarker(naverMap: NaverMap, uiRoute: UiRoute) {
     CoroutineScope(Dispatchers.Default).launch {
         val deferredNewMarkers = async {
-            uiRoute.getUiMarkerInfo().map { UiMarkerInfo ->
-                setMarkerSetting(UiMarkerInfo)
+            uiRoute.getUiMarkerInfo().mapIndexed() { index, UiMarkerInfo ->
+                setMarkerSetting(UiMarkerInfo, index == START_MARKER_INDEX)
             }
         }
         val newMarkers = deferredNewMarkers.await()
@@ -85,7 +85,7 @@ private fun View.initializeMarker(naverMap: NaverMap, uiRoute: UiRoute) {
     }
 }
 
-private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo): Marker =
+private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo, isStartPoint: Boolean): Marker =
     Marker().apply {
         this.position = UiMarkerInfo.latLng
         this.anchor = PointF(ANCHOR_X_LOCATION_VALUE, ANCHOR_Y_LOCATION_VALUE)
@@ -98,7 +98,7 @@ private fun setMarkerSetting(UiMarkerInfo: UiMarkerInfo): Marker =
                 this.icon = markerNoPostImage
             }
         }
-        this.isVisible = false
+        if (!isStartPoint) this.isVisible = false
     }
 
 private val markerNoPostImage = OverlayImage.fromResource(R.drawable.ic_marker_no_post)
@@ -108,11 +108,14 @@ private val markerSelectedImage = OverlayImage.fromResource(R.drawable.ic_marker
 private const val MARKER_HAS_POST_PRIORITY_DEGREE = 300
 private const val ANCHOR_X_LOCATION_VALUE = 0.5f
 private const val ANCHOR_Y_LOCATION_VALUE = 0.5f
+private const val START_MARKER_INDEX = 0
 
 @BindingAdapter("app:markerViewModeState")
 fun View.toggleMarkerMode(markerViewModeState: Boolean) {
     if (getTag(R.id.NAVER_MAP_MARKERS_TAG) != null) {
         val markers = getTag(R.id.NAVER_MAP_MARKERS_TAG) as List<Marker>
-        markers.forEach { it.isVisible = markerViewModeState }
+        markers.forEachIndexed { index, marker ->
+            if (index != START_MARKER_INDEX) marker.isVisible = markerViewModeState
+        }
     }
 }
