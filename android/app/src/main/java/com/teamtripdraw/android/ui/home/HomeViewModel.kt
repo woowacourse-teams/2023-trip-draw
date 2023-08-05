@@ -32,6 +32,9 @@ class HomeViewModel(
     private val _markerViewModeState = MutableLiveData<Boolean>(false)
     val markerViewModeState: LiveData<Boolean> = _markerViewModeState
 
+    val markerViewModeStateValue: Boolean
+        get() = markerViewModeState.value ?: false
+
     private val _openPostViewerEvent = MutableLiveData<Event<Boolean>>()
     val openPostViewerEvent: LiveData<Event<Boolean>> = _openPostViewerEvent
 
