@@ -11,7 +11,7 @@ import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiRoute
-import com.teamtripdraw.android.ui.model.mapper.toUi
+import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -77,7 +77,7 @@ class HomeViewModel(
         viewModelScope.launch {
             tripRepository.getCurrentTripRoute(tripId)
                 .onSuccess {
-                    _currentTripRoute.value = it.toUi()
+                    _currentTripRoute.value = it.toPresentation()
                 }
         }
     }
