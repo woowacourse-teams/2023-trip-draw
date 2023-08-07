@@ -3,7 +3,8 @@ package com.teamtripdraw.android.ui.model
 import com.naver.maps.geometry.LatLng
 
 data class UiRoute(
-    val value: List<UiPoint>
+    val value: List<UiPoint>,
+    val enablePolyLine: Boolean
 ) {
     fun getLatLngs(): List<LatLng> =
         value.map {
@@ -17,7 +18,4 @@ data class UiRoute(
                 it.hasPost
             )
         }
-
-    fun checkAvailablePolyLine(): Boolean =
-        value.size >= 2
 }

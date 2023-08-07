@@ -5,5 +5,6 @@ import com.teamtripdraw.android.ui.model.UiRoute
 
 fun Route.toPresentation(): UiRoute =
     UiRoute(
-        value = value.map { it.toPresentation() }
+        value = value.map { it.toPresentation() },
+        enablePolyLine = checkAvailablePolyLine()
     )
