@@ -45,9 +45,7 @@ class PostWritingViewModel(
     val address: LiveData<String> = _address
 
     fun updateAddress(address: String) {
-        viewModelScope.launch {
-            _address.value = address
-        }
+        _address.value = address
     }
 
     fun updateImage(file: File) {
