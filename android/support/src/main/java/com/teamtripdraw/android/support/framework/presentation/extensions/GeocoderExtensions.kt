@@ -17,16 +17,12 @@ fun Geocoder.fetchAddress(
         getFromLocation(
             latitude, longitude, ADDRESSES_RESULT_MAX_NUMBER
         ) { addresses: List<Address> ->
-            CoroutineScope(Dispatchers.Main).launch {
-                event(getAdministrativeAddress(addresses, defaultAddress))
-            }
+            event(getAdministrativeAddress(addresses, defaultAddress))
         }
     } else { // API 레벨 33 미만
         val addresses: List<Address>? =
             getFromLocation(latitude, longitude, ADDRESSES_RESULT_MAX_NUMBER)
-        CoroutineScope(Dispatchers.Main).launch {
-            event(getAdministrativeAddress(addresses, defaultAddress))
-        }
+        event(getAdministrativeAddress(addresses, defaultAddress))
     }
 }
 
