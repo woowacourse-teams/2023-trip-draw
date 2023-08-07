@@ -28,6 +28,8 @@ class PostWritingActivity : AppCompatActivity() {
             uri.toFile(this)?.let { viewModel.updateImage(it) }
         }
 
+    private val geocoder = Geocoder(this, Locale.KOREAN)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_writing)
@@ -57,10 +59,7 @@ class PostWritingActivity : AppCompatActivity() {
 
     private fun initEvent() {
         viewModel.point.observe(this) { point ->
-            val geocoder = Geocoder(this, Locale.KOREAN)
-            geocoder.fetchAddress(point.latitude, point.longitude) { address ->
-                viewModel.updateAddress(address)
-            }
+            geocoder.fetchAddress(point.latitude, point.longitude, viewModel::updateAddress)
         }
 
         viewModel.writingCompletedEvent.observe(this) {
