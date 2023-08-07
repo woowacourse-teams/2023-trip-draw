@@ -45,7 +45,7 @@ class PostWritingViewModel(
     val address: LiveData<String> = _address
 
     fun updateAddress(address: String) {
-        _address.value = address
+        _address.postValue(address)
     }
 
     fun updateImage(file: File) {
