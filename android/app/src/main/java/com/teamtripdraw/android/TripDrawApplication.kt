@@ -1,6 +1,7 @@
 package com.teamtripdraw.android
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.teamtripdraw.android.di.LocalDataSourceContainer
 import com.teamtripdraw.android.di.LocalPreferenceContainer
 import com.teamtripdraw.android.di.RemoteDataSourceContainer
@@ -13,6 +14,7 @@ class TripDrawApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         initContainer()
+        prohibitDarkMode()
     }
 
     private fun initContainer() {
@@ -24,6 +26,10 @@ class TripDrawApplication : Application() {
         remoteDataSourceContainer = RemoteDataSourceContainer(serviceContainer, retrofitContainer)
         repositoryContainer =
             RepositoryContainer(localDataSourceContainer, remoteDataSourceContainer)
+    }
+
+    private fun prohibitDarkMode() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     companion object DependencyContainer {
