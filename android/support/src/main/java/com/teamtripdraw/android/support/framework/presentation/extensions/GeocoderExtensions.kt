@@ -20,12 +20,13 @@ fun Geocoder.fetchAdministrativeAddress(
                 return@getFromLocation
             }
 
-            val address = addresses[0]
-            val adminArea: String = address.adminArea ?: ""
-            val subAdminArea: String = address.featureName ?: ""
-            val administrativeArea = adminArea + subAdminArea
+            val fullAddress = addresses[0].getAddressLine(0)
+            val addressParts: MutableList<String> = fullAddress.split(" ").toMutableList()
+            addressParts.removeFirst()
+            addressParts.removeLast()
+            val addressText = addressParts.joinToString(" ")
 
-            if (administrativeArea != "") event(administrativeArea)
+            if (addressParts.isNotEmpty()) event(addressText)
             else event(defaultAdministrativeArea)
         }
     } else { // API 레벨 33 미만
@@ -37,12 +38,13 @@ fun Geocoder.fetchAdministrativeAddress(
             return
         }
 
-        val address = addresses[0]
-        val adminArea: String = address.adminArea ?: ""
-        val subAdminArea: String = address.subAdminArea ?: ""
-        val administrativeArea = adminArea + subAdminArea
+        val fullAddress = addresses[0].getAddressLine(0)
+        val addressParts: MutableList<String> = fullAddress.split(" ").toMutableList()
+        addressParts.removeFirst()
+        addressParts.removeLast()
+        val addressText = addressParts.joinToString(" ")
 
-        if (administrativeArea != "") event(administrativeArea)
+        if (addressParts.isNotEmpty()) event(addressText)
         else event(defaultAdministrativeArea)
     }
 }
