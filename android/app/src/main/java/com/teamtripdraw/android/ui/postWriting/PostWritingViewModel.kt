@@ -41,7 +41,7 @@ class PostWritingViewModel(
     private val _point: MutableLiveData<Point> = MutableLiveData()
     val point: LiveData<Point> = _point
 
-    private val _address: MutableLiveData<String> = MutableLiveData()
+    private val _address: MutableLiveData<String> = MutableLiveData("")
     val address: LiveData<String> = _address
 
     fun updateAddress(address: String) {
@@ -78,7 +78,7 @@ class PostWritingViewModel(
                 pointId = pointId,
                 title = title.value ?: "",
                 writing = writing.value ?: "",
-                address = address.value!!,
+                address = address.value ?: "",
                 imageFile = imageFile
             )
             postRepository.addPost(prePost).onSuccess {

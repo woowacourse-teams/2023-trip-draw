@@ -3,12 +3,11 @@ package com.teamtripdraw.android.support.framework.presentation.extensions
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 fun Geocoder.fetchAddress(
-    latitude: Double, longitude: Double, event: (address: String) -> Unit
+    latitude: Double,
+    longitude: Double,
+    event: (address: String) -> Unit
 ) {
     val ADDRESSES_RESULT_MAX_NUMBER = 1
     val defaultAddress = "x: $latitude, y: $longitude"
