@@ -39,10 +39,10 @@
             app:layout_constraintTop_toBottomOf="@+id/tb_main"
             app:markerViewModeState="@{homeViewModel.markerViewModeState}"
             app:setMarkerNaverMap="@{naverMap}"
-            app:setMarkerUiRoute="@{homeViewModel.currentTripRoute}"
+            app:setMarkerUiRoute="@{homeViewModel.currentTripUiRoute}"
             app:setMarkerViewModeState="@{homeViewModel.markerViewModeStateValue}"
             app:setPolyLineNaverMap="@{naverMap}"
-            app:setPolyLineUiRoute="@{homeViewModel.currentTripRoute}"
+            app:setPolyLineUiRoute="@{homeViewModel.currentTripUiRoute}"
             tools:layout="@layout/map_preview" />
 
         <androidx.appcompat.widget.AppCompatButton
