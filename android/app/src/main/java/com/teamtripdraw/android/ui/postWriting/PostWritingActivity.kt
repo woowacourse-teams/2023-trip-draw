@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
-import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAdministrativeAddress
+import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.support.framework.presentation.extensions.toFile
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import java.util.Locale
@@ -58,7 +58,7 @@ class PostWritingActivity : AppCompatActivity() {
     private fun initEvent() {
         viewModel.point.observe(this) { point ->
             val geocoder = Geocoder(this, Locale.KOREAN)
-            geocoder.fetchAdministrativeAddress(point.latitude, point.longitude) { address ->
+            geocoder.fetchAddress(point.latitude, point.longitude) { address ->
                 viewModel.updateAddress(address)
             }
         }
