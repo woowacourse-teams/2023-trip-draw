@@ -21,33 +21,35 @@
         android:theme="@style/Theme.TripDraw"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${NAVER_MAP_CLIENT_ID}" />
-
         <service
             android:name=".ui.home.recordingPoint.RecordingPointService"
             android:description="@string/recording_point_service_description"
             android:exported="false" />
-
         <activity
             android:name=".ui.signUp.NicknameSetupActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.postWriting.PostWritingActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.post.viewer.PostViewerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.post.detail.PostDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
