@@ -50,6 +50,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private val homeViewModel: HomeViewModel by viewModels { tripDrawViewModelFactory }
 
+    private val markerSelectedBottomSheet: MarkerSelectedBottomSheet = MarkerSelectedBottomSheet()
+
     private var recordingPointServiceBindingState: Boolean = false
 
     private lateinit var recordingPointBinder: RecordingPointService.RecordingPointBinder
@@ -126,6 +128,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         setUpPostViewerClickEvent()
         setUpPostWritingClickEvent()
         initPostWritingEventObserver()
+        observeMarkerSelected()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -243,6 +246,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun unbindRecordingPointService() {
         requireActivity().unbindService(recordingPointServiceConnection)
         recordingPointServiceBindingState = false
+    }
+
+    private fun observeMarkerSelected() {
+        homeViewModel.makerSelected.observe(viewLifecycleOwner) {
+            // todo 바텀시트켜져있는지 확인후 바텀시트 켜주는 로직
+        }
     }
 
     companion object {

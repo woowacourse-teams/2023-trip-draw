@@ -39,6 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tb_main"
             app:markerViewModeState="@{homeViewModel.markerViewModeState}"
             app:setMarkerNaverMap="@{naverMap}"
+            app:setMarkerSelectMarkerListener="@{homeViewModel.notificationMarkerSelected}"
             app:setMarkerUiRoute="@{homeViewModel.currentTripUiRoute}"
             app:setMarkerViewModeState="@{homeViewModel.markerViewModeStateValue}"
             app:setPolyLineNaverMap="@{naverMap}"
