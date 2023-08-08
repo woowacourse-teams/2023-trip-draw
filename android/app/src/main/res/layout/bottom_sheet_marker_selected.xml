@@ -9,8 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_td_white_fill_28_rect">
+        android:layout_height="wrap_content">
 
         <View
             android:id="@+id/view_marker_selected_bottom_sheet"
