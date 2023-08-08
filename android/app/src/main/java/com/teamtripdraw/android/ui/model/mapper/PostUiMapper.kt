@@ -1,10 +1,10 @@
 package com.teamtripdraw.android.ui.model.mapper
 
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.support.framework.presentation.LocalDateTimeFormatter.isoRemoveNanoSecondFormatter
 import com.teamtripdraw.android.ui.model.UiPostDetail
 import com.teamtripdraw.android.ui.model.UiPostItem
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 fun Post.toPresentation() = UiPostItem(
     id = this.postId,
@@ -26,4 +26,4 @@ fun Post.toDetailPresentation() = UiPostDetail(
 )
 
 private fun LocalDateTime.formattedDateTime() =
-    this.format(DateTimeFormatter.ofPattern("yyyy.MM.dd | HH:mm"))
+    this.format(isoRemoveNanoSecondFormatter)
