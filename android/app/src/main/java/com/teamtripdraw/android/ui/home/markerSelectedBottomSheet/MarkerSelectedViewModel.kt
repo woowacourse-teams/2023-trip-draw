@@ -28,6 +28,9 @@ class MarkerSelectedViewModel(
         point.toPresentation()
     }
 
+    private val _address = MutableLiveData<String>()
+    val address: LiveData<String> = _address
+
     fun updatePointId(pointId: Long) {
         this.pointId = pointId
     }
@@ -36,5 +39,9 @@ class MarkerSelectedViewModel(
         viewModelScope.launch {
             pointRepository.getPoint(pointId, tripId).onSuccess { _selectedPoint.value = it }
         }
+    }
+
+    fun updateAddress(address: String) {
+        _address.postValue(address)
     }
 }

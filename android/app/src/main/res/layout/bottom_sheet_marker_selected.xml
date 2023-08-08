@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="markerSelectedViewModel"
+            type="com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,6 +44,7 @@
             android:layout_marginEnd="32dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{markerSelectedViewModel.address}"
             android:textAppearance="@style/body2"
             android:textColor="@color/td_black"
             app:layout_constraintBottom_toBottomOf="@+id/iv_location_marker_selected_bottom_sheet"
@@ -71,6 +75,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_location_marker_selected_bottom_sheet"
             app:layout_constraintStart_toEndOf="@+id/iv_date_time_marker_selected_bottom_sheet"
             app:layout_constraintTop_toTopOf="@+id/iv_date_time_marker_selected_bottom_sheet"
+            app:setMarkerSelectedBottomSheetRecordTime="@{markerSelectedViewModel.selectedUiPoint}"
             tools:text="2023.07.28 21:00" />
 
         <androidx.appcompat.widget.AppCompatButton
