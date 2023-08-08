@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.ui.home.HomeViewModel
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedViewModel
 import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
 import com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel
 import com.teamtripdraw.android.ui.postWriting.PostWritingViewModel
@@ -38,6 +39,11 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     PostViewerViewModel(
                         repositoryContainer.tripRepository,
                         repositoryContainer.postRepository
+                    )
+                isAssignableFrom(MarkerSelectedViewModel::class.java) ->
+                    MarkerSelectedViewModel(
+                        repositoryContainer.tripRepository,
+                        repositoryContainer.pointRepository
                     )
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))

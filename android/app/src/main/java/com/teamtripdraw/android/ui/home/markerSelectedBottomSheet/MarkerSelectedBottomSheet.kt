@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.BottomSheetMarkerSelectedBinding
+import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.HomeViewModel
 
 class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
@@ -16,6 +17,18 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
+    private val markerSelectedViewModel: MarkerSelectedViewModel by viewModels { tripDrawViewModelFactory }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initBundleData()?.let { pointId ->
+            markerSelectedViewModel.updatePointId(pointId)
+        }
+        markerSelectedViewModel.getPointInfo()
+    }
+
+    private fun initBundleData(): Long? =
+        arguments?.getLong(TRIP_ID)
 
     override fun onCreateView(
         inflater: LayoutInflater,
