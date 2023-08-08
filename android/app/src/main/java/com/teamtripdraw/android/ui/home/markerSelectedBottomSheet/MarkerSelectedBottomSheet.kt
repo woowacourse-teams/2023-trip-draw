@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.home
+package com.teamtripdraw.android.ui.home.markerSelectedBottomSheet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.BottomSheetMarkerSelectedBinding
+import com.teamtripdraw.android.ui.home.HomeViewModel
 
 class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 

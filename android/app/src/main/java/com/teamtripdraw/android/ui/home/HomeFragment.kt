@@ -35,6 +35,7 @@ import com.teamtripdraw.android.support.framework.presentation.permission.checkN
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
