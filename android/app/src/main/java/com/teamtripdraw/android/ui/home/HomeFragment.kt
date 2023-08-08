@@ -250,14 +250,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun observeMarkerSelected() {
-        homeViewModel.makerSelected.observe(viewLifecycleOwner) { tripId ->
-            showMarkerSelectedBottomSheet(tripId)
+        homeViewModel.makerSelected.observe(viewLifecycleOwner) { pointId ->
+            showMarkerSelectedBottomSheet(pointId)
         }
     }
 
-    private fun showMarkerSelectedBottomSheet(tripId: Long) {
+    private fun showMarkerSelectedBottomSheet(pointId: Long) {
         if (!markerSelectedBottomSheet.isAdded) {
-            markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(tripId)
+            markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(pointId)
             markerSelectedBottomSheet.show(
                 parentFragmentManager,
                 markerSelectedBottomSheet.javaClass.name

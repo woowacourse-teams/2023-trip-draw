@@ -26,15 +26,17 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initBundleData()?.let { pointId ->
-            markerSelectedViewModel.updatePointId(pointId)
-        }
-        markerSelectedViewModel.getPointInfo()
+        initMarkerSelectedViewModelData()
         initGeocoder()
     }
 
+    private fun initMarkerSelectedViewModelData() {
+        initBundleData()?.let { pointId -> markerSelectedViewModel.updatePointId(pointId) }
+        markerSelectedViewModel.getPointInfo()
+    }
+
     private fun initBundleData(): Long? =
-        arguments?.getLong(TRIP_ID)
+        arguments?.getLong(POINT_ID)
 
     private fun initGeocoder() {
         geocoder = Geocoder(requireContext(), Locale.KOREAN)
@@ -67,9 +69,9 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
-        private const val TRIP_ID = "TRIP_ID"
+        const val POINT_ID = "POINT_ID"
 
         fun getBundle(tripId: Long): Bundle =
-            Bundle().apply { putLong(TRIP_ID, tripId) }
+            Bundle().apply { putLong(POINT_ID, tripId) }
     }
 }

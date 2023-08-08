@@ -47,7 +47,7 @@ class HomeViewModel(
     private val _markerSelected = MutableLiveData<Long>()
     val makerSelected: LiveData<Long> = _markerSelected
 
-    val notificationMarkerSelected: (tripId: Long) -> Unit = { _markerSelected.value = it }
+    val notificationMarkerSelected: (pointId: Long) -> Unit = { _markerSelected.value = it }
 
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
