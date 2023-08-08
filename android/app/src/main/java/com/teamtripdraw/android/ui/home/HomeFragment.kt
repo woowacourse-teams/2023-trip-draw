@@ -238,6 +238,25 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    override fun onStop() {
+        turnOffFloatingActionButton()
+        super.onStop()
+    }
+
+    private fun turnOffFloatingActionButton() {
+        ObjectAnimators.closeFab(
+            binding.fabHome,
+            binding.fabWritePost,
+            binding.fabPostList,
+            binding.fabMarkerMode,
+            binding.tvWritePost,
+            binding.tvPostList,
+            binding.tvMarkerMode,
+        )
+        fabState = false
+        binding.fabState = fabState
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID) unbindRecordingPointService()

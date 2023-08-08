@@ -52,4 +52,29 @@ object ObjectAnimators {
             buttonMain.setImageResource(R.drawable.ic_fab_plus_rotate_45)
         }
     }
+
+    fun closeFab(
+        buttonMain: FloatingActionButton,
+        buttonWritePost: FloatingActionButton,
+        buttonPostList: FloatingActionButton,
+        buttonMarkerMode: FloatingActionButton,
+        textViewWritePost: TextView,
+        textViewPostList: TextView,
+        textViewMarkerMode: TextView
+    ) {
+        ObjectAnimator.ofFloat(buttonMain, View.ROTATION, 45f, 0f).apply {
+            duration = 300
+            start()
+        }
+        ObjectAnimator.ofFloat(buttonMarkerMode, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(textViewMarkerMode, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(buttonPostList, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(textViewPostList, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(buttonWritePost, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(textViewWritePost, "translationY", 0f).apply { start() }
+        textViewMarkerMode.visibility = View.GONE
+        textViewPostList.visibility = View.GONE
+        textViewWritePost.visibility = View.GONE
+        buttonMain.setImageResource(R.drawable.ic_fab_plus)
+    }
 }
