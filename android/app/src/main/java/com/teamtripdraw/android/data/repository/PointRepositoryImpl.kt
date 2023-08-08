@@ -20,4 +20,7 @@ class PointRepositoryImpl(
 
     override suspend fun getPoint(pointId: Long, tripId: Long): Result<Point> =
         pointDataSource.getPoint(tripId = tripId, pointId = pointId).map { it.toDomain() }
+
+    override suspend fun deletePoint(tripId: Long, pointId: Long): Result<Unit> =
+        pointDataSource.deletePoint(tripId = tripId, pointId = pointId)
 }
