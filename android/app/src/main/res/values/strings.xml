@@ -51,4 +51,8 @@
     <string name="iv_route_description">경로 이미지</string>
     <string name="iv_image_description">사진 조회</string>
 
+    <!-- InputDialog -->
+    <string name="btn_positive_dialog_input">확인</string>
+    <string name="tv_dialog_input_title">여행 제목을 입력해주세요</string>
+
 </resources>
