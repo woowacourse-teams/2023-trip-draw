@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialogViewModel
 import com.teamtripdraw.android.ui.history.HistoryViewModel
+import com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
 import com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel
@@ -45,6 +46,8 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     HistoryViewModel() // todo: repository 추가
                 isAssignableFrom(SetTripTitleDialogViewModel::class.java) ->
                     SetTripTitleDialogViewModel(repositoryContainer.tripRepository)
+                isAssignableFrom(HistoryDetailViewModel::class.java) ->
+                    HistoryDetailViewModel() // todo: repository 추가
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }

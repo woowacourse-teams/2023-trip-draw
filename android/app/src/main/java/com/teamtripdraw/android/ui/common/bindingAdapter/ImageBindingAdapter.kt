@@ -10,7 +10,7 @@ import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamtripdraw.android.R
 
 @BindingAdapter("app:setImage")
-fun ImageView.setImage(imgUrl: String) {
+fun ImageView.setImage(imgUrl: String?) {
     Glide.with(this.context)
         .load(imgUrl)
         .placeholder(R.drawable.shape_td_gray_fill_0_rect)

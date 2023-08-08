@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentHistoryBinding
 import com.teamtripdraw.android.support.framework.presentation.GridSpaceItemDecoration
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
+import com.teamtripdraw.android.ui.model.UiHistoryItem
 
 class HistoryFragment : Fragment() {
 
@@ -52,7 +53,8 @@ class HistoryFragment : Fragment() {
         )
     }
 
-    private fun onHistoryClick(id: Long) {
-        Toast.makeText(requireContext(), "$id", Toast.LENGTH_SHORT).show()
+    private fun onHistoryClick(historyItem: UiHistoryItem) {
+        val intent = HistoryDetailActivity.getIntent(requireContext(), historyItem)
+        startActivity(intent)
     }
 }
