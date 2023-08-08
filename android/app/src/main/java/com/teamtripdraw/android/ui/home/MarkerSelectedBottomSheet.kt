@@ -27,4 +27,11 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun getTheme(): Int = R.style.RoundBottomSheetStyleTheme
+
+    companion object {
+        private const val TRIP_ID = "TRIP_ID"
+
+        fun getBundle(tripId: Long): Bundle =
+            Bundle().apply { putLong(TRIP_ID, tripId) }
+    }
 }

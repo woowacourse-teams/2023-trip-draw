@@ -249,8 +249,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun observeMarkerSelected() {
-        homeViewModel.makerSelected.observe(viewLifecycleOwner) {
-            // todo 바텀시트켜져있는지 확인후 바텀시트 켜주는 로직
+        homeViewModel.makerSelected.observe(viewLifecycleOwner) { tripId ->
+            showMarkerSelectedBottomSheet(tripId)
+        }
+    }
+
+    private fun showMarkerSelectedBottomSheet(tripId: Long) {
+        if (!markerSelectedBottomSheet.isAdded) {
+            markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(tripId)
+            markerSelectedBottomSheet.show(
+                parentFragmentManager,
+                markerSelectedBottomSheet.javaClass.name
+            )
         }
     }
 
