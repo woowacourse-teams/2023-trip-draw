@@ -84,6 +84,7 @@
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/shape_td_main_blue_line_12_rect"
+            android:onClick="@{()->markerSelectedViewModel.openPostWriting()}"
             android:text="@string/btn_write_post_marker_selected_bottom_sheet"
             android:textAppearance="@style/body2"
             android:textColor="@color/td_main_blue"

@@ -9,9 +9,11 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.BottomSheetMarkerSelectedBinding
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.HomeViewModel
+import com.teamtripdraw.android.ui.postWriting.PostWritingActivity
 import java.util.Locale
 
 class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
@@ -58,6 +60,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getAddress()
+        initPostWritingEventObserver()
     }
 
     private fun getAddress() {
@@ -66,6 +69,18 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
                 markerSelectedViewModel.updateAddress(address)
             }
         }
+    }
+
+    private fun initPostWritingEventObserver() {
+        markerSelectedViewModel.openPostWritingEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this::navigateToPostWriting)
+        )
+    }
+
+    private fun navigateToPostWriting(pointId: Long) {
+        startActivity(PostWritingActivity.getIntent(requireContext(), pointId))
+        dismiss()
     }
 
     override fun onDestroyView() {

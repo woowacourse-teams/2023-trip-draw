@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
+import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPoint
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
@@ -31,6 +32,9 @@ class MarkerSelectedViewModel(
     private val _address = MutableLiveData<String>()
     val address: LiveData<String> = _address
 
+    private val _openPostWritingEvent = MutableLiveData<Event<Long>>()
+    val openPostWritingEvent: LiveData<Event<Long>> = _openPostWritingEvent
+
     fun updatePointId(pointId: Long) {
         this.pointId = pointId
     }
@@ -43,5 +47,9 @@ class MarkerSelectedViewModel(
 
     fun updateAddress(address: String) {
         _address.postValue(address)
+    }
+
+    fun openPostWriting() {
+        _openPostWritingEvent.value = Event(pointId)
     }
 }
