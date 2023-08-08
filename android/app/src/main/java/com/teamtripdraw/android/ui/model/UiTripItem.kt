@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class UiHistoryItem(
+data class UiTripItem(
     val id: Long,
     val name: String,
     val imageUrl: String,

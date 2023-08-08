@@ -1,5 +1,5 @@
 package com.teamtripdraw.android.ui.common.dialog
 
-enum class SetTitleStatus {
+enum class SetTitleSituation {
     FINISHED, EDIT
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationResult
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
@@ -18,8 +19,8 @@ class TripDetailViewModel(
     private val pointRepository: PointRepository
 ) : ViewModel() {
 
-    private val _tripId = MutableLiveData<Long>()
-    val tripId: LiveData<Long> = _tripId
+    var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+        private set
 
     private val _currentTripRoute = MutableLiveData<UiRoute>()
     val currentTripRoute: LiveData<UiRoute> = _currentTripRoute
@@ -36,7 +37,7 @@ class TripDetailViewModel(
         get() = markerViewModeState.value ?: false
 
     fun updateTripId(id: Long) {
-        _tripId.value = id
+        tripId = id
     }
 
     fun toggleMarkerViewModeState() {
@@ -51,7 +52,7 @@ class TripDetailViewModel(
         viewModelScope.launch {
             pointRepository.createRecordingPoint(
                 getPrePoint(locationResult),
-                tripId.value
+                tripId
             ).onSuccess {
                 _openPostWritingEvent.value = Event(it)
             }.onFailure {

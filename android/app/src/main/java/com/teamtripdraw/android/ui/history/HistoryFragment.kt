@@ -11,7 +11,7 @@ import com.teamtripdraw.android.support.framework.presentation.GridSpaceItemDeco
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
-import com.teamtripdraw.android.ui.model.UiHistoryItem
+import com.teamtripdraw.android.ui.model.UiTripItem
 
 class HistoryFragment : Fragment() {
 
@@ -53,8 +53,8 @@ class HistoryFragment : Fragment() {
         )
     }
 
-    private fun onHistoryClick(historyItem: UiHistoryItem) {
-        val intent = HistoryDetailActivity.getIntent(requireContext(), historyItem)
+    private fun onHistoryClick(tripItem: UiTripItem) {
+        val intent = HistoryDetailActivity.getIntent(requireContext(), tripItem)
         startActivity(intent)
     }
 }

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamtripdraw.android.databinding.ItemTripHistoryBinding
-import com.teamtripdraw.android.ui.model.UiHistoryItem
+import com.teamtripdraw.android.ui.model.UiTripItem
 
 class HistoryViewHolder(
     private val binding: ItemTripHistoryBinding,
@@ -15,8 +15,8 @@ class HistoryViewHolder(
         binding.historyViewModel = viewModel
     }
 
-    fun bind(item: UiHistoryItem) {
-        binding.historyItem = item
+    fun bind(item: UiTripItem) {
+        binding.tripItem = item
     }
 
     companion object {

@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.trip.TripStatus
 import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
-import com.teamtripdraw.android.ui.model.UiHistoryItem
+import com.teamtripdraw.android.ui.model.UiTripItem
 import kotlinx.coroutines.launch
 
 class SetTripTitleDialogViewModel(
@@ -17,8 +18,8 @@ class SetTripTitleDialogViewModel(
 
     val MAX_INPUT_TITLE_LENGTH = TripTitleValidState.MAX_TITLE_LENGTH + 1
 
-    private val _tripId: MutableLiveData<Long> = MutableLiveData()
-    val tripId: LiveData<Long> = _tripId
+    var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+        private set
 
     val tripTitle: MutableLiveData<String> = MutableLiveData("")
 
@@ -29,11 +30,11 @@ class SetTripTitleDialogViewModel(
     private val _titleSetupCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val titleSetupCompletedEvent: LiveData<Event<Boolean>> = _titleSetupCompletedEvent
 
-    private val _tripItem: MutableLiveData<UiHistoryItem> = MutableLiveData()
-    val tripItem: LiveData<UiHistoryItem> = _tripItem
+    private val _tripItem: MutableLiveData<UiTripItem> = MutableLiveData()
+    val tripItem: LiveData<UiTripItem> = _tripItem
 
     fun updateTripId(id: Long) {
-        _tripId.value = id
+        tripId = id
     }
 
     fun titleChangedEvent() {
@@ -43,7 +44,7 @@ class SetTripTitleDialogViewModel(
     fun setTripTitle() {
         viewModelScope.launch {
             repository.setTripTitle(
-                tripId = requireNotNull(tripId.value),
+                tripId = tripId,
                 name = requireNotNull(tripTitle.value),
                 status = TripStatus.FINISHED
             ).onSuccess {
