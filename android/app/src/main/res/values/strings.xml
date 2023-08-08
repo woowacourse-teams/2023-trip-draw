@@ -51,4 +51,8 @@
     <string name="iv_route_description">경로 이미지</string>
     <string name="iv_image_description">사진 조회</string>
 
+    <!-- MarkerSelectedBottomSheet -->
+    <string name="btn_write_post_marker_selected_bottom_sheet">감상 기록</string>
+    <string name="btn_delete_point_marker_selected_bottom_sheet">위치 삭제</string>
+
 </resources>
