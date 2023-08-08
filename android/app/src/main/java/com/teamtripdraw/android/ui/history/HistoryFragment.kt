@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentHistoryBinding
-import com.teamtripdraw.android.support.framework.presentation.GridSpaceItemDecoration
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
@@ -35,11 +34,7 @@ class HistoryFragment : Fragment() {
 
     private fun setUpView() {
         historyAdapter = HistoryAdapter(viewModel)
-        binding.rvTripHistory.run {
-            adapter = historyAdapter
-            val spanCount = 2
-            addItemDecoration(GridSpaceItemDecoration(spanCount, 20))
-        }
+        binding.rvTripHistory.adapter = historyAdapter
     }
 
     private fun initObserve() {
