@@ -7,7 +7,7 @@ import com.teamtripdraw.android.data.httpClient.service.GetTripInfoService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.httpClient.service.PostService
-import retrofit2.create
+import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
 
 class ServiceContainer(retrofitContainer: RetrofitContainer) {
     val nicknameSetupService: NicknameSetupService =
@@ -24,4 +24,6 @@ class ServiceContainer(retrofitContainer: RetrofitContainer) {
         retrofitContainer.tripDrawRetrofit.create(GetTripInfoService::class.java)
     val getPointService: GetPointService =
         retrofitContainer.tripDrawRetrofit.create(GetPointService::class.java)
+    val setTripTitleService: SetTripTitleService =
+        retrofitContainer.tripDrawRetrofit.create(SetTripTitleService::class.java)
 }

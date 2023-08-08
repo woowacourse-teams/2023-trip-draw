@@ -7,7 +7,7 @@
 
         <variable
             name="insertTripTitleDialogViewModel"
-            type="com.teamtripdraw.android.ui.common.dialog.InsertTripTitleDialogViewModel" />
+            type="com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,17 +34,18 @@
             android:layout_marginStart="20dp"
             android:background="@drawable/shape_td_main_blue_line_5_rect"
             android:ems="10"
+            android:hint="@string/et_dialog_input_hint"
             android:inputType="text"
             android:maxLength="@{insertTripTitleDialogViewModel.MAX_INPUT_TITLE_LENGTH}"
             android:maxLines="1"
+            android:paddingHorizontal="10dp"
             android:paddingVertical="12dp"
-            android:paddingStart="10dp"
             android:text="@={insertTripTitleDialogViewModel.tripTitle}"
+            android:textAppearance="@style/body_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_positive_dialog_input"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_input_title"
-            tools:hint="여행 제목" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_input_title" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_positive_dialog_input"
@@ -53,6 +54,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/shape_td_main_blue_fill_5_rect"
+            android:onClick="@{() -> insertTripTitleDialogViewModel.setTripTitle()}"
             android:paddingVertical="12dp"
             android:text="@string/btn_positive_dialog_input"
             android:textAppearance="@style/body_1"

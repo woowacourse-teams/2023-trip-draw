@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.teamtripdraw.android.TripDrawApplication
-import com.teamtripdraw.android.ui.common.dialog.InsertTripTitleDialogViewModel
+import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialogViewModel
 import com.teamtripdraw.android.ui.history.HistoryViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
@@ -43,8 +43,8 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     )
                 isAssignableFrom(HistoryViewModel::class.java) ->
                     HistoryViewModel() // todo: repository 추가
-                isAssignableFrom(InsertTripTitleDialogViewModel::class.java) ->
-                    InsertTripTitleDialogViewModel(repositoryContainer.tripRepository)
+                isAssignableFrom(SetTripTitleDialogViewModel::class.java) ->
+                    SetTripTitleDialogViewModel(repositoryContainer.tripRepository)
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }

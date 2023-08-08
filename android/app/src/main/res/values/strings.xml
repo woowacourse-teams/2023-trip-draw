@@ -54,5 +54,6 @@
     <!-- InputDialog -->
     <string name="btn_positive_dialog_input">확인</string>
     <string name="tv_dialog_input_title">여행 제목을 입력해주세요</string>
+    <string name="et_dialog_input_hint">여행 제목</string>
 
 </resources>
