@@ -90,15 +90,16 @@ private fun View.initializeMarker(
 }
 
 private fun setMarkerSetting(
-    UiMarkerInfo: UiMarkerInfo,
+    uiMarkerInfo: UiMarkerInfo,
     isStartPoint: Boolean,
     markerViewModeState: Boolean
 ): Marker =
     Marker().apply {
-        this.position = UiMarkerInfo.latLng
+        this.position = uiMarkerInfo.latLng
         setMarkerAnchor(this, isStartPoint)
-        selectMarkerIcon(this, isStartPoint, UiMarkerInfo)
+        selectMarkerIcon(this, isStartPoint, uiMarkerInfo)
         if (!isStartPoint) this.isVisible = markerViewModeState
+        tag = uiMarkerInfo.pointId
     }
 
 private fun setMarkerAnchor(marker: Marker, isStartPoint: Boolean) {
