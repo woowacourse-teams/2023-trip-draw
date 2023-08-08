@@ -259,7 +259,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         if (!markerSelectedBottomSheet.isAdded) {
             markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(pointId)
             markerSelectedBottomSheet.show(
-                parentFragmentManager,
+                childFragmentManager,
                 markerSelectedBottomSheet.javaClass.name
             )
         }

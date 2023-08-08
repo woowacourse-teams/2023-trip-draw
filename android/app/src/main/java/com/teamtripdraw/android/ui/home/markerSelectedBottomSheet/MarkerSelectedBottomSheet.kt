@@ -68,6 +68,15 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        updateMapMarkers()
+        super.onDestroyView()
+    }
+
+    private fun updateMapMarkers() {
+        homeViewModel.updateCurrentTripRoute()
+    }
+
     companion object {
         const val POINT_ID = "POINT_ID"
 
