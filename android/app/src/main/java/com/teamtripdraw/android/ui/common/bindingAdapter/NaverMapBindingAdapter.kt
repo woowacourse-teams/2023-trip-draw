@@ -99,7 +99,7 @@ private fun setMarkerSetting(
         setMarkerAnchor(this, isStartPoint)
         selectMarkerIcon(this, isStartPoint, uiMarkerInfo)
         if (!isStartPoint) this.isVisible = markerViewModeState
-        tag = uiMarkerInfo.pointId
+        initMarkerClickListener(this, uiMarkerInfo.pointId)
     }
 
 private fun setMarkerAnchor(marker: Marker, isStartPoint: Boolean) {
@@ -138,6 +138,14 @@ private fun selectMarkerWithPostHoldingStatus(
         false -> {
             marker.icon = markerNoPostImage
         }
+    }
+}
+
+private fun initMarkerClickListener(marker: Marker, pointId: Long) {
+    marker.setOnClickListener {
+        marker.icon = markerSelectedImage
+
+        true
     }
 }
 
