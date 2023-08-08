@@ -33,20 +33,17 @@ class PostWritingActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_writing)
 
         initView()
-        initTripData()
-        initEvent()
+        initIntentData()
+        initViewEvent()
+        initObserveEvent()
     }
 
     private fun initView() {
         binding.lifecycleOwner = this
         binding.postWritingViewModel = viewModel
-
-        binding.btnCamera.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
     }
 
-    private fun initTripData() {
+    private fun initIntentData() {
         val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, NULL_SUBSTITUTE_POINT_ID)
 
         if (pointId == NULL_SUBSTITUTE_POINT_ID)
@@ -55,7 +52,17 @@ class PostWritingActivity : AppCompatActivity() {
         viewModel.initTripData(pointId)
     }
 
-    private fun initEvent() {
+    private fun initViewEvent() {
+        binding.btnCamera.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun initObserveEvent() {
         viewModel.point.observe(this) { point ->
             val geocoder = Geocoder(this, Locale.KOREAN)
             geocoder.fetchAddress(point.latitude, point.longitude, viewModel::updateAddress)
