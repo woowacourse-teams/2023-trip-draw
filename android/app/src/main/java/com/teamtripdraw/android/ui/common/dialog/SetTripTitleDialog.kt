@@ -1,17 +1,16 @@
 package com.teamtripdraw.android.ui.common.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.google.android.material.snackbar.Snackbar
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentTripTitleDialogBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.model.UiHistoryItem
 
 class SetTripTitleDialog(
     private val tripId: Long,
@@ -62,48 +61,29 @@ class SetTripTitleDialog(
     }
 
     private fun initObserve() {
-        viewModel.isBlankEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@SetTripTitleDialog::onBlankTitle)
-        )
-
         viewModel.titleSetupCompletedEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@SetTripTitleDialog::onSetupCompleted)
         )
     }
 
-    private fun onBlankTitle(isBlank: Boolean) {
-        if (isBlank) {
-            Log.e("BLANK_TITLE_ERROR", BLANK_TITLE_ERROR)
-            Snackbar.make(
-                binding.root,
-                BLANK_TITLE_ERROR,
-                Snackbar.LENGTH_SHORT
-            ).show()
-        }
-    }
-
     private fun onSetupCompleted(isSuccess: Boolean) {
         if (isSuccess) {
             when (status) {
-                SetTitleStatus.FINISHED -> navigateDetailPage(requireNotNull(viewModel.tripId.value))
+                SetTitleStatus.FINISHED -> navigateDetailPage(requireNotNull(viewModel.tripItem.value))
                 SetTitleStatus.EDIT -> dismiss()
             }
         }
     }
 
-    private fun navigateDetailPage(tripId: Long) {
+    private fun navigateDetailPage(tripItem: UiHistoryItem) {
         // todo 해당 여행 히스토리의 상세 화면으로 이동
+
         dismiss()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private const val BLANK_TITLE_ERROR = "제목을 입력해주세요"
     }
 }
