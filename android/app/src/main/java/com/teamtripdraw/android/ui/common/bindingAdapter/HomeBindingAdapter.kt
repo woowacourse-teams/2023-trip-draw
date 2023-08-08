@@ -7,7 +7,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.ui.home.HomeUiState
 import com.teamtripdraw.android.ui.home.HomeUiState.BEFORE_TRIP
-import com.teamtripdraw.android.ui.home.HomeUiState.EDIT_TRIP
 import com.teamtripdraw.android.ui.home.HomeUiState.ON_TRIP
 
 @BindingAdapter("app:homeUiStateBeforeTrip")
@@ -16,7 +15,7 @@ fun View.setHomeUiStateBeforeTrip(homeUiState: HomeUiState) {
         BEFORE_TRIP -> {
             this.visibility = View.VISIBLE
         }
-        ON_TRIP, EDIT_TRIP -> {
+        ON_TRIP -> {
             this.visibility = View.GONE
         }
     }
@@ -28,7 +27,7 @@ fun View.setHomeUiStateOnTrip(homeUiState: HomeUiState) {
         ON_TRIP -> {
             this.visibility = View.VISIBLE
         }
-        BEFORE_TRIP, EDIT_TRIP -> {
+        BEFORE_TRIP -> {
             this.visibility = View.GONE
         }
     }
@@ -38,7 +37,7 @@ fun View.setHomeUiStateOnTrip(homeUiState: HomeUiState) {
 fun View.setHomeUiStateOnTripForFabText(homeUiState: HomeUiState) {
     when (homeUiState) {
         ON_TRIP -> {}
-        BEFORE_TRIP, EDIT_TRIP -> {
+        BEFORE_TRIP -> {
             this.visibility = View.GONE
         }
     }
