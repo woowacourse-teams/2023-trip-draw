@@ -9,6 +9,7 @@ import com.teamtripdraw.android.ui.history.HistoryViewModel
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedViewModel
 import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
 import com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel
 import com.teamtripdraw.android.ui.post.writing.PostWritingViewModel
@@ -43,6 +44,8 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                         repositoryContainer.tripRepository,
                         repositoryContainer.postRepository
                     )
+                isAssignableFrom(MarkerSelectedViewModel::class.java) ->
+                    MarkerSelectedViewModel(
                 isAssignableFrom(HistoryViewModel::class.java) ->
                     HistoryViewModel() // todo: repository 추가
                 isAssignableFrom(SetTripTitleDialogViewModel::class.java) ->

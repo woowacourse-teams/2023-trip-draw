@@ -44,8 +44,15 @@ class HomeViewModel(
     private val _openPostWritingEvent = MutableLiveData<Event<Long>>()
     val openPostWritingEvent: LiveData<Event<Long>> = _openPostWritingEvent
 
+    private val _markerSelectEvent = MutableLiveData<Long>()
+    val makerSelectedEvent: LiveData<Long> = _markerSelectEvent
+
+    val notificationMarkerSelected: (pointId: Long) -> Unit = { _markerSelectEvent.value = it }
+
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
+
+    var markerSelectedState: Boolean = false
 
     init {
         updateTripId()
@@ -106,12 +113,10 @@ class HomeViewModel(
         }
     }
 
-    private fun getPrePoint(locationResult: LocationResult): PrePoint {
-        val prePoint: PrePoint = PrePoint(
+    private fun getPrePoint(locationResult: LocationResult): PrePoint =
+        PrePoint(
             locationResult.locations.first().latitude,
             locationResult.locations.first().longitude,
             LocalDateTime.now()
         )
-        return prePoint
-    }
 }

@@ -35,6 +35,7 @@ import com.teamtripdraw.android.support.framework.presentation.permission.checkN
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
@@ -126,6 +127,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         setUpPostViewerClickEvent()
         setUpPostWritingClickEvent()
         initPostWritingEventObserver()
+        initMarkerSelectedObserver()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -234,6 +236,25 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    override fun onStop() {
+        turnOffFloatingActionButton()
+        super.onStop()
+    }
+
+    private fun turnOffFloatingActionButton() {
+        ObjectAnimators.closeFab(
+            binding.fabHome,
+            binding.fabWritePost,
+            binding.fabPostList,
+            binding.fabMarkerMode,
+            binding.tvWritePost,
+            binding.tvPostList,
+            binding.tvMarkerMode
+        )
+        fabState = false
+        binding.fabState = fabState
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID) unbindRecordingPointService()
@@ -243,6 +264,20 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun unbindRecordingPointService() {
         requireActivity().unbindService(recordingPointServiceConnection)
         recordingPointServiceBindingState = false
+    }
+
+    private fun initMarkerSelectedObserver() {
+        homeViewModel.makerSelectedEvent.observe(viewLifecycleOwner) { pointId ->
+            showMarkerSelectedBottomSheet(pointId)
+        }
+    }
+
+    private fun showMarkerSelectedBottomSheet(pointId: Long) {
+        if (!homeViewModel.markerSelectedState) {
+            val markerSelectedBottomSheet = MarkerSelectedBottomSheet()
+            markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(pointId)
+            markerSelectedBottomSheet.show(childFragmentManager, this.javaClass.name)
+        }
     }
 
     companion object {
