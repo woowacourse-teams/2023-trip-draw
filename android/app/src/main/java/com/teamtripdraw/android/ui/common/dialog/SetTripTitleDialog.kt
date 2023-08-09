@@ -41,7 +41,7 @@ class SetTripTitleDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.updateTripId(tripId)
         binding.insertTripTitleDialogViewModel = viewModel
-        initObserve()
+        setCompletedEventObserve()
     }
 
     override fun onStart() {
@@ -61,7 +61,7 @@ class SetTripTitleDialog : DialogFragment() {
         }
     }
 
-    private fun initObserve() {
+    private fun setCompletedEventObserve() {
         viewModel.titleSetupCompletedEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@SetTripTitleDialog::onSetupCompleted)

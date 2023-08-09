@@ -28,22 +28,29 @@ class HistoryFragment : Fragment() {
         _binding = FragmentHistoryBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        setUpView()
+        setAdapter()
         initObserve()
 
         return binding.root
     }
 
-    private fun setUpView() {
+    private fun setAdapter() {
         historyAdapter = HistoryAdapter(viewModel)
         binding.rvTripHistory.adapter = historyAdapter
     }
 
     private fun initObserve() {
+        setTripHistoryObserve()
+        setHistoryOpenObserveEvent()
+    }
+
+    private fun setTripHistoryObserve() {
         viewModel.tripHistory.observe(viewLifecycleOwner) {
             historyAdapter.submitList(it)
         }
+    }
 
+    private fun setHistoryOpenObserveEvent() {
         viewModel.historyOpenEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@HistoryFragment::onHistoryClick)

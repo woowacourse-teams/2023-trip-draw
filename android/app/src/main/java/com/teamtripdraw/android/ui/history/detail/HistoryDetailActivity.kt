@@ -24,28 +24,39 @@ class HistoryDetailActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_history_detail)
         binding.lifecycleOwner = this
 
-        setUpView()
+        getIntentData()
+        setAdapter()
         initObserve()
     }
 
+    private fun getIntentData() {
+        val trip = intent.getParcelableExtraCompat<UiTrip>(TRIP_ITEM_KEY)
+            ?: throw java.lang.IllegalStateException()
+        viewModel.updateTripItem(trip)
+    }
+
+    private fun setAdapter() {
+        adapter = HistoryDetailAdapter(viewModel)
+        binding.rvTripHistoryDetail.adapter = adapter
+    }
+
     private fun initObserve() {
+        setPostObserve()
+        setTripObserve()
+    }
+
+    private fun setPostObserve() {
         viewModel.post.observe(this) {
             adapter.submitList(it)
         }
+    }
 
+    private fun setTripObserve() {
         viewModel.trip.observe(this) {
             binding.ivHistoryDetailImage.setImage(it.imageUrl)
             binding.ivHistoryDetailRoute.setImage(it.routeImageUrl)
             binding.tbHistoryDetail.title = it.name
         }
-    }
-
-    private fun setUpView() {
-        val tripHistory = intent.getParcelableExtraCompat<UiTrip>(TRIP_ITEM_KEY)
-            ?: throw java.lang.IllegalStateException()
-        viewModel.updateTripItem(tripHistory)
-        adapter = HistoryDetailAdapter(viewModel)
-        binding.rvTripHistoryDetail.adapter = adapter
     }
 
     companion object {
