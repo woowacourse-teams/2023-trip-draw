@@ -3,7 +3,6 @@ package com.teamtripdraw.android.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationResult
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
@@ -12,6 +11,7 @@ import com.teamtripdraw.android.domain.model.point.Route
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MapBottomSheetViewModel
 import com.teamtripdraw.android.ui.model.UiRoute
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
@@ -19,8 +19,8 @@ import java.time.LocalDateTime
 
 class HomeViewModel(
     private val tripRepository: TripRepository,
-    private val pointRepository: PointRepository
-) : ViewModel() {
+    private val pointRepository: PointRepository,
+) : MapBottomSheetViewModel() {
 
     private val _homeUiState: MutableLiveData<HomeUiState> = MutableLiveData()
     val homeUiState: LiveData<HomeUiState> = _homeUiState
@@ -52,12 +52,12 @@ class HomeViewModel(
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
 
-    var markerSelectedState: Boolean = false
+    override var markerSelectedState: Boolean = false
 
     init {
         updateTripId()
         initHomeUiState()
-        updateCurrentTripRoute()
+        updateTripInfo()
     }
 
     private fun initHomeUiState() {
@@ -82,7 +82,7 @@ class HomeViewModel(
         }
     }
 
-    fun updateCurrentTripRoute() {
+    override fun updateTripInfo() {
         if (tripId == NULL_SUBSTITUTE_TRIP_ID) return
         viewModelScope.launch {
             tripRepository.getCurrentTripRoute(tripId)
@@ -104,7 +104,7 @@ class HomeViewModel(
         viewModelScope.launch {
             pointRepository.createRecordingPoint(
                 getPrePoint(locationResult),
-                tripId
+                tripId,
             ).onSuccess {
                 _openPostWritingEvent.value = Event(it)
             }.onFailure {
@@ -117,6 +117,6 @@ class HomeViewModel(
         PrePoint(
             locationResult.locations.first().latitude,
             locationResult.locations.first().longitude,
-            LocalDateTime.now()
+            LocalDateTime.now(),
         )
 }

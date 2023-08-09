@@ -8,21 +8,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.OverlayImage
-import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityTripDetailBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.support.framework.presentation.Locations
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
-import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION_PERMISSION_REQUEST_CODE
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
-import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserLocationOption
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 
@@ -41,26 +42,47 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val tripId = intent.getLongExtra(TRIP_ID_KEY, NULL_SUBSTITUTE_TRIP_ID)
         viewModel.updateTripId(tripId)
+        viewModel.updateTripInfo()
 
         binding.tripDetailViewModel = viewModel
         binding.fabState = fabState
 
+        matchMapFragmentToNaverMap()
         initFloatingButtonClickListener()
         setUpPostViewerClickEvent()
         setUpPostWritingClickEvent()
         initPostWritingEventObserver()
+        initMarkerSelectedObserver()
+    }
+
+    private fun matchMapFragmentToNaverMap() {
+        val fragmentManager = supportFragmentManager
+        val mapFragment =
+            fragmentManager.findFragmentById(R.id.fragment_trip_detail_map) as MapFragment?
+                ?: MapFragment.newInstance().also {
+                    fragmentManager.beginTransaction().add(R.id.fragment_trip_detail_map, it)
+                        .commit()
+                }
+        mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         binding.naverMap = this.naverMap
         this.naverMap.initUserInterface()
-        this.naverMap.initUserLocationOption(
-            FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE),
-            this
-        )
+        initTripRouteObserver()
         this.naverMap.locationOverlay.icon = currentLocationImage
         this.naverMap.setContentPadding(0, 0, 0, toPixel(this, 67))
+    }
+
+    private fun initTripRouteObserver() {
+        viewModel.tripRoute.observe(this) {
+            val cameraUpdate = CameraUpdate.scrollTo(
+                it.getLatLngs().last(),
+            )
+            this.naverMap.moveCamera(cameraUpdate)
+            this.naverMap.moveCamera(CameraUpdate.zoomTo(ZOOM_VALUE))
+        }
     }
 
     private fun initFloatingButtonClickListener() {
@@ -73,7 +95,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.tvWritePost,
                 binding.tvPostList,
                 binding.tvMarkerMode,
-                fabState
+                fabState,
             )
             fabState = !fabState
             binding.fabState = fabState
@@ -83,12 +105,12 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setUpPostViewerClickEvent() {
         viewModel.openPostViewerEvent.observe(
             this,
-            EventObserver(this@TripDetailActivity::navigateToPostViewer)
+            EventObserver(this@TripDetailActivity::navigateToPostViewer),
         )
     }
 
     private fun navigateToPostViewer(isClicked: Boolean) {
-        if (isClicked) startActivity(PostViewerActivity.getIntent(this)) // todo: tripId 받아가기
+        if (isClicked) startActivity(PostViewerActivity.getIntent(this))
     }
 
     private fun setUpPostWritingClickEvent() {
@@ -96,7 +118,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             Locations.getUpdateLocation(
                 getFusedLocationClient(),
                 this,
-                viewModel::createPoint
+                viewModel::createPoint,
             )
         }
     }
@@ -107,17 +129,56 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun initPostWritingEventObserver() {
         viewModel.openPostWritingEvent.observe(
             this,
-            EventObserver(this::navigateToPostWriting)
+            EventObserver(this::navigateToPostWriting),
         )
     }
 
     private fun navigateToPostWriting(pointId: Long) {
-        startActivity(PostWritingActivity.getIntent(this, pointId)) // todo: tripId 받아가기
+        startActivity(PostWritingActivity.getIntent(this, pointId))
+    }
+
+    override fun onStop() {
+        turnOffFloatingActionButton()
+        super.onStop()
+    }
+
+    private fun turnOffFloatingActionButton() {
+        ObjectAnimators.closeFab(
+            binding.fabHome,
+            binding.fabWritePost,
+            binding.fabPostList,
+            binding.fabMarkerMode,
+            binding.tvWritePost,
+            binding.tvPostList,
+            binding.tvMarkerMode,
+        )
+        fabState = false
+        binding.fabState = fabState
+    }
+
+    private fun initMarkerSelectedObserver() {
+        viewModel.makerSelectedEvent.observe(this) { pointId ->
+            showMarkerSelectedBottomSheet(pointId)
+        }
+    }
+
+    private fun showMarkerSelectedBottomSheet(pointId: Long) {
+        if (!viewModel.markerSelectedState) {
+            val markerSelectedBottomSheet = MarkerSelectedBottomSheet()
+            markerSelectedBottomSheet.arguments =
+                MarkerSelectedBottomSheet.getBundle(
+                    pointId,
+                    viewModel.tripId,
+                    BottomSheetClickSituation.HISTORY,
+                )
+            markerSelectedBottomSheet.show(supportFragmentManager, this.javaClass.name)
+        }
     }
 
     companion object {
         private val currentLocationImage = OverlayImage.fromResource(R.drawable.ic_current_location)
         private const val TRIP_ID_KEY = "TRIP_ID_KEY"
+        private const val ZOOM_VALUE = 17.0
 
         fun getIntent(context: Context, tripId: Long): Intent {
             val intent = Intent(context, TripDetailActivity::class.java)

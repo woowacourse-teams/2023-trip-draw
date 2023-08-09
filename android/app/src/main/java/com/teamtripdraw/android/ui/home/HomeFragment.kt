@@ -35,6 +35,7 @@ import com.teamtripdraw.android.support.framework.presentation.permission.checkN
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
@@ -73,7 +74,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private val locationPermissionRequest = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
+        ActivityResultContracts.RequestMultiplePermissions(),
     ) { permissions ->
         when {
             permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) -> {
@@ -87,7 +88,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         checkNotificationPermission(requireContext(), notificationPermissionRequest)
     }
     private val notificationPermissionRequest = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
+        ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
         if (!isGranted) {
             // todo: 알림 권한 받아야 notification 보여줄 수 있다는 다이얼로그 #75
@@ -97,7 +98,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -112,7 +113,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             requireActivity().bindService(
                 intent,
                 recordingPointServiceConnection,
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         }
     }
@@ -145,7 +146,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         this.naverMap.initUserInterface()
         this.naverMap.initUserLocationOption(
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE),
-            requireContext()
+            requireContext(),
         )
         this.naverMap.locationOverlay.icon = currentLocationImage
         this.naverMap.setContentPadding(0, 0, 0, toPixel(requireContext(), 67))
@@ -154,7 +155,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun observeStartTripEvent() {
         homeViewModel.startTripEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this::startRecordPoint)
+            EventObserver(this::startRecordPoint),
         )
     }
 
@@ -173,7 +174,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun startRecordingPointService() {
         RecordingPointService.getTripIdIntent(
             Intent(requireContext(), RecordingPointService::class.java),
-            homeViewModel.tripId
+            homeViewModel.tripId,
         ).apply { requireContext().startService(this) }
     }
 
@@ -187,7 +188,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 binding.tvWritePost,
                 binding.tvPostList,
                 binding.tvMarkerMode,
-                fabState
+                fabState,
             )
             fabState = !fabState
             binding.fabState = fabState
@@ -197,7 +198,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun setUpPostViewerClickEvent() {
         homeViewModel.openPostViewerEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@HomeFragment::navigateToPostViewer)
+            EventObserver(this@HomeFragment::navigateToPostViewer),
         )
     }
 
@@ -210,7 +211,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             getUpdateLocation(
                 getFusedLocationClient(),
                 requireContext(),
-                homeViewModel::createPoint
+                homeViewModel::createPoint,
             )
         }
     }
@@ -221,7 +222,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun initPostWritingEventObserver() {
         homeViewModel.openPostWritingEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this::navigateToPostWriting)
+            EventObserver(this::navigateToPostWriting),
         )
     }
 
@@ -232,7 +233,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun observeUpdateTripId() {
         updatedTripId.observe(viewLifecycleOwner) {
             // map 좌표 최신화 방법 #193 참고
-            if (it != NULL_SUBSTITUTE_POINT_ID) homeViewModel.updateCurrentTripRoute()
+            if (it != NULL_SUBSTITUTE_POINT_ID) homeViewModel.updateTripInfo()
         }
     }
 
@@ -249,7 +250,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             binding.fabMarkerMode,
             binding.tvWritePost,
             binding.tvPostList,
-            binding.tvMarkerMode
+            binding.tvMarkerMode,
         )
         fabState = false
         binding.fabState = fabState
@@ -275,7 +276,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun showMarkerSelectedBottomSheet(pointId: Long) {
         if (!homeViewModel.markerSelectedState) {
             val markerSelectedBottomSheet = MarkerSelectedBottomSheet()
-            markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(pointId)
+            markerSelectedBottomSheet.arguments =
+                MarkerSelectedBottomSheet.getBundle(
+                    pointId,
+                    homeViewModel.tripId,
+                    BottomSheetClickSituation.HOME,
+                )
             markerSelectedBottomSheet.show(childFragmentManager, this.javaClass.name)
         }
     }

@@ -46,6 +46,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
+                android:text="@{tripDetailViewModel.tripTitle}"
                 android:textAppearance="@style/title_3M"
                 android:textColor="@color/td_black"
                 tools:text="여행 제목" />
@@ -68,8 +69,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_trip_detail"
             app:markerViewModeState="@{tripDetailViewModel.markerViewModeState}"
+            app:setMarkerNaverMap="@{naverMap}"
+            app:setMarkerSelectMarkerListener="@{tripDetailViewModel.notificationMarkerSelected}"
+            app:setMarkerUiRoute="@{tripDetailViewModel.tripRoute}"
+            app:setMarkerViewModeState="@{tripDetailViewModel.markerViewModeStateValue}"
             app:setPolyLineNaverMap="@{naverMap}"
-            app:setPolyLineUiRoute="@{tripDetailViewModel.currentTripRoute}"
+            app:setPolyLineUiRoute="@{tripDetailViewModel.tripRoute}"
             tools:layout="@layout/map_preview" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

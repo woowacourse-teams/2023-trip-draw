@@ -46,7 +46,6 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     )
                 isAssignableFrom(MarkerSelectedViewModel::class.java) ->
                     MarkerSelectedViewModel(
-                        repositoryContainer.tripRepository,
                         repositoryContainer.pointRepository,
                     )
                 isAssignableFrom(HistoryViewModel::class.java) ->

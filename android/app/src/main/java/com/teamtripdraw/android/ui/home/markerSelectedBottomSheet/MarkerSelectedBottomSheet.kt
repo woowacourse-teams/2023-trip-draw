@@ -11,7 +11,9 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.BottomSheetMarkerSelectedBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
+import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.history.tripDetail.TripDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 import java.util.Locale
@@ -21,29 +23,50 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     private var _binding: BottomSheetMarkerSelectedBinding? = null
     private val binding get() = _binding!!
 
-    private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
+    private lateinit var viewModel: MapBottomSheetViewModel
     private val markerSelectedViewModel: MarkerSelectedViewModel by viewModels { tripDrawViewModelFactory }
 
     private lateinit var geocoder: Geocoder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initViewModel()
+
         updateMarkerSelectedStateToOpen()
         initMarkerSelectedViewModelData()
         initGeocoder()
     }
 
+    private fun initViewModel() {
+        viewModel = when (initBottomSheetClickSituation()) {
+            BottomSheetClickSituation.HOME -> {
+                val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
+                homeViewModel
+            }
+            BottomSheetClickSituation.HISTORY -> {
+                val tripDetailViewModel: TripDetailViewModel by viewModels({ requireActivity() })
+                tripDetailViewModel
+            }
+        }
+    }
+
+    private fun initBottomSheetClickSituation(): BottomSheetClickSituation =
+        arguments?.getParcelableCompat(BOTTOM_SHEET_CLICK_SITUATION_ID)
+            ?: throw IllegalStateException()
+
     fun updateMarkerSelectedStateToOpen() {
-        homeViewModel.markerSelectedState = true
+        viewModel.markerSelectedState = true
     }
 
     private fun initMarkerSelectedViewModelData() {
-        initBundleData()?.let { pointId -> markerSelectedViewModel.updatePointId(pointId) }
+        initPointData()?.let { pointId -> markerSelectedViewModel.updatePointId(pointId) }
+        initTripId()?.let { tripId -> markerSelectedViewModel.updateTripId(tripId) }
         markerSelectedViewModel.getPointInfo()
     }
 
-    private fun initBundleData(): Long? =
-        arguments?.getLong(POINT_ID)
+    private fun initPointData(): Long? = arguments?.getLong(POINT_ID)
+
+    private fun initTripId(): Long? = arguments?.getLong(TRIP_ID)
 
     private fun initGeocoder() {
         geocoder = Geocoder(requireContext(), Locale.KOREAN)
@@ -52,7 +75,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = BottomSheetMarkerSelectedBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -80,7 +103,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     private fun initPostWritingEventObserver() {
         markerSelectedViewModel.openPostWritingEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this::navigateToPostWriting)
+            EventObserver(this::navigateToPostWriting),
         )
     }
 
@@ -92,7 +115,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     private fun initDeletePointEventObserver() {
         markerSelectedViewModel.deletePointEvent.observe(
             viewLifecycleOwner,
-            EventObserver { if (it) dismiss() }
+            EventObserver { if (it) dismiss() },
         )
     }
 
@@ -102,7 +125,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateMapMarkers() {
-        homeViewModel.updateCurrentTripRoute()
+        viewModel.updateTripInfo()
     }
 
     override fun onDestroy() {
@@ -112,13 +135,22 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     }
 
     fun updateMarkerSelectedStateToClose() {
-        homeViewModel.markerSelectedState = false
+        viewModel.markerSelectedState = false
     }
 
     companion object {
-        const val POINT_ID = "POINT_ID"
+        private const val POINT_ID = "POINT_ID"
+        private const val TRIP_ID = "TRIP_ID"
+        private const val BOTTOM_SHEET_CLICK_SITUATION_ID = "BOTTOM_SHEET_CLICK_SITUATION_ID"
 
-        fun getBundle(tripId: Long): Bundle =
-            Bundle().apply { putLong(POINT_ID, tripId) }
+        fun getBundle(pointId: Long, tripId: Long, situation: BottomSheetClickSituation): Bundle {
+            val bundle = Bundle()
+            bundle.apply {
+                putLong(POINT_ID, pointId)
+                putLong(TRIP_ID, tripId)
+                putParcelable(BOTTOM_SHEET_CLICK_SITUATION_ID, situation)
+            }
+            return bundle
+        }
     }
 }
