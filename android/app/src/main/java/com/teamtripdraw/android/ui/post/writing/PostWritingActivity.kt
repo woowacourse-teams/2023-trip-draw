@@ -86,8 +86,8 @@ class PostWritingActivity : AppCompatActivity() {
         private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다. (PostWritingActivity)"
 
         /**
-         * Default is "New Post" mode.
-         * If you want "Edit Post" change the mode to "WritingMode.Edit".
+         * 새로운 글을 작성합니다.
+         * 기존의 글을 수정하고 싶다면 "WritingMode.Edit"를 설정해주세요.
          */
         fun getIntent(context: Context, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
@@ -96,8 +96,8 @@ class PostWritingActivity : AppCompatActivity() {
         }
 
         /**
-         * Edit Post
-         * If you want "New Post" don't choose mode.
+         * 기존의 글을 수정합니다.
+         * 새로운 글을 작성하고 싶다면 글 작성 모드를 설정하지 마세요.
          */
         fun getIntent(
             context: Context,

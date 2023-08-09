@@ -46,6 +46,10 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
             .dispatcher(tripDrawDispatcher)
             .build()
 
+    val moshi: Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
     val tripDrawRetrofit: Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.TRIP_DRAW_BASE_URL)
@@ -56,9 +60,5 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
 
     companion object {
         private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
-
-        val moshi: Moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
     }
 }
