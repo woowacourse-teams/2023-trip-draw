@@ -9,9 +9,12 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
+val DEFAULT_IMAGE_QUALITY = 90
+val DEFAULT_RESIZE_SIZE = 720f
+
 fun Uri.toResizedImageFile(context: Context): File? {
     val bitmap = toBitmap(context) ?: return null
-    val file = getResizedImageFile(bitmap, context.cacheDir)
+    val file = getResizedImageFile(bitmap = bitmap, directory = context.cacheDir)
     val orientation = context.contentResolver
         .openInputStream(this)?.use {
             ExifInterface(it)
@@ -29,28 +32,34 @@ private fun Uri.toBitmap(context: Context): Bitmap? {
         }
 }
 
-private fun getResizedImageFile(bitmap: Bitmap, directory: File): File {
+private fun getResizedImageFile(
+    bitmap: Bitmap,
+    directory: File,
+    quality: Int = DEFAULT_IMAGE_QUALITY
+): File {
     val byteArrayOutputStream = ByteArrayOutputStream()
-    val resizedBitmap: Bitmap = getResizedBitmap(bitmap)
-    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+    val resizedBitmap: Bitmap = getResizedBitmap(bitmap = bitmap)
+    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
 
-    val tempFile = File.createTempFile("image", ".jpg", directory)
-    FileOutputStream(tempFile).use {
+    val file = File.createTempFile("image", ".jpg", directory)
+    FileOutputStream(file).use {
         it.write(byteArrayOutputStream.toByteArray())
     }
-    return tempFile
+    return file
 }
 
-private fun getResizedBitmap(bitmap: Bitmap): Bitmap {
-    val RESIZE_SIZE = 720f
-    var resizedWidth: Float = RESIZE_SIZE
-    var resizedHeight: Float = RESIZE_SIZE
+private fun getResizedBitmap(
+    bitmap: Bitmap,
+    resizeSize: Float = DEFAULT_RESIZE_SIZE
+): Bitmap {
+    var resizedWidth: Float = resizeSize
+    var resizedHeight: Float = resizeSize
 
-    if (bitmap.width >= RESIZE_SIZE && bitmap.height >= RESIZE_SIZE) {
+    if (bitmap.width >= resizeSize && bitmap.height >= resizeSize) {
         if (bitmap.width >= bitmap.height) {
-            resizedWidth = RESIZE_SIZE * (bitmap.width.toFloat() / bitmap.height.toFloat())
+            resizedWidth = resizeSize * (bitmap.width.toFloat() / bitmap.height.toFloat())
         } else {
-            resizedHeight = RESIZE_SIZE * (bitmap.height.toFloat() / bitmap.width.toFloat())
+            resizedHeight = resizeSize * (bitmap.height.toFloat() / bitmap.width.toFloat())
         }
     } else {
         resizedWidth = bitmap.width.toFloat()

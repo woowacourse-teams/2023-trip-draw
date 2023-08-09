@@ -34,13 +34,16 @@ class PostWritingActivity : AppCompatActivity() {
 
         initView()
         initIntentData()
-        initViewEvent()
-        initObserveEvent()
+        initObserve()
     }
 
     private fun initView() {
         binding.lifecycleOwner = this
         binding.postWritingViewModel = viewModel
+
+        binding.onSelectPhoto =
+            { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+        binding.onBackClick = { finish() }
     }
 
     private fun initIntentData() {
@@ -52,17 +55,7 @@ class PostWritingActivity : AppCompatActivity() {
         viewModel.initTripData(pointId)
     }
 
-    private fun initViewEvent() {
-        binding.btnCamera.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-    }
-
-    private fun initObserveEvent() {
+    private fun initObserve() {
         viewModel.point.observe(this) { point ->
             val geocoder = Geocoder(this, Locale.KOREAN)
             geocoder.fetchAddress(point.latitude, point.longitude, viewModel::updateAddress)
