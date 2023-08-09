@@ -27,8 +27,10 @@ public class MemberService {
         return memberRepository.existsById(memberId);
     }
 
-    public MemberSearchResponse findById(Long id) {
-        Member member = memberRepository.findById(id)
+    @Transactional(readOnly = true)
+    public MemberSearchResponse findByCode(String code) {
+        Long memberId = authTokenManager.extractMemberId(code);
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
         return MemberSearchResponse.from(member);
     }
@@ -37,7 +39,6 @@ public class MemberService {
         Long memberId = authTokenManager.extractMemberId(code);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-
         member.delete();
     }
 }
