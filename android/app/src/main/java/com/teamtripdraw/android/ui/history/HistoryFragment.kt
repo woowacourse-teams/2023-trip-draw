@@ -10,7 +10,7 @@ import com.teamtripdraw.android.databinding.FragmentHistoryBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
-import com.teamtripdraw.android.ui.model.UiTripItem
+import com.teamtripdraw.android.ui.model.UiTrip
 
 class HistoryFragment : Fragment() {
 
@@ -48,7 +48,7 @@ class HistoryFragment : Fragment() {
         )
     }
 
-    private fun onHistoryClick(tripItem: UiTripItem) {
+    private fun onHistoryClick(tripItem: UiTrip) {
         val intent = HistoryDetailActivity.getIntent(requireContext(), tripItem)
         startActivity(intent)
     }

@@ -9,7 +9,7 @@ import com.teamtripdraw.android.domain.model.trip.TripStatus
 import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
-import com.teamtripdraw.android.ui.model.UiTripItem
+import com.teamtripdraw.android.ui.model.UiTrip
 import kotlinx.coroutines.launch
 
 class SetTripTitleDialogViewModel(
@@ -30,8 +30,8 @@ class SetTripTitleDialogViewModel(
     private val _titleSetupCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val titleSetupCompletedEvent: LiveData<Event<Boolean>> = _titleSetupCompletedEvent
 
-    private val _tripItem: MutableLiveData<UiTripItem> = MutableLiveData()
-    val tripItem: LiveData<UiTripItem> = _tripItem
+    private val _tripItem: MutableLiveData<UiTrip> = MutableLiveData()
+    val tripItem: LiveData<UiTrip> = _tripItem
 
     fun updateTripId(id: Long) {
         tripId = id

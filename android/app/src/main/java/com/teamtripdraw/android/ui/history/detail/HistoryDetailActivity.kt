@@ -11,7 +11,7 @@ import com.teamtripdraw.android.databinding.ActivityHistoryDetailBinding
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.common.bindingAdapter.setImage
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
-import com.teamtripdraw.android.ui.model.UiTripItem
+import com.teamtripdraw.android.ui.model.UiTrip
 
 class HistoryDetailActivity : AppCompatActivity() {
 
@@ -41,7 +41,7 @@ class HistoryDetailActivity : AppCompatActivity() {
     }
 
     private fun setUpView() {
-        val tripHistory = intent.getParcelableExtraCompat<UiTripItem>(TRIP_ITEM_KEY)
+        val tripHistory = intent.getParcelableExtraCompat<UiTrip>(TRIP_ITEM_KEY)
             ?: throw java.lang.IllegalStateException()
         viewModel.updateTripItem(tripHistory)
         adapter = HistoryDetailAdapter(viewModel)
@@ -51,7 +51,7 @@ class HistoryDetailActivity : AppCompatActivity() {
     companion object {
         private const val TRIP_ITEM_KEY = "TRIP_ITEM_KEY"
 
-        fun getIntent(context: Context, trip: UiTripItem): Intent {
+        fun getIntent(context: Context, trip: UiTrip): Intent {
             val intent = Intent(context, HistoryDetailActivity::class.java)
             intent.putExtra(TRIP_ITEM_KEY, trip)
             return intent
