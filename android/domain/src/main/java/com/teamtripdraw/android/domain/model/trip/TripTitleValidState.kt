@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.domain.model.trip
 
 enum class TripTitleValidState {
-    DEFAULT, EXCEED_LIMIT, CONTAIN_BLANK;
+    AVAILABLE, EXCEED_LIMIT, CONTAIN_BLANK;
 
     companion object {
         const val MAX_TITLE_LENGTH = 100
@@ -12,7 +12,7 @@ enum class TripTitleValidState {
             return when {
                 title.isBlank() -> CONTAIN_BLANK
                 MAX_TITLE_LENGTH < title.length -> EXCEED_LIMIT
-                title.length in MIN_TITLE_LENGTH..MAX_TITLE_LENGTH -> DEFAULT
+                title.length in MIN_TITLE_LENGTH..MAX_TITLE_LENGTH -> AVAILABLE
                 else -> throw IllegalArgumentException(WRONG_NICKNAME_STATE)
             }
         }

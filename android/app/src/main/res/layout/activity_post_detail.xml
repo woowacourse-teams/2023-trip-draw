@@ -131,7 +131,7 @@
                     tools:background="@color/td_gray" />
 
                 <com.google.android.material.divider.MaterialDivider
-                    android:id="@+id/divider_1"
+                    android:id="@+id/divider_post_detail"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="12dp"
@@ -151,7 +151,7 @@
                     app:clickToShowImageViewer="@{postDetailViewModel.postDetail.postImageUrl}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/divider_post_detail"
                     app:setImageWithVisibility="@{postDetailViewModel.postDetail.postImageUrl}"
                     tools:background="@color/td_gray" />
 

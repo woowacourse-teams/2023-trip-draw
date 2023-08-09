@@ -8,10 +8,10 @@ import androidx.databinding.BindingAdapter
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
 
-@BindingAdapter("app:setDialogEditTextDrawable")
-fun EditText.setDialogEditTextDrawable(state: TripTitleValidState) {
+@BindingAdapter("app:setDialogEditTextBackground")
+fun EditText.setDialogEditTextBackground(state: TripTitleValidState) {
     val etLineColor = when (state) {
-        TripTitleValidState.DEFAULT -> R.drawable.shape_td_main_blue_line_5_rect
+        TripTitleValidState.AVAILABLE -> R.drawable.shape_td_main_blue_line_5_rect
         TripTitleValidState.EXCEED_LIMIT, TripTitleValidState.CONTAIN_BLANK -> R.drawable.shape_td_red_line_5_rect
     }
 
@@ -21,12 +21,12 @@ fun EditText.setDialogEditTextDrawable(state: TripTitleValidState) {
 @BindingAdapter("app:setDialogWarningMessage")
 fun TextView.setDialogWarningMessage(state: TripTitleValidState) {
     when (state) {
-        TripTitleValidState.DEFAULT -> {
+        TripTitleValidState.AVAILABLE -> {
             this.visibility = View.INVISIBLE
         }
         TripTitleValidState.EXCEED_LIMIT -> {
             this.visibility = View.VISIBLE
-            this.text = resources.getString(R.string.input_dialog_warning_exceed_limit)
+            this.text = resources.getString(R.string.warning_exceed_limit_input_dialog)
         }
         TripTitleValidState.CONTAIN_BLANK -> {
             this.visibility = View.VISIBLE

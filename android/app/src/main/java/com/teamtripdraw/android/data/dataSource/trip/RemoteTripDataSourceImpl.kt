@@ -26,7 +26,7 @@ class RemoteTripDataSourceImpl(
 
     override suspend fun setTripTitle(tripId: Long, name: String, status: TripStatus): Result<Unit> {
         val request = SetTripTitleRequest(name, status.name)
-        return setTripTitleService.setTripTitle(tripId, request).process { body, headers ->
+        return setTripTitleService.setTripTitle(tripId, request).process { body, _ ->
             Result.success(body)
         }
     }

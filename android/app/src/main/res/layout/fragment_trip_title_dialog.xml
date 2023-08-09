@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toStartOf="@id/btn_positive_dialog_input"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_dialog_input_title"
-            app:setDialogEditTextDrawable="@{insertTripTitleDialogViewModel.titleState}" />
+            app:setDialogEditTextBackground="@{insertTripTitleDialogViewModel.titleState}" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_positive_dialog_input"

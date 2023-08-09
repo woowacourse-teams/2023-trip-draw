@@ -41,11 +41,11 @@ fun TextView.setDrawable(state: NicknameValidState) {
         }
         NicknameValidState.EXCEED_LIMIT -> {
             this.visibility = View.VISIBLE
-            this.text = resources.getString(R.string.warning_exceed_limit)
+            this.text = resources.getString(R.string.warning_exceed_limit_nickname)
         }
         NicknameValidState.CONTAIN_BLANK -> {
             this.visibility = View.VISIBLE
-            this.text = resources.getString(R.string.warning_contain_blank)
+            this.text = resources.getString(R.string.warning_contain_blank_nickname)
         }
         NicknameValidState.DUPLICATE -> {
             this.visibility = View.VISIBLE

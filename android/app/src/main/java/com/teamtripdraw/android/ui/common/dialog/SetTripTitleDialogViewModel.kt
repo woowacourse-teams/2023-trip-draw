@@ -24,7 +24,7 @@ class SetTripTitleDialogViewModel(
     val tripTitle: MutableLiveData<String> = MutableLiveData("")
 
     private val _titleState: MutableLiveData<TripTitleValidState> =
-        MutableLiveData(TripTitleValidState.DEFAULT)
+        MutableLiveData(TripTitleValidState.AVAILABLE)
     val titleState: LiveData<TripTitleValidState> = _titleState
 
     private val _titleSetupCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()

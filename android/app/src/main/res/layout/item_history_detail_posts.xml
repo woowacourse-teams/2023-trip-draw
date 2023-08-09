@@ -93,13 +93,13 @@
             android:text="@{postItem.recordedAt}"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_dark_gray"
-            app:layout_constraintBottom_toTopOf="@id/divider_1"
+            app:layout_constraintBottom_toTopOf="@id/divider_history_detail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_history_detail_location_icon"
             tools:text="2023.07.18 | 21:00" />
 
         <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_1"
+            android:id="@+id/divider_history_detail"
             android:layout_width="0dp"
             android:layout_height="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
