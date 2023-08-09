@@ -61,6 +61,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         getAddress()
         initPostWritingEventObserver()
+        initDeletePointEventObserver()
     }
 
     private fun getAddress() {
@@ -81,6 +82,13 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     private fun navigateToPostWriting(pointId: Long) {
         startActivity(PostWritingActivity.getIntent(requireContext(), pointId))
         dismiss()
+    }
+
+    private fun initDeletePointEventObserver() {
+        markerSelectedViewModel.deletePointEvent.observe(
+            viewLifecycleOwner,
+            EventObserver { if (it) dismiss() }
+        )
     }
 
     override fun onDestroyView() {

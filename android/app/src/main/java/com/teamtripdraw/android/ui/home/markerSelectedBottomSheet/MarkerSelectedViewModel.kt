@@ -35,6 +35,9 @@ class MarkerSelectedViewModel(
     private val _openPostWritingEvent = MutableLiveData<Event<Long>>()
     val openPostWritingEvent: LiveData<Event<Long>> = _openPostWritingEvent
 
+    private val _deletePointEvent = MutableLiveData<Event<Boolean>>()
+    val deletePointEvent: LiveData<Event<Boolean>> = _deletePointEvent
+
     fun updatePointId(pointId: Long) {
         this.pointId = pointId
     }
@@ -51,5 +54,15 @@ class MarkerSelectedViewModel(
 
     fun openPostWriting() {
         _openPostWritingEvent.value = Event(pointId)
+    }
+
+    fun deletePoint() {
+        viewModelScope.launch {
+            pointRepository.deletePoint(tripId = tripId, pointId = pointId).onSuccess {
+                _deletePointEvent.value = Event(true)
+            }.onFailure {
+                // todo log전략 수립후 서버로 전송되는 로그 찍기
+            }
+        }
     }
 }
