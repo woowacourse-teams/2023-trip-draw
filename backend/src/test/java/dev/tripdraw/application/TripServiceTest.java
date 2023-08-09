@@ -19,7 +19,6 @@ import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -114,10 +113,9 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
 
         // when
-        tripService.deletePoint(loginUser, pointDeleteRequest);
+        tripService.deletePoint(loginUser, response.pointId(), trip.id());
 
         // then
         Point deletedPoint = trip.route().points()
@@ -134,11 +132,10 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
         LoginUser otherUser = new LoginUser("순후추");
 
         // expect
-        assertThatThrownBy(() -> tripService.deletePoint(otherUser, pointDeleteRequest))
+        assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
@@ -150,10 +147,9 @@ class TripServiceTest {
         tripService.addPoint(loginUser, pointCreateRequest);
 
         Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, false, LocalDateTime.now());
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), inExistentPoint.id());
 
         // expect
-        assertThatThrownBy(() -> tripService.deletePoint(loginUser, pointDeleteRequest))
+        assertThatThrownBy(() -> tripService.deletePoint(loginUser, inExistentPoint.id(), trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_IN_TRIP.getMessage());
     }
@@ -163,11 +159,10 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
-        tripService.deletePoint(loginUser, pointDeleteRequest);
+        tripService.deletePoint(loginUser, response.pointId(), trip.id());
 
         // expect
-        assertThatThrownBy(() -> tripService.deletePoint(loginUser, pointDeleteRequest))
+        assertThatThrownBy(() -> tripService.deletePoint(loginUser, response.pointId(), trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_ALREADY_DELETED.getMessage());
     }

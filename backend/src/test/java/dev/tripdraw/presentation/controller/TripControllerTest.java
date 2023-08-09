@@ -17,7 +17,6 @@ import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -179,14 +178,12 @@ class TripControllerTest extends ControllerTest {
 
         PointResponse pointResponse = response.as(PointResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
-
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(NO_CONTENT.value());
     }
@@ -211,14 +208,12 @@ class TripControllerTest extends ControllerTest {
 
         PointResponse pointResponse = response.as(PointResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
-
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(순후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
     }
@@ -250,14 +245,12 @@ class TripControllerTest extends ControllerTest {
                 .extract()
                 .as(TripResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(tripResponse.tripId(), pointResponse.pointId());
-
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .param("tripId", tripResponse.tripId())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }
@@ -281,21 +274,20 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         PointResponse pointResponse = response.as(PointResponse.class);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
 
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all();
 
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(CONFLICT.value());
     }

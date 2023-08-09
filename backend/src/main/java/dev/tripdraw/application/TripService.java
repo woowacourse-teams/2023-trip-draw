@@ -12,7 +12,6 @@ import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -61,10 +60,8 @@ public class TripService {
         return PointCreateResponse.from(point);
     }
 
-    public void deletePoint(LoginUser loginUser, PointDeleteRequest pointDeleteRequest) {
+    public void deletePoint(LoginUser loginUser, Long pointId, Long tripId) {
         Member member = getByNickname(loginUser.nickname());
-        Long tripId = pointDeleteRequest.tripId();
-        Long pointId = pointDeleteRequest.pointId();
 
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
