@@ -39,4 +39,17 @@ class MemberRepositoryTest {
         // expect
         assertThat(foundMember).isEmpty();
     }
+
+    @Test
+    void 삭제된_회원을_ID로_조회하면_빈_Optional을_반환한다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+
+        // when
+        memberRepository.deleteById(member.id());
+        Optional<Member> foundMember = memberRepository.findById(member.id());
+
+        // then
+        assertThat(foundMember).isEmpty();
+    }
 }

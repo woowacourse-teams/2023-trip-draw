@@ -1,16 +1,24 @@
 package dev.tripdraw.domain.member;
 
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.oauth.OauthType;
+import dev.tripdraw.exception.member.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ?")
+@Where(clause = "is_deleted = FALSE")
 @Entity
 public class Member extends BaseEntity {
 
@@ -27,6 +35,9 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OauthType oauthType;
+
+    @Column(nullable = false)
+    private Boolean isDeleted = FALSE;
 
     protected Member() {
     }
@@ -46,6 +57,17 @@ public class Member extends BaseEntity {
         return new Member(null, null, oauthId, oauthType);
     }
 
+    public void delete() {
+        validateNotDeleted();
+        this.isDeleted = TRUE;
+    }
+
+    private void validateNotDeleted() {
+        if (isDeleted == TRUE) {
+            throw new MemberException(MEMBER_NOT_FOUND);
+        }
+    }
+
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -56,5 +78,17 @@ public class Member extends BaseEntity {
 
     public String nickname() {
         return nickname;
+    }
+
+    public String oauthId() {
+        return oauthId;
+    }
+
+    public OauthType oauthType() {
+        return oauthType;
+    }
+
+    public Boolean isDeleted() {
+        return isDeleted;
     }
 }
