@@ -42,14 +42,14 @@ public class TripService {
     }
 
     public TripCreateResponse create(LoginUser loginUser) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = Trip.from(member);
         Trip savedTrip = tripRepository.save(trip);
         return TripCreateResponse.from(savedTrip);
     }
 
     public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(pointCreateRequest.tripId());
 
         Point point = pointCreateRequest.toPoint();
@@ -61,7 +61,7 @@ public class TripService {
     }
 
     public void deletePoint(LoginUser loginUser, Long pointId, Long tripId) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
 
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
@@ -69,8 +69,8 @@ public class TripService {
         trip.deletePointById(pointId);
     }
 
-    private Member getByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname)
+    private Member getById(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
@@ -81,7 +81,7 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripResponse readTripById(LoginUser loginUser, Long id) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(id);
         trip.validateAuthorization(member);
         return TripResponse.from(trip);
@@ -89,13 +89,13 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripsSearchResponse readAllTrips(LoginUser loginUser) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
         return TripsSearchResponse.from(trips);
     }
 
     public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
 
@@ -116,7 +116,7 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public PointResponse readPointByTripAndPointId(LoginUser loginUser, Long tripId, Long pointId) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
 

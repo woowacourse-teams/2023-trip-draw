@@ -1,5 +1,6 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
@@ -25,7 +26,7 @@ class TripTest {
     @Test
     void 여행_경로에_좌표를_추가한다() {
         // given
-        Member member = new Member("tonghuchu");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point = new Point(1.1, 2.2, LocalDateTime.now());
 
@@ -40,7 +41,7 @@ class TripTest {
     @Test
     void 인가된_사용자는_예외가_발생하지_않는다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("tonghuchu", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
 
         // expect
@@ -50,11 +51,11 @@ class TripTest {
     @Test
     void 인가되지_않은_사용자는_예외가_발생한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("tonghuchu", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
 
         // expect
-        assertThatThrownBy(() -> trip.validateAuthorization(new Member("other")))
+        assertThatThrownBy(() -> trip.validateAuthorization(new Member("other", "kakaoId", KAKAO)))
                 .isInstanceOf(TripException.class)
                 .hasMessage(NOT_AUTHORIZED_TO_TRIP.getMessage());
     }
@@ -62,7 +63,7 @@ class TripTest {
     @Test
     void 이름을_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("tonghuchu", "kakaoId", KAKAO);
         Trip trip = new Trip(TripName.from("통후추"), member);
 
         // expect
@@ -72,7 +73,7 @@ class TripTest {
     @Test
     void 이름을_변경한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("tonghuchu", "kakaoId", KAKAO);
         Trip trip = new Trip(TripName.from("통후추"), member);
 
         // when
@@ -85,7 +86,7 @@ class TripTest {
     @Test
     void 경로에_해당하는_모든_위치를_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
         Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
@@ -103,7 +104,7 @@ class TripTest {
     @CsvSource({"ONGOING, ONGOING", "FINISHED, FINISHED"})
     void 여행_상태를_변경한다(TripStatus target, TripStatus expected) {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
 
         // when
@@ -116,7 +117,7 @@ class TripTest {
     @Test
     void 여행_상태를_null로_변경하려할_경우_예외를_발생시킨다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
 
         // expect
@@ -128,7 +129,7 @@ class TripTest {
     @Test
     void 여행에_존재하는_위치정보를_삭제한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
         Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
@@ -146,7 +147,7 @@ class TripTest {
     @Test
     void 삭제된_위치정보를_삭제하면_예외를_발생시킨다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point1 = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
         trip.add(point1);
@@ -161,7 +162,7 @@ class TripTest {
     @Test
     void 여행에_존재하지_않는_위치정보를_삭제하면_예외를_발생시킨다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point1 = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
         Point point2 = new Point(2L, 3.3, 4.4, false, LocalDateTime.now());
@@ -176,7 +177,7 @@ class TripTest {
     @Test
     void 감상_사진_URL을_변경한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
 
         // when
@@ -189,7 +190,7 @@ class TripTest {
     @Test
     void 경로_이미지_URL을_변경한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
 
         // when
@@ -202,7 +203,7 @@ class TripTest {
     @Test
     void 위도를_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         trip.add(new Point(1.1, 2.2, LocalDateTime.now()));
         trip.add(new Point(3.3, 4.4, LocalDateTime.now()));
@@ -218,7 +219,7 @@ class TripTest {
     @Test
     void 경도를_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         trip.add(new Point(1.1, 2.2, LocalDateTime.now()));
         trip.add(new Point(3.3, 4.4, LocalDateTime.now()));
@@ -234,7 +235,7 @@ class TripTest {
     @Test
     void 감상을_남긴_위치_정보의_위도를_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         trip.add(new Point(1L, 1.1, 2.2, true, LocalDateTime.now()));
         trip.add(new Point(2L, 3.3, 4.4, false, LocalDateTime.now()));
@@ -250,7 +251,7 @@ class TripTest {
     @Test
     void 감상을_남긴_위치_정보의_경도를_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         trip.add(new Point(1L, 1.1, 2.2, true, LocalDateTime.now()));
         trip.add(new Point(2L, 3.3, 4.4, false, LocalDateTime.now()));
@@ -266,7 +267,7 @@ class TripTest {
     @Test
     void 여행의_위치정보_중_삭제되지_않은_위치정보를_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
         Point point2 = new Point(3.3, 4.4, LocalDateTime.now());

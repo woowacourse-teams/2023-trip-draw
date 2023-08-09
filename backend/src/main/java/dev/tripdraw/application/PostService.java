@@ -59,7 +59,7 @@ public class PostService {
             PostAndPointCreateRequest postAndPointCreateRequest,
             MultipartFile file
     ) {
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         Trip trip = findValidatedTripById(postAndPointCreateRequest.tripId(), member);
 
         Point point = postAndPointCreateRequest.toPoint();
@@ -89,7 +89,7 @@ public class PostService {
             PostRequest postRequest,
             MultipartFile file
     ) {
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         Trip trip = findValidatedTripById(postRequest.tripId(), member);
 
         Point point = trip.findPointById(postRequest.pointId());
@@ -105,13 +105,13 @@ public class PostService {
 
     public PostResponse read(LoginUser loginUser, Long postId) {
         Post post = findPostById(postId);
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         post.validateAuthorization(member);
         return PostResponse.from(post);
     }
 
     public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         findValidatedTripById(tripId, member);
 
         List<Post> posts = postRepository.findAllByTripId(tripId);
@@ -120,7 +120,7 @@ public class PostService {
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
         Post post = findPostById(postId);
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         post.validateAuthorization(member);
 
         post.changeTitle(postUpdateRequest.title());
@@ -130,7 +130,7 @@ public class PostService {
 
     public void delete(LoginUser loginUser, Long postId) {
         Post post = findPostById(postId);
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         post.validateAuthorization(member);
 
         postRepository.deleteById(postId);
@@ -153,8 +153,8 @@ public class PostService {
         return trip;
     }
 
-    private Member findMemberByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname)
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 

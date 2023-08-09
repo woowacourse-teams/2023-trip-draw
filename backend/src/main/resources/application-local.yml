@@ -48,3 +48,11 @@ trip:
   base:
   post:
   route:
+
+jwt:
+  secret-key: ItIsALocalKeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee2222222222222222222222222222222222eeeeeeeeeeyXD
+  expiration-time: 172800000  # 48시간 millisecond
+
+oauth:
+  kakao:
+    info-url: https://kapi.kakao.com/v2/user/me
