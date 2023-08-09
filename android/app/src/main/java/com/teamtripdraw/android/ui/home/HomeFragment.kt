@@ -34,6 +34,8 @@ import com.teamtripdraw.android.support.framework.presentation.permission.checkF
 import com.teamtripdraw.android.support.framework.presentation.permission.checkNotificationPermission
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
+import com.teamtripdraw.android.ui.common.dialog.SetTitleSituation.FINISHED
+import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialog
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
@@ -128,6 +130,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         setUpPostWritingClickEvent()
         initPostWritingEventObserver()
         initMarkerSelectedObserver()
+        initFinishTripEventObserver()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -277,6 +280,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             val markerSelectedBottomSheet = MarkerSelectedBottomSheet()
             markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(pointId)
             markerSelectedBottomSheet.show(childFragmentManager, this.javaClass.name)
+        }
+    }
+
+    private fun initFinishTripEventObserver() {
+        homeViewModel.finishTripEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this::showSetTripTitleDialog)
+        )
+    }
+
+    private fun showSetTripTitleDialog(event: Boolean) {
+        if (event) {
+            val setTripTitleDialog = SetTripTitleDialog()
+            setTripTitleDialog.arguments =
+                SetTripTitleDialog.getBundle(homeViewModel.tripId, FINISHED)
+            setTripTitleDialog.show(childFragmentManager, this.javaClass.name)
         }
     }
 

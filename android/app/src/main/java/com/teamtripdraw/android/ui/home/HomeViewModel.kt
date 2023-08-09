@@ -49,6 +49,9 @@ class HomeViewModel(
 
     val notificationMarkerSelected: (pointId: Long) -> Unit = { _markerSelectEvent.value = it }
 
+    private val _finishTripEvent = MutableLiveData<Event<Boolean>>()
+    val finishTripEvent: LiveData<Event<Boolean>> = _finishTripEvent
+
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
 
@@ -119,4 +122,8 @@ class HomeViewModel(
             locationResult.locations.first().longitude,
             LocalDateTime.now()
         )
+
+    fun finishTripEvent() {
+        _finishTripEvent.value = Event(true)
+    }
 }
