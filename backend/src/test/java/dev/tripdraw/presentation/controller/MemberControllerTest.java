@@ -3,9 +3,11 @@ package dev.tripdraw.presentation.controller;
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
@@ -28,6 +30,9 @@ class MemberControllerTest extends ControllerTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    AuthTokenManager authTokenManager;
 
     @BeforeEach
     void setUp() {
@@ -61,5 +66,34 @@ class MemberControllerTest extends ControllerTest {
                 .then().log().all()
                 .statusCode(NOT_FOUND.value())
                 .extract();
+    }
+
+    @Test
+    void code를_입력_받아_사용자를_삭제한다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        String code = authTokenManager.generate(member.id());
+
+        // expect
+        RestAssured.given().log().all()
+                .param("code", code)
+                .when().delete("/members")
+                .then().log().all()
+                .statusCode(NO_CONTENT.value());
+    }
+
+    @Test
+    void code를_입력_받아_사용자를_삭제할_때_존재하지_않는_사용자라면_예외를_발생시킨다() {
+        // given
+        Member memberToBeDeleted = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        memberRepository.deleteById(memberToBeDeleted.id());
+        String code = authTokenManager.generate(memberToBeDeleted.id());
+
+        // expect
+        RestAssured.given().log().all()
+                .param("code", code)
+                .when().delete("/members")
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
     }
 }

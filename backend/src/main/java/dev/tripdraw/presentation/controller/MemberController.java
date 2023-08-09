@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Member", description = "사용자 관련 API 명세")
@@ -31,5 +33,16 @@ public class MemberController {
     public ResponseEntity<MemberSearchResponse> findById(@PathVariable Long memberId) {
         MemberSearchResponse response = memberService.findById(memberId);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "사용자 삭제 API", description = "사용자를 삭제합니다.")
+    @ApiResponse(
+            responseCode = "204",
+            description = "사용자 삭제 성공."
+    )
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestParam String code) {
+        memberService.deleteByCode(code);
+        return ResponseEntity.noContent().build();
     }
 }
