@@ -13,7 +13,7 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
-import com.teamtripdraw.android.support.framework.presentation.extensions.toFile
+import com.teamtripdraw.android.support.framework.presentation.extensions.toResizedImageFile
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import java.util.Locale
 
@@ -25,7 +25,7 @@ class PostWritingActivity : AppCompatActivity() {
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri == null) return@registerForActivityResult
-            uri.toFile(this)?.let { viewModel.updateImage(it) }
+            uri.toResizedImageFile(this)?.let { viewModel.updateImage(it) }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,20 +33,20 @@ class PostWritingActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_writing)
 
         initView()
-        initTripData()
-        initEvent()
+        initIntentData()
+        initObserve()
     }
 
     private fun initView() {
         binding.lifecycleOwner = this
         binding.postWritingViewModel = viewModel
 
-        binding.btnCamera.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
+        binding.onSelectPhoto =
+            { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+        binding.onBackClick = { finish() }
     }
 
-    private fun initTripData() {
+    private fun initIntentData() {
         val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, NULL_SUBSTITUTE_POINT_ID)
 
         if (pointId == NULL_SUBSTITUTE_POINT_ID)
@@ -55,12 +55,19 @@ class PostWritingActivity : AppCompatActivity() {
         viewModel.initTripData(pointId)
     }
 
-    private fun initEvent() {
+    private fun initObserve() {
+        setPointObserveEvent()
+        setWritingCompletedEvent()
+    }
+
+    private fun setPointObserveEvent() {
         viewModel.point.observe(this) { point ->
             val geocoder = Geocoder(this, Locale.KOREAN)
             geocoder.fetchAddress(point.latitude, point.longitude, viewModel::updateAddress)
         }
+    }
 
+    private fun setWritingCompletedEvent() {
         viewModel.writingCompletedEvent.observe(this) {
             if (it == true) finish()
         }
@@ -68,7 +75,7 @@ class PostWritingActivity : AppCompatActivity() {
 
     companion object {
         private const val INTENT_KEY_POINT_ID = "pointId"
-        private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다."
+        private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다. (PostWritingActivity)"
 
         fun getIntent(context: Context, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
