@@ -13,7 +13,7 @@ import com.teamtripdraw.android.support.framework.presentation.event.EventObserv
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.HomeViewModel
-import com.teamtripdraw.android.ui.postWriting.PostWritingActivity
+import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 import java.util.Locale
 
 class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {

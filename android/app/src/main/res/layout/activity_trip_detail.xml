@@ -68,9 +68,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_trip_detail"
             app:markerViewModeState="@{tripDetailViewModel.markerViewModeState}"
-            app:setMarkerNaverMap="@{naverMap}"
-            app:setMarkerUiRoute="@{tripDetailViewModel.currentTripRoute}"
-            app:setMarkerViewModeState="@{tripDetailViewModel.markerViewModeStateValue}"
             app:setPolyLineNaverMap="@{naverMap}"
             app:setPolyLineUiRoute="@{tripDetailViewModel.currentTripRoute}"
             tools:layout="@layout/map_preview" />
