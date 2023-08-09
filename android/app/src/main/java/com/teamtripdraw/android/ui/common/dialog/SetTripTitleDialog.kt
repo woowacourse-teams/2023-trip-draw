@@ -90,8 +90,8 @@ class SetTripTitleDialog : DialogFragment() {
 
     companion object {
         private const val DIALOG_WINDOW_SIZE = 0.85
-        const val TRIP_ID_KEY = "TRIP_ID_KEY"
-        const val SET_TITLE_SITUATION_KEY = "SET_TITLE_SITUATION_KEY"
+        private const val TRIP_ID_KEY = "TRIP_ID_KEY"
+        private const val SET_TITLE_SITUATION_KEY = "SET_TITLE_SITUATION_KEY"
 
         fun getBundle(tripId: Long, setTitleSituation: SetTitleSituation): Bundle =
             Bundle().apply {
