@@ -2,9 +2,9 @@ package com.teamtripdraw.android.ui.history.tripDetail
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -24,7 +24,7 @@ import com.teamtripdraw.android.support.framework.presentation.resolution.toPixe
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
-import com.teamtripdraw.android.ui.postWriting.PostWritingActivity
+import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 
 class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -33,7 +33,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityTripDetailBinding
     private val viewModel: TripDetailViewModel by viewModels { tripDrawViewModelFactory }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +88,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun navigateToPostViewer(isClicked: Boolean) {
-        if (isClicked) startActivity(PostViewerActivity.getIntent(this))    // todo: tripId 받아가기
+        if (isClicked) startActivity(PostViewerActivity.getIntent(this)) // todo: tripId 받아가기
     }
 
     private fun setUpPostWritingClickEvent() {
@@ -113,7 +112,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun navigateToPostWriting(pointId: Long) {
-        startActivity(PostWritingActivity.getIntent(this, pointId))    // todo: tripId 받아가기
+        startActivity(PostWritingActivity.getIntent(this, pointId)) // todo: tripId 받아가기
     }
 
     companion object {
