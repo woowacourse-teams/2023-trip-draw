@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.PreSetTripTitle
 import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.model.trip.TripStatus
 import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
@@ -49,8 +50,10 @@ class SetTripTitleDialogViewModel(
         viewModelScope.launch {
             repository.setTripTitle(
                 tripId = tripId,
-                name = requireNotNull(tripTitle.value),
-                status = TripStatus.FINISHED
+                preSetTripTitle = PreSetTripTitle(
+                    requireNotNull(tripTitle.value),
+                    TripStatus.FINISHED
+                )
             ).onSuccess {
                 _titleSetupCompletedEvent.value = Event(true)
             }.onFailure {
