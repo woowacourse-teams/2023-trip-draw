@@ -11,7 +11,7 @@ import com.teamtripdraw.android.databinding.FragmentTripTitleDialogBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
-import com.teamtripdraw.android.ui.model.UiTrip
+import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
 class SetTripTitleDialog : DialogFragment() {
 
@@ -71,13 +71,13 @@ class SetTripTitleDialog : DialogFragment() {
     private fun onSetupCompleted(isSuccess: Boolean) {
         if (isSuccess) {
             when (status) {
-                SetTitleSituation.FINISHED -> navigateDetailPage(requireNotNull(viewModel.trip.value))
+                SetTitleSituation.FINISHED -> navigateDetailPage(requireNotNull(viewModel.previewTrip.value))
                 SetTitleSituation.EDIT -> dismiss()
             }
         }
     }
 
-    private fun navigateDetailPage(trip: UiTrip) {
+    private fun navigateDetailPage(trip: UiPreviewTrip) {
         // todo 해당 여행 히스토리의 상세 화면으로 이동
 
         dismiss()

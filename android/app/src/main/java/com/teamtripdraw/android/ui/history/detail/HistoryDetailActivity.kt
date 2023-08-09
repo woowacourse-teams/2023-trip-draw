@@ -11,7 +11,7 @@ import com.teamtripdraw.android.databinding.ActivityHistoryDetailBinding
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.common.bindingAdapter.setImage
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
-import com.teamtripdraw.android.ui.model.UiTrip
+import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
 class HistoryDetailActivity : AppCompatActivity() {
 
@@ -30,9 +30,9 @@ class HistoryDetailActivity : AppCompatActivity() {
     }
 
     private fun getIntentData() {
-        val trip = intent.getParcelableExtraCompat<UiTrip>(TRIP_ITEM_KEY)
+        val trip = intent.getParcelableExtraCompat<UiPreviewTrip>(TRIP_ITEM_KEY)
             ?: throw java.lang.IllegalStateException()
-        viewModel.updateTripItem(trip)
+        viewModel.updatePreViewTrip(trip)
     }
 
     private fun setAdapter() {
@@ -52,7 +52,7 @@ class HistoryDetailActivity : AppCompatActivity() {
     }
 
     private fun setTripObserve() {
-        viewModel.trip.observe(this) {
+        viewModel.previewTrip.observe(this) {
             binding.ivHistoryDetailImage.setImage(it.imageUrl)
             binding.ivHistoryDetailRoute.setImage(it.routeImageUrl)
             binding.tbHistoryDetail.title = it.name
@@ -62,7 +62,7 @@ class HistoryDetailActivity : AppCompatActivity() {
     companion object {
         private const val TRIP_ITEM_KEY = "TRIP_ITEM_KEY"
 
-        fun getIntent(context: Context, trip: UiTrip): Intent {
+        fun getIntent(context: Context, trip: UiPreviewTrip): Intent {
             val intent = Intent(context, HistoryDetailActivity::class.java)
             intent.putExtra(TRIP_ITEM_KEY, trip)
             return intent

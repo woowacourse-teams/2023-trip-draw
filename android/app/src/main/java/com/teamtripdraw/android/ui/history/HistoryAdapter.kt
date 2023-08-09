@@ -3,11 +3,11 @@ package com.teamtripdraw.android.ui.history
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamtripdraw.android.ui.model.UiTrip
+import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
 class HistoryAdapter(
     private val viewModel: HistoryViewModel
-) : ListAdapter<UiTrip, HistoryViewHolder>(diffUtil) {
+) : ListAdapter<UiPreviewTrip, HistoryViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         return HistoryViewHolder.of(parent, viewModel)
@@ -18,17 +18,17 @@ class HistoryAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<UiTrip>() {
+        val diffUtil = object : DiffUtil.ItemCallback<UiPreviewTrip>() {
             override fun areItemsTheSame(
-                oldItem: UiTrip,
-                newItem: UiTrip,
+                oldItem: UiPreviewTrip,
+                newItem: UiPreviewTrip,
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: UiTrip,
-                newItem: UiTrip,
+                oldItem: UiPreviewTrip,
+                newItem: UiPreviewTrip,
             ): Boolean {
                 return oldItem == newItem
             }

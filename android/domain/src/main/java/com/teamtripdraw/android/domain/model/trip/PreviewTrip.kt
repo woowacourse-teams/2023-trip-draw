@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.domain.model.trip
 
-data class Trip(
+data class PreviewTrip(
     val id: Long,
     val name: String,
     val imageUrl: String,

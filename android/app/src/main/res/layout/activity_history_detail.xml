@@ -47,7 +47,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:setImage="@{historyDetailViewModel.trip.imageUrl}"
+                        app:setImage="@{historyDetailViewModel.previewTrip.imageUrl}"
                         tools:background="@color/td_light_blue" />
 
                     <View
@@ -66,7 +66,7 @@
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_image"
                         app:layout_constraintEnd_toEndOf="@id/iv_history_detail_image"
-                        app:setImage="@{historyDetailViewModel.trip.routeImageUrl}"
+                        app:setImage="@{historyDetailViewModel.previewTrip.routeImageUrl}"
                         tools:background="@color/td_gray" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

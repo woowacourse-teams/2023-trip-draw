@@ -4,17 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamtripdraw.android.support.framework.presentation.event.Event
-import com.teamtripdraw.android.ui.model.UiTrip
+import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
 class HistoryViewModel : ViewModel() {
 
-    private val _tripHistory: MutableLiveData<List<UiTrip>> = MutableLiveData()
-    val tripHistory: LiveData<List<UiTrip>> = _tripHistory
+    private val _tripHistory: MutableLiveData<List<UiPreviewTrip>> = MutableLiveData()
+    val tripHistory: LiveData<List<UiPreviewTrip>> = _tripHistory
 
-    private val _historyOpenEvent = MutableLiveData<Event<UiTrip>>()
-    val historyOpenEvent: LiveData<Event<UiTrip>> = _historyOpenEvent
+    private val _historyOpenEvent = MutableLiveData<Event<UiPreviewTrip>>()
+    val historyOpenEvent: LiveData<Event<UiPreviewTrip>> = _historyOpenEvent
 
-    fun openHistoryDetail(historyItem: UiTrip) {
+    fun openHistoryDetail(historyItem: UiPreviewTrip) {
         _historyOpenEvent.value = Event(historyItem)
     }
 }

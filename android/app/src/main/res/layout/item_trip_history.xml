@@ -10,8 +10,8 @@
             type="com.teamtripdraw.android.ui.history.HistoryViewModel" />
 
         <variable
-            name="tripItem"
-            type="com.teamtripdraw.android.ui.model.UiTrip" />
+            name="uiPreviewTrip"
+            type="com.teamtripdraw.android.ui.model.UiPreviewTrip" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
         android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="@dimen/margin_default"
         android:background="@drawable/shape_td_gray_line_0_rect"
-        android:onClick="@{()->historyViewModel.openHistoryDetail(tripItem)}"
+        android:onClick="@{()->historyViewModel.openHistoryDetail(uiPreviewTrip)}"
         android:padding="@dimen/margin_default">
 
         <ImageView
@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setRoundImageWithVisibility="@{tripItem.imageUrl}"
+            app:setRoundImageWithVisibility="@{uiPreviewTrip.imageUrl}"
             tools:background="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -45,7 +45,7 @@
             app:layout_constraintEnd_toEndOf="@id/iv_history_image"
             app:layout_constraintStart_toStartOf="@id/iv_history_image"
             app:layout_constraintTop_toTopOf="@id/iv_history_image"
-            app:setImage="@{tripItem.routeImageUrl}" />
+            app:setImage="@{uiPreviewTrip.routeImageUrl}" />
 
         <TextView
             android:id="@+id/tv_history_title"
@@ -55,7 +55,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="@{tripItem.name}"
+            android:text="@{uiPreviewTrip.name}"
             android:textAppearance="@style/subtitle_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/iv_history_image"
