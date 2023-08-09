@@ -85,6 +85,14 @@ public class Post extends BaseEntity {
         return point.recordedAt();
     }
 
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeWriting(String writing) {
+        this.writing = writing;
+    }
+
     public Long id() {
         return id;
     }
