@@ -284,10 +284,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun initFinishTripEventObserver() {
-        homeViewModel.finishTripEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this::showSetTripTitleDialog)
-        )
+        homeViewModel.finishTripEvent.observe(viewLifecycleOwner, this::showSetTripTitleDialog)
     }
 
     private fun showSetTripTitleDialog(event: Boolean) {
@@ -296,6 +293,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             setTripTitleDialog.arguments =
                 SetTripTitleDialog.getBundle(homeViewModel.tripId, FINISHED)
             setTripTitleDialog.show(childFragmentManager, this.javaClass.name)
+            homeViewModel.resetFinishTripEvent()
         }
     }
 
