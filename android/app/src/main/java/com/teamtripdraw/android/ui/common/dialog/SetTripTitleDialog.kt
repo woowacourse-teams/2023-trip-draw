@@ -92,5 +92,11 @@ class SetTripTitleDialog : DialogFragment() {
         private const val DIALOG_WINDOW_SIZE = 0.85
         const val TRIP_ID_KEY = "TRIP_ID_KEY"
         const val SET_TITLE_SITUATION_KEY = "SET_TITLE_SITUATION_KEY"
+
+        fun getBundle(tripId: Long, setTitleSituation: SetTitleSituation): Bundle =
+            Bundle().apply {
+                putLong(TRIP_ID_KEY, tripId)
+                putSerializable(SET_TITLE_SITUATION_KEY, setTitleSituation)
+            }
     }
 }
