@@ -127,7 +127,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         setUpPostViewerClickEvent()
         setUpPostWritingClickEvent()
         initPostWritingEventObserver()
-        observeMarkerSelected()
+        initMarkerSelectedObserver()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -266,7 +266,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         recordingPointServiceBindingState = false
     }
 
-    private fun observeMarkerSelected() {
+    private fun initMarkerSelectedObserver() {
         homeViewModel.makerSelectedEvent.observe(viewLifecycleOwner) { pointId ->
             showMarkerSelectedBottomSheet(pointId)
         }
