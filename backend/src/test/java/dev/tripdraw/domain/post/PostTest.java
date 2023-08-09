@@ -86,6 +86,36 @@ class PostTest {
     }
 
     @Test
+    void 감상의_제목을_수정한다() {
+        // given
+        LocalDateTime recordedAt = LocalDateTime.now();
+        Point point = new Point(3.14, 5.25, recordedAt);
+        Member member = new Member("통후추");
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+
+        // when
+        post.changeTitle("바뀐 제목");
+
+        // then
+        assertThat(post.title()).isEqualTo("바뀐 제목");
+    }
+
+    @Test
+    void 감상의_내용을_수정한다() {
+        // given
+        LocalDateTime recordedAt = LocalDateTime.now();
+        Point point = new Point(3.14, 5.25, recordedAt);
+        Member member = new Member("통후추");
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+
+        // when
+        post.changeWriting("내일은 바람이 많네요.");
+
+        // then
+        assertThat(post.writing()).isEqualTo("내일은 바람이 많네요.");
+    }
+
+    @Test
     void 감상_사진_URL을_변경한다() {
         // given
         LocalDateTime recordedAt = LocalDateTime.now();
@@ -113,5 +143,21 @@ class PostTest {
 
         // then
         assertThat(post.routeImageUrl()).isEqualTo("/통후추여행경로.png");
+    }
+
+    @Test
+    void 감상의_사진_URL을_제거한다() {
+        // given
+        LocalDateTime recordedAt = LocalDateTime.now();
+        Point point = new Point(3.14, 5.25, recordedAt);
+        Member member = new Member("통후추");
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        post.changePostImageUrl("example.url");
+
+        // when
+        post.removePostImageUrl();
+
+        // then
+        assertThat(post.postImageUrl()).isNull();
     }
 }

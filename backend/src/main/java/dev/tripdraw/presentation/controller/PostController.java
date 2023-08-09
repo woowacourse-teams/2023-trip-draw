@@ -1,6 +1,7 @@
 package dev.tripdraw.presentation.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import dev.tripdraw.application.PostService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
@@ -9,6 +10,7 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +18,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -90,5 +94,35 @@ public class PostController {
     ) {
         PostsResponse response = postService.readAllByTripId(loginUser, tripId);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "감상 수정 API", description = "주소를 제외한 감상의 모든 정보를 수정")
+    @ApiResponse(
+            responseCode = "204",
+            description = "감상 수정 성공."
+    )
+    @PatchMapping("/posts/{postId}")
+    public ResponseEntity<Void> update(
+            @Auth LoginUser loginUser,
+            @PathVariable Long postId,
+            @Valid @RequestPart(value = "dto") PostUpdateRequest postUpdateRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        postService.update(loginUser, postId, postUpdateRequest, file);
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
+
+    @Operation(summary = "감상 삭제 API", description = "감상 삭제")
+    @ApiResponse(
+            responseCode = "204",
+            description = "감상 삭제 성공."
+    )
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<Void> delete(
+            @Auth LoginUser loginUser,
+            @PathVariable Long postId
+    ) {
+        postService.delete(loginUser, postId);
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 }

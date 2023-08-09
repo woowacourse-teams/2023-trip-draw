@@ -77,12 +77,24 @@ public class Post extends BaseEntity {
         this.postImageUrl = postImageUrl;
     }
 
+    public void removePostImageUrl() {
+        this.postImageUrl = null;
+    }
+
     public void changeRouteImageUrl(String routeImageUrl) {
         this.routeImageUrl = routeImageUrl;
     }
 
     public LocalDateTime pointRecordedAt() {
         return point.recordedAt();
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeWriting(String writing) {
+        this.writing = writing;
     }
 
     public Long id() {
