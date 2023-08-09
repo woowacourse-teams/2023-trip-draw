@@ -14,6 +14,7 @@ data class UiRoute(
     fun getUiMarkerInfo(): List<UiMarkerInfo> =
         value.map {
             UiMarkerInfo(
+                it.pointId,
                 LatLng(it.latitude, it.longitude),
                 it.hasPost
             )

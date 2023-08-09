@@ -29,6 +29,7 @@
             android:name=".ui.home.recordingPoint.RecordingPointService"
             android:description="@string/recording_point_service_description"
             android:exported="false" />
+
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"
@@ -58,6 +59,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.post.detail.PostDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.history.detail.HistoryDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.history.tripDetail.TripDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

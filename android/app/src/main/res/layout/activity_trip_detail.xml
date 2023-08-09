@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="tripDetailViewModel"
+            type="com.teamtripdraw.android.ui.history.tripDetail.TripDetailViewModel" />
+
+        <variable
+            name="fabState"
+            type="Boolean" />
+
+        <variable
+            name="naverMap"
+            type="com.naver.maps.map.NaverMap" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.history.tripDetail.TripDetailActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_trip_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_trip_detail_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/btn_post_viewer_back_description"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/tv_trip_detail_title"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textAppearance="@style/title_3M"
+                android:textColor="@color/td_black"
+                tools:text="여행 제목" />
+
+            <ImageView
+                android:id="@+id/btn_trip_detail_share"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:src="@drawable/ic_share" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_trip_detail_map"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_trip_detail"
+            app:markerViewModeState="@{tripDetailViewModel.markerViewModeState}"
+            app:setPolyLineNaverMap="@{naverMap}"
+            app:setPolyLineUiRoute="@{tripDetailViewModel.currentTripRoute}"
+            tools:layout="@layout/map_preview" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_marker_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/td_white"
+            android:onClick="@{()->tripDetailViewModel.toggleMarkerViewModeState()}"
+            android:src="@drawable/ic_marker_mode"
+            app:borderWidth="0dp"
+            app:fabCustomSize="44dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toEndOf="@+id/fab_home"
+            app:layout_constraintStart_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home"
+            app:tint="@color/td_main_blue" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_post_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/td_white"
+            android:onClick="@{()->tripDetailViewModel.openPostViewer()}"
+            android:src="@drawable/ic_post_list"
+            app:borderWidth="0dp"
+            app:fabCustomSize="44dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toEndOf="@+id/fab_home"
+            app:layout_constraintStart_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home"
+            app:tint="@color/td_main_blue" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_write_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/td_white"
+            android:src="@drawable/ic_write_post"
+            app:borderWidth="0dp"
+            app:fabCustomSize="44dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toEndOf="@+id/fab_home"
+            app:layout_constraintStart_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home"
+            app:tint="@color/td_main_blue" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:elevation="0dp"
+            android:src="@drawable/ic_fab_plus"
+            app:borderWidth="0dp"
+            app:fabCustomSize="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:setFloatingActionButtonTint="@{fabState}"
+            tools:backgroundTint="@color/td_main_blue"
+            tools:tint="@color/td_white" />
+
+        <TextView
+            android:id="@+id/tv_marker_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/tv_marker_mode"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_main_blue"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home" />
+
+        <TextView
+            android:id="@+id/tv_post_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/tv_post_list"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_main_blue"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home" />
+
+        <TextView
+            android:id="@+id/tv_write_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/tv_write_post"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_main_blue"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
+            app:layout_constraintEnd_toStartOf="@+id/fab_home"
+            app:layout_constraintTop_toTopOf="@+id/fab_home" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

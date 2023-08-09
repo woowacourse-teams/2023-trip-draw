@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="markerSelectedViewModel"
+            type="com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view_marker_selected_bottom_sheet"
+            android:layout_width="32dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="@dimen/margin_default"
+            android:background="@drawable/shape_td_gray_fill_100_rect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_location_marker_selected_bottom_sheet"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintEnd_toStartOf="@+id/tv_location_marker_selected_bottom_sheet"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_marker_selected_bottom_sheet"
+            app:srcCompat="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/tv_location_marker_selected_bottom_sheet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{markerSelectedViewModel.address}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_location_marker_selected_bottom_sheet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_location_marker_selected_bottom_sheet"
+            app:layout_constraintTop_toTopOf="@+id/iv_location_marker_selected_bottom_sheet"
+            tools:text="인천 미추홀구 문학산" />
+
+        <ImageView
+            android:id="@+id/iv_date_time_marker_selected_bottom_sheet"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintEnd_toStartOf="@+id/tv_date_time_marker_selected_bottom_sheet"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@+id/iv_location_marker_selected_bottom_sheet"
+            app:layout_constraintTop_toBottomOf="@+id/iv_location_marker_selected_bottom_sheet"
+            app:srcCompat="@drawable/ic_date_time" />
+
+        <TextView
+            android:id="@+id/tv_date_time_marker_selected_bottom_sheet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_date_time_marker_selected_bottom_sheet"
+            app:layout_constraintEnd_toEndOf="@+id/tv_location_marker_selected_bottom_sheet"
+            app:layout_constraintStart_toEndOf="@+id/iv_date_time_marker_selected_bottom_sheet"
+            app:layout_constraintTop_toTopOf="@+id/iv_date_time_marker_selected_bottom_sheet"
+            app:setMarkerSelectedBottomSheetRecordTime="@{markerSelectedViewModel.selectedUiPoint}"
+            tools:text="2023.07.28 21:00" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_write_post_marker_selected_bottom_sheet"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_td_main_blue_line_12_rect"
+            android:onClick="@{()->markerSelectedViewModel.openPostWriting()}"
+            android:text="@string/btn_write_post_marker_selected_bottom_sheet"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_main_blue"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_delete_point_marker_selected_bottom_sheet"
+            app:layout_constraintEnd_toStartOf="@+id/btn_delete_point_marker_selected_bottom_sheet"
+            app:layout_constraintTop_toTopOf="@+id/btn_delete_point_marker_selected_bottom_sheet" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_delete_point_marker_selected_bottom_sheet"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/shape_td_red_line_12_rect"
+            android:onClick="@{()->markerSelectedViewModel.deletePoint()}"
+            android:text="@string/btn_delete_point_marker_selected_bottom_sheet"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_date_time_marker_selected_bottom_sheet" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

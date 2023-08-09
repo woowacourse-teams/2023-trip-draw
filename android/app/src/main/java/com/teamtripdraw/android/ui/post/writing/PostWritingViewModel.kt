@@ -31,7 +31,7 @@ class PostWritingViewModel(
     private var postId: Long = NULL_SUBSTITUTE_POST_ID
     private var imageFile: File? = null
     private lateinit var writingMode: WritingMode
-
+  
     val title: MutableLiveData<String> = MutableLiveData("")
     val writing: MutableLiveData<String> = MutableLiveData("")
 

@@ -22,13 +22,15 @@ class RemoteDataSourceContainer(
     val remoteTripDataSource: TripDataSource.Remote =
         RemoteTripDataSourceImpl(
             serviceContainer.createTripService,
-            serviceContainer.getTripInfoService
+            serviceContainer.getTripInfoService,
+            serviceContainer.setTripTitleService
         )
     val remotePostDataSource: PostDataSource.Remote =
         RemotePostDataSourceImpl(serviceContainer.postService)
     val remotePointDataSource: PointDataSource.Remote =
         RemotePointDataSourceImpl(
             serviceContainer.createRecordingPointService,
-            serviceContainer.getPointService
+            serviceContainer.getPointService,
+            serviceContainer.deletePointService
         )
 }
