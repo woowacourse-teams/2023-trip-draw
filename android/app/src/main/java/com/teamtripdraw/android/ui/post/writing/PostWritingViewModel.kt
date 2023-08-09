@@ -61,19 +61,12 @@ class PostWritingViewModel(
             WritingMode.NEW -> {
                 pointId = id
                 tripId = tripRepository.getCurrentTripId()
-                initPoint(pointId)
+                fetchPoint()
             }
             WritingMode.EDIT -> {
                 postId = id
+                fetchPost()
             }
-        }
-    }
-
-    private fun initPoint(pointId: Long) {
-        this.pointId = pointId
-        viewModelScope.launch {
-            pointRepository.getPoint(pointId = pointId, tripId = tripId)
-                .onSuccess { _point.value = it }
         }
     }
 
@@ -93,9 +86,35 @@ class PostWritingViewModel(
                 address = address.value ?: "",
                 imageFile = imageFile
             )
-            postRepository.addPost(prePost).onSuccess {
-                _writingCompletedEvent.value = true
+
+            when(writingMode) {
+                WritingMode.NEW ->  {
+                    postRepository.addPost(prePost).onSuccess {
+                        _writingCompletedEvent.value = true
+                    }
+                }
+                WritingMode.EDIT -> {
+                    // todo post 수정 요청 붙이기
+                }
             }
+        }
+    }
+
+    private fun fetchPoint() {
+        viewModelScope.launch {
+            pointRepository.getPoint(pointId = pointId, tripId = tripId)
+                .onSuccess { _point.value = it }
+        }
+    }
+
+    private fun fetchPost() {
+        viewModelScope.launch {
+            postRepository.getPost(postId = postId)
+                .onSuccess {
+                    _address.value = it.address
+                    title.value = it.title
+                    writing.value = it.writing
+                }
         }
     }
 }
