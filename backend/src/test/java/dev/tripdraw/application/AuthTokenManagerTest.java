@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AuthTokenManagerTest {
 
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
     private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
@@ -25,7 +26,7 @@ class AuthTokenManagerTest {
     @Test
     void 회원_ID를_입력_받아_토큰을_생성한다() {
         // given
-        AuthTokenManager authTokenManager = new AuthTokenManager(jwtTokenProvider);
+        AuthTokenManager authTokenManager = new AuthTokenManager(jwtTokenProvider, ACCESS_TOKEN_EXPIRE_TIME);
 
         // when
         String accessToken = authTokenManager.generate(1L);
@@ -37,7 +38,7 @@ class AuthTokenManagerTest {
     @Test
     void 토큰에서_회원_ID를_추출한다() {
         // given
-        AuthTokenManager authTokenManager = new AuthTokenManager(jwtTokenProvider);
+        AuthTokenManager authTokenManager = new AuthTokenManager(jwtTokenProvider, ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = authTokenManager.generate(1L);
 
         // when

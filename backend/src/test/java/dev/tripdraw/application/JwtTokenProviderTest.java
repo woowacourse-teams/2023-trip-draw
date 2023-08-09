@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class JwtTokenProviderTest {
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;        //30분
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
     private static final Date EXPIRED_AT = new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME);
 
     private JwtTokenProvider jwtTokenProvider;

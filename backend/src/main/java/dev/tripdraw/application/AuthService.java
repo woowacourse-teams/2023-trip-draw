@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private static final String EMPTY_TOKEN = "";
+
     private final MemberRepository memberRepository;
     private final OauthClientProvider oauthClientProvider;
     private final AuthTokenManager authTokenManager;

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthExtractor {
 
-    private static final String KEYWORD = "Bearer ";
+    private static final String AUTHORIZATION_PREFIX = "Bearer ";
     private static final String EMPTY = "";
 
     private final AuthTokenManager authTokenManager;
@@ -34,13 +34,13 @@ public class AuthExtractor {
     }
 
     private static void validate(String header) {
-        if (!hasText(header) || !header.startsWith(KEYWORD)) {
+        if (!hasText(header) || !header.startsWith(AUTHORIZATION_PREFIX)) {
             throw new AuthException(INVALID_AUTH_HEADER);
         }
     }
 
     private Long parseCredential(String header) {
-        String credential = header.replace(KEYWORD, EMPTY);
+        String credential = header.replace(AUTHORIZATION_PREFIX, EMPTY);
         return authTokenManager.extractMemberId(credential);
     }
 }

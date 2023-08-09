@@ -1,10 +1,11 @@
 package dev.tripdraw.application.oauth;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+
 import dev.tripdraw.domain.oauth.OauthType;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,10 +15,7 @@ public class OauthClientProvider {
 
     public OauthClientProvider(Set<OauthClient> clients) {
         this.mapping = clients.stream()
-                .collect(Collectors.toMap(
-                        OauthClient::oauthType,
-                        Function.identity()
-                ));
+                .collect(toMap(OauthClient::oauthType, identity()));
     }
 
     public OauthClient provide(OauthType oauthType) {

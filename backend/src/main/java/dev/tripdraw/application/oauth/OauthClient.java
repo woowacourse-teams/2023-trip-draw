@@ -4,7 +4,8 @@ import dev.tripdraw.domain.oauth.OauthType;
 import dev.tripdraw.dto.auth.OauthInfo;
 
 public interface OauthClient {
-    OauthType oauthType();
 
+    OauthType oauthType();
+    
     OauthInfo requestOauthInfo(String accessToken);
 }

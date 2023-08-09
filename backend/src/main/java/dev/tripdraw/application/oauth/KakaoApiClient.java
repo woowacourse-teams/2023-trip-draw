@@ -1,5 +1,6 @@
 package dev.tripdraw.application.oauth;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
 import dev.tripdraw.domain.oauth.OauthType;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class KakaoApiClient implements OauthClient {
 
+    private static final String BEARER = "Bearer ";
     private final String kakaoInfoUrl;
     private final RestTemplate restTemplate;
 
@@ -31,7 +33,7 @@ public class KakaoApiClient implements OauthClient {
     public OauthInfo requestOauthInfo(String accessToken) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(APPLICATION_FORM_URLENCODED);
-        httpHeaders.set("Authorization", "Bearer " + accessToken);
+        httpHeaders.set(AUTHORIZATION, BEARER + accessToken);
 
         HttpEntity<?> request = new HttpEntity<>(httpHeaders);
         KakaoInfoResponse kakaoInfoResponse = restTemplate.postForObject(kakaoInfoUrl, request,

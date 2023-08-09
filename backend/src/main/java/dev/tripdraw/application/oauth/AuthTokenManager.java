@@ -1,22 +1,23 @@
 package dev.tripdraw.application.oauth;
 
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AuthTokenManager {
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
-
     private final JwtTokenProvider jwtTokenProvider;
+    private Long expirationTime;
 
-    public AuthTokenManager(JwtTokenProvider jwtTokenProvider) {
+    public AuthTokenManager(JwtTokenProvider jwtTokenProvider, @Value("${jwt.expiration-time}") Long expirationTime) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.expirationTime = expirationTime;
     }
 
     public String generate(Long memberId) {
         long now = (new Date()).getTime();
-        Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        Date accessTokenExpiredAt = new Date(now + expirationTime);
 
         String subject = memberId.toString();
 
