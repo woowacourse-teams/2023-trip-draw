@@ -5,9 +5,10 @@ import com.teamtripdraw.android.domain.model.trip.PreviewTrip
 import com.teamtripdraw.android.ui.model.UiRoute
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
-fun Route.toUi(): UiRoute =
+fun Route.toPresentation(): UiRoute =
     UiRoute(
-        value = value.map { it.toUi() }
+        value = value.map { it.toPresentation() },
+        enablePolyLine = checkAvailablePolyLine()
     )
 
 fun PreviewTrip.toPresentation(): UiPreviewTrip =

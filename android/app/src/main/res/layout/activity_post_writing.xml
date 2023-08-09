@@ -9,6 +9,14 @@
             name="postWritingViewModel"
             type="com.teamtripdraw.android.ui.postWriting.PostWritingViewModel" />
 
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onSelectPhoto"
+            type="kotlin.jvm.functions.Function0" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +44,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="start"
+                    android:onClick="@{() -> onBackClick.invoke()}"
                     android:src="@drawable/ic_back" />
 
                 <TextView
@@ -107,9 +116,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:text="@{postWritingViewModel.address}"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_dark_gray"
-            app:administrativeAreaText="@{postWritingViewModel.latLngPoint}"
             app:layout_constraintBottom_toBottomOf="@+id/btn_location_icon"
             app:layout_constraintStart_toEndOf="@id/btn_location_icon"
             app:layout_constraintTop_toTopOf="@+id/btn_location_icon"
@@ -149,6 +158,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
+            android:onClick="@{() -> onSelectPhoto.invoke()}"
             android:src="@drawable/ic_camera"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

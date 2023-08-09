@@ -4,29 +4,38 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 
-fun Geocoder.getAdministrativeAddress(latitude: Double, longitude: Double): String {
-    val MAX_ADDRESSES_RESULT_NUMBER = 1
-    var administrativeArea: String = "x: $latitude, y: $longitude"
+fun Geocoder.fetchAddress(
+    latitude: Double,
+    longitude: Double,
+    event: (address: String) -> Unit
+) {
+    val ADDRESSES_RESULT_MAX_NUMBER = 1
+    val defaultAddress = "x: $latitude, y: $longitude"
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 레벨 33 이상
-        getFromLocation(latitude, longitude, MAX_ADDRESSES_RESULT_NUMBER) { addresses: List<Address> ->
-            if (addresses.isNotEmpty()
-                && addresses[0].getAddressLine(0).isNotEmpty()
-            ) {
-                val address = addresses[0]
-                administrativeArea = address.adminArea + address.subAdminArea
-            }
+        getFromLocation(
+            latitude, longitude, ADDRESSES_RESULT_MAX_NUMBER
+        ) { addresses: List<Address> ->
+            event(getAdministrativeAddress(addresses, defaultAddress))
         }
     } else { // API 레벨 33 미만
-        val addresses: List<Address>? = getFromLocation(latitude, longitude, 1)
-        if (addresses != null
-            && addresses.isNotEmpty()
-            && addresses[0].getAddressLine(0).isNotEmpty()
-        ) {
-            val address = addresses[0]
-            administrativeArea = address.adminArea + address.subAdminArea
-        }
+        val addresses: List<Address>? =
+            getFromLocation(latitude, longitude, ADDRESSES_RESULT_MAX_NUMBER)
+        event(getAdministrativeAddress(addresses, defaultAddress))
+    }
+}
+
+private fun getAdministrativeAddress(addresses: List<Address>?, defaultAddress: String): String {
+    if (addresses == null || addresses.isEmpty() || addresses[0].getAddressLine(0).isEmpty()) {
+        return defaultAddress
     }
 
-    return administrativeArea
+    val fullAddress = addresses[0].getAddressLine(0)
+    val addressParts: MutableList<String> = fullAddress.split(" ").toMutableList()
+    addressParts.removeFirst()
+    addressParts.removeLast()
+    val address = addressParts.joinToString(" ")
+
+    return if (addressParts.isNotEmpty()) address
+    else defaultAddress
 }

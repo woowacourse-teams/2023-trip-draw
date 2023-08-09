@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.model.mapper
+package com.teamtripdraw.android.ui.model
 
 import com.naver.maps.geometry.LatLng
 

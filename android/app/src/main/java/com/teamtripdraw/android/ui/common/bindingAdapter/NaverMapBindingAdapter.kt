@@ -10,8 +10,8 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PolylineOverlay
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.support.framework.presentation.resolution.toDP
+import com.teamtripdraw.android.ui.model.UiMarkerInfo
 import com.teamtripdraw.android.ui.model.UiRoute
-import com.teamtripdraw.android.ui.model.mapper.UiMarkerInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 @BindingAdapter("app:setPolyLineNaverMap", "app:setPolyLineUiRoute")
 fun View.setPolyLine(naverMap: NaverMap?, uiRoute: UiRoute?) {
     if (uiRoute == null) return
-    if (!uiRoute.checkAvailablePolyLine()) return
+    if (!uiRoute.enablePolyLine) return
     if (naverMap == null) return
     initializePolyLine()
     updatePolyLine(uiRoute, naverMap)
