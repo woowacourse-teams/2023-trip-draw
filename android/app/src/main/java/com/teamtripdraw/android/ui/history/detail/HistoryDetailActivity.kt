@@ -2,9 +2,9 @@ package com.teamtripdraw.android.ui.history.detail
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityHistoryDetailBinding
@@ -38,6 +38,7 @@ class HistoryDetailActivity : AppCompatActivity() {
     private fun setAdapter() {
         adapter = HistoryDetailAdapter(viewModel)
         binding.rvTripHistoryDetail.adapter = adapter
+        viewModel.getPosts()
     }
 
     private fun initObserve() {

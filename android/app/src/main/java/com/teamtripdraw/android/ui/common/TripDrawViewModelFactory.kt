@@ -54,7 +54,7 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                 isAssignableFrom(SetTripTitleDialogViewModel::class.java) ->
                     SetTripTitleDialogViewModel(repositoryContainer.tripRepository)
                 isAssignableFrom(HistoryDetailViewModel::class.java) ->
-                    HistoryDetailViewModel() // todo: repository 추가
+                    HistoryDetailViewModel(repositoryContainer.postRepository)
                 isAssignableFrom(TripDetailViewModel::class.java) ->
                     TripDetailViewModel(
                         repositoryContainer.tripRepository,

@@ -29,7 +29,8 @@
                 app:expandedTitleGravity="start|bottom"
                 app:expandedTitleTextAppearance="@style/title_1B"
                 app:expandedTitleTextColor="@color/white"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:title="@{historyDetailViewModel.previewTrip.name}">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
