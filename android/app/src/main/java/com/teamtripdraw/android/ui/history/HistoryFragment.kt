@@ -14,7 +14,9 @@ import com.teamtripdraw.android.ui.model.UiTrip
 
 class HistoryFragment : Fragment() {
 
-    private lateinit var binding: FragmentHistoryBinding
+    private var _binding: FragmentHistoryBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var historyAdapter: HistoryAdapter
     private val viewModel: HistoryViewModel by viewModels { tripDrawViewModelFactory }
 
@@ -23,7 +25,7 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHistoryBinding.inflate(inflater)
+        _binding = FragmentHistoryBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
 
         setUpView()
@@ -51,5 +53,10 @@ class HistoryFragment : Fragment() {
     private fun onHistoryClick(tripItem: UiTrip) {
         val intent = HistoryDetailActivity.getIntent(requireContext(), tripItem)
         startActivity(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
