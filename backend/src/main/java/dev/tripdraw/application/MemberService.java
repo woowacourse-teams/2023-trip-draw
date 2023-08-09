@@ -2,6 +2,7 @@ package dev.tripdraw.application;
 
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 
+import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
@@ -14,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final AuthTokenManager authTokenManager;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, AuthTokenManager authTokenManager) {
         this.memberRepository = memberRepository;
+        this.authTokenManager = authTokenManager;
     }
 
     @Transactional(readOnly = true)
@@ -28,5 +31,13 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
         return MemberSearchResponse.from(member);
+    }
+
+    public void deleteByCode(String code) {
+        Long memberId = authTokenManager.extractMemberId(code);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+
+        member.delete();
     }
 }
