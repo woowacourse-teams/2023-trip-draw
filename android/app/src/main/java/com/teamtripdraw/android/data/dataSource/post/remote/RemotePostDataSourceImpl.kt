@@ -1,7 +1,5 @@
 package com.teamtripdraw.android.data.dataSource.post.remote
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
@@ -11,6 +9,7 @@ import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPrePatchPost
 import com.teamtripdraw.android.data.model.DataPrePost
 import com.teamtripdraw.android.data.model.mapper.toData
+import com.teamtripdraw.android.di.RetrofitContainer.Companion.moshi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -18,8 +17,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class RemotePostDataSourceImpl(private val postService: PostService) : PostDataSource.Remote {
-
-    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     override suspend fun addPost(
         dataPrePost: DataPrePost,

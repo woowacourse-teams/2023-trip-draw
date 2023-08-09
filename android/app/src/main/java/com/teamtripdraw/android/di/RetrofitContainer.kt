@@ -22,9 +22,9 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
                         .newBuilder()
                         .addHeader(
                             "Authorization",
-                            AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getIdentifyInfo())
+                            AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getIdentifyInfo()),
                         )
-                        .build()
+                        .build(),
                 )
             }
         }
@@ -46,10 +46,6 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
             .dispatcher(tripDrawDispatcher)
             .build()
 
-    private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
-
     val tripDrawRetrofit: Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.TRIP_DRAW_BASE_URL)
@@ -60,5 +56,9 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
 
     companion object {
         private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
+
+        val moshi: Moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
     }
 }

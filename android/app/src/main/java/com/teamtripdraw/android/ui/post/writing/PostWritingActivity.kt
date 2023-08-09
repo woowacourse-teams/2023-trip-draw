@@ -105,7 +105,7 @@ class PostWritingActivity : AppCompatActivity() {
             wringMode: WritingMode,
         ): Intent {
             if (wringMode == WritingMode.NEW) {
-                throw java.lang.IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
+                throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
             }
             val intent = Intent(context, PostWritingActivity::class.java)
             intent.putExtra(INTENT_KEY_POST_ID, postId)
