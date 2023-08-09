@@ -1,5 +1,10 @@
 package dev.tripdraw.domain.member;
 
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.oauth.OauthType;
 import dev.tripdraw.exception.member.MemberException;
@@ -9,13 +14,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ?")
 @Where(clause = "is_deleted = FALSE")
 @Entity
 public class Member extends BaseEntity {
