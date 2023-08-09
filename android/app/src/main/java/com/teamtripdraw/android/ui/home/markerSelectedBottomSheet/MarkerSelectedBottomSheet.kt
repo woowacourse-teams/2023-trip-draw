@@ -28,8 +28,13 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        updateMarkerSelectedStateToOpen()
         initMarkerSelectedViewModelData()
         initGeocoder()
+    }
+
+    fun updateMarkerSelectedStateToOpen() {
+        homeViewModel.markerSelectedState = true
     }
 
     private fun initMarkerSelectedViewModelData() {
@@ -101,8 +106,13 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onDestroy() {
+        updateMarkerSelectedStateToClose()
         _binding = null
         super.onDestroy()
+    }
+
+    fun updateMarkerSelectedStateToClose() {
+        homeViewModel.markerSelectedState = false
     }
 
     companion object {

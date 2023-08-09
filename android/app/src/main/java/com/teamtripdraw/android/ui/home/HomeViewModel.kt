@@ -44,13 +44,15 @@ class HomeViewModel(
     private val _openPostWritingEvent = MutableLiveData<Event<Long>>()
     val openPostWritingEvent: LiveData<Event<Long>> = _openPostWritingEvent
 
-    private val _markerSelected = MutableLiveData<Long>()
-    val makerSelected: LiveData<Long> = _markerSelected
+    private val _markerSelectEvent = MutableLiveData<Long>()
+    val makerSelectedEvent: LiveData<Long> = _markerSelectEvent
 
-    val notificationMarkerSelected: (pointId: Long) -> Unit = { _markerSelected.value = it }
+    val notificationMarkerSelected: (pointId: Long) -> Unit = { _markerSelectEvent.value = it }
 
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
+
+    var markerSelectedState: Boolean = false
 
     init {
         updateTripId()

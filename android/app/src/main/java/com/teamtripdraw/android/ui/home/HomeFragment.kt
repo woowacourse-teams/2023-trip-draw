@@ -51,8 +51,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private val homeViewModel: HomeViewModel by viewModels { tripDrawViewModelFactory }
 
-    private val markerSelectedBottomSheet: MarkerSelectedBottomSheet = MarkerSelectedBottomSheet()
-
     private var recordingPointServiceBindingState: Boolean = false
 
     private lateinit var recordingPointBinder: RecordingPointService.RecordingPointBinder
@@ -251,7 +249,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             binding.fabMarkerMode,
             binding.tvWritePost,
             binding.tvPostList,
-            binding.tvMarkerMode,
+            binding.tvMarkerMode
         )
         fabState = false
         binding.fabState = fabState
@@ -269,18 +267,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun observeMarkerSelected() {
-        homeViewModel.makerSelected.observe(viewLifecycleOwner) { pointId ->
+        homeViewModel.makerSelectedEvent.observe(viewLifecycleOwner) { pointId ->
             showMarkerSelectedBottomSheet(pointId)
         }
     }
 
     private fun showMarkerSelectedBottomSheet(pointId: Long) {
-        if (!markerSelectedBottomSheet.isAdded) {
+        if (!homeViewModel.markerSelectedState) {
+            val markerSelectedBottomSheet = MarkerSelectedBottomSheet()
             markerSelectedBottomSheet.arguments = MarkerSelectedBottomSheet.getBundle(pointId)
-            markerSelectedBottomSheet.show(
-                childFragmentManager,
-                markerSelectedBottomSheet.javaClass.name
-            )
+            markerSelectedBottomSheet.show(childFragmentManager, this.javaClass.name)
         }
     }
 
