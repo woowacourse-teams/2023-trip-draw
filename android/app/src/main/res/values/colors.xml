@@ -24,4 +24,5 @@
     <color name="td_medium_gray">#8F8F8F</color>
     <color name="td_light_gray">#F6F1F1</color>
     <color name="td_white">#FFFFFF</color>
+    <color name="td_black_transparency_15">#26000000</color>
 </resources>

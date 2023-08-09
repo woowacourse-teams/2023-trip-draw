@@ -30,8 +30,8 @@
     <string name="et_nickname">공백을 포함할 수 없습니다</string>
     <string name="btn_duplication_check">중복 확인</string>
     <string name="btn_setup_complete">시작하기</string>
-    <string name="warning_contain_blank">닉네임은 공백을 포함할 수 없습니다</string>
-    <string name="warning_exceed_limit">닉네임은 10자를 초과할 수 없습니다</string>
+    <string name="warning_contain_blank_nickname">닉네임은 공백을 포함할 수 없습니다</string>
+    <string name="warning_exceed_limit_nickname">닉네임은 10자를 초과할 수 없습니다</string>
     <string name="tv_nickname_length">%d/%d</string>
     <string name="warning_duplicate_nickname">중복된 닉네임입니다</string>
     <string name="dialog_positive_button_default_text">확인</string>
@@ -50,5 +50,11 @@
     <string name="btn_post_detail_location_icon_description">주소 아이콘</string>
     <string name="iv_route_description">경로 이미지</string>
     <string name="iv_image_description">사진 조회</string>
+
+    <!-- InputDialog -->
+    <string name="btn_positive_dialog_input">확인</string>
+    <string name="tv_dialog_input_title">여행 제목을 입력해주세요</string>
+    <string name="et_dialog_input_hint">여행 제목</string>
+    <string name="warning_exceed_limit_input_dialog">여행 제목은 100자를 초과할 수 없습니다</string>
 
 </resources>

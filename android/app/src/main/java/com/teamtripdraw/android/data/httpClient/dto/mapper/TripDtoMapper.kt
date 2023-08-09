@@ -1,8 +1,10 @@
 package com.teamtripdraw.android.data.httpClient.dto.mapper
 
+import com.teamtripdraw.android.data.httpClient.dto.request.SetTripTitleRequest
 import com.teamtripdraw.android.data.httpClient.dto.response.GetTripInfoPoint
 import com.teamtripdraw.android.data.httpClient.dto.response.GetTripInfoResponse
 import com.teamtripdraw.android.data.model.DataPoint
+import com.teamtripdraw.android.data.model.DataPreSetTripTitle
 import com.teamtripdraw.android.data.model.DataTrip
 
 fun GetTripInfoResponse.toData(): DataTrip =
@@ -23,3 +25,6 @@ fun GetTripInfoPoint.toData(): DataPoint =
         hasPost = hasPost,
         recordedAt = recordedAt
     )
+
+fun DataPreSetTripTitle.toHttpRequest(): SetTripTitleRequest =
+    SetTripTitleRequest(name = name, status = status.name)

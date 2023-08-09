@@ -1,8 +1,10 @@
 package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
+import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.mapper.toDomainRoute
 import com.teamtripdraw.android.domain.model.point.Route
+import com.teamtripdraw.android.domain.model.trip.PreSetTripTitle
 import com.teamtripdraw.android.domain.repository.TripRepository
 
 class TripRepositoryImpl(
@@ -22,4 +24,10 @@ class TripRepositoryImpl(
         remoteTripDataSource.getTripInfo(tripId).map { dataTrip ->
             dataTrip.toDomainRoute()
         }
+
+    override suspend fun setTripTitle(
+        tripId: Long,
+        preSetTripTitle: PreSetTripTitle
+    ): Result<Unit> =
+        remoteTripDataSource.setTripTitle(tripId, preSetTripTitle.toData())
 }
