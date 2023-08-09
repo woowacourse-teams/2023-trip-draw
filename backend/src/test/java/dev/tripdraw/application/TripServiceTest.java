@@ -1,5 +1,6 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
@@ -56,9 +57,9 @@ class TripServiceTest {
 
     @BeforeEach
     void setUp() {
-        Member member = memberRepository.save(new Member("통후추"));
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         trip = tripRepository.save(Trip.from(member));
-        loginUser = new LoginUser("통후추");
+        loginUser = new LoginUser(member.id());
     }
 
     @Test
@@ -132,7 +133,7 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        LoginUser otherUser = new LoginUser("순후추");
+        LoginUser otherUser = new LoginUser(Long.MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))

@@ -3,8 +3,11 @@ package dev.tripdraw.domain.member;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import dev.tripdraw.domain.common.BaseEntity;
+import dev.tripdraw.domain.oauth.OauthType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
@@ -16,18 +19,34 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String nickname;
+
+    @Column(nullable = false)
+    private String oauthId;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OauthType oauthType;
 
     protected Member() {
     }
 
-    public Member(String nickname) {
-        this(null, nickname);
+    public Member(Long id, String nickname, String oauthId, OauthType oauthType) {
+        this.id = id;
+        this.nickname = nickname;
+        this.oauthId = oauthId;
+        this.oauthType = oauthType;
     }
 
-    public Member(Long id, String nickname) {
-        this.id = id;
+    public Member(String nickname, String oauthId, OauthType oauthType) {
+        this(null, nickname, oauthId, oauthType);
+    }
+
+    public static Member of(String oauthId, OauthType oauthType) {
+        return new Member(null, null, oauthId, oauthType);
+    }
+
+    public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
 

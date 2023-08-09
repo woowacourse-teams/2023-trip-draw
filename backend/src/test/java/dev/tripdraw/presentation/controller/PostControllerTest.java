@@ -1,16 +1,18 @@
 package dev.tripdraw.presentation.controller;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
+import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
@@ -39,8 +41,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
 
-    private static final String 통후추_BASE64 = "7Ya17ZuE7LaU";
-    private static final String 순후추_BASE64 = "7Iic7ZuE7LaU";
+    private static final String WRONG_TOKEN = "wrong.long.token";
 
     @Autowired
     private TripRepository tripRepository;
@@ -48,17 +49,22 @@ class PostControllerTest extends ControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private AuthTokenManager authTokenManager;
+
     @MockBean
     private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
+    private String huchuToken;
 
     @BeforeEach
     void setUp() {
         super.setUp();
 
-        Member member = memberRepository.save(new Member("통후추"));
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         trip = tripRepository.save(Trip.from(member));
+        huchuToken = authTokenManager.generate(member.id());
     }
 
     @Test
@@ -77,7 +83,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -108,11 +114,11 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -131,7 +137,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -154,7 +160,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -177,7 +183,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -200,7 +206,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
@@ -223,7 +229,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
@@ -254,11 +260,11 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -277,7 +283,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
@@ -298,7 +304,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
@@ -321,7 +327,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
@@ -344,7 +350,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
@@ -359,7 +365,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().get("/posts/{postId}", postResponse.postId())
                 .then().log().all()
                 .extract();
@@ -385,10 +391,10 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .when().get("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -396,7 +402,7 @@ class PostControllerTest extends ControllerTest {
         // given & expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().get("/posts/{postId}", -1)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -584,7 +590,7 @@ class PostControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
@@ -614,7 +620,7 @@ class PostControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> createResponse = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart(multiPartSpecification)
                 .when().post("/posts/current-location")
                 .then().log().all()

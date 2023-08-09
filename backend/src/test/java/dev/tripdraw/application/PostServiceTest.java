@@ -1,5 +1,6 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
@@ -58,14 +59,14 @@ class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        Member member = memberRepository.save(new Member("통후추"));
-        memberRepository.save(new Member("순후추"));
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        Member otherMember = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
         trip = tripRepository.save(Trip.from(member));
         point = new Point(1.1, 2.1, LocalDateTime.now());
         trip.add(point);
         tripRepository.flush();
-        loginUser = new LoginUser("통후추");
-        otherUser = new LoginUser("순후추");
+        loginUser = new LoginUser(member.id());
+        otherUser = new LoginUser(otherMember.id());
     }
 
     @Test
@@ -92,7 +93,7 @@ class PostServiceTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser("상한후추");
+        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
@@ -150,7 +151,7 @@ class PostServiceTest {
     @Test
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser("상한후추");
+        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
         PostRequest postRequest = new PostRequest(
                 trip.id(),
                 point.id(),
@@ -227,7 +228,7 @@ class PostServiceTest {
     void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
         PostCreateResponse postCreateResponse = createPost();
-        LoginUser wrongUser = new LoginUser("상한후추");
+        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> postService.read(wrongUser, postCreateResponse.postId()))
@@ -270,7 +271,7 @@ class PostServiceTest {
     @Test
     void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser("상한후추");
+        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> postService.readAllByTripId(wrongUser, trip.id()))
