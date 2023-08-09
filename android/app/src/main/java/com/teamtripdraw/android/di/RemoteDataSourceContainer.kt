@@ -11,19 +11,20 @@ import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
 
 class RemoteDataSourceContainer(
     serviceContainer: ServiceContainer,
-    retrofitContainer: RetrofitContainer
+    retrofitContainer: RetrofitContainer,
 ) {
     val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote =
         RemoteNicknameSetupDataSourceImpl(
             serviceContainer.nicknameSetupService,
             serviceContainer.getNicknameService,
-            retrofitContainer.tripDrawRetrofit
+            retrofitContainer.tripDrawRetrofit,
         )
     val remoteTripDataSource: TripDataSource.Remote =
         RemoteTripDataSourceImpl(
             serviceContainer.createTripService,
             serviceContainer.getTripInfoService,
-            serviceContainer.setTripTitleService
+            serviceContainer.setTripTitleService,
+            serviceContainer.getAllTripsService,
         )
     val remotePostDataSource: PostDataSource.Remote =
         RemotePostDataSourceImpl(serviceContainer.postService)
@@ -31,6 +32,6 @@ class RemoteDataSourceContainer(
         RemotePointDataSourceImpl(
             serviceContainer.createRecordingPointService,
             serviceContainer.getPointService,
-            serviceContainer.deletePointService
+            serviceContainer.deletePointService,
         )
 }

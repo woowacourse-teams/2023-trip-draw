@@ -23,7 +23,7 @@ class HistoryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentHistoryBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -37,23 +37,24 @@ class HistoryFragment : Fragment() {
     private fun setAdapter() {
         historyAdapter = HistoryAdapter(viewModel)
         binding.rvTripHistory.adapter = historyAdapter
+        viewModel.getPreviewTrips()
     }
 
     private fun initObserve() {
-        setTripHistoryObserve()
+        setPreviewTripsObserve()
         setHistoryOpenObserveEvent()
     }
 
-    private fun setTripHistoryObserve() {
-        viewModel.tripHistory.observe(viewLifecycleOwner) {
+    private fun setPreviewTripsObserve() {
+        viewModel.previewTrips.observe(viewLifecycleOwner) {
             historyAdapter.submitList(it)
         }
     }
 
     private fun setHistoryOpenObserveEvent() {
-        viewModel.historyOpenEvent.observe(
+        viewModel.previewTripOpenEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@HistoryFragment::onHistoryClick)
+            EventObserver(this@HistoryFragment::onHistoryClick),
         )
     }
 

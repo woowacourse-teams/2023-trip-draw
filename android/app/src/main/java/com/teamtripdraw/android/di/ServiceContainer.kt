@@ -3,6 +3,7 @@ package com.teamtripdraw.android.di
 import com.teamtripdraw.android.data.httpClient.service.CreateRecordingPointService
 import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.DeletePointService
+import com.teamtripdraw.android.data.httpClient.service.GetAllTripsService
 import com.teamtripdraw.android.data.httpClient.service.GetNicknameService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
 import com.teamtripdraw.android.data.httpClient.service.GetTripInfoService
@@ -29,4 +30,6 @@ class ServiceContainer(retrofitContainer: RetrofitContainer) {
         retrofitContainer.tripDrawRetrofit.create(DeletePointService::class.java)
     val setTripTitleService: SetTripTitleService =
         retrofitContainer.tripDrawRetrofit.create(SetTripTitleService::class.java)
+    val getAllTripsService: GetAllTripsService =
+        retrofitContainer.tripDrawRetrofit.create(GetAllTripsService::class.java)
 }

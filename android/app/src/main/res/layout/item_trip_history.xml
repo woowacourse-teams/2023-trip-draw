@@ -45,7 +45,7 @@
             app:layout_constraintEnd_toEndOf="@id/iv_history_image"
             app:layout_constraintStart_toStartOf="@id/iv_history_image"
             app:layout_constraintTop_toTopOf="@id/iv_history_image"
-            app:setImage="@{uiPreviewTrip.routeImageUrl}" />
+            app:setRoundImageWithVisibility="@{uiPreviewTrip.routeImageUrl}" />
 
         <TextView
             android:id="@+id/tv_history_title"
