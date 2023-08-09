@@ -48,7 +48,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.postWriting.PostWritingActivity"
+            android:name=".ui.post.writing.PostWritingActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
