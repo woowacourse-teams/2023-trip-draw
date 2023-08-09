@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
@@ -26,7 +27,9 @@ class PostWritingViewModel(
 
     private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
     private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
+    private var postId: Long = NULL_SUBSTITUTE_POST_ID
     private var imageFile: File? = null
+    private lateinit var writingMode: WritingMode
 
     val title: MutableLiveData<String> = MutableLiveData("")
     val writing: MutableLiveData<String> = MutableLiveData("")
@@ -52,9 +55,18 @@ class PostWritingViewModel(
         this.imageFile = file
     }
 
-    fun initTripData(pointId: Long) {
-        this.tripId = tripRepository.getCurrentTripId()
-        initPoint(pointId)
+    fun initWritingMode(writingMode: WritingMode, id: Long) {
+        this.writingMode = writingMode
+        when (writingMode) {
+            WritingMode.NEW -> {
+                pointId = id
+                tripId = tripRepository.getCurrentTripId()
+                initPoint(pointId)
+            }
+            WritingMode.EDIT -> {
+                postId = id
+            }
+        }
     }
 
     private fun initPoint(pointId: Long) {

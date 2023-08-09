@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.support.framework.presentation.extensions.toResizedImageFile
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
@@ -48,11 +49,17 @@ class PostWritingActivity : AppCompatActivity() {
 
     private fun initIntentData() {
         val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, NULL_SUBSTITUTE_POINT_ID)
+        val postId = intent.getLongExtra(INTENT_KEY_POST_ID, NULL_SUBSTITUTE_POST_ID)
 
-        if (pointId == NULL_SUBSTITUTE_POINT_ID)
-            throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
-
-        viewModel.initTripData(pointId)
+        when {
+            pointId != NULL_SUBSTITUTE_POINT_ID && postId == NULL_SUBSTITUTE_POST_ID -> {
+                viewModel.initWritingMode(WritingMode.NEW, pointId)
+            }
+            postId != NULL_SUBSTITUTE_POST_ID && pointId == NULL_SUBSTITUTE_POINT_ID -> {
+                viewModel.initWritingMode(WritingMode.EDIT, postId)
+            }
+            else -> throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
+        }
     }
 
     private fun initObserve() {
@@ -75,14 +82,30 @@ class PostWritingActivity : AppCompatActivity() {
 
     companion object {
         private const val INTENT_KEY_POINT_ID = "pointId"
+        private const val INTENT_KEY_POST_ID = "postId"
         private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다. (PostWritingActivity)"
 
         /**
-         * write new post
+         * Default is "New Post" mode.
+         * If you want "Edit Post" change the mode to "WritingMode.Edit".
          */
         fun getIntent(context: Context, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
             intent.putExtra(INTENT_KEY_POINT_ID, pointId)
+            return intent
+        }
+
+        /**
+         * Edit Post
+         * If you want "New Post" don't choose mode.
+         */
+        fun getIntent(
+            context: Context, postId: Long, wringMode: WritingMode
+        ): Intent {
+            if (wringMode == WritingMode.NEW)
+                throw java.lang.IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
+            val intent = Intent(context, PostWritingActivity::class.java)
+            intent.putExtra(INTENT_KEY_POST_ID, postId)
             return intent
         }
     }
