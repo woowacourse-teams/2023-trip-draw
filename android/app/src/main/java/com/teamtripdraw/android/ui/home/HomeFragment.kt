@@ -307,9 +307,36 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun finishTripSuccessListener(event: Boolean) {
         if (event) {
-            // todo 서비스 종료 등등 작업
+            updateFinishTripHomeUiState()
+            stopRecordingPointAlarmManager()
+            stopRecordingPointService()
+            unbindRecordingPointService()
+            clearCurrentTripId()
+            clearCurrentTripRoute()
             homeViewModel.resetFinishTripCompleteEvent()
         }
+    }
+
+    private fun updateFinishTripHomeUiState() {
+        homeViewModel.updateHomeUiState(HomeUiState.BEFORE_TRIP)
+    }
+
+    private fun clearCurrentTripId() {
+        homeViewModel.clearCurrentTripId()
+    }
+
+    private fun stopRecordingPointService() {
+        val recordingPointServiceIntent =
+            Intent(requireContext(), RecordingPointService::class.java)
+        requireActivity().stopService(recordingPointServiceIntent)
+    }
+
+    private fun stopRecordingPointAlarmManager() {
+        RecordingPointAlarmManager(requireContext()).cancelRecord()
+    }
+
+    private fun clearCurrentTripRoute() {
+        homeViewModel.cleatCurrentTripRoute()
     }
 
     companion object {
