@@ -1,5 +1,9 @@
 package com.teamtripdraw.android.ui.common.dialog
 
-enum class SetTitleSituation {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class SetTitleSituation : Parcelable {
     FINISHED, EDIT
 }

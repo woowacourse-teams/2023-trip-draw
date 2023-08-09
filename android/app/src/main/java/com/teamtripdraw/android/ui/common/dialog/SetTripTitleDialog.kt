@@ -9,17 +9,22 @@ import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentTripTitleDialogBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
+import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.model.UiTripItem
 
-class SetTripTitleDialog(
-    private val tripId: Long,
-    private val status: SetTitleSituation
-) : DialogFragment() {
+class SetTripTitleDialog : DialogFragment() {
 
     private var _binding: FragmentTripTitleDialogBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SetTripTitleDialogViewModel by viewModels { tripDrawViewModelFactory }
+
+    private val tripId by lazy { requireArguments().getLong(TRIP_ID_KEY) }
+    private val status by lazy {
+        requireArguments().getParcelableCompat<SetTitleSituation>(
+            SET_TITLE_SITUATION_KEY
+        ) ?: throw IllegalStateException()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,5 +90,7 @@ class SetTripTitleDialog(
 
     companion object {
         private const val DIALOG_WINDOW_SIZE = 0.85
+        const val TRIP_ID_KEY = "TRIP_ID_KEY"
+        const val SET_TITLE_SITUATION_KEY = "SET_TITLE_SITUATION_KEY"
     }
 }
