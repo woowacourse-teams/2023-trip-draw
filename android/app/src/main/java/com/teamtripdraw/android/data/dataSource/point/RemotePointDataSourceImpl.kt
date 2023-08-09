@@ -2,7 +2,6 @@ package com.teamtripdraw.android.data.dataSource.point
 
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.DeletePointRequest
 import com.teamtripdraw.android.data.httpClient.service.CreateRecordingPointService
 import com.teamtripdraw.android.data.httpClient.service.DeletePointService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
@@ -27,6 +26,6 @@ class RemotePointDataSourceImpl(
             .process { body, headers -> Result.success(body.toData()) }
 
     override suspend fun deletePoint(tripId: Long, pointId: Long): Result<Unit> =
-        deletePointService.deletePoint(pointId, DeletePointRequest(tripId))
+        deletePointService.deletePoint(pointId, tripId)
             .process { _, _ -> Result.success(Unit) }
 }
