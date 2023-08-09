@@ -2,6 +2,8 @@ package com.teamtripdraw.android.ui.home.recordingPoint
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_NO_CREATE
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
@@ -16,7 +18,7 @@ class RecordingPointAlarmManager(private val context: Context) {
             context,
             RECORD_REQUEST_CODE,
             RecordingPointService.getTripIdIntent(intent, tripId),
-            PendingIntent.FLAG_IMMUTABLE
+            FLAG_IMMUTABLE
         )
         alarmManager.setRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -31,7 +33,7 @@ class RecordingPointAlarmManager(private val context: Context) {
             context,
             RECORD_REQUEST_CODE,
             intent,
-            PendingIntent.FLAG_NO_CREATE
+            FLAG_NO_CREATE or FLAG_IMMUTABLE
         )
         if (pendingIntent != null) {
             alarmManager.cancel(pendingIntent)

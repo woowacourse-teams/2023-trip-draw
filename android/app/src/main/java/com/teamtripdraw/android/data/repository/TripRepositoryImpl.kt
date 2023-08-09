@@ -20,6 +20,10 @@ class TripRepositoryImpl(
     override fun getCurrentTripId(): Long =
         localTripDataSource.getCurrentTripId()
 
+    override fun deleteCurrentTripId() {
+        localTripDataSource.deleteCurrentTripId()
+    }
+
     override suspend fun getCurrentTripRoute(tripId: Long): Result<Route> =
         remoteTripDataSource.getTripInfo(tripId).map { dataTrip ->
             dataTrip.toDomainRoute()

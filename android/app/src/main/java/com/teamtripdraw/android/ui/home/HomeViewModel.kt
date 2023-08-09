@@ -67,10 +67,12 @@ class HomeViewModel(
     }
 
     private fun initHomeUiState() {
-        _homeUiState.value = when (tripId) {
-            NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
-            else -> HomeUiState.ON_TRIP
-        }
+        updateHomeUiState(
+            when (tripId) {
+                NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
+                else -> HomeUiState.ON_TRIP
+            }
+        )
     }
 
     private fun updateTripId() {
@@ -82,10 +84,14 @@ class HomeViewModel(
             tripRepository.startTrip()
                 .onSuccess {
                     updateTripId()
-                    _homeUiState.value = HomeUiState.ON_TRIP
+                    updateHomeUiState(HomeUiState.ON_TRIP)
                     _startTripEvent.value = Event(true)
                 }
         }
+    }
+
+    fun updateHomeUiState(homeUiState: HomeUiState) {
+        _homeUiState.value = homeUiState
     }
 
     fun updateCurrentTripRoute() {
@@ -140,5 +146,13 @@ class HomeViewModel(
 
     fun resetFinishTripCompleteEvent() {
         _finishTripCompleteEvent.value = false
+    }
+
+    fun clearCurrentTripId() {
+        tripRepository.deleteCurrentTripId()
+    }
+
+    fun cleatCurrentTripRoute() {
+        _currentTripRoute.value = Route(listOf())
     }
 }
