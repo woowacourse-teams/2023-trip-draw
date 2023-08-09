@@ -3,11 +3,11 @@ package com.teamtripdraw.android.ui.post.writing
 import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
@@ -100,10 +100,13 @@ class PostWritingActivity : AppCompatActivity() {
          * If you want "New Post" don't choose mode.
          */
         fun getIntent(
-            context: Context, postId: Long, wringMode: WritingMode
+            context: Context,
+            postId: Long,
+            wringMode: WritingMode,
         ): Intent {
-            if (wringMode == WritingMode.NEW)
+            if (wringMode == WritingMode.NEW) {
                 throw java.lang.IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
+            }
             val intent = Intent(context, PostWritingActivity::class.java)
             intent.putExtra(INTENT_KEY_POST_ID, postId)
             return intent

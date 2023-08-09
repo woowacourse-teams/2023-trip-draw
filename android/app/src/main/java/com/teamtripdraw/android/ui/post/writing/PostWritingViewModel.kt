@@ -9,6 +9,7 @@ import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
+import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
@@ -19,7 +20,7 @@ import java.io.File
 class PostWritingViewModel(
     private val pointRepository: PointRepository,
     private val postRepository: PostRepository,
-    private val tripRepository: TripRepository
+    private val tripRepository: TripRepository,
 ) : ViewModel() {
 
     val MAX_INPUT_TITLE_LENGTH = PostWritingValidState.MAX_TITLE_LENGTH
@@ -72,29 +73,37 @@ class PostWritingViewModel(
 
     fun textChangedEvent() {
         _postWritingValidState.value = PostWritingValidState.getValidState(
-            requireNotNull(title.value), requireNotNull(writing.value)
+            requireNotNull(title.value),
+            requireNotNull(writing.value),
         )
     }
 
     fun completeWritingEvent() {
         viewModelScope.launch {
-            val prePost = PrePost(
-                tripId = tripId,
-                pointId = pointId,
-                title = title.value ?: "",
-                writing = writing.value ?: "",
-                address = address.value ?: "",
-                imageFile = imageFile
-            )
-
-            when(writingMode) {
-                WritingMode.NEW ->  {
+            when (writingMode) {
+                WritingMode.NEW -> {
+                    val prePost = PrePost(
+                        tripId = tripId,
+                        pointId = pointId,
+                        title = title.value ?: "",
+                        writing = writing.value ?: "",
+                        address = address.value ?: "",
+                        imageFile = imageFile,
+                    )
                     postRepository.addPost(prePost).onSuccess {
                         _writingCompletedEvent.value = true
                     }
                 }
                 WritingMode.EDIT -> {
-                    // todo post 수정 요청 붙이기
+                    val prePatchPost = PrePatchPost(
+                        postId = postId,
+                        title = title.value ?: "",
+                        writing = writing.value ?: "",
+                        imageFile = imageFile,
+                    )
+                    postRepository.patchPost(prePatchPost).onSuccess {
+                        _writingCompletedEvent.value = true
+                    }
                 }
             }
         }
