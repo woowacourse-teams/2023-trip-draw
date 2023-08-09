@@ -71,13 +71,13 @@ class SetTripTitleDialog : DialogFragment() {
     private fun onSetupCompleted(isSuccess: Boolean) {
         if (isSuccess) {
             when (status) {
-                SetTitleSituation.FINISHED -> navigateDetailPage(requireNotNull(viewModel.tripItem.value))
+                SetTitleSituation.FINISHED -> navigateDetailPage(requireNotNull(viewModel.trip.value))
                 SetTitleSituation.EDIT -> dismiss()
             }
         }
     }
 
-    private fun navigateDetailPage(tripItem: UiTrip) {
+    private fun navigateDetailPage(trip: UiTrip) {
         // todo 해당 여행 히스토리의 상세 화면으로 이동
 
         dismiss()

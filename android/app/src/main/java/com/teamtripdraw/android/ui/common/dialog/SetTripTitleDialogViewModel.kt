@@ -2,14 +2,17 @@ package com.teamtripdraw.android.ui.common.dialog
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.model.trip.TripStatus
 import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiTrip
+import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
 
 class SetTripTitleDialogViewModel(
@@ -30,8 +33,9 @@ class SetTripTitleDialogViewModel(
     private val _titleSetupCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val titleSetupCompletedEvent: LiveData<Event<Boolean>> = _titleSetupCompletedEvent
 
-    private val _tripItem: MutableLiveData<UiTrip> = MutableLiveData()
-    val tripItem: LiveData<UiTrip> = _tripItem
+    private val _trip: MutableLiveData<Trip> = MutableLiveData()
+    val trip: LiveData<UiTrip> =
+        Transformations.map(_trip) { trip -> trip.toPresentation() }
 
     fun updateTripId(id: Long) {
         tripId = id
