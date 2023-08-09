@@ -56,11 +56,18 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
+        setPointObserveEvent()
+        setWritingCompletedEvent()
+    }
+
+    private fun setPointObserveEvent() {
         viewModel.point.observe(this) { point ->
             val geocoder = Geocoder(this, Locale.KOREAN)
             geocoder.fetchAddress(point.latitude, point.longitude, viewModel::updateAddress)
         }
+    }
 
+    private fun setWritingCompletedEvent() {
         viewModel.writingCompletedEvent.observe(this) {
             if (it == true) finish()
         }
