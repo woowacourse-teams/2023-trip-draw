@@ -131,6 +131,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         initPostWritingEventObserver()
         initMarkerSelectedObserver()
         initFinishTripEventObserver()
+        initFinishTripCompleteEventObserver()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -294,6 +295,20 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 SetTripTitleDialog.getBundle(homeViewModel.tripId, FINISHED)
             setTripTitleDialog.show(childFragmentManager, this.javaClass.name)
             homeViewModel.resetFinishTripEvent()
+        }
+    }
+
+    private fun initFinishTripCompleteEventObserver() {
+        homeViewModel.finishTripCompleteEvent.observe(
+            viewLifecycleOwner,
+            this::finishTripSuccessListener
+        )
+    }
+
+    private fun finishTripSuccessListener(event: Boolean) {
+        if (event) {
+            // todo 서비스 종료 등등 작업
+            homeViewModel.resetFinishTripCompleteEvent()
         }
     }
 

@@ -52,6 +52,9 @@ class HomeViewModel(
     private val _finishTripEvent = MutableLiveData<Boolean>()
     val finishTripEvent: LiveData<Boolean> = _finishTripEvent
 
+    private val _finishTripCompleteEvent = MutableLiveData<Boolean>()
+    val finishTripCompleteEvent: LiveData<Boolean> = _finishTripCompleteEvent
+
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
 
@@ -128,6 +131,14 @@ class HomeViewModel(
     }
 
     fun resetFinishTripEvent() {
+        _finishTripEvent.value = false
+    }
+
+    fun finishTripCompleteEvent() {
+        _finishTripEvent.value = true
+    }
+
+    fun resetFinishTripCompleteEvent() {
         _finishTripEvent.value = false
     }
 }
