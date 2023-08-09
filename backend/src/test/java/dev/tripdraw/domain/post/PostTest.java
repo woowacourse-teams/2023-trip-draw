@@ -66,7 +66,7 @@ class PostTest {
         Member member = new Member("통후추", "kakaoId", KAKAO);
 
         // when
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
 
         // then
         assertThat(point.hasPost()).isTrue();
@@ -91,7 +91,7 @@ class PostTest {
         // given
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
 
         // when
@@ -106,7 +106,7 @@ class PostTest {
         // given
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
 
         // when
@@ -151,7 +151,7 @@ class PostTest {
         // given
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
         post.changePostImageUrl("example.url");
 

@@ -417,7 +417,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().get("/trips/{tripId}/posts", trip.id())
                 .then().log().all()
                 .extract();
@@ -443,10 +443,10 @@ class PostControllerTest extends ControllerTest {
         // given & expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .when().get("/trips/{tripId}/posts", trip.id())
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -454,10 +454,10 @@ class PostControllerTest extends ControllerTest {
         // given & expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .when().get("/trips/{tripId}/posts", Long.MIN_VALUE)
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -475,7 +475,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart(multiPartSpecification)
                 .when().patch("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
@@ -506,11 +506,11 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .multiPart(multiPartSpecification)
                 .when().patch("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -526,7 +526,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .multiPart(multiPartSpecification)
                 .when().patch("/posts/{postId}", Long.MIN_VALUE)
                 .then().log().all()
@@ -541,7 +541,7 @@ class PostControllerTest extends ControllerTest {
         // expect1 : 삭제하면 204 NO_CONTENT 응답
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().delete("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
                 .statusCode(NO_CONTENT.value());
@@ -549,7 +549,7 @@ class PostControllerTest extends ControllerTest {
         // expect2 : 다시 조회하면 404 NOT_FOUND 응답
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().get("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -563,10 +563,10 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .when().delete("/posts/{postId}", postCreateResponse.postId())
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -574,7 +574,7 @@ class PostControllerTest extends ControllerTest {
         // given & expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().delete("/posts/{postId}", Long.MIN_VALUE)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -634,7 +634,7 @@ class PostControllerTest extends ControllerTest {
     PostResponse readPost(Long postId) {
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().get("/posts/{postId}", postId)
                 .then().log().all()
                 .extract();

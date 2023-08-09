@@ -7,11 +7,12 @@ import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
+import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.any;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
@@ -93,7 +94,7 @@ class PostServiceTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
+        LoginUser wrongUser = new LoginUser(MIN_VALUE);
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
@@ -114,7 +115,7 @@ class PostServiceTest {
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
         PostAndPointCreateRequest requestOfNotExistedTripId = new PostAndPointCreateRequest(
-                Long.MIN_VALUE,
+                MIN_VALUE,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
@@ -151,7 +152,7 @@ class PostServiceTest {
     @Test
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
+        LoginUser wrongUser = new LoginUser(MIN_VALUE);
         PostRequest postRequest = new PostRequest(
                 trip.id(),
                 point.id(),
@@ -170,7 +171,7 @@ class PostServiceTest {
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
         PostRequest requestOfNotExistedTripId = new PostRequest(
-                Long.MIN_VALUE,
+                MIN_VALUE,
                 point.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -188,7 +189,7 @@ class PostServiceTest {
         // given
         PostRequest requestOfNotExistedPointId = new PostRequest(
                 trip.id(),
-                Long.MIN_VALUE,
+                MIN_VALUE,
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
@@ -219,7 +220,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
         // given & expect
-        assertThatThrownBy(() -> postService.read(loginUser, Long.MIN_VALUE))
+        assertThatThrownBy(() -> postService.read(loginUser, MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUNT.getMessage());
     }
@@ -228,7 +229,7 @@ class PostServiceTest {
     void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
         PostCreateResponse postCreateResponse = createPost();
-        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
+        LoginUser wrongUser = new LoginUser(MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> postService.read(wrongUser, postCreateResponse.postId()))
@@ -271,7 +272,7 @@ class PostServiceTest {
     @Test
     void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
+        LoginUser wrongUser = new LoginUser(MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> postService.readAllByTripId(wrongUser, trip.id()))
@@ -282,7 +283,7 @@ class PostServiceTest {
     @Test
     void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_여행_ID이면_예외가_발생한다() {
         // given & expect
-        assertThatThrownBy(() -> postService.readAllByTripId(loginUser, Long.MIN_VALUE))
+        assertThatThrownBy(() -> postService.readAllByTripId(loginUser, MIN_VALUE))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
@@ -327,7 +328,7 @@ class PostServiceTest {
         );
 
         // expect
-        assertThatThrownBy(() -> postService.update(loginUser, Long.MIN_VALUE, postUpdateRequest, null))
+        assertThatThrownBy(() -> postService.update(loginUser, MIN_VALUE, postUpdateRequest, null))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUNT.getMessage());
     }
@@ -340,7 +341,7 @@ class PostServiceTest {
                 "우도의 땅콩 아이스크림",
                 "수정한 내용입니다."
         );
-        LoginUser wrongUser = new LoginUser("상한후추");
+        LoginUser wrongUser = new LoginUser(MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> postService.update(wrongUser, postCreateResponse.postId(), postUpdateRequest, null))
@@ -379,7 +380,7 @@ class PostServiceTest {
     @Test
     void 감상을_삭제할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
         // given & expect
-        assertThatThrownBy(() -> postService.delete(loginUser, Long.MIN_VALUE))
+        assertThatThrownBy(() -> postService.delete(loginUser, MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUNT.getMessage());
     }
@@ -388,7 +389,7 @@ class PostServiceTest {
     void 감상을_삭제할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
         PostCreateResponse postCreateResponse = createPost();
-        LoginUser wrongUser = new LoginUser("상한후추");
+        LoginUser wrongUser = new LoginUser(MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> postService.delete(wrongUser, postCreateResponse.postId()))

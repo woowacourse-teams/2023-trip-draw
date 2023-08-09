@@ -120,7 +120,7 @@ public class PostService {
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
         Post post = findPostById(postId);
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         post.validateAuthorization(member);
 
         post.changeTitle(postUpdateRequest.title());
@@ -130,7 +130,7 @@ public class PostService {
 
     public void delete(LoginUser loginUser, Long postId) {
         Post post = findPostById(postId);
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         post.validateAuthorization(member);
 
         postRepository.deleteById(postId);

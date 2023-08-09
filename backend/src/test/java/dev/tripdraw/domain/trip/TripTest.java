@@ -26,7 +26,7 @@ class TripTest {
     @Test
     void 여행_경로에_좌표를_추가한다() {
         // given
-        Member member = new Member("tonghuchu", "kakaoId", KAKAO);
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point = new Point(1.1, 2.2, LocalDateTime.now());
 
@@ -267,7 +267,7 @@ class TripTest {
     @Test
     void 여행의_위치정보_중_삭제되지_않은_위치정보를_반환한다() {
         // given
-        Member member = new Member("통후추");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         Trip trip = Trip.from(member);
         Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
         Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
