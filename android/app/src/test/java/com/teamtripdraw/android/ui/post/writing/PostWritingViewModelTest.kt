@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.postWriting
+package com.teamtripdraw.android.ui.post.writing
 
 import com.teamtripdraw.android.DefaultViewModelTest
 import com.teamtripdraw.android.domain.model.point.Point
@@ -56,8 +56,8 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
 
         // when
         sut.initTripData(pointId)
-        val actualLat = sut.latLngPoint.value?.latitude
-        val actualLng = sut.latLngPoint.value?.longitude
+        val actualLat = sut.point.value?.latitude
+        val actualLng = sut.point.value?.longitude
 
         // then
         Assertions.assertEquals(actualLat, expectedLat)

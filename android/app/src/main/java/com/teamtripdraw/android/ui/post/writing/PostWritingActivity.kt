@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.postWriting
+package com.teamtripdraw.android.ui.post.writing
 
 import android.content.Context
 import android.content.Intent
@@ -77,6 +77,9 @@ class PostWritingActivity : AppCompatActivity() {
         private const val INTENT_KEY_POINT_ID = "pointId"
         private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다. (PostWritingActivity)"
 
+        /**
+         * write new post
+         */
         fun getIntent(context: Context, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
             intent.putExtra(INTENT_KEY_POINT_ID, pointId)

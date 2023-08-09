@@ -2,6 +2,7 @@ package com.teamtripdraw.android.ui.home
 
 import com.teamtripdraw.android.DefaultViewModelTest
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.ui.home.HomeUiState.BEFORE_TRIP
 import com.teamtripdraw.android.ui.home.HomeUiState.ON_TRIP
@@ -20,12 +21,14 @@ class HomeViewModelTest : DefaultViewModelTest() {
     // class under test
     private lateinit var cut: HomeViewModel
     private lateinit var tripRepository: TripRepository
+    private lateinit var pointRepository: PointRepository
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         tripRepository = mockk(relaxed = true)
-        cut = HomeViewModel(tripRepository)
+        pointRepository = mockk()
+        cut = HomeViewModel(tripRepository, pointRepository)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,7 +42,7 @@ class HomeViewModelTest : DefaultViewModelTest() {
         coEvery { tripRepository.getCurrentTripId() } returns NULL_SUBSTITUTE_TRIP_ID
 
         // when
-        cut = HomeViewModel(tripRepository)
+        cut = HomeViewModel(tripRepository, pointRepository)
 
         // then
         assertEquals(cut.homeUiState.value, BEFORE_TRIP)
@@ -52,7 +55,7 @@ class HomeViewModelTest : DefaultViewModelTest() {
         coEvery { tripRepository.getCurrentTripId() } returns testTripId
 
         // when
-        cut = HomeViewModel(tripRepository)
+        cut = HomeViewModel(tripRepository, pointRepository)
 
         // then
         assertEquals(cut.homeUiState.value, ON_TRIP)
@@ -63,7 +66,6 @@ class HomeViewModelTest : DefaultViewModelTest() {
         // given
         // 사용자 여행 시작전 상태 초기화 코드
         coEvery { tripRepository.getCurrentTripId() } returns NULL_SUBSTITUTE_TRIP_ID
-        cut = HomeViewModel(tripRepository)
         coEvery { tripRepository.startTrip() } returns Result.success(Unit)
 
         // when

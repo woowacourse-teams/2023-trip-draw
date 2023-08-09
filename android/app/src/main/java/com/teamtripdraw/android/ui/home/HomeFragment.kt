@@ -38,7 +38,7 @@ import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
-import com.teamtripdraw.android.ui.postWriting.PostWritingActivity
+import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
