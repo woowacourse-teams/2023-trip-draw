@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,9 +28,9 @@ public class MemberController {
             responseCode = "200",
             description = "사용자 조회 성공."
     )
-    @GetMapping("/{memberId}")
-    public ResponseEntity<MemberSearchResponse> findById(@PathVariable Long memberId) {
-        MemberSearchResponse response = memberService.findById(memberId);
+    @GetMapping()
+    public ResponseEntity<MemberSearchResponse> findByCode(@RequestParam String code) {
+        MemberSearchResponse response = memberService.findByCode(code);
         return ResponseEntity.ok(response);
     }
 
