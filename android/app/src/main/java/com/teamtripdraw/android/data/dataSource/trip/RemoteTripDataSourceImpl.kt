@@ -1,13 +1,17 @@
 package com.teamtripdraw.android.data.dataSource.trip
 
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
+import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.GetTripInfoService
+import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
+import com.teamtripdraw.android.data.model.DataPreSetTripTitle
 import com.teamtripdraw.android.data.model.DataTrip
 
 class RemoteTripDataSourceImpl(
     private val createTripService: CreateTripService,
-    private val getTripInfoService: GetTripInfoService
+    private val getTripInfoService: GetTripInfoService,
+    private val setTripTitleService: SetTripTitleService
 ) :
     TripDataSource.Remote {
     override suspend fun startTrip(): Result<Long> =
@@ -19,4 +23,13 @@ class RemoteTripDataSourceImpl(
         getTripInfoService.getTripInfo(tripId).process { body, _ ->
             Result.success(body)
         }.map { it.toData() }
+
+    override suspend fun setTripTitle(
+        tripId: Long,
+        dataPreSetTripTitle: DataPreSetTripTitle
+    ): Result<Unit> =
+        setTripTitleService.setTripTitle(tripId, dataPreSetTripTitle.toHttpRequest())
+            .process { body, _ ->
+                Result.success(body)
+            }
 }
