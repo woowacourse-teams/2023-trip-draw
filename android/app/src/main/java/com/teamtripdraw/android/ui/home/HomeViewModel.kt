@@ -135,10 +135,10 @@ class HomeViewModel(
     }
 
     fun finishTripCompleteEvent() {
-        _finishTripEvent.value = true
+        _finishTripCompleteEvent.value = true
     }
 
     fun resetFinishTripCompleteEvent() {
-        _finishTripEvent.value = false
+        _finishTripCompleteEvent.value = false
     }
 }
