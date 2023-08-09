@@ -21,11 +21,6 @@ class SetTripTitleDialog(
     private val binding get() = _binding!!
     private val viewModel: SetTripTitleDialogViewModel by viewModels { tripDrawViewModelFactory }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        isCancelable = true
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +28,7 @@ class SetTripTitleDialog(
     ): View {
         _binding = FragmentTripTitleDialogBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        isCancelable = true
         return binding.root
     }
 
@@ -52,7 +48,7 @@ class SetTripTitleDialog(
         requireNotNull(dialog).apply {
             requireNotNull(window).apply {
                 setLayout(
-                    (resources.displayMetrics.widthPixels * 0.85).toInt(),
+                    (resources.displayMetrics.widthPixels * DIALOG_WINDOW_SIZE).toInt(),
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 setBackgroundDrawableResource(R.color.td_white)
@@ -85,5 +81,9 @@ class SetTripTitleDialog(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val DIALOG_WINDOW_SIZE = 0.85
     }
 }
