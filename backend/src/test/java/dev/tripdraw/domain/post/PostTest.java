@@ -152,12 +152,12 @@ class PostTest {
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추");
         Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
-        post.changeImageUrl("example.url");
+        post.changePostImageUrl("example.url");
 
         // when
-        post.removeImageUrl();
+        post.removePostImageUrl();
 
         // then
-        assertThat(post.imageUrl()).isNull();
+        assertThat(post.postImageUrl()).isNull();
     }
 }

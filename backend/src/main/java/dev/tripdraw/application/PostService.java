@@ -138,11 +138,11 @@ public class PostService {
 
     private void updateFileOfPost(MultipartFile file, Post post) {
         if (file == null) {
-            post.removeImageUrl();
+            post.removePostImageUrl();
             return;
         }
         String imageUrl = fileUploader.upload(file, POST_IMAGE);
-        post.changeImageUrl(imageUrl);
+        post.changePostImageUrl(imageUrl);
     }
 
     private Trip findValidatedTripById(Long tripId, Member member) {

@@ -77,6 +77,10 @@ public class Post extends BaseEntity {
         this.postImageUrl = postImageUrl;
     }
 
+    public void removePostImageUrl() {
+        this.postImageUrl = null;
+    }
+
     public void changeRouteImageUrl(String routeImageUrl) {
         this.routeImageUrl = routeImageUrl;
     }
@@ -93,17 +97,6 @@ public class Post extends BaseEntity {
         this.writing = writing;
     }
 
-<<<<<<< HEAD
-=======
-    public void changeImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void removeImageUrl() {
-        this.imageUrl = null;
-    }
-
->>>>>>> a83d220 ([feat] 감상의 이미지 주소 제거 (#159))
     public Long id() {
         return id;
     }
