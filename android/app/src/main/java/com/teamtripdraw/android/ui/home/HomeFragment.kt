@@ -269,7 +269,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID) unbindRecordingPointService()
+        if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID && recordingPointServiceBindingState) {
+            unbindRecordingPointService()
+        }
         _binding = null
     }
 
