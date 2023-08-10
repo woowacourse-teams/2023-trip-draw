@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.mannodermaus) apply false
     alias(libs.plugins.jlleitschuh) apply false
     alias(libs.plugins.fireBasePlugIn) apply false
+    alias(libs.plugins.firebaseCrashlyticsPlugIn) apply false
 }
 
 allprojects {

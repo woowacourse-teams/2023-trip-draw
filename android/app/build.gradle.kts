@@ -12,6 +12,8 @@ plugins {
     id("kotlin-parcelize")
     // FireBase
     id("com.google.gms.google-services")
+    // FireBaseCrashlytics
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -129,7 +131,10 @@ dependencies {
 
     // FireBase
     implementation(platform(libs.fireBaseBom))
-    implementation(libs.fireBaseAnalyticsKtx)
+    // FireBaseAnalytics
+    releaseImplementation(libs.fireBaseAnalyticsKtx)
+    // FirebaseCrashlytics
+    releaseImplementation(libs.fireBaseCrashlyticsKtx)
 
     // EncryptedSharedPreference
     implementation(libs.encryptedSharedPreference)
