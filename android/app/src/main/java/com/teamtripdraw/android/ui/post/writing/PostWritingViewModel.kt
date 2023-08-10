@@ -14,6 +14,7 @@ import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
+import com.teamtripdraw.android.support.framework.presentation.event.Event
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -38,8 +39,11 @@ class PostWritingViewModel(
         MutableLiveData(PostWritingValidState.EMPTY_TITLE)
     val postWritingValidState: LiveData<PostWritingValidState> = _postWritingValidState
 
-    private val _writingCompletedEvent: MutableLiveData<Boolean> = MutableLiveData(false)
-    val writingCompletedEvent: LiveData<Boolean> = _writingCompletedEvent
+    private val _backPageEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val backPageEvent: LiveData<Event<Boolean>> = _backPageEvent
+
+    private val _writingCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val writingCompletedEvent: LiveData<Event<Boolean>> = _writingCompletedEvent
 
     private val _point: MutableLiveData<Point> = MutableLiveData()
     val point: LiveData<Point> = _point
@@ -50,12 +54,32 @@ class PostWritingViewModel(
     private val _imageFile: MutableLiveData<File> = MutableLiveData()
     val imageFile: LiveData<File> = _imageFile
 
+    private val _takePictureEvent: MutableLiveData<Boolean> = MutableLiveData(false)
+    val takePictureEvent: LiveData<Boolean> = _takePictureEvent
+
+    private val _selectPhotoEvent: MutableLiveData<Boolean> = MutableLiveData(false)
+    val selectPhotoEvent: LiveData<Boolean> = _selectPhotoEvent
+
     fun updateAddress(address: String) {
         _address.postValue(address)
     }
 
     fun updateImage(file: File) {
         _imageFile.value = file
+    }
+
+    fun backPage() {
+        _backPageEvent.value = Event(true)
+    }
+
+    fun takePicture() {
+        _takePictureEvent.value = true
+        _takePictureEvent.value = false
+    }
+
+    fun selectPhoto() {
+        _selectPhotoEvent.value = true
+        _selectPhotoEvent.value = false
     }
 
     fun initWritingMode(writingMode: WritingMode, id: Long) {
@@ -93,7 +117,7 @@ class PostWritingViewModel(
                         imageFile = _imageFile.value,
                     )
                     postRepository.addPost(prePost).onSuccess {
-                        _writingCompletedEvent.value = true
+                        _writingCompletedEvent.value = Event(true)
                     }
                 }
                 WritingMode.EDIT -> {
@@ -104,7 +128,7 @@ class PostWritingViewModel(
                         imageFile = _imageFile.value,
                     )
                     postRepository.patchPost(prePatchPost).onSuccess {
-                        _writingCompletedEvent.value = true
+                        _writingCompletedEvent.value = Event(true)
                     }
                 }
             }

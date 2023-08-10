@@ -17,8 +17,8 @@ fun Uri.toResizedImageFile(context: Context): File? {
     val file = getResizedImageFile(bitmap = bitmap, directory = context.cacheDir)
     val orientation = context.contentResolver
         .openInputStream(this)?.use {
-            ExifInterface(it)
-        }?.getAttribute(ExifInterface.TAG_ORIENTATION)
+        ExifInterface(it)
+    }?.getAttribute(ExifInterface.TAG_ORIENTATION)
 
     orientation?.let { file.setOrientation(it) }
 
@@ -28,14 +28,14 @@ fun Uri.toResizedImageFile(context: Context): File? {
 private fun Uri.toBitmap(context: Context): Bitmap? {
     return context.contentResolver
         .openInputStream(this)?.use {
-            BitmapFactory.decodeStream(it)
-        }
+        BitmapFactory.decodeStream(it)
+    }
 }
 
 private fun getResizedImageFile(
     bitmap: Bitmap,
     directory: File,
-    quality: Int = DEFAULT_IMAGE_QUALITY
+    quality: Int = DEFAULT_IMAGE_QUALITY,
 ): File {
     val byteArrayOutputStream = ByteArrayOutputStream()
     val resizedBitmap: Bitmap = getResizedBitmap(bitmap = bitmap)
@@ -50,7 +50,7 @@ private fun getResizedImageFile(
 
 private fun getResizedBitmap(
     bitmap: Bitmap,
-    resizeSize: Float = DEFAULT_RESIZE_SIZE
+    resizeSize: Float = DEFAULT_RESIZE_SIZE,
 ): Bitmap {
     var resizedWidth: Float = resizeSize
     var resizedHeight: Float = resizeSize
@@ -67,7 +67,10 @@ private fun getResizedBitmap(
     }
 
     return Bitmap.createScaledBitmap(
-        bitmap, resizedWidth.toInt(), resizedHeight.toInt(), true
+        bitmap,
+        resizedWidth.toInt(),
+        resizedHeight.toInt(),
+        true,
     )
 }
 
