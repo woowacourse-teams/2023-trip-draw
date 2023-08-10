@@ -6,8 +6,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -16,7 +14,6 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityTripDetailBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
-import com.teamtripdraw.android.support.framework.presentation.Locations
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
@@ -25,7 +22,6 @@ import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
-import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 
 class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -48,8 +44,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         matchMapFragmentToNaverMap()
         initFloatingButtonClickListener()
         setUpPostViewerClickEvent()
-        setUpPostWritingClickEvent()
-        initPostWritingEventObserver()
         initMarkerSelectedObserver()
         setClickBack()
     }
@@ -97,10 +91,10 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.fabHome.setOnClickListener {
             ObjectAnimators.toggleFab(
                 binding.fabHome,
-                binding.fabWritePost,
+                null,
                 binding.fabPostList,
                 binding.fabMarkerMode,
-                binding.tvWritePost,
+                null,
                 binding.tvPostList,
                 binding.tvMarkerMode,
                 fabState,
@@ -121,30 +115,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         if (isClicked) startActivity(PostViewerActivity.getIntent(this, viewModel.tripId))
     }
 
-    private fun setUpPostWritingClickEvent() {
-        binding.fabWritePost.setOnClickListener {
-            Locations.getUpdateLocation(
-                getFusedLocationClient(),
-                this,
-                viewModel::createPoint,
-            )
-        }
-    }
-
-    private fun getFusedLocationClient(): FusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(this)
-
-    private fun initPostWritingEventObserver() {
-        viewModel.openPostWritingEvent.observe(
-            this,
-            EventObserver(this::navigateToPostWriting),
-        )
-    }
-
-    private fun navigateToPostWriting(pointId: Long) {
-        startActivity(PostWritingActivity.getIntent(this, pointId))
-    }
-
     override fun onStop() {
         turnOffFloatingActionButton()
         super.onStop()
@@ -153,10 +123,10 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun turnOffFloatingActionButton() {
         ObjectAnimators.closeFab(
             binding.fabHome,
-            binding.fabWritePost,
+            null,
             binding.fabPostList,
             binding.fabMarkerMode,
-            binding.tvWritePost,
+            null,
             binding.tvPostList,
             binding.tvMarkerMode,
         )

@@ -117,22 +117,6 @@
             app:tint="@color/td_main_blue" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_write_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/td_white"
-            android:src="@drawable/ic_write_post"
-            app:borderWidth="0dp"
-            app:fabCustomSize="44dp"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
-            app:layout_constraintEnd_toEndOf="@+id/fab_home"
-            app:layout_constraintStart_toStartOf="@+id/fab_home"
-            app:layout_constraintTop_toTopOf="@+id/fab_home"
-            app:tint="@color/td_main_blue" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -167,19 +151,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/tv_post_list"
-            android:textAppearance="@style/subtitle_1"
-            android:textColor="@color/td_main_blue"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
-            app:layout_constraintEnd_toStartOf="@+id/fab_home"
-            app:layout_constraintTop_toTopOf="@+id/fab_home" />
-
-        <TextView
-            android:id="@+id/tv_write_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/tv_write_post"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_main_blue"
             android:visibility="gone"

@@ -50,10 +50,7 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                 isAssignableFrom(HistoryDetailViewModel::class.java) ->
                     HistoryDetailViewModel(repositoryContainer.postRepository)
                 isAssignableFrom(TripDetailViewModel::class.java) ->
-                    TripDetailViewModel(
-                        repositoryContainer.tripRepository,
-                        repositoryContainer.pointRepository,
-                    )
+                    TripDetailViewModel(repositoryContainer.tripRepository)
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }
