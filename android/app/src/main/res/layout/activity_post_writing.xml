@@ -178,22 +178,26 @@
             app:layout_constraintStart_toEndOf="@+id/btn_camera"
             app:layout_constraintTop_toTopOf="@+id/btn_camera" />
 
+        <!--   todo 첫 release 버전에서 이용되지 않는 기능    -->
         <ImageView
             android:id="@+id/btn_mike"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_marginStart="18dp"
             android:src="@drawable/ic_mike"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/btn_find_image"
             app:layout_constraintStart_toEndOf="@+id/btn_find_image"
             app:layout_constraintTop_toTopOf="@+id/btn_find_image" />
 
+        <!--   todo 첫 release 버전에서 이용되지 않는 기능    -->
         <ImageView
             android:id="@+id/btn_video"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="18dp"
             android:src="@drawable/ic_video"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/btn_mike"
             app:layout_constraintStart_toEndOf="@+id/btn_mike"
             app:layout_constraintTop_toTopOf="@+id/btn_mike" />
