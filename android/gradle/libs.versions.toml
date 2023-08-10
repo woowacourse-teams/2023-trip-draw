@@ -77,6 +77,9 @@ coroutineTest = "1.7.2"
 # Stfalcon
 stfalcon = "v1.0.1"
 
+# firebaseCrashlytics
+firebaseCrashlyticsPlugIn = "2.9.8"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -137,7 +140,10 @@ gmsPlayServicesLocation = { module = "com.google.android.gms:play-services-locat
 
 # fireBase
 fireBaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "fireBaseBom" }
+# googleAnalytics
 fireBaseAnalyticsKtx = { module = "com.google.firebase:firebase-analytics-ktx" }
+# firebaseCrashlytics
+fireBaseCrashlyticsKtx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 #EncryptedSharedPreference
 encryptedSharedPreference = { module = "androidx.security:security-crypto", version.ref = "encryptedSharedPreference" }
@@ -155,7 +161,6 @@ androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mock
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
 naverMap = ["naverMap", "gmsPlayServicesLocation"]
-fireBase = ["fireBaseBom", "fireBaseAnalyticsKtx"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradleplugin" }
@@ -167,6 +172,8 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jlleitschuh = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "jlleitschuh" }
 # fireBase
 fireBasePlugIn = { id = "com.google.gms.google-services", version.ref = "fireBasePlugIn" }
+# firebaseCrashlytics
+firebaseCrashlyticsPlugIn = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugIn" }
 
 # use junit5 for test
 mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus" }
