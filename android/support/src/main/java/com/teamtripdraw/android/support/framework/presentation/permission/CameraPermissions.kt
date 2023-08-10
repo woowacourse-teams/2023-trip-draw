@@ -40,12 +40,12 @@ private fun processCameraPermission(
     hasCameraPermission: Boolean,
     activityResultLauncher: ActivityResultLauncher<Array<String>>,
 ) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        if (hasCameraPermission.not()) activityResultLauncher.launch(arrayOf(CAMERA))
-    } else {
-        if (hasWriteStoragePermission.not() || hasCameraPermission.not()) {
-            activityResultLauncher.launch(arrayOf(CAMERA, WRITE_STORAGE))
-        }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && hasCameraPermission.not()) {
+        activityResultLauncher.launch(arrayOf(CAMERA))
+        return
+    }
+    if (hasWriteStoragePermission.not() || hasCameraPermission.not()) {
+        activityResultLauncher.launch(arrayOf(CAMERA, WRITE_STORAGE))
     }
 }
 

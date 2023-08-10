@@ -15,14 +15,13 @@ fun ImageView.setImageWithVisibility(imgUrl: String?) {
     if (imgUrl == null) {
         this.visibility = View.GONE
         return
-    } else {
-        this.visibility = View.VISIBLE
-        Glide.with(this.context)
-            .load(imgUrl)
-            .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-            .error(R.drawable.shape_td_gray_fill_0_rect)
-            .into(this)
     }
+    this.visibility = View.VISIBLE
+    Glide.with(this.context)
+        .load(imgUrl)
+        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .into(this)
 }
 
 @BindingAdapter("app:clickToShowImageViewer")
@@ -43,15 +42,14 @@ fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
     if (imgUrl == null) {
         this.visibility = View.GONE
         return
-    } else {
-        this.visibility = View.VISIBLE
-        Glide.with(this.context)
-            .load(imgUrl)
-            .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-            .error(R.drawable.shape_td_gray_fill_0_rect)
-            .transform(CenterCrop(), RoundedCorners(20))
-            .into(this)
     }
+    this.visibility = View.VISIBLE
+    Glide.with(this.context)
+        .load(imgUrl)
+        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .transform(CenterCrop(), RoundedCorners(20))
+        .into(this)
 }
 
 @BindingAdapter("app:setRoundImageWithVisibility")
@@ -59,13 +57,12 @@ fun ImageView.setRoundImageWithVisibility(imgFile: File?) {
     if (imgFile == null) {
         this.visibility = View.GONE
         return
-    } else {
-        this.visibility = View.VISIBLE
-        Glide.with(this.context)
-            .load(imgFile)
-            .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-            .error(R.drawable.shape_td_gray_fill_0_rect)
-            .transform(CenterCrop(), RoundedCorners(20))
-            .into(this)
     }
+    this.visibility = View.VISIBLE
+    Glide.with(this.context)
+        .load(imgFile)
+        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .transform(CenterCrop(), RoundedCorners(20))
+        .into(this)
 }

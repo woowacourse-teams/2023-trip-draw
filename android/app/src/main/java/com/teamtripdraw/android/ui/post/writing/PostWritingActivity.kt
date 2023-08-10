@@ -1,12 +1,10 @@
 package com.teamtripdraw.android.ui.post.writing
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,13 +15,14 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.support.framework.presentation.extensions.toResizedImageFile
+import com.teamtripdraw.android.support.framework.presentation.images.createImageUri
 import com.teamtripdraw.android.support.framework.presentation.permission.checkCameraPermission
 import com.teamtripdraw.android.support.framework.presentation.permission.requestCameraPermission
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class PostWritingActivity : AppCompatActivity() {
 
@@ -39,6 +38,7 @@ class PostWritingActivity : AppCompatActivity() {
     private val permissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             if (permissions.count { it.value.not() } != 0) {
+                // todo dialog로 변경 필요
                 Toast.makeText(this, "권한을 허용해주세요", Toast.LENGTH_SHORT).show()
             }
         }
@@ -66,10 +66,6 @@ class PostWritingActivity : AppCompatActivity() {
     private fun initView() {
         binding.lifecycleOwner = this
         binding.postWritingViewModel = viewModel
-
-        setOnSelectPhoto()
-        setOnBack()
-        setOnTakePicture()
     }
 
     private fun initIntentData() {
@@ -88,28 +84,25 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        initPointObserve()
+        initBackPageObserve()
         initWritingCompletedObserve()
+        initPointObserve()
+        initTakePictureObserve()
+        initSelectPhotoObserve()
     }
 
-    private fun setOnSelectPhoto() {
-        binding.onSelectPhoto =
-            { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+    private fun initBackPageObserve() {
+        viewModel.backPageEvent.observe(
+            this,
+            EventObserver { if (it) finish() },
+        )
     }
 
-    private fun setOnTakePicture() {
-        binding.onTakePicture = {
-            if (checkCameraPermission(this)) {
-                imageUri = createImageUri()
-                takePicture.launch(imageUri)
-            } else {
-                requestCameraPermission(this, permissionRequest)
-            }
-        }
-    }
-
-    private fun setOnBack() {
-        binding.onBackClick = { finish() }
+    private fun initWritingCompletedObserve() {
+        viewModel.writingCompletedEvent.observe(
+            this,
+            EventObserver { if (it) finish() },
+        )
     }
 
     private fun initPointObserve() {
@@ -119,19 +112,23 @@ class PostWritingActivity : AppCompatActivity() {
         }
     }
 
-    private fun initWritingCompletedObserve() {
-        viewModel.writingCompletedEvent.observe(this) {
-            if (it == true) finish()
+    private fun initTakePictureObserve() {
+        viewModel.takePictureEvent.observe(this) {
+            if (it.not()) return@observe
+            if (checkCameraPermission(this)) {
+                imageUri = createImageUri(contentResolver)
+                takePicture.launch(imageUri)
+            } else {
+                requestCameraPermission(this, permissionRequest)
+            }
         }
     }
 
-    private fun createImageUri(): Uri? {
-        val now = SimpleDateFormat("yyMMdd_HHmmss").format(Date())
-        val content = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "img_$now.jpg")
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+    private fun initSelectPhotoObserve() {
+        viewModel.selectPhotoEvent.observe(this) {
+            if (it.not()) return@observe
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-        return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, content)
     }
 
     companion object {

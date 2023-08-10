@@ -9,18 +9,6 @@
             name="postWritingViewModel"
             type="com.teamtripdraw.android.ui.post.writing.PostWritingViewModel" />
 
-        <variable
-            name="onBackClick"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="onSelectPhoto"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="onTakePicture"
-            type="kotlin.jvm.functions.Function0" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +36,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="start"
-                    android:onClick="@{() -> onBackClick.invoke()}"
+                    android:onClick="@{() -> postWritingViewModel.backPage()}"
                     android:src="@drawable/ic_back" />
 
                 <TextView
@@ -170,7 +158,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{() -> onTakePicture.invoke()}"
+            android:onClick="@{() -> postWritingViewModel.takePicture()}"
             android:src="@drawable/ic_camera"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -180,7 +168,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="18dp"
-            android:onClick="@{() -> onSelectPhoto.invoke()}"
+            android:onClick="@{() -> postWritingViewModel.selectPhoto()}"
             android:src="@drawable/ic_find_image"
             app:layout_constraintBottom_toBottomOf="@+id/btn_camera"
             app:layout_constraintStart_toEndOf="@+id/btn_camera"
