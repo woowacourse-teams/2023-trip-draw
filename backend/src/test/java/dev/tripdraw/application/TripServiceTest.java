@@ -175,7 +175,14 @@ class TripServiceTest {
 
         // then
         assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
-                new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
+                new TripsSearchResponse(List.of(
+                        new TripSearchResponse(
+                                trip.id(),
+                                trip.nameValue(),
+                                trip.imageUrl(),
+                                trip.routeImageUrl()
+                        )
+                ))
         );
     }
 

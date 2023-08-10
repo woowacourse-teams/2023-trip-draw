@@ -313,7 +313,14 @@ class TripControllerTest extends ControllerTest {
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
             softly.assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
-                    new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
+                    new TripsSearchResponse(
+                            List.of(new TripSearchResponse(
+                                    trip.id(),
+                                    trip.nameValue(),
+                                    trip.imageUrl(),
+                                    trip.routeImageUrl())
+                            )
+                    )
             );
         });
     }
