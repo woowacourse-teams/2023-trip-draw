@@ -282,7 +282,6 @@ class TripControllerTest extends ControllerTest {
         PointResponse pointResponse = response.as(PointResponse.class);
 
         RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(huchuToken)
                 .param("tripId", trip.id())
                 .when().delete("/points/{pointId}", pointResponse.pointId())
@@ -290,7 +289,6 @@ class TripControllerTest extends ControllerTest {
 
         // expect
         RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(huchuToken)
                 .param("tripId", trip.id())
                 .when().delete("/points/{pointId}", pointResponse.pointId())
@@ -362,7 +360,6 @@ class TripControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(huchuToken)
                 .param("tripId", trip.id())
                 .when().get("/points/{pointId}", pointId)
@@ -386,6 +383,26 @@ class TripControllerTest extends ControllerTest {
         });
     }
 
+    @Test
+    void 여행을_삭제한다() {
+        // expect
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(huchuToken)
+                .when().delete("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .statusCode(NO_CONTENT.value());
+    }
+
+    @Test
+    void 여행을_삭제할_때_인증에_실패하면_예외가_발생한다() {
+        // expect
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(WRONG_TOKEN)
+                .when().delete("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .statusCode(UNAUTHORIZED.value());
+    }
+
     private PointCreateResponse createPointAndGetId(PointCreateRequest request) {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
@@ -395,7 +412,6 @@ class TripControllerTest extends ControllerTest {
                 .then().log().all()
                 .extract();
 
-        PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
-        return pointCreateResponse;
+        return response.as(PointCreateResponse.class);
     }
 }

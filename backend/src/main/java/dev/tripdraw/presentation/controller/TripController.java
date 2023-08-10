@@ -1,6 +1,7 @@
 package dev.tripdraw.presentation.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import dev.tripdraw.application.TripService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
@@ -127,5 +128,19 @@ public class TripController {
     ) {
         tripService.updateTripById(loginUser, tripId, tripUpdateRequest);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "여행 삭제 API", description = "여행 삭제")
+    @ApiResponse(
+            responseCode = "204",
+            description = "여행 삭제 성공."
+    )
+    @DeleteMapping("/trips/{tripId}")
+    public ResponseEntity<Void> delete(
+            @Auth LoginUser loginUser,
+            @PathVariable Long tripId
+    ) {
+        tripService.delete(loginUser, tripId);
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 }
