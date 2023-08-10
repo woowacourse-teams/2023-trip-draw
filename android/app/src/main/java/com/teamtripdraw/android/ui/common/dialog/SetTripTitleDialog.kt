@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentTripTitleDialogBinding
@@ -22,7 +23,7 @@ class SetTripTitleDialog : DialogFragment() {
     private val binding get() = _binding!!
     private val viewModel: SetTripTitleDialogViewModel by viewModels { tripDrawViewModelFactory }
     private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
-    private val historyDetailViewModel: HistoryDetailViewModel by viewModels({ requireActivity() })
+    private val historyDetailViewModel: HistoryDetailViewModel by activityViewModels()
 
     private val tripId by lazy { requireArguments().getLong(TRIP_ID_KEY) }
     private val status by lazy {

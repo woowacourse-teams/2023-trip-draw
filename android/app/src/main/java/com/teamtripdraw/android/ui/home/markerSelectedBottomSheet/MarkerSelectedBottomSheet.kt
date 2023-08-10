@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamtripdraw.android.R
@@ -43,7 +44,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
                 homeViewModel
             }
             BottomSheetClickSituation.HISTORY -> {
-                val tripDetailViewModel: TripDetailViewModel by viewModels({ requireActivity() })
+                val tripDetailViewModel: TripDetailViewModel by activityViewModels()
                 tripDetailViewModel
             }
         }
