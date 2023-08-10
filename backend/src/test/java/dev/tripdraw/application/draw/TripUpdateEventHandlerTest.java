@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -27,10 +26,7 @@ class TripUpdateEventHandlerTest {
 
     @Mock
     private TripRepository tripRepository;
-
-    @Mock
-    private TransactionTemplate transactionTemplate;
-
+    
     @InjectMocks
     private TripUpdateEventHandler tripUpdateEventHandler;
 
