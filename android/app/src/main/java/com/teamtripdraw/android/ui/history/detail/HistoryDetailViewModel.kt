@@ -45,6 +45,12 @@ class HistoryDetailViewModel(
         _previewTrip.value = previewTrip
     }
 
+    fun updateTripTitle(title: String) {
+        _previewTrip.value = _previewTrip.value!!.run {
+            UiPreviewTrip(id, title, imageUrl, routeImageUrl)
+        }
+    }
+
     fun getPosts() {
         viewModelScope.launch {
             postRepository.getAllPosts(tripId)

@@ -12,6 +12,7 @@ import com.teamtripdraw.android.support.framework.presentation.event.EventObserv
 import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
+import com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
@@ -21,6 +22,7 @@ class SetTripTitleDialog : DialogFragment() {
     private val binding get() = _binding!!
     private val viewModel: SetTripTitleDialogViewModel by viewModels { tripDrawViewModelFactory }
     private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
+    private val historyDetailViewModel: HistoryDetailViewModel by viewModels({ requireActivity() })
 
     private val tripId by lazy { requireArguments().getLong(TRIP_ID_KEY) }
     private val status by lazy {
@@ -84,10 +86,12 @@ class SetTripTitleDialog : DialogFragment() {
                 SetTitleSituation.FINISHED -> {
                     viewModel.getTripPreviewInfo()
                     homeViewModel.finishTripCompleteEvent()
-                    dismiss()
                 }
-                SetTitleSituation.EDIT -> dismiss()
+                SetTitleSituation.EDIT -> {
+                    historyDetailViewModel.updateTripTitle(viewModel.tripTitle.value ?: "")
+                }
             }
+            dismiss()
         }
     }
 
