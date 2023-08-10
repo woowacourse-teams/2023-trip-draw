@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
 public class PostCreateEventHandler {
@@ -18,18 +17,15 @@ public class PostCreateEventHandler {
     private final RouteImageGenerator routeImageGenerator;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
-    private final TransactionTemplate transactionTemplate;
 
     public PostCreateEventHandler(
             RouteImageGenerator routeImageGenerator,
             PostRepository postRepository,
-            TripRepository tripRepository,
-            TransactionTemplate transactionTemplate
+            TripRepository tripRepository
     ) {
         this.routeImageGenerator = routeImageGenerator;
         this.postRepository = postRepository;
         this.tripRepository = tripRepository;
-        this.transactionTemplate = transactionTemplate;
     }
 
     @Async
@@ -45,9 +41,7 @@ public class PostCreateEventHandler {
                 List.of(post.point().longitude())
         );
 
-        transactionTemplate.executeWithoutResult(action -> {
-            post.changeRouteImageUrl(imageUrl);
-            postRepository.save(post);
-        });
+        post.changeRouteImageUrl(imageUrl);
+        postRepository.save(post);
     }
 }

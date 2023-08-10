@@ -7,23 +7,19 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
 public class TripUpdateEventHandler {
 
     private final RouteImageGenerator routeImageGenerator;
     private final TripRepository tripRepository;
-    private final TransactionTemplate transactionTemplate;
 
     public TripUpdateEventHandler(
             RouteImageGenerator routeImageGenerator,
-            TripRepository tripRepository,
-            TransactionTemplate transactionTemplate
+            TripRepository tripRepository
     ) {
         this.routeImageGenerator = routeImageGenerator;
         this.tripRepository = tripRepository;
-        this.transactionTemplate = transactionTemplate;
     }
 
     @Async
@@ -38,9 +34,7 @@ public class TripUpdateEventHandler {
                 trip.getPointedLongitudes()
         );
 
-        transactionTemplate.executeWithoutResult(action -> {
-            trip.changeRouteImageUrl(imageUrl);
-            tripRepository.save(trip);
-        });
+        trip.changeRouteImageUrl(imageUrl);
+        tripRepository.save(trip);
     }
 }
