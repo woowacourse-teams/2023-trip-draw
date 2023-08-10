@@ -158,10 +158,20 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{() -> onSelectPhoto.invoke()}"
             android:src="@drawable/ic_camera"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_find_image"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="18dp"
+            android:onClick="@{() -> onSelectPhoto.invoke()}"
+            android:src="@drawable/ic_find_image"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_camera"
+            app:layout_constraintStart_toEndOf="@+id/btn_camera"
+            app:layout_constraintTop_toTopOf="@+id/btn_camera" />
 
         <ImageView
             android:id="@+id/btn_mike"
@@ -169,9 +179,9 @@
             android:layout_height="22dp"
             android:layout_marginStart="18dp"
             android:src="@drawable/ic_mike"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_camera"
-            app:layout_constraintStart_toEndOf="@+id/btn_camera"
-            app:layout_constraintTop_toTopOf="@+id/btn_camera" />
+            app:layout_constraintBottom_toBottomOf="@+id/btn_find_image"
+            app:layout_constraintStart_toEndOf="@+id/btn_find_image"
+            app:layout_constraintTop_toTopOf="@+id/btn_find_image" />
 
         <ImageView
             android:id="@+id/btn_video"
