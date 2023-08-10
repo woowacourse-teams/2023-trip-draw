@@ -16,6 +16,10 @@
         <variable
             name="naverMap"
             type="com.naver.maps.map.NaverMap" />
+
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +40,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/btn_post_viewer_back_description"
+                android:onClick="@{()->onBackClick.invoke()}"
                 android:src="@drawable/ic_back" />
 
             <TextView

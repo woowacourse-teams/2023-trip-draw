@@ -40,19 +40,23 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_trip_detail)
         binding.lifecycleOwner = this
 
-        val tripId = intent.getLongExtra(TRIP_ID_KEY, NULL_SUBSTITUTE_TRIP_ID)
-        viewModel.updateTripId(tripId)
-        viewModel.updateTripInfo()
-
         binding.tripDetailViewModel = viewModel
         binding.fabState = fabState
 
+        initTripInfo()
         matchMapFragmentToNaverMap()
         initFloatingButtonClickListener()
         setUpPostViewerClickEvent()
         setUpPostWritingClickEvent()
         initPostWritingEventObserver()
         initMarkerSelectedObserver()
+        setClickBack()
+    }
+
+    private fun initTripInfo() {
+        val tripId = intent.getLongExtra(TRIP_ID_KEY, NULL_SUBSTITUTE_TRIP_ID)
+        viewModel.updateTripId(tripId)
+        viewModel.updateTripInfo()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -173,6 +177,10 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
             markerSelectedBottomSheet.show(supportFragmentManager, this.javaClass.name)
         }
+    }
+
+    private fun setClickBack() {
+        binding.onBackClick = { finish() }
     }
 
     companion object {

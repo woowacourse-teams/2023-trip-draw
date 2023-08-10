@@ -29,6 +29,7 @@ class HistoryDetailActivity : AppCompatActivity() {
 
         getIntentData()
         setAdapter()
+        setClickBack()
         initObserve()
     }
 
@@ -42,6 +43,10 @@ class HistoryDetailActivity : AppCompatActivity() {
         adapter = HistoryDetailAdapter(viewModel)
         binding.rvTripHistoryDetail.adapter = adapter
         viewModel.getPosts()
+    }
+
+    private fun setClickBack() {
+        binding.onBackClick = { finish() }
     }
 
     private fun initObserve() {
