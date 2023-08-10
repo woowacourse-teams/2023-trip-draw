@@ -3,10 +3,28 @@ package com.teamtripdraw.android.ui.common.bindingAdapter
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
+
+@BindingAdapter("app:setDialogButtonEnabled")
+fun AppCompatButton.setDialogButtonEnabled(state: TripTitleValidState) {
+    val btnEnabled: Boolean = when (state) {
+        TripTitleValidState.AVAILABLE -> true
+        TripTitleValidState.EXCEED_LIMIT, TripTitleValidState.CONTAIN_BLANK -> false
+    }
+    val btnBackground =
+        if (btnEnabled) {
+            R.drawable.shape_td_main_blue_fill_5_rect
+        } else {
+            R.drawable.shape_td_gray_fill_5_rect
+        }
+
+    this.isEnabled = btnEnabled
+    this.background = ResourcesCompat.getDrawable(resources, btnBackground, null)
+}
 
 @BindingAdapter("app:setDialogEditTextBackground")
 fun EditText.setDialogEditTextBackground(state: TripTitleValidState) {

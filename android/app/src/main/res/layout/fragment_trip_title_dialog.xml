@@ -65,7 +65,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/et_dialog_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/et_dialog_input"
-            app:layout_constraintTop_toTopOf="@+id/et_dialog_input" />
+            app:layout_constraintTop_toTopOf="@+id/et_dialog_input"
+            app:setDialogButtonEnabled="@{insertTripTitleDialogViewModel.titleState}" />
 
         <TextView
             android:id="@+id/tv_title_valid_state_warning_message"
