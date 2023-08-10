@@ -7,7 +7,7 @@ import dev.tripdraw.exception.common.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum PostExceptionType implements ExceptionType {
-    POST_NOT_FOUNT(NOT_FOUND, "존재하지 않는 감상입니다."),
+    POST_NOT_FOUND(NOT_FOUND, "존재하지 않는 감상입니다."),
     NOT_AUTHORIZED_TO_POST(FORBIDDEN, "해당 감상에 대한 접근 권한이 없습니다.");
 
     private final HttpStatus httpStatus;
