@@ -8,6 +8,8 @@ import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.dataSource.post.remote.RemotePostDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.trip.RemoteTripDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
+import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.RemoteUserIdentifyInfoDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
 
 class RemoteDataSourceContainer(
     serviceContainer: ServiceContainer,
@@ -37,5 +39,9 @@ class RemoteDataSourceContainer(
             serviceContainer.createRecordingPointService,
             serviceContainer.getPointService,
             serviceContainer.deletePointService,
+        )
+    val remoteUserIdentifyInfoDataSourceImpl: UserIdentifyInfoDataSource.Remote =
+        RemoteUserIdentifyInfoDataSourceImpl(
+            serviceContainer.loginService,
         )
 }
