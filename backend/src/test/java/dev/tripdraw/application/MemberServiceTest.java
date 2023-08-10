@@ -5,12 +5,20 @@ import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND
 import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.domain.post.Post;
+import dev.tripdraw.domain.post.PostRepository;
+import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.domain.trip.Trip;
+import dev.tripdraw.domain.trip.TripName;
+import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +35,34 @@ class MemberServiceTest {
     @Autowired
     private AuthTokenManager authTokenManager;
 
+    @Autowired
+    private TripRepository tripRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
     private Member member;
     private String code;
+    private Trip trip;
+    private Post post;
+
 
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         code = authTokenManager.generate(member.id());
+
+        trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member));
+        Point point = new Point(3.14, 5.25, LocalDateTime.now());
+        trip.add(point);
+        post = postRepository.save(new Post(
+                "제목",
+                point,
+                "위치",
+                "오늘은 날씨가 좋네요.",
+                member,
+                trip.id()
+        ));
     }
 
     @Test
@@ -77,7 +106,11 @@ class MemberServiceTest {
         memberService.deleteByCode(code);
 
         // then
-        assertThat(memberRepository.findById(member.id())).isEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(memberRepository.findById(member.id())).isEmpty();
+            softly.assertThat(tripRepository.findById(trip.id())).isEmpty();
+            softly.assertThat(postRepository.findById(post.id())).isEmpty();
+        });
     }
 
     @Test

@@ -3,6 +3,7 @@ package dev.tripdraw.presentation.controller;
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
@@ -10,10 +11,17 @@ import static org.springframework.http.HttpStatus.OK;
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.domain.post.Post;
+import dev.tripdraw.domain.post.PostRepository;
+import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.domain.trip.Trip;
+import dev.tripdraw.domain.trip.TripName;
+import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -30,6 +38,12 @@ class MemberControllerTest extends ControllerTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    TripRepository tripRepository;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Autowired
     AuthTokenManager authTokenManager;
@@ -98,12 +112,37 @@ class MemberControllerTest extends ControllerTest {
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         String code = authTokenManager.generate(member.id());
 
+        Trip trip = new Trip(TripName.from("통후추의 여행"), member);
+        Point point = new Point(3.14, 5.25, LocalDateTime.now());
+        trip.add(point);
+        tripRepository.save(trip);
+        Post post = postRepository.save(new Post(
+                "제목",
+                point,
+                "위치",
+                "오늘은 날씨가 좋네요.",
+                member,
+                trip.id()
+        ));
+
         // expect
         RestAssured.given().log().all()
                 .param("code", code)
                 .when().delete("/members")
                 .then().log().all()
                 .statusCode(NO_CONTENT.value());
+
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(code)
+                .when().get("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(code)
+                .when().get("/posts/{postId}", post.id())
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
     }
 
     @Test
