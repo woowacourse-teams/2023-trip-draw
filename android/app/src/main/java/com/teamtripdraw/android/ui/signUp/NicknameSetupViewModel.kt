@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
-import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
+import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.model.user.NicknameValidState
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import kotlinx.coroutines.launch
 
 class NicknameSetupViewModel(
-    private val nicknameSetupRepository: NicknameSetupRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     val MAX_INPUT_NAME_LENGTH = NicknameValidState.MAX_NAME_LENGTH + 1
@@ -32,7 +32,7 @@ class NicknameSetupViewModel(
 
     fun setNickname() {
         viewModelScope.launch {
-            nicknameSetupRepository.setNickname(requireNotNull(nickname.value))
+            authRepository.setNickname(requireNotNull(nickname.value))
                 .onSuccess {
                     _nicknameSetupCompletedEvent.value = Event(true)
                 }
@@ -42,7 +42,7 @@ class NicknameSetupViewModel(
                             _nicknameState.value = NicknameValidState.DUPLICATE
                     }
                 }.getOrNull()?.let {
-                    nicknameSetupRepository.getNickname(it)
+                    authRepository.getNickname(it)
                 }
         }
     }
