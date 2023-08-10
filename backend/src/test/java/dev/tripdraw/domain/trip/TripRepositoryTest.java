@@ -56,4 +56,17 @@ class TripRepositoryTest {
         // then
         assertThat(trips).hasSize(0);
     }
+
+    @Test
+    void 회원_ID로_여행을_삭제한다() {
+        // given
+        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        tripRepository.save(trip);
+
+        // when
+        tripRepository.deleteByMemberId(member.id());
+
+        // then
+        assertThat(tripRepository.findById(trip.id())).isEmpty();
+    }
 }
