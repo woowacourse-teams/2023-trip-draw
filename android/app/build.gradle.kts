@@ -40,7 +40,7 @@ android {
         buildConfigField(
             "String",
             "ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS",
-            localProperties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS")
+            localProperties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS"),
         )
 
         manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
@@ -57,11 +57,11 @@ android {
             buildConfigField(
                 "String",
                 "TRIP_DRAW_BASE_URL",
-                localProperties.getProperty("TRIP_DRAW_PROD_BASE_URL")
+                localProperties.getProperty("TRIP_DRAW_PROD_BASE_URL"),
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             signingConfig = signingConfigs.getByName("release")
         }
@@ -74,7 +74,7 @@ android {
             buildConfigField(
                 "String",
                 "TRIP_DRAW_BASE_URL",
-                localProperties.getProperty("TRIP_DRAW_DEV_BASE_URL")
+                localProperties.getProperty("TRIP_DRAW_DEV_BASE_URL"),
             )
             applicationIdSuffix = ".debug"
         }
@@ -141,4 +141,7 @@ dependencies {
 
     // Stfalcon
     implementation(libs.stfalcon)
+
+    // kakaoLogin
+    implementation(libs.kakaoUser)
 }
