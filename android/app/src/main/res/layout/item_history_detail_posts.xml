@@ -16,7 +16,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{()->historyDetailViewModel.openPostDetail(postItem.id)}">
 
         <ImageView
             android:id="@+id/iv_history_detail_post_image"

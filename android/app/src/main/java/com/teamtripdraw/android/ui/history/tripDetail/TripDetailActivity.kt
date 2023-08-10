@@ -110,7 +110,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun navigateToPostViewer(isClicked: Boolean) {
-        if (isClicked) startActivity(PostViewerActivity.getIntent(this))
+        if (isClicked) startActivity(PostViewerActivity.getIntent(this, viewModel.tripId))
     }
 
     private fun setUpPostWritingClickEvent() {

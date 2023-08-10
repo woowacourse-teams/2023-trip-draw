@@ -203,7 +203,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun navigateToPostViewer(isClicked: Boolean) {
-        if (isClicked) startActivity(PostViewerActivity.getIntent(requireContext()))
+        if (isClicked) {
+            startActivity(
+                PostViewerActivity.getIntent(
+                    requireContext(),
+                    homeViewModel.tripId,
+                ),
+            )
+        }
     }
 
     private fun setUpPostWritingClickEvent() {

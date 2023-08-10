@@ -8,10 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityHistoryDetailBinding
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.common.bindingAdapter.setImage
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.history.tripDetail.TripDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
+import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
 
 class HistoryDetailActivity : AppCompatActivity() {
 
@@ -44,6 +47,8 @@ class HistoryDetailActivity : AppCompatActivity() {
     private fun initObserve() {
         setPostObserve()
         setTripObserve()
+        setTripDetailEventObserve()
+        setPostDetailEventObserve()
     }
 
     private fun setPostObserve() {
@@ -57,7 +62,34 @@ class HistoryDetailActivity : AppCompatActivity() {
             binding.ivHistoryDetailImage.setImage(it.imageUrl)
             binding.ivHistoryDetailRoute.setImage(it.routeImageUrl)
             binding.tbHistoryDetail.title = it.name
+            binding.ivHistoryDetailImage.setOnClickListener {
+                viewModel.openTripDetail()
+            }
         }
+    }
+
+    private fun setTripDetailEventObserve() {
+        viewModel.openTripDetailEvent.observe(
+            this,
+            EventObserver(this@HistoryDetailActivity::navigateToTripDetail),
+        )
+    }
+
+    private fun navigateToTripDetail(tripId: Long) {
+        val intent = TripDetailActivity.getIntent(this, tripId)
+        startActivity(intent)
+    }
+
+    private fun setPostDetailEventObserve() {
+        viewModel.openPostDetailEvent.observe(
+            this,
+            EventObserver(this@HistoryDetailActivity::navigateToPostDetail),
+        )
+    }
+
+    private fun navigateToPostDetail(postId: Long) {
+        val intent = PostDetailActivity.getIntent(this, postId)
+        startActivity(intent)
     }
 
     companion object {
