@@ -330,7 +330,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.update(loginUser, MIN_VALUE, postUpdateRequest, null))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.getMessage());
+                .hasMessage(POST_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -374,7 +374,7 @@ class PostServiceTest {
 
         assertThatThrownBy(() -> postService.read(loginUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.getMessage());
+                .hasMessage(POST_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -382,7 +382,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.delete(loginUser, MIN_VALUE))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.getMessage());
+                .hasMessage(POST_NOT_FOUND.getMessage());
     }
 
     @Test

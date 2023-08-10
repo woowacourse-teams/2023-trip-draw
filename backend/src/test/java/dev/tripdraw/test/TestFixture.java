@@ -1,6 +1,7 @@
 package dev.tripdraw.test;
 
 import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.domain.oauth.OauthType;
 import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.trip.Point;
 import dev.tripdraw.domain.trip.Trip;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 public class TestFixture {
 
     public static Member 사용자() {
-        return new Member(1L, "통후추");
+        return new Member(1L, "통후추", "", OauthType.KAKAO);
     }
 
     public static Point 위치_정보() {
@@ -20,7 +21,7 @@ public class TestFixture {
     }
 
     public static Trip 여행() {
-        return new Trip(1L, TripName.from("통후추"), 사용자(), TripStatus.ONGOING);
+        return new Trip(1L, TripName.from("통후추"), 사용자(), TripStatus.ONGOING, "", "");
     }
 
     public static Post 감상() {

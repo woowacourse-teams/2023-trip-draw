@@ -2,6 +2,7 @@ package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 import dev.tripdraw.application.file.FileUploader;
@@ -148,7 +149,7 @@ public class PostService {
 
     private Post findPostById(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(POST_NOT_FOUNT));
+                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
 
     private Post registerFileToPost(MultipartFile file, Post post) {
