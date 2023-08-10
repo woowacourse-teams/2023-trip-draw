@@ -72,7 +72,7 @@ class HomeViewModel(
             when (tripId) {
                 NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
                 else -> HomeUiState.ON_TRIP
-            }
+            },
         )
     }
 
@@ -89,6 +89,10 @@ class HomeViewModel(
                     _startTripEvent.value = Event(true)
                 }
         }
+    }
+
+    fun updateHomeUiState(homeUiState: HomeUiState) {
+        _homeUiState.value = homeUiState
     }
 
     override fun updateTripInfo() {

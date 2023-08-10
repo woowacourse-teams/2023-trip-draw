@@ -314,7 +314,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun initFinishTripCompleteEventObserver() {
         homeViewModel.finishTripCompleteEvent.observe(
             viewLifecycleOwner,
-            this::finishTripSuccessListener
+            this::finishTripSuccessListener,
         )
     }
 
