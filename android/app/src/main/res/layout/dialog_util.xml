@@ -8,10 +8,6 @@
         <variable
             name="confirmText"
             type="String" />
-
-        <variable
-            name="cancelText"
-            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -39,7 +39,9 @@ class RemoteTripDataSourceImpl(
             }
 
     override suspend fun getAllTrips(): Result<List<DataPreviewTrip>> =
-        getAllTripsService.getAllTrips().process { body, _ -> Result.success(body.toData()) }
+        getAllTripsService.getAllTrips().process { body, _ ->
+            Result.success(body.toData())
+        }
 
     override suspend fun deleteTrip(tripId: Long): Result<Unit> =
         deleteTripService.deleteTrip(tripId).process { body, _ ->

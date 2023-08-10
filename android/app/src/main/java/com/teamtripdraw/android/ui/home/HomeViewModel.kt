@@ -3,6 +3,7 @@ package com.teamtripdraw.android.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationResult
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
@@ -20,7 +21,7 @@ import java.time.LocalDateTime
 class HomeViewModel(
     private val tripRepository: TripRepository,
     private val pointRepository: PointRepository,
-) : MapBottomSheetViewModel() {
+) : ViewModel(), MapBottomSheetViewModel {
 
     private val _homeUiState: MutableLiveData<HomeUiState> = MutableLiveData()
     val homeUiState: LiveData<HomeUiState> = _homeUiState

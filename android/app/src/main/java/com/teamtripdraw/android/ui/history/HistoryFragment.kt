@@ -29,6 +29,7 @@ class HistoryFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         setAdapter()
+        getPreviewTrips()
         initObserve()
 
         return binding.root
@@ -37,21 +38,22 @@ class HistoryFragment : Fragment() {
     private fun setAdapter() {
         historyAdapter = HistoryAdapter(viewModel)
         binding.rvTripHistory.adapter = historyAdapter
-        viewModel.getPreviewTrips()
     }
+
+    private fun getPreviewTrips() = viewModel.getPreviewTrips()
 
     private fun initObserve() {
-        setPreviewTripsObserve()
-        setHistoryOpenObserveEvent()
+        initPreviewTripsObserve()
+        initHistoryOpenObserveEvent()
     }
 
-    private fun setPreviewTripsObserve() {
+    private fun initPreviewTripsObserve() {
         viewModel.previewTrips.observe(viewLifecycleOwner) {
             historyAdapter.submitList(it)
         }
     }
 
-    private fun setHistoryOpenObserveEvent() {
+    private fun initHistoryOpenObserveEvent() {
         viewModel.previewTripOpenEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@HistoryFragment::onHistoryClick),

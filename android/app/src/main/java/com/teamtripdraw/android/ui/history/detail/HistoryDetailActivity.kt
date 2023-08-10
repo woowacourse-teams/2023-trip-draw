@@ -52,39 +52,40 @@ class HistoryDetailActivity : AppCompatActivity() {
     }
 
     private fun setClickListener() {
-        // 이상하게 이 부분도 DataBinding이 되지 않아서 일단 이렇게 처리했습니다..
+        // dataBinding이 안되는 문제 : 이슈 #243 참고
         binding.btnHistoryDetailDelete.setOnClickListener {
             viewModel.openDeleteDialog()
+        }
+        binding.ivHistoryDetailImage.setOnClickListener {
+            viewModel.openTripDetail()
         }
     }
 
     private fun initObserve() {
-        setPostObserve()
-        setTripObserve()
-        setTripDetailEventObserve()
-        setPostDetailEventObserve()
-        setDeleteDialogEventObserve()
-        setDeleteCompleteObserve()
+        initPostObserve()
+        initTripObserve()
+        initTripDetailEventObserve()
+        initPostDetailEventObserve()
+        initDeleteDialogEventObserve()
+        initDeleteCompleteObserve()
     }
 
-    private fun setPostObserve() {
+    private fun initPostObserve() {
         viewModel.post.observe(this) {
             adapter.submitList(it)
         }
     }
 
-    private fun setTripObserve() {
+    private fun initTripObserve() {
+        // LiveData의 변화를 감지하지 못하는 문제 : 이슈 #212 참고
         viewModel.previewTrip.observe(this) {
             binding.ivHistoryDetailImage.setImage(it.imageUrl)
             binding.ivHistoryDetailRoute.setImage(it.routeImageUrl)
             binding.tbHistoryDetail.title = it.name
-            binding.ivHistoryDetailImage.setOnClickListener {
-                viewModel.openTripDetail()
-            }
         }
     }
 
-    private fun setTripDetailEventObserve() {
+    private fun initTripDetailEventObserve() {
         viewModel.openTripDetailEvent.observe(
             this,
             EventObserver(this@HistoryDetailActivity::navigateToTripDetail),
@@ -96,7 +97,7 @@ class HistoryDetailActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setPostDetailEventObserve() {
+    private fun initPostDetailEventObserve() {
         viewModel.openPostDetailEvent.observe(
             this,
             EventObserver(this@HistoryDetailActivity::navigateToPostDetail),
@@ -108,7 +109,7 @@ class HistoryDetailActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setDeleteDialogEventObserve() {
+    private fun initDeleteDialogEventObserve() {
         viewModel.openDeleteDialogEvent.observe(
             this,
             EventObserver(this@HistoryDetailActivity::showDeleteDialog),
@@ -122,7 +123,7 @@ class HistoryDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setDeleteCompleteObserve() =
+    private fun initDeleteCompleteObserve() =
         viewModel.deleteCompleteEvent.observe(this) { if (it) finish() }
 
     companion object {

@@ -13,16 +13,16 @@ fun DataTrip.toDomainRoute(): Route =
 
 fun DataTrip.toDomain(): Trip =
     Trip(
-        tripId,
-        name,
-        Route(route.map { it.toDomain() }),
-        status,
-        imageUrl,
-        routeImageUrl,
+        tripId = tripId,
+        name = name,
+        route = Route(route.map { it.toDomain() }),
+        status = status,
+        imageUrl = imageUrl,
+        routeImageUrl = routeImageUrl,
     )
 
 fun PreSetTripTitle.toData(): DataPreSetTripTitle =
     DataPreSetTripTitle(name, status)
 
 fun DataPreviewTrip.toDomain(): PreviewTrip =
-    PreviewTrip(id, name, imageUrl, routeImageUrl)
+    PreviewTrip(id = id, name = name, imageUrl = imageUrl, routeImageUrl = routeImageUrl)
