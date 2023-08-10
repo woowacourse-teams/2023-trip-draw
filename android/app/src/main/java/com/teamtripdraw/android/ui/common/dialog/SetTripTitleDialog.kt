@@ -11,6 +11,7 @@ import com.teamtripdraw.android.databinding.FragmentTripTitleDialogBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
@@ -24,14 +25,14 @@ class SetTripTitleDialog : DialogFragment() {
     private val tripId by lazy { requireArguments().getLong(TRIP_ID_KEY) }
     private val status by lazy {
         requireArguments().getParcelableCompat<SetTitleSituation>(
-            SET_TITLE_SITUATION_KEY
+            SET_TITLE_SITUATION_KEY,
         ) ?: throw IllegalStateException()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentTripTitleDialogBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -43,7 +44,8 @@ class SetTripTitleDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.updateTripId(tripId)
         binding.insertTripTitleDialogViewModel = viewModel
-        setCompletedEventObserve()
+        initCompletedEventObserve()
+        initPreviewTripObserve()
     }
 
     override fun onStart() {
@@ -56,25 +58,31 @@ class SetTripTitleDialog : DialogFragment() {
             requireNotNull(window).apply {
                 setLayout(
                     (resources.displayMetrics.widthPixels * DIALOG_WINDOW_SIZE).toInt(),
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
                 )
                 setBackgroundDrawableResource(R.color.td_white)
             }
         }
     }
 
-    private fun setCompletedEventObserve() {
+    private fun initCompletedEventObserve() {
         viewModel.titleSetupCompletedEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@SetTripTitleDialog::onSetupCompleted)
+            EventObserver(this@SetTripTitleDialog::onSetupCompleted),
         )
+    }
+
+    private fun initPreviewTripObserve() {
+        viewModel.previewTrip.observe(viewLifecycleOwner) {
+            navigateToHistoryDetail(it)
+        }
     }
 
     private fun onSetupCompleted(isSuccess: Boolean) {
         if (isSuccess) {
             when (status) {
                 SetTitleSituation.FINISHED -> {
-//                    navigateDetailPage(requireNotNull(viewModel.previewTrip.value))
+                    viewModel.getTripPreviewInfo()
                     homeViewModel.finishTripCompleteEvent()
                     dismiss()
                 }
@@ -83,11 +91,8 @@ class SetTripTitleDialog : DialogFragment() {
         }
     }
 
-    private fun navigateDetailPage(trip: UiPreviewTrip) {
-        // todo 해당 여행 히스토리의 상세 화면으로 이동
-
-        dismiss()
-    }
+    private fun navigateToHistoryDetail(trip: UiPreviewTrip) =
+        startActivity(HistoryDetailActivity.getIntent(requireContext(), trip))
 
     override fun onDestroyView() {
         super.onDestroyView()
