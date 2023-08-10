@@ -74,6 +74,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_trip_detail"
             app:markerViewModeState="@{tripDetailViewModel.markerViewModeState}"
+            app:setCameraMoveNaverMap="@{naverMap}"
+            app:setCameraMoveUiRoute="@{tripDetailViewModel.uiTripRoute}"
             app:setMarkerNaverMap="@{naverMap}"
             app:setMarkerSelectMarkerListener="@{tripDetailViewModel.notificationMarkerSelected}"
             app:setMarkerUiRoute="@{tripDetailViewModel.tripRoute}"

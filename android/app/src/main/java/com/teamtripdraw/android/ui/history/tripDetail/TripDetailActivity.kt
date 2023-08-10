@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -27,7 +26,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
     private var fabState: Boolean = false
-    private var cameraMoveState: Boolean = true
 
     private lateinit var binding: ActivityTripDetailBinding
     private val viewModel: TripDetailViewModel by viewModels { tripDrawViewModelFactory }
@@ -69,22 +67,8 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         this.naverMap = naverMap
         binding.naverMap = this.naverMap
         this.naverMap.initUserInterface()
-        initTripRouteObserver()
         this.naverMap.locationOverlay.icon = currentLocationImage
         this.naverMap.setContentPadding(0, 0, 0, toPixel(this, 67))
-    }
-
-    private fun initTripRouteObserver() {
-        viewModel.tripRoute.observe(this) {
-            if (cameraMoveState) {
-                val cameraUpdate = CameraUpdate.scrollTo(
-                    it.getLatLngs().last(),
-                )
-                this.naverMap.moveCamera(cameraUpdate)
-                this.naverMap.moveCamera(CameraUpdate.zoomTo(ZOOM_VALUE))
-                cameraMoveState = false
-            }
-        }
     }
 
     private fun initFloatingButtonClickListener() {
@@ -160,7 +144,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private val currentLocationImage = OverlayImage.fromResource(R.drawable.ic_current_location)
         private const val TRIP_ID_KEY = "TRIP_ID_KEY"
-        private const val ZOOM_VALUE = 17.0
 
         fun getIntent(context: Context, tripId: Long): Intent {
             val intent = Intent(context, TripDetailActivity::class.java)

@@ -21,6 +21,7 @@ class TripDetailViewModel(
     private val _tripRoute = MutableLiveData<Route>()
     val tripRoute: LiveData<UiRoute> =
         Transformations.map(_tripRoute) { route -> route.toPresentation() }
+    val uiTripRoute get() = tripRoute.value
 
     private val _tripTitle = MutableLiveData<String>()
     val tripTitle: LiveData<String> = _tripTitle
