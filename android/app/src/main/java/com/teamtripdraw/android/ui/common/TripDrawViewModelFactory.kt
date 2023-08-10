@@ -26,7 +26,7 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
             val repositoryContainer = dependencyContainer.repositoryContainer
             when {
                 isAssignableFrom(NicknameSetupViewModel::class.java) ->
-                    NicknameSetupViewModel(repositoryContainer.nicknameSetupRepository)
+                    NicknameSetupViewModel(repositoryContainer.authRepository)
                 isAssignableFrom(PostWritingViewModel::class.java) ->
                     PostWritingViewModel(
                         repositoryContainer.pointRepository,

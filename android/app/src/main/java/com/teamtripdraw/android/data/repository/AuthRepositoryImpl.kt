@@ -2,13 +2,13 @@ package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
 import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
-import com.teamtripdraw.android.domain.repository.NicknameSetupRepository
+import com.teamtripdraw.android.domain.repository.AuthRepository
 
-class NicknameSetupRepositoryImpl(
+class AuthRepositoryImpl(
     private val localUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
     private val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote
 ) :
-    NicknameSetupRepository {
+    AuthRepository {
     override suspend fun setNickname(nickname: String): Result<Long> =
         remoteNicknameSetupDataSource.setNickname(nickname)
 
