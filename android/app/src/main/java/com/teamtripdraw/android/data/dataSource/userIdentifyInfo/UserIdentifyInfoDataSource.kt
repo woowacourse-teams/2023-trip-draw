@@ -12,6 +12,6 @@ interface UserIdentifyInfoDataSource {
     }
 
     interface Remote {
-        suspend fun issueUserIdentifyInfo(dataLoginInfo: DataLoginInfo)
+        suspend fun issueUserIdentifyInfo(dataLoginInfo: DataLoginInfo): Result<String>
     }
 }
