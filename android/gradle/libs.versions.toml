@@ -80,6 +80,9 @@ stfalcon = "v1.0.1"
 # firebaseCrashlytics
 firebaseCrashlyticsPlugIn = "2.9.8"
 
+# kakaoLogin
+kakaoUser = "2.15.0"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -153,6 +156,9 @@ coroutineTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", vers
 
 # Stfalcon
 stfalcon = { module = "com.github.stfalcon-studio:StfalconImageViewer", version.ref = "stfalcon" }
+
+# kakaoLogin
+kakaoUser = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
