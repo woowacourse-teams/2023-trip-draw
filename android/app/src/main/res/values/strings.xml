@@ -67,4 +67,10 @@
     <string name="tv_content_save_check">저장하시겠습니까?</string>
     <string name="tv_confirm_delete_check">삭제</string>
     <string name="tv_confirm_save_check">저장</string>
+
+    <!-- LoginActivity -->
+    <string name="tv_login_sign_in_policy_explain">로그인 시&#160;</string>
+    <string name="tv_login_sign_in_policy"><u>이용약관</u>과&#160;</string>
+    <string name="tv_login_sign_in_personal_info"><u>개인정보 처리 방침</u>에&#160;</string>
+    <string name="tv_login_sign_in_personal_info_explain">동의하게 됩니다.</string>
 </resources>
