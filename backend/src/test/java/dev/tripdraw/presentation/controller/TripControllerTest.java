@@ -3,7 +3,6 @@ package dev.tripdraw.presentation.controller;
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -293,7 +292,7 @@ class TripControllerTest extends ControllerTest {
                 .param("tripId", trip.id())
                 .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
-                .statusCode(CONFLICT.value());
+                .statusCode(NOT_FOUND.value());
     }
 
     @Test
