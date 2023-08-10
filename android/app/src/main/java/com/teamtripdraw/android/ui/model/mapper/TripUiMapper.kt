@@ -2,6 +2,7 @@ package com.teamtripdraw.android.ui.model.mapper
 
 import com.teamtripdraw.android.domain.model.point.Route
 import com.teamtripdraw.android.domain.model.trip.PreviewTrip
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.UiRoute
 
@@ -17,4 +18,20 @@ fun PreviewTrip.toPresentation(): UiPreviewTrip =
         name = this.name,
         imageUrl = this.imageUrl,
         routeImageUrl = this.routeImageUrl,
+    )
+
+fun Trip.toPreviewPresentation(): UiPreviewTrip =
+    UiPreviewTrip(
+        id = tripId,
+        name = name,
+        imageUrl = imageUrl ?: "",
+        routeImageUrl = routeImageUrl ?: "",
+    )
+
+fun UiPreviewTrip.toDomain(): PreviewTrip =
+    PreviewTrip(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
+        routeImageUrl = routeImageUrl,
     )

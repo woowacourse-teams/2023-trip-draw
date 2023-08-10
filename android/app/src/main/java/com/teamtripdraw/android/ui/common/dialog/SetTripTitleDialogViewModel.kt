@@ -13,11 +13,13 @@ import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
+import com.teamtripdraw.android.ui.model.mapper.toDomain
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import com.teamtripdraw.android.ui.model.mapper.toPreviewPresentation
 import kotlinx.coroutines.launch
 
 class SetTripTitleDialogViewModel(
-    private val repository: TripRepository
+    private val repository: TripRepository,
 ) : ViewModel() {
 
     val MAX_INPUT_TITLE_LENGTH = TripTitleValidState.MAX_TITLE_LENGTH + 1
@@ -52,13 +54,22 @@ class SetTripTitleDialogViewModel(
                 tripId = tripId,
                 preSetTripTitle = PreSetTripTitle(
                     requireNotNull(tripTitle.value),
-                    TripStatus.FINISHED
-                )
+                    TripStatus.FINISHED,
+                ),
             ).onSuccess {
                 _titleSetupCompletedEvent.value = Event(true)
             }.onFailure {
                 // todo 오류 처리
             }
+        }
+    }
+
+    fun getTripPreviewInfo() {
+        viewModelScope.launch {
+            repository.getTrip(tripId)
+                .onSuccess {
+                    _previewTrip.value = it.toPreviewPresentation().toDomain()
+                }
         }
     }
 }
