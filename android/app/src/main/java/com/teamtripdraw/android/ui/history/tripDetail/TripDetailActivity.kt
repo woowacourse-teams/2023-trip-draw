@@ -31,6 +31,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
     private var fabState: Boolean = false
+    private var cameraMoveState: Boolean = true
 
     private lateinit var binding: ActivityTripDetailBinding
     private val viewModel: TripDetailViewModel by viewModels { tripDrawViewModelFactory }
@@ -81,11 +82,14 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun initTripRouteObserver() {
         viewModel.tripRoute.observe(this) {
-            val cameraUpdate = CameraUpdate.scrollTo(
-                it.getLatLngs().last(),
-            )
-            this.naverMap.moveCamera(cameraUpdate)
-            this.naverMap.moveCamera(CameraUpdate.zoomTo(ZOOM_VALUE))
+            if (cameraMoveState) {
+                val cameraUpdate = CameraUpdate.scrollTo(
+                    it.getLatLngs().last(),
+                )
+                this.naverMap.moveCamera(cameraUpdate)
+                this.naverMap.moveCamera(CameraUpdate.zoomTo(ZOOM_VALUE))
+                cameraMoveState = false
+            }
         }
     }
 
