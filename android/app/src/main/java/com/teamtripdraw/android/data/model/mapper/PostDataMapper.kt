@@ -1,16 +1,16 @@
 package com.teamtripdraw.android.data.model.mapper
 
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostListResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
+import com.teamtripdraw.android.data.model.DataPrePatchPost
 import com.teamtripdraw.android.data.model.DataPrePost
-import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
-import java.time.LocalDateTime
 
 fun AddPostResponse.toData(): Long {
     return postId
@@ -22,7 +22,7 @@ fun GetPostPointResponse.toData(): DataPoint {
         latitude = latitude,
         longitude = longitude,
         hasPost = hasPost,
-        recordedAt = recordedAt
+        recordedAt = recordedAt,
     )
 }
 
@@ -35,7 +35,7 @@ fun GetPostResponse.toData(): DataPost {
         address = address,
         point = point.toData(),
         postImageUrl = postImageUrl,
-        routeImageUrl = routeImageUrl
+        routeImageUrl = routeImageUrl,
     )
 }
 
@@ -48,7 +48,15 @@ fun PrePost.toData(): DataPrePost {
         pointId = pointId,
         title = title,
         writing = writing,
-        address = address
+        address = address,
+    )
+}
+
+fun PrePatchPost.toData(): DataPrePatchPost {
+    return DataPrePatchPost(
+        postId = postId,
+        title = title,
+        writing = writing,
     )
 }
 
@@ -61,7 +69,6 @@ fun DataPost.toDomain(): Post {
         address = address,
         point = point.toDomain(),
         postImageUrl = postImageUrl,
-        routeImageUrl = routeImageUrl
+        routeImageUrl = routeImageUrl,
     )
 }
-

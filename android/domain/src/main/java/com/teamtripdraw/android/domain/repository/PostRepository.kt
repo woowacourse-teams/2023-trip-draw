@@ -1,6 +1,7 @@
 package com.teamtripdraw.android.domain.repository
 
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
 
 interface PostRepository {
@@ -13,4 +14,5 @@ interface PostRepository {
 
     suspend fun deletePost(postId: Long): Result<Unit>
 
+    suspend fun patchPost(prePatchPost: PrePatchPost): Result<Unit>
 }

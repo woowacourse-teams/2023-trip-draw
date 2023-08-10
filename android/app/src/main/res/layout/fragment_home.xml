@@ -183,6 +183,7 @@
             android:layout_marginEnd="@dimen/margin_default"
             android:layout_marginBottom="@dimen/margin_default"
             android:background="@drawable/shape_td_main_blue_line_12_rect"
+            android:onClick="@{()->homeViewModel.finishTripEvent()}"
             android:text="@string/btn_finish_trip"
             android:textAppearance="@style/title_2M"
             android:textColor="@color/td_main_blue"

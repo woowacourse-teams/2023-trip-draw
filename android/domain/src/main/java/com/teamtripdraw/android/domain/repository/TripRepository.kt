@@ -8,6 +8,7 @@ import com.teamtripdraw.android.domain.model.trip.Trip
 interface TripRepository {
     suspend fun startTrip(): Result<Unit>
     fun getCurrentTripId(): Long
+    fun deleteCurrentTripId()
     suspend fun getCurrentTripRoute(tripId: Long): Result<Route>
     suspend fun getTrip(tripId: Long): Result<Trip>
     suspend fun setTripTitle(tripId: Long, preSetTripTitle: PreSetTripTitle): Result<Unit>

@@ -50,6 +50,12 @@ class HomeViewModel(
 
     val notificationMarkerSelected: (pointId: Long) -> Unit = { _markerSelectEvent.value = it }
 
+    private val _finishTripEvent = MutableLiveData<Boolean>()
+    val finishTripEvent: LiveData<Boolean> = _finishTripEvent
+
+    private val _finishTripCompleteEvent = MutableLiveData<Boolean>()
+    val finishTripCompleteEvent: LiveData<Boolean> = _finishTripCompleteEvent
+
     var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
         private set
 
@@ -62,10 +68,12 @@ class HomeViewModel(
     }
 
     private fun initHomeUiState() {
-        _homeUiState.value = when (tripId) {
-            NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
-            else -> HomeUiState.ON_TRIP
-        }
+        updateHomeUiState(
+            when (tripId) {
+                NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
+                else -> HomeUiState.ON_TRIP
+            }
+        )
     }
 
     private fun updateTripId() {
@@ -77,7 +85,7 @@ class HomeViewModel(
             tripRepository.startTrip()
                 .onSuccess {
                     updateTripId()
-                    _homeUiState.value = HomeUiState.ON_TRIP
+                    updateHomeUiState(HomeUiState.ON_TRIP)
                     _startTripEvent.value = Event(true)
                 }
         }
@@ -120,4 +128,28 @@ class HomeViewModel(
             locationResult.locations.first().longitude,
             LocalDateTime.now(),
         )
+
+    fun finishTripEvent() {
+        _finishTripEvent.value = true
+    }
+
+    fun resetFinishTripEvent() {
+        _finishTripEvent.value = false
+    }
+
+    fun finishTripCompleteEvent() {
+        _finishTripCompleteEvent.value = true
+    }
+
+    fun resetFinishTripCompleteEvent() {
+        _finishTripCompleteEvent.value = false
+    }
+
+    fun clearCurrentTripId() {
+        tripRepository.deleteCurrentTripId()
+    }
+
+    fun cleatCurrentTripRoute() {
+        _currentTripRoute.value = Route(listOf())
+    }
 }

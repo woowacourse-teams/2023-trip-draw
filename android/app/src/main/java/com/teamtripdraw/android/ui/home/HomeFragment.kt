@@ -34,6 +34,8 @@ import com.teamtripdraw.android.support.framework.presentation.permission.checkF
 import com.teamtripdraw.android.support.framework.presentation.permission.checkNotificationPermission
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
+import com.teamtripdraw.android.ui.common.dialog.SetTitleSituation.FINISHED
+import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialog
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
@@ -129,6 +131,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         setUpPostWritingClickEvent()
         initPostWritingEventObserver()
         initMarkerSelectedObserver()
+        initFinishTripEventObserver()
+        initFinishTripCompleteEventObserver()
     }
 
     private fun matchMapFragmentToNaverMap() {
@@ -291,6 +295,61 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
             markerSelectedBottomSheet.show(childFragmentManager, this.javaClass.name)
         }
+    }
+
+    private fun initFinishTripEventObserver() {
+        homeViewModel.finishTripEvent.observe(viewLifecycleOwner, this::showSetTripTitleDialog)
+    }
+
+    private fun showSetTripTitleDialog(event: Boolean) {
+        if (event) {
+            val setTripTitleDialog = SetTripTitleDialog()
+            setTripTitleDialog.arguments =
+                SetTripTitleDialog.getBundle(homeViewModel.tripId, FINISHED)
+            setTripTitleDialog.show(childFragmentManager, this.javaClass.name)
+            homeViewModel.resetFinishTripEvent()
+        }
+    }
+
+    private fun initFinishTripCompleteEventObserver() {
+        homeViewModel.finishTripCompleteEvent.observe(
+            viewLifecycleOwner,
+            this::finishTripSuccessListener
+        )
+    }
+
+    private fun finishTripSuccessListener(event: Boolean) {
+        if (event) {
+            updateFinishTripHomeUiState()
+            stopRecordingPointAlarmManager()
+            stopRecordingPointService()
+            unbindRecordingPointService()
+            clearCurrentTripId()
+            clearCurrentTripRoute()
+            homeViewModel.resetFinishTripCompleteEvent()
+        }
+    }
+
+    private fun updateFinishTripHomeUiState() {
+        homeViewModel.updateHomeUiState(HomeUiState.BEFORE_TRIP)
+    }
+
+    private fun clearCurrentTripId() {
+        homeViewModel.clearCurrentTripId()
+    }
+
+    private fun stopRecordingPointService() {
+        val recordingPointServiceIntent =
+            Intent(requireContext(), RecordingPointService::class.java)
+        requireActivity().stopService(recordingPointServiceIntent)
+    }
+
+    private fun stopRecordingPointAlarmManager() {
+        RecordingPointAlarmManager(requireContext()).cancelRecord()
+    }
+
+    private fun clearCurrentTripRoute() {
+        homeViewModel.cleatCurrentTripRoute()
     }
 
     companion object {

@@ -4,6 +4,7 @@ import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.repository.PostRepository
 
@@ -12,11 +13,11 @@ class PostRepositoryImpl(
 ) : PostRepository {
 
     override suspend fun addPost(
-        prePost: PrePost
+        prePost: PrePost,
     ): Result<Long> {
         return remotePostDataSource.addPost(
             prePost.toData(),
-            prePost.imageFile
+            prePost.imageFile,
         )
     }
 
@@ -31,5 +32,12 @@ class PostRepositoryImpl(
 
     override suspend fun deletePost(postId: Long): Result<Unit> {
         return remotePostDataSource.deletePost(postId)
+    }
+
+    override suspend fun patchPost(prePatchPost: PrePatchPost): Result<Unit> {
+        return remotePostDataSource.patchPost(
+            prePatchPost.toData(),
+            prePatchPost.imageFile,
+        )
     }
 }

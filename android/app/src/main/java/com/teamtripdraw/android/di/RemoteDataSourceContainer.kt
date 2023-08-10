@@ -28,7 +28,10 @@ class RemoteDataSourceContainer(
             serviceContainer.deleteTripService,
         )
     val remotePostDataSource: PostDataSource.Remote =
-        RemotePostDataSourceImpl(serviceContainer.postService)
+        RemotePostDataSourceImpl(
+            retrofitContainer.moshi,
+            serviceContainer.postService,
+        )
     val remotePointDataSource: PointDataSource.Remote =
         RemotePointDataSourceImpl(
             serviceContainer.createRecordingPointService,
