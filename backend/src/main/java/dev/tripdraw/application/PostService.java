@@ -138,7 +138,6 @@ public class PostService {
 
     private void updateFileOfPost(MultipartFile file, Post post) {
         if (file == null) {
-            post.removePostImageUrl();
             return;
         }
         String imageUrl = fileUploader.upload(file, POST_IMAGE);
