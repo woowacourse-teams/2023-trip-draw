@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.repository.PostRepository
+import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPostItem
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
@@ -12,11 +13,14 @@ import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
 
 class HistoryDetailViewModel(
+    private val tripRepository: TripRepository,
     private val postRepository: PostRepository,
 ) : ViewModel() {
 
     private val _previewTrip: MutableLiveData<UiPreviewTrip> = MutableLiveData()
     val previewTrip: LiveData<UiPreviewTrip> = _previewTrip
+
+    private val tripId get() = requireNotNull(previewTrip.value).id
 
     private val _posts: MutableLiveData<List<UiPostItem>> = MutableLiveData()
     val post: LiveData<List<UiPostItem>> = _posts
@@ -27,13 +31,19 @@ class HistoryDetailViewModel(
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
 
+    private val _openDeleteDialogEvent = MutableLiveData<Event<Boolean>>()
+    val openDeleteDialogEvent: LiveData<Event<Boolean>> = _openDeleteDialogEvent
+
+    private val _deleteCompleteEvent = MutableLiveData<Boolean>()
+    val deleteCompleteEvent: LiveData<Boolean> = _deleteCompleteEvent
+
     fun updatePreViewTrip(previewTrip: UiPreviewTrip) {
         _previewTrip.value = previewTrip
     }
 
     fun getPosts() {
         viewModelScope.launch {
-            postRepository.getAllPosts(requireNotNull(previewTrip.value).id)
+            postRepository.getAllPosts(tripId)
                 .onSuccess { posts ->
                     _posts.value = posts.map { post -> post.toPresentation() }
                 }
@@ -42,11 +52,22 @@ class HistoryDetailViewModel(
         }
     }
 
+    fun deleteTrip() {
+        viewModelScope.launch {
+            tripRepository.deleteTrip(tripId)
+                .onSuccess { _deleteCompleteEvent.value = true }
+        }
+    }
+
     fun openTripDetail() {
-        _openTripDetailEvent.value = Event(requireNotNull(previewTrip.value).id)
+        _openTripDetailEvent.value = Event(tripId)
     }
 
     fun openPostDetail(postId: Long) {
         _openPostDetailEvent.value = Event(postId)
+    }
+
+    fun openDeleteDialog() {
+        _openDeleteDialogEvent.value = Event(true)
     }
 }

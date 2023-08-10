@@ -11,6 +11,7 @@ import com.teamtripdraw.android.databinding.ActivityHistoryDetailBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.common.bindingAdapter.setImage
+import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
@@ -30,6 +31,7 @@ class HistoryDetailActivity : AppCompatActivity() {
         getIntentData()
         setAdapter()
         setClickBack()
+        setClickListener()
         initObserve()
     }
 
@@ -49,11 +51,20 @@ class HistoryDetailActivity : AppCompatActivity() {
         binding.onBackClick = { finish() }
     }
 
+    private fun setClickListener() {
+        // 이상하게 이 부분도 DataBinding이 되지 않아서 일단 이렇게 처리했습니다..
+        binding.btnHistoryDetailDelete.setOnClickListener {
+            viewModel.openDeleteDialog()
+        }
+    }
+
     private fun initObserve() {
         setPostObserve()
         setTripObserve()
         setTripDetailEventObserve()
         setPostDetailEventObserve()
+        setDeleteDialogEventObserve()
+        setDeleteCompleteObserve()
     }
 
     private fun setPostObserve() {
@@ -96,6 +107,23 @@ class HistoryDetailActivity : AppCompatActivity() {
         val intent = PostDetailActivity.getIntent(this, postId)
         startActivity(intent)
     }
+
+    private fun setDeleteDialogEventObserve() {
+        viewModel.openDeleteDialogEvent.observe(
+            this,
+            EventObserver(this@HistoryDetailActivity::showDeleteDialog),
+        )
+    }
+
+    private fun showDeleteDialog(isClick: Boolean) {
+        if (isClick) {
+            DialogUtil(DialogUtil.DELETE_CHECK) { viewModel.deleteTrip() }
+                .show(supportFragmentManager, this.javaClass.name)
+        }
+    }
+
+    private fun setDeleteCompleteObserve() =
+        viewModel.deleteCompleteEvent.observe(this) { if (it) finish() }
 
     companion object {
         private const val TRIP_ITEM_KEY = "TRIP_ITEM_KEY"

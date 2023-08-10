@@ -3,6 +3,7 @@ package com.teamtripdraw.android.data.dataSource.trip
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.service.CreateTripService
+import com.teamtripdraw.android.data.httpClient.service.DeleteTripService
 import com.teamtripdraw.android.data.httpClient.service.GetAllTripsService
 import com.teamtripdraw.android.data.httpClient.service.GetTripInfoService
 import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
@@ -15,6 +16,7 @@ class RemoteTripDataSourceImpl(
     private val getTripInfoService: GetTripInfoService,
     private val setTripTitleService: SetTripTitleService,
     private val getAllTripsService: GetAllTripsService,
+    private val deleteTripService: DeleteTripService,
 ) :
     TripDataSource.Remote {
     override suspend fun startTrip(): Result<Long> =
@@ -38,4 +40,9 @@ class RemoteTripDataSourceImpl(
 
     override suspend fun getAllTrips(): Result<List<DataPreviewTrip>> =
         getAllTripsService.getAllTrips().process { body, _ -> Result.success(body.toData()) }
+
+    override suspend fun deleteTrip(tripId: Long): Result<Unit> =
+        deleteTripService.deleteTrip(tripId).process { body, _ ->
+            Result.success(body)
+        }
 }

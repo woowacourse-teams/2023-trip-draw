@@ -25,6 +25,7 @@ class RemoteDataSourceContainer(
             serviceContainer.getTripInfoService,
             serviceContainer.setTripTitleService,
             serviceContainer.getAllTripsService,
+            serviceContainer.deleteTripService,
         )
     val remotePostDataSource: PostDataSource.Remote =
         RemotePostDataSourceImpl(serviceContainer.postService)

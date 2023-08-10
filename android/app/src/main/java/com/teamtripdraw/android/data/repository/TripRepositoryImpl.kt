@@ -39,4 +39,7 @@ class TripRepositoryImpl(
 
     override suspend fun getAllTrips(): Result<List<PreviewTrip>> =
         remoteTripDataSource.getAllTrips().map { trips -> trips.map { it.toDomain() } }
+
+    override suspend fun deleteTrip(tripId: Long): Result<Unit> =
+        remoteTripDataSource.deleteTrip(tripId)
 }
