@@ -3,6 +3,7 @@ package dev.tripdraw.presentation.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.application.PostService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
@@ -19,7 +20,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,14 +42,14 @@ public class PostController {
         this.postService = postService;
     }
 
-    @Operation(summary = "현재 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 현재 위치에 대한 감상을 생성합니다.")
+    @Operation(summary = "현재 위치에 대한 감상 생성 API", description = "현재 위치에 대한 감상을 생성합니다.")
     @ApiResponse(
             responseCode = "201",
             description = "현재 위치에 대한 감상 생성 성공."
     )
     @PostMapping(
             path = "/posts/current-location",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            consumes = MULTIPART_FORM_DATA_VALUE,
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<PostCreateResponse> createOfCurrentLocation(
@@ -68,14 +68,14 @@ public class PostController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    @Operation(summary = "사용자가 선택한 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 사용자가 선택한 위치에 대한 감상을 생성합니다.")
+    @Operation(summary = "사용자가 선택한 위치에 대한 감상 생성 API", description = "사용자가 선택한 위치에 대한 감상을 생성합니다.")
     @ApiResponse(
             responseCode = "201",
             description = "사용자가 선택한 위치에 대한 감상 생성 성공."
     )
     @PostMapping(
             path = "/posts",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            consumes = MULTIPART_FORM_DATA_VALUE,
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<PostCreateResponse> create(
@@ -130,7 +130,7 @@ public class PostController {
     )
     @PatchMapping(
             path = "/posts/{postId}",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+            consumes = MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<Void> update(
             @Auth
