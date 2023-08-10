@@ -129,7 +129,7 @@
             tools:text="관동지방 태초마을" />
 
         <EditText
-            android:id="@+id/et_content"
+            android:id="@+id/et_writing"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/margin_default"
@@ -145,6 +145,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_location_icon" />
 
+        <ImageView
+            android:id="@+id/iv_post_writing_image_thumbnail"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:layout_constraintBottom_toBottomOf="@+id/et_writing"
+            app:layout_constraintEnd_toEndOf="@+id/et_writing"
+            app:setRoundImageWithVisibility="@{postWritingViewModel.imageFile}" />
+
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_content_file"
             android:layout_width="0dp"
@@ -154,7 +162,7 @@
             app:layout_constraintBottom_toTopOf="@id/btn_camera"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_content" />
+            app:layout_constraintTop_toBottomOf="@+id/et_writing" />
 
         <ImageView
             android:id="@+id/btn_camera"
