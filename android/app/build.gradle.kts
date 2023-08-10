@@ -1,7 +1,9 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import java.util.Properties
 
-val properties = Properties()
-properties.load(project.rootProject.file("local.properties").inputStream())
+val localProperties = Properties()
+localProperties.load(project.rootProject.file("local.properties").inputStream())
+val keystoreProperties = Properties()
+keystoreProperties.load(project.rootProject.file("keystore.properties").inputStream())
 
 plugins {
     id("com.android.application")
@@ -13,6 +15,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
     namespace = "com.teamtripdraw.android"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
@@ -28,11 +38,11 @@ android {
         buildConfigField(
             "String",
             "ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS",
-            properties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS")
+            localProperties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS")
         )
 
         manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
-            properties.getProperty("NAVER_MAP_CLIENT_ID")
+            localProperties.getProperty("NAVER_MAP_CLIENT_ID")
     }
 
     buildTypes {
@@ -45,12 +55,13 @@ android {
             buildConfigField(
                 "String",
                 "TRIP_DRAW_BASE_URL",
-                properties.getProperty("TRIP_DRAW_PROD_BASE_URL")
+                localProperties.getProperty("TRIP_DRAW_PROD_BASE_URL")
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
             isMinifyEnabled = false
@@ -61,7 +72,7 @@ android {
             buildConfigField(
                 "String",
                 "TRIP_DRAW_BASE_URL",
-                properties.getProperty("TRIP_DRAW_DEV_BASE_URL")
+                localProperties.getProperty("TRIP_DRAW_DEV_BASE_URL")
             )
             applicationIdSuffix = ".debug"
         }
