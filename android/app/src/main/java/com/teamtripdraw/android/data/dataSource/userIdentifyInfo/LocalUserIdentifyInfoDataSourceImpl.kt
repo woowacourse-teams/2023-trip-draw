@@ -2,19 +2,13 @@ package com.teamtripdraw.android.data.dataSource.userIdentifyInfo
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import java.util.Base64
 
 class LocalUserIdentifyInfoDataSourceImpl(private val userIdentifyInfoPreference: SharedPreferences) :
     UserIdentifyInfoDataSource.Local {
 
     override fun setIdentifyInfo(identifyInfo: String) {
-        val encodedNickNameByBase64 =
-            Base64.getEncoder().encodeToString(identifyInfo.toByteArray(Charsets.UTF_8))
         userIdentifyInfoPreference.edit {
-            putString(
-                TRIP_DRAW_IDENTIFY_INFO,
-                encodedNickNameByBase64
-            )
+            putString(TRIP_DRAW_IDENTIFY_INFO, identifyInfo)
         }
     }
 
