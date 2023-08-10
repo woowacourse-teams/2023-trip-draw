@@ -77,7 +77,7 @@ class MemberServiceTest {
         memberService.deleteByCode(code);
 
         // then
-        assertThat(member.isDeleted()).isTrue();
+        assertThat(memberRepository.findById(member.id())).isEmpty();
     }
 
     @Test

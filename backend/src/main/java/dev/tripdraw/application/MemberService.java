@@ -39,6 +39,6 @@ public class MemberService {
         Long memberId = authTokenManager.extractMemberId(code);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-        member.delete();
+        memberRepository.delete(member);
     }
 }

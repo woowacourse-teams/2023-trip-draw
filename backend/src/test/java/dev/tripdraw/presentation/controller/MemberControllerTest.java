@@ -82,7 +82,7 @@ class MemberControllerTest extends ControllerTest {
         Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
         String code = authTokenManager.generate(member.id());
 
-        memberRepository.deleteById(member.id());
+        memberRepository.delete(member);
 
         // expect
         RestAssured.given().log().all()
@@ -125,7 +125,7 @@ class MemberControllerTest extends ControllerTest {
         Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
         String code = authTokenManager.generate(member.id());
 
-        memberRepository.deleteById(member.id());
+        memberRepository.delete(member);
 
         // expect
         RestAssured.given().log().all()
