@@ -88,6 +88,7 @@ class HistoryDetailActivity : AppCompatActivity() {
             binding.ivHistoryDetailImage.setImage(it.imageUrl)
             binding.ivHistoryDetailRoute.setImage(it.routeImageUrl)
             binding.tbHistoryDetail.title = it.name
+            binding.invalidateAll() // DataBinding 오류 : 이슈 #262 참고
         }
     }
 

@@ -27,9 +27,7 @@ class HistoryFragment : Fragment() {
     ): View {
         _binding = FragmentHistoryBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
-
         setAdapter()
-        getPreviewTrips()
         initObserve()
 
         return binding.root
@@ -39,8 +37,6 @@ class HistoryFragment : Fragment() {
         historyAdapter = HistoryAdapter(viewModel)
         binding.rvTripHistory.adapter = historyAdapter
     }
-
-    private fun getPreviewTrips() = viewModel.getPreviewTrips()
 
     private fun initObserve() {
         initPreviewTripsObserve()
@@ -64,6 +60,13 @@ class HistoryFragment : Fragment() {
         val intent = HistoryDetailActivity.getIntent(requireContext(), previewTrip)
         startActivity(intent)
     }
+
+    override fun onStart() {
+        super.onStart()
+        getPreviewTrips()
+    }
+
+    private fun getPreviewTrips() = viewModel.getPreviewTrips()
 
     override fun onDestroy() {
         super.onDestroy()
