@@ -27,12 +27,6 @@ android {
 
         buildConfigField(
             "String",
-            "TRIP_DRAW_BASE_URL",
-            properties.getProperty("TRIP_DRAW_BASE_URL")
-        )
-
-        buildConfigField(
-            "String",
             "ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS",
             properties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS")
         )
@@ -43,11 +37,33 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
+            buildConfigField("Boolean", "IS_RELEASE", "true")
+            manifestPlaceholders["appLabel"] = "TRIP DRAW"
+            buildConfigField(
+                "String",
+                "TRIP_DRAW_BASE_URL",
+                properties.getProperty("TRIP_DRAW_PROD_BASE_URL")
+            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        getByName("debug") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            isDebuggable = true
+            buildConfigField("Boolean", "IS_RELEASE", "false")
+            manifestPlaceholders["appLabel"] = "(Dev)TRIP DRAW"
+            buildConfigField(
+                "String",
+                "TRIP_DRAW_BASE_URL",
+                properties.getProperty("TRIP_DRAW_DEV_BASE_URL")
+            )
+            applicationIdSuffix = ".debug"
         }
     }
     compileOptions {
