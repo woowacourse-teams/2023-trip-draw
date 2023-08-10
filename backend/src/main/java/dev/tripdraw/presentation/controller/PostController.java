@@ -42,7 +42,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @Operation(summary = "현재 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 현재 위치에 대한 감상 생성")
+    @Operation(summary = "현재 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 현재 위치에 대한 감상을 생성합니다.")
     @ApiResponse(
             responseCode = "201",
             description = "현재 위치에 대한 감상 생성 성공."
@@ -68,7 +68,7 @@ public class PostController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    @Operation(summary = "사용자가 선택한 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 사용자가 선택한 위치에 대한 감상 생성")
+    @Operation(summary = "사용자가 선택한 위치에 대한 감상 생성 API", description = "진행 중인 여행에서, 사용자가 선택한 위치에 대한 감상을 생성합니다.")
     @ApiResponse(
             responseCode = "201",
             description = "사용자가 선택한 위치에 대한 감상 생성 성공."
@@ -95,7 +95,7 @@ public class PostController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    @Operation(summary = "특정 감상 상세 조회 API", description = "특정한 1개 감상의 상세 정보 조회")
+    @Operation(summary = "특정 감상 상세 조회 API", description = "특정한 1개의 감상을 조회합니다.")
     @ApiResponse(
             responseCode = "200",
             description = "특정 감상 상세 조회 성공."
@@ -109,7 +109,7 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "특정 여행의 모든 감상 조회 API", description = "특정한 1개의 여행에 대해 작성한 모든 감상 정보 조회")
+    @Operation(summary = "특정 여행의 모든 감상 조회 API", description = "특정한 1개의 여행에 대해 작성한 모든 감상을 조회합니다.")
     @ApiResponse(
             responseCode = "200",
             description = "특정 여행의 모든 감상 조회 성공."
@@ -123,7 +123,7 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "감상 수정 API", description = "주소를 제외한 감상의 모든 정보를 수정")
+    @Operation(summary = "감상 수정 API", description = "주소를 제외한 감상의 모든 정보를 수정합니다.")
     @ApiResponse(
             responseCode = "204",
             description = "감상 수정 성공."
@@ -149,7 +149,7 @@ public class PostController {
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
-    @Operation(summary = "감상 삭제 API", description = "감상 삭제")
+    @Operation(summary = "감상 삭제 API", description = "특정한 1개의 감상을 삭제합니다.")
     @ApiResponse(
             responseCode = "204",
             description = "감상 삭제 성공."
