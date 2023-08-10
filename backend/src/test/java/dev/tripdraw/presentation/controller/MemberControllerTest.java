@@ -144,33 +144,4 @@ class MemberControllerTest extends ControllerTest {
                 .then().log().all()
                 .statusCode(FORBIDDEN.value());
     }
-
-    @Test
-    void code를_입력_받아_사용자를_삭제할_때_존재하지_않는_사용자라면_예외를_발생시킨다() {
-        // given
-        String code = authTokenManager.generate(MIN_VALUE);
-
-        // expect
-        RestAssured.given().log().all()
-                .param("code", code)
-                .when().delete("/members")
-                .then().log().all()
-                .statusCode(NOT_FOUND.value());
-    }
-
-    @Test
-    void code를_입력_받아_사용자를_삭제할_때_이미_삭제된_사용자라면_예외를_발생시킨다() {
-        // given
-        Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
-        String code = authTokenManager.generate(member.id());
-
-        memberRepository.delete(member);
-
-        // expect
-        RestAssured.given().log().all()
-                .param("code", code)
-                .when().delete("/members")
-                .then().log().all()
-                .statusCode(NOT_FOUND.value());
-    }
 }

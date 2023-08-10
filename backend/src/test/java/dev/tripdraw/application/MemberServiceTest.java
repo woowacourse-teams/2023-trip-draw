@@ -112,28 +112,4 @@ class MemberServiceTest {
             softly.assertThat(postRepository.findById(post.id())).isEmpty();
         });
     }
-
-    @Test
-    void code를_입력_받아_사용자를_삭제할_때_이미_삭제된_사용자라면_예외를_발생시킨다() {
-        // given
-        Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
-        String code = authTokenManager.generate(member.id());
-
-        memberRepository.deleteById(member.id());
-
-        // expect
-        assertThatThrownBy(() -> memberService.deleteByCode(code))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
-    }
-
-    @Test
-    void code를_입력_받아_사용자를_삭제할_때_존재하지_않는_사용자라면_예외를_발생시킨다() {
-        String nonExistentCode = authTokenManager.generate(MIN_VALUE);
-
-        // expect
-        assertThatThrownBy(() -> memberService.deleteByCode(nonExistentCode))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
-    }
 }
