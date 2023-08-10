@@ -2,42 +2,62 @@ package com.teamtripdraw.android.ui.history.tripDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.LocationResult
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
-import com.teamtripdraw.android.domain.model.point.PrePoint
-import com.teamtripdraw.android.domain.repository.PointRepository
+import com.teamtripdraw.android.domain.model.point.Route
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MapBottomSheetViewModel
 import com.teamtripdraw.android.ui.model.UiRoute
+import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class TripDetailViewModel(
     private val tripRepository: TripRepository,
-    private val pointRepository: PointRepository
-) : ViewModel() {
+) : ViewModel(), MapBottomSheetViewModel {
 
-    var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
-        private set
+    private val _tripRoute = MutableLiveData<Route>()
+    val tripRoute: LiveData<UiRoute> =
+        Transformations.map(_tripRoute) { route -> route.toPresentation() }
+    val uiTripRoute get() = tripRoute.value
 
-    private val _currentTripRoute = MutableLiveData<UiRoute>()
-    val currentTripRoute: LiveData<UiRoute> = _currentTripRoute
+    private val _tripTitle = MutableLiveData<String>()
+    val tripTitle: LiveData<String> = _tripTitle
+
+    private val _markerViewModeState = MutableLiveData<Boolean>(false)
+    val markerViewModeState: LiveData<Boolean> = _markerViewModeState
+
+    val markerViewModeStateValue: Boolean
+        get() = markerViewModeState.value ?: false
 
     private val _openPostViewerEvent = MutableLiveData<Event<Boolean>>()
     val openPostViewerEvent: LiveData<Event<Boolean>> = _openPostViewerEvent
 
-    private val _openPostWritingEvent = MutableLiveData<Event<Long>>()
-    val openPostWritingEvent: LiveData<Event<Long>> = _openPostWritingEvent
+    private val _markerSelectEvent = MutableLiveData<Long>()
+    val makerSelectedEvent: LiveData<Long> = _markerSelectEvent
 
-    private val _markerViewModeState = MutableLiveData<Boolean>(false)
-    val markerViewModeState: LiveData<Boolean> = _markerViewModeState
-    val markerViewModeStateValue: Boolean
-        get() = markerViewModeState.value ?: false
+    val notificationMarkerSelected: (pointId: Long) -> Unit = { _markerSelectEvent.value = it }
 
-    fun updateTripId(id: Long) {
-        tripId = id
+    var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+        private set
+
+    override var markerSelectedState: Boolean = false
+
+    fun updateTripId(tripId: Long) {
+        this.tripId = tripId
+    }
+
+    override fun updateTripInfo() {
+        if (tripId == NULL_SUBSTITUTE_TRIP_ID) return
+        viewModelScope.launch {
+            tripRepository.getTrip(tripId)
+                .onSuccess {
+                    _tripRoute.value = it.route
+                    _tripTitle.value = it.name
+                }
+        }
     }
 
     fun toggleMarkerViewModeState() {
@@ -46,26 +66,5 @@ class TripDetailViewModel(
 
     fun openPostViewer() {
         _openPostViewerEvent.value = Event(true)
-    }
-
-    fun createPoint(locationResult: LocationResult) {
-        viewModelScope.launch {
-            pointRepository.createRecordingPoint(
-                getPrePoint(locationResult),
-                tripId
-            ).onSuccess {
-                _openPostWritingEvent.value = Event(it)
-            }.onFailure {
-                // todo log전략 수립후 서버로 전송되는 로그 찍기
-            }
-        }
-    }
-
-    private fun getPrePoint(locationResult: LocationResult): PrePoint {
-        return PrePoint(
-            locationResult.locations.first().latitude,
-            locationResult.locations.first().longitude,
-            LocalDateTime.now()
-        )
     }
 }

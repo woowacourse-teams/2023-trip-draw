@@ -89,11 +89,15 @@
 
                 <TextView
                     android:id="@+id/tv_post_detail_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="@{postDetailViewModel.postDetail.title}"
                     android:textAppearance="@style/title_2M"
+                    app:layout_constraintEnd_toStartOf="@id/iv_route"
                     app:layout_constraintStart_toStartOf="@id/tv_post_detail_recorded_at"
                     app:layout_constraintTop_toBottomOf="@id/tv_post_detail_recorded_at"
                     tools:text="우도의 바닷가" />

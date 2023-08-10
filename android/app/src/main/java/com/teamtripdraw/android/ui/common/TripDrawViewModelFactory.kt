@@ -30,36 +30,30 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     PostWritingViewModel(
                         repositoryContainer.pointRepository,
                         repositoryContainer.postRepository,
-                        repositoryContainer.tripRepository
+                        repositoryContainer.tripRepository,
                     )
                 isAssignableFrom(HomeViewModel::class.java) ->
                     HomeViewModel(
                         repositoryContainer.tripRepository,
-                        repositoryContainer.pointRepository
+                        repositoryContainer.pointRepository,
                     )
                 isAssignableFrom(PostDetailViewModel::class.java) ->
                     PostDetailViewModel(repositoryContainer.postRepository)
                 isAssignableFrom(PostViewerViewModel::class.java) ->
-                    PostViewerViewModel(
-                        repositoryContainer.tripRepository,
-                        repositoryContainer.postRepository
-                    )
+                    PostViewerViewModel(repositoryContainer.postRepository)
                 isAssignableFrom(MarkerSelectedViewModel::class.java) ->
-                    MarkerSelectedViewModel(
-                        repositoryContainer.tripRepository,
-                        repositoryContainer.pointRepository
-                    )
+                    MarkerSelectedViewModel(repositoryContainer.pointRepository)
                 isAssignableFrom(HistoryViewModel::class.java) ->
-                    HistoryViewModel() // todo: repository 추가
+                    HistoryViewModel(repositoryContainer.tripRepository)
                 isAssignableFrom(SetTripTitleDialogViewModel::class.java) ->
                     SetTripTitleDialogViewModel(repositoryContainer.tripRepository)
                 isAssignableFrom(HistoryDetailViewModel::class.java) ->
-                    HistoryDetailViewModel() // todo: repository 추가
-                isAssignableFrom(TripDetailViewModel::class.java) ->
-                    TripDetailViewModel(
+                    HistoryDetailViewModel(
                         repositoryContainer.tripRepository,
-                        repositoryContainer.pointRepository
+                        repositoryContainer.postRepository,
                     )
+                isAssignableFrom(TripDetailViewModel::class.java) ->
+                    TripDetailViewModel(repositoryContainer.tripRepository)
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }

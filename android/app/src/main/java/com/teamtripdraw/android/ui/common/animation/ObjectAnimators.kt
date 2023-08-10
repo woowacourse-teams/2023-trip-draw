@@ -9,13 +9,13 @@ import com.teamtripdraw.android.R
 object ObjectAnimators {
     fun toggleFab(
         buttonMain: FloatingActionButton,
-        buttonWritePost: FloatingActionButton,
+        buttonWritePost: FloatingActionButton?,
         buttonPostList: FloatingActionButton,
         buttonMarkerMode: FloatingActionButton,
-        textViewWritePost: TextView,
+        textViewWritePost: TextView?,
         textViewPostList: TextView,
         textViewMarkerMode: TextView,
-        fabState: Boolean
+        fabState: Boolean,
     ) {
         // 플로팅 액션 버튼 닫기 - 열려있는 플로팅 버튼 집어넣는 애니메이션 세팅
         if (fabState) {
@@ -31,7 +31,7 @@ object ObjectAnimators {
             ObjectAnimator.ofFloat(textViewWritePost, "translationY", 0f).apply { start() }
             textViewMarkerMode.visibility = View.GONE
             textViewPostList.visibility = View.GONE
-            textViewWritePost.visibility = View.GONE
+            textViewWritePost?.visibility = View.GONE
             buttonMain.setImageResource(R.drawable.ic_fab_plus)
 
             // 플로팅 액션 버튼 열기 - 닫혀있는 플로팅 버튼 꺼내는 애니메이션 세팅
@@ -42,7 +42,7 @@ object ObjectAnimators {
             }
             textViewMarkerMode.visibility = View.VISIBLE
             textViewPostList.visibility = View.VISIBLE
-            textViewWritePost.visibility = View.VISIBLE
+            textViewWritePost?.visibility = View.VISIBLE
             ObjectAnimator.ofFloat(buttonMarkerMode, "translationY", -200f).apply { start() }
             ObjectAnimator.ofFloat(textViewMarkerMode, "translationY", -200f).apply { start() }
             ObjectAnimator.ofFloat(textViewPostList, "translationY", -360f).apply { start() }
@@ -55,12 +55,12 @@ object ObjectAnimators {
 
     fun closeFab(
         buttonMain: FloatingActionButton,
-        buttonWritePost: FloatingActionButton,
+        buttonWritePost: FloatingActionButton?,
         buttonPostList: FloatingActionButton,
         buttonMarkerMode: FloatingActionButton,
-        textViewWritePost: TextView,
+        textViewWritePost: TextView?,
         textViewPostList: TextView,
-        textViewMarkerMode: TextView
+        textViewMarkerMode: TextView,
     ) {
         ObjectAnimator.ofFloat(buttonMain, View.ROTATION, 45f, 0f).apply {
             duration = 300
@@ -74,7 +74,7 @@ object ObjectAnimators {
         ObjectAnimator.ofFloat(textViewWritePost, "translationY", 0f).apply { start() }
         textViewMarkerMode.visibility = View.GONE
         textViewPostList.visibility = View.GONE
-        textViewWritePost.visibility = View.GONE
+        textViewWritePost?.visibility = View.GONE
         buttonMain.setImageResource(R.drawable.ic_fab_plus)
     }
 }

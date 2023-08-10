@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.PointF
 import android.view.View
 import androidx.databinding.BindingAdapter
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
@@ -29,7 +30,7 @@ fun View.setPolyLine(naverMap: NaverMap?, uiRoute: UiRoute?) {
 
 private fun View.updatePolyLine(
     uiRoute: UiRoute,
-    naverMap: NaverMap
+    naverMap: NaverMap,
 ) {
     val polyLine = getTag(R.id.NAVER_MAP_POLY_LINE_TAG) as PolylineOverlay
     polyLine.coords = uiRoute.getLatLngs()
@@ -37,10 +38,12 @@ private fun View.updatePolyLine(
 }
 
 private fun View.initializePolyLine() {
-    if (this.getTag(R.id.NAVER_MAP_POLY_LINE_TAG) == null) setTag(
-        R.id.NAVER_MAP_POLY_LINE_TAG,
-        setPolyLineSetting(PolylineOverlay(), context)
-    )
+    if (this.getTag(R.id.NAVER_MAP_POLY_LINE_TAG) == null) {
+        setTag(
+            R.id.NAVER_MAP_POLY_LINE_TAG,
+            setPolyLineSetting(PolylineOverlay(), context),
+        )
+    }
 }
 
 private fun setPolyLineSetting(polyLine: PolylineOverlay, context: Context): PolylineOverlay =
@@ -57,13 +60,13 @@ private const val POLY_LINE_WIDTH = 30
     "app:setMarkerNaverMap",
     "app:setMarkerUiRoute",
     "app:setMarkerViewModeState",
-    "app:setMarkerSelectMarkerListener"
+    "app:setMarkerSelectMarkerListener",
 )
 fun View.setMarker(
     naverMap: NaverMap?,
     uiRoute: UiRoute?,
     markerViewModeState: Boolean,
-    selectMarkerListener: (Long) -> Unit
+    selectMarkerListener: (Long) -> Unit,
 ) {
     if (uiRoute == null) return
     if (naverMap == null) return
@@ -82,7 +85,7 @@ private fun View.initializeMarker(
     naverMap: NaverMap,
     uiRoute: UiRoute,
     markerViewModeState: Boolean,
-    selectMarkerListener: (Long) -> Unit
+    selectMarkerListener: (Long) -> Unit,
 ) {
     CoroutineScope(Dispatchers.Default).launch {
         val deferredNewMarkers = async {
@@ -91,7 +94,7 @@ private fun View.initializeMarker(
                     UiMarkerInfo,
                     index == START_MARKER_INDEX,
                     markerViewModeState,
-                    selectMarkerListener
+                    selectMarkerListener,
                 )
             }
         }
@@ -109,7 +112,7 @@ private fun setMarkerSetting(
     uiMarkerInfo: UiMarkerInfo,
     isStartPoint: Boolean,
     markerViewModeState: Boolean,
-    selectMarkerListener: (Long) -> Unit
+    selectMarkerListener: (Long) -> Unit,
 ): Marker =
     Marker().apply {
         this.position = uiMarkerInfo.latLng
@@ -123,7 +126,7 @@ private fun setMarkerAnchor(marker: Marker, isStartPoint: Boolean) {
     if (isStartPoint) {
         marker.anchor = PointF(
             START_MARKER_ANCHOR_X_LOCATION_VALUE,
-            START_MARKER_ANCHOR_Y_LOCATION_VALUE
+            START_MARKER_ANCHOR_Y_LOCATION_VALUE,
         )
     } else {
         marker.anchor = PointF(COMMON_ANCHOR_X_LOCATION_VALUE, COMMON_ANCHOR_Y_LOCATION_VALUE)
@@ -133,7 +136,7 @@ private fun setMarkerAnchor(marker: Marker, isStartPoint: Boolean) {
 private fun selectMarkerIcon(
     marker: Marker,
     isStartPoint: Boolean,
-    UiMarkerInfo: UiMarkerInfo
+    UiMarkerInfo: UiMarkerInfo,
 ) {
     if (isStartPoint) {
         marker.icon = markerFirstPoint
@@ -145,7 +148,7 @@ private fun selectMarkerIcon(
 
 private fun selectMarkerWithPostHoldingStatus(
     UiMarkerInfo: UiMarkerInfo,
-    marker: Marker
+    marker: Marker,
 ) {
     when (UiMarkerInfo.hasPost) {
         true -> {
@@ -161,7 +164,7 @@ private fun selectMarkerWithPostHoldingStatus(
 private fun initMarkerClickListener(
     marker: Marker,
     pointId: Long,
-    selectMarkerListener: (Long) -> Unit
+    selectMarkerListener: (Long) -> Unit,
 ) {
     marker.setOnClickListener {
         marker.icon = markerSelectedImage
@@ -192,3 +195,18 @@ fun View.toggleMarkerMode(markerViewModeState: Boolean) {
         }
     }
 }
+
+@BindingAdapter("app:setCameraMoveNaverMap", "app:setCameraMoveUiRoute")
+fun View.setCameraMove(naverMap: NaverMap?, uiRoute: UiRoute?) {
+    if (uiRoute == null) return
+    if (!uiRoute.enablePolyLine) return
+    if (naverMap == null) return
+
+    val cameraUpdate = CameraUpdate.scrollTo(
+        uiRoute.getLatLngs().last(),
+    )
+    naverMap.moveCamera(cameraUpdate)
+    naverMap.moveCamera(CameraUpdate.zoomTo(ZOOM_VALUE))
+}
+
+private const val ZOOM_VALUE = 17.0

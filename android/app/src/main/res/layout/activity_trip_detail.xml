@@ -16,6 +16,10 @@
         <variable
             name="naverMap"
             type="com.naver.maps.map.NaverMap" />
+
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +40,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/btn_post_viewer_back_description"
+                android:onClick="@{()->onBackClick.invoke()}"
                 android:src="@drawable/ic_back" />
 
             <TextView
@@ -46,6 +51,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
+                android:text="@{tripDetailViewModel.tripTitle}"
                 android:textAppearance="@style/title_3M"
                 android:textColor="@color/td_black"
                 tools:text="여행 제목" />
@@ -68,8 +74,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_trip_detail"
             app:markerViewModeState="@{tripDetailViewModel.markerViewModeState}"
+            app:setCameraMoveNaverMap="@{naverMap}"
+            app:setCameraMoveUiRoute="@{tripDetailViewModel.uiTripRoute}"
+            app:setMarkerNaverMap="@{naverMap}"
+            app:setMarkerSelectMarkerListener="@{tripDetailViewModel.notificationMarkerSelected}"
+            app:setMarkerUiRoute="@{tripDetailViewModel.tripRoute}"
+            app:setMarkerViewModeState="@{tripDetailViewModel.markerViewModeStateValue}"
             app:setPolyLineNaverMap="@{naverMap}"
-            app:setPolyLineUiRoute="@{tripDetailViewModel.currentTripRoute}"
+            app:setPolyLineUiRoute="@{tripDetailViewModel.tripRoute}"
             tools:layout="@layout/map_preview" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -97,22 +109,6 @@
             android:backgroundTint="@color/td_white"
             android:onClick="@{()->tripDetailViewModel.openPostViewer()}"
             android:src="@drawable/ic_post_list"
-            app:borderWidth="0dp"
-            app:fabCustomSize="44dp"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
-            app:layout_constraintEnd_toEndOf="@+id/fab_home"
-            app:layout_constraintStart_toStartOf="@+id/fab_home"
-            app:layout_constraintTop_toTopOf="@+id/fab_home"
-            app:tint="@color/td_main_blue" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_write_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/td_white"
-            android:src="@drawable/ic_write_post"
             app:borderWidth="0dp"
             app:fabCustomSize="44dp"
             app:fabSize="mini"
@@ -157,19 +153,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/tv_post_list"
-            android:textAppearance="@style/subtitle_1"
-            android:textColor="@color/td_main_blue"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/fab_home"
-            app:layout_constraintEnd_toStartOf="@+id/fab_home"
-            app:layout_constraintTop_toTopOf="@+id/fab_home" />
-
-        <TextView
-            android:id="@+id/tv_write_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/tv_write_post"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_main_blue"
             android:visibility="gone"

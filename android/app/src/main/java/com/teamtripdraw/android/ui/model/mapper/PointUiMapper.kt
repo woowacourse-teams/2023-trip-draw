@@ -10,5 +10,5 @@ fun Point.toPresentation(): UiPoint =
         latitude = latitude,
         longitude = longitude,
         hasPost = hasPost,
-        recordedAt = recordedAt.format(LocalDateTimeFormatter.isoRemoveNanoSecondFormatter)
+        recordedAt = recordedAt.format(LocalDateTimeFormatter.displayDateTimeFormatter),
     )
