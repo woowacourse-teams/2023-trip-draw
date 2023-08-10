@@ -10,6 +10,7 @@ import com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedViewModel
+import com.teamtripdraw.android.ui.login.LoginViewModel
 import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
 import com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel
 import com.teamtripdraw.android.ui.post.writing.PostWritingViewModel
@@ -54,6 +55,8 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     )
                 isAssignableFrom(TripDetailViewModel::class.java) ->
                     TripDetailViewModel(repositoryContainer.tripRepository)
+                isAssignableFrom(LoginViewModel::class.java) ->
+                    LoginViewModel()
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }
