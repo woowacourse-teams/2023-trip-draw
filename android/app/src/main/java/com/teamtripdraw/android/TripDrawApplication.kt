@@ -2,6 +2,8 @@ package com.teamtripdraw.android
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.kakao.sdk.common.KakaoSdk
+import com.teamtripdraw.android.BuildConfig.KAKAO_NATIVE_APP_KEY
 import com.teamtripdraw.android.di.LocalDataSourceContainer
 import com.teamtripdraw.android.di.LocalPreferenceContainer
 import com.teamtripdraw.android.di.RemoteDataSourceContainer
@@ -15,6 +17,11 @@ class TripDrawApplication : Application() {
         super.onCreate()
         initContainer()
         prohibitDarkMode()
+        initKakaoSdk()
+    }
+
+    private fun initKakaoSdk() {
+        KakaoSdk.init(this, KAKAO_NATIVE_APP_KEY)
     }
 
     private fun initContainer() {
