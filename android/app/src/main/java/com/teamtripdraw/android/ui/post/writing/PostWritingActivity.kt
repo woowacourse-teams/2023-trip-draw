@@ -1,9 +1,13 @@
 package com.teamtripdraw.android.ui.post.writing
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -15,8 +19,11 @@ import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.support.framework.presentation.extensions.toResizedImageFile
+import com.teamtripdraw.android.support.framework.presentation.permission.checkCameraPermission
+import com.teamtripdraw.android.support.framework.presentation.permission.requestCameraPermission
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
-import java.util.Locale
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PostWritingActivity : AppCompatActivity() {
 
@@ -27,6 +34,24 @@ class PostWritingActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri == null) return@registerForActivityResult
             uri.toResizedImageFile(this)?.let { viewModel.updateImage(it) }
+        }
+
+    private val permissionRequest =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions.count { it.value.not() } != 0) {
+                Toast.makeText(this, "권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private var imageUri: Uri? = null
+
+    private val takePicture =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if (isSuccess) {
+                imageUri?.toResizedImageFile(this)?.let {
+                    viewModel.updateImage(it)
+                }
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +67,9 @@ class PostWritingActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.postWritingViewModel = viewModel
 
-        binding.onSelectPhoto =
-            { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
-        binding.onBackClick = { finish() }
+        setOnSelectPhoto()
+        setOnBack()
+        setOnTakePicture()
     }
 
     private fun initIntentData() {
@@ -63,21 +88,50 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
-        setPointObserveEvent()
-        setWritingCompletedEvent()
+        initPointObserve()
+        initWritingCompletedObserve()
     }
 
-    private fun setPointObserveEvent() {
+    private fun setOnSelectPhoto() {
+        binding.onSelectPhoto =
+            { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+    }
+
+    private fun setOnTakePicture() {
+        binding.onTakePicture = {
+            if (checkCameraPermission(this)) {
+                imageUri = createImageUri()
+                takePicture.launch(imageUri)
+            } else {
+                requestCameraPermission(this, permissionRequest)
+            }
+        }
+    }
+
+    private fun setOnBack() {
+        binding.onBackClick = { finish() }
+    }
+
+    private fun initPointObserve() {
         viewModel.point.observe(this) { point ->
             val geocoder = Geocoder(this, Locale.KOREAN)
             geocoder.fetchAddress(point.latitude, point.longitude, viewModel::updateAddress)
         }
     }
 
-    private fun setWritingCompletedEvent() {
+    private fun initWritingCompletedObserve() {
         viewModel.writingCompletedEvent.observe(this) {
             if (it == true) finish()
         }
+    }
+
+    private fun createImageUri(): Uri? {
+        val now = SimpleDateFormat("yyMMdd_HHmmss").format(Date())
+        val content = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "img_$now.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+        }
+        return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, content)
     }
 
     companion object {
