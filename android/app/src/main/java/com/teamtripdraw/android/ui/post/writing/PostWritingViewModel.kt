@@ -29,7 +29,6 @@ class PostWritingViewModel(
     private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
     private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
     private var postId: Long = NULL_SUBSTITUTE_POST_ID
-    private var imageFile: File? = null
     private lateinit var writingMode: WritingMode
 
     val title: MutableLiveData<String> = MutableLiveData("")
@@ -48,12 +47,15 @@ class PostWritingViewModel(
     private val _address: MutableLiveData<String> = MutableLiveData("")
     val address: LiveData<String> = _address
 
+    private val _imageFile: MutableLiveData<File> = MutableLiveData()
+    val imageFile: LiveData<File> = _imageFile
+
     fun updateAddress(address: String) {
         _address.postValue(address)
     }
 
     fun updateImage(file: File) {
-        this.imageFile = file
+        _imageFile.value = file
     }
 
     fun initWritingMode(writingMode: WritingMode, id: Long) {
@@ -88,7 +90,7 @@ class PostWritingViewModel(
                         title = title.value ?: "",
                         writing = writing.value ?: "",
                         address = address.value ?: "",
-                        imageFile = imageFile,
+                        imageFile = _imageFile.value,
                     )
                     postRepository.addPost(prePost).onSuccess {
                         _writingCompletedEvent.value = true
@@ -99,7 +101,7 @@ class PostWritingViewModel(
                         postId = postId,
                         title = title.value ?: "",
                         writing = writing.value ?: "",
-                        imageFile = imageFile,
+                        imageFile = _imageFile.value,
                     )
                     postRepository.patchPost(prePatchPost).onSuccess {
                         _writingCompletedEvent.value = true
@@ -123,6 +125,7 @@ class PostWritingViewModel(
                     _address.value = it.address
                     title.value = it.title
                     writing.value = it.writing
+                    // todo http url을 파일로 변환해 가지고 있도록 하는 작업
                 }
         }
     }
