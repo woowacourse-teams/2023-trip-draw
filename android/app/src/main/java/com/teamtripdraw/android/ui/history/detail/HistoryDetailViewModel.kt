@@ -21,7 +21,7 @@ class HistoryDetailViewModel(
     private val _previewTrip: MutableLiveData<UiPreviewTrip> = MutableLiveData()
     val previewTrip: LiveData<UiPreviewTrip> = _previewTrip
 
-    private val tripId get() = previewTrip.value?.id ?: NULL_SUBSTITUTE_TRIP_ID
+    val tripId get() = previewTrip.value?.id ?: NULL_SUBSTITUTE_TRIP_ID
 
     private val _posts: MutableLiveData<List<UiPostItem>> = MutableLiveData()
     val post: LiveData<List<UiPostItem>> = _posts
@@ -31,6 +31,9 @@ class HistoryDetailViewModel(
 
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
+
+    private val _openEditTripTitleEvent = MutableLiveData<Boolean>()
+    val openEditTripTitleEvent: LiveData<Boolean> = _openEditTripTitleEvent
 
     private val _openDeleteDialogEvent = MutableLiveData<Event<Boolean>>()
     val openDeleteDialogEvent: LiveData<Event<Boolean>> = _openDeleteDialogEvent
@@ -65,6 +68,10 @@ class HistoryDetailViewModel(
 
     fun openPostDetail(postId: Long) {
         _openPostDetailEvent.value = Event(postId)
+    }
+
+    fun openEditTitle() {
+        _openEditTripTitleEvent.value = true
     }
 
     fun openDeleteDialog() {

@@ -12,6 +12,8 @@ import com.teamtripdraw.android.support.framework.presentation.event.EventObserv
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.common.bindingAdapter.setImage
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
+import com.teamtripdraw.android.ui.common.dialog.SetTitleSituation
+import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialog
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
@@ -59,6 +61,9 @@ class HistoryDetailActivity : AppCompatActivity() {
         binding.ivHistoryDetailImage.setOnClickListener {
             viewModel.openTripDetail()
         }
+        binding.btnHistoryDetailEdit.setOnClickListener {
+            viewModel.openEditTitle()
+        }
     }
 
     private fun initObserve() {
@@ -67,6 +72,7 @@ class HistoryDetailActivity : AppCompatActivity() {
         initTripDetailEventObserve()
         initPostDetailEventObserve()
         initDeleteDialogEventObserve()
+        initEditTripTitleObserve()
         initDeleteCompleteObserve()
     }
 
@@ -121,6 +127,19 @@ class HistoryDetailActivity : AppCompatActivity() {
             DialogUtil(DialogUtil.DELETE_CHECK) { viewModel.deleteTrip() }
                 .show(supportFragmentManager, this.javaClass.name)
         }
+    }
+
+    private fun initEditTripTitleObserve() {
+        viewModel.openEditTripTitleEvent.observe(this) {
+            showEditTripTitleDialog()
+        }
+    }
+
+    private fun showEditTripTitleDialog() {
+        val setTripTitleDialog = SetTripTitleDialog()
+        setTripTitleDialog.arguments =
+            SetTripTitleDialog.getBundle(viewModel.tripId, SetTitleSituation.EDIT)
+        setTripTitleDialog.show(supportFragmentManager, this.javaClass.name)
     }
 
     private fun initDeleteCompleteObserve() =
