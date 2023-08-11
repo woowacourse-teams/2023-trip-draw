@@ -1,9 +1,9 @@
 package com.teamtripdraw.android.ui.post.detail
 
 import com.teamtripdraw.android.DefaultViewModelTest
-import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PostRepository
+import com.teamtripdraw.android.getPost
 import com.teamtripdraw.android.ui.model.mapper.toDetailPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -15,7 +15,6 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import java.time.LocalDateTime
 
 class PostDetailViewModelTest : DefaultViewModelTest() {
 
@@ -39,15 +38,7 @@ class PostDetailViewModelTest : DefaultViewModelTest() {
     @Test
     fun `감상 기록을 가져는 것을 성공했을 경우 감상 기록의 값을 변경한다`() {
         // given
-        val post = Post(
-            postId = 0, tripId = 0, title = "", writing = "", address = "", point = Point(
-                pointId = 0,
-                latitude = 0.0,
-                longitude = 0.0,
-                hasPost = false,
-                recordedAt = LocalDateTime.of(2023, 8, 2, 7, 40)
-            ), postImageUrl = null, routeImageUrl = null
-        )
+        val post = getPost()
         val result: Result<Post> = Result.success(post)
         coEvery { postRepository.getPost(any()) } returns result
 

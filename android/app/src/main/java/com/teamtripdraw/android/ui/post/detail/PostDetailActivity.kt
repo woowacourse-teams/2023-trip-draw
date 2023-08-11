@@ -40,7 +40,7 @@ class PostDetailActivity : AppCompatActivity() {
     private fun initIntentData() {
         val postId = intent.getLongExtra(POST_ID_KEY, NULL_SUBSTITUTE_POST_ID)
         if (postId == NULL_SUBSTITUTE_POST_ID) {
-            throw java.lang.IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
+            throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
         }
         viewModel.initPostId(intent.getLongExtra(POST_ID_KEY, NULL_SUBSTITUTE_POST_ID))
     }
