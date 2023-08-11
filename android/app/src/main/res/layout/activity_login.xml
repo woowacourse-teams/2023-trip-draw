@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="loginViewModel"
+            type="com.teamtripdraw.android.ui.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_default"
+            android:onClick="@{()->loginViewModel.startKakaoLogin()}"
             app:layout_constraintBottom_toTopOf="@+id/tv_login_sign_in_policy_explain"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +65,6 @@
             android:id="@+id/tv_login_sign_in_personal_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:text="@string/tv_login_sign_in_personal_info"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_black"
