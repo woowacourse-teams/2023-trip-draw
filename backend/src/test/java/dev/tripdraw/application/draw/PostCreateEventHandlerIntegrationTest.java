@@ -24,7 +24,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ContextConfiguration(classes = TestSyncConfig.class)
-@SpringBootTest()
+@SpringBootTest
 public class PostCreateEventHandlerIntegrationTest {
 
     @MockBean
@@ -35,7 +35,7 @@ public class PostCreateEventHandlerIntegrationTest {
 
     @MockBean
     private TripRepository tripRepository;
-    
+
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 

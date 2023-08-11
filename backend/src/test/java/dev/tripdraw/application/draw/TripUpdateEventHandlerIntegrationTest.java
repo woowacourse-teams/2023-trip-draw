@@ -35,9 +35,6 @@ public class TripUpdateEventHandlerIntegrationTest {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    private TripUpdateEventHandler tripUpdateEventHandler;
-
-    @Autowired
     private TransactionTemplate transactionTemplate;
 
     @Test
