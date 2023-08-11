@@ -14,8 +14,10 @@ class AuthRepositoryImpl(
     private val remoteUserIdentifyInfoDataSourceImpl: UserIdentifyInfoDataSource.Remote,
 ) :
     AuthRepository {
-    override suspend fun setNickname(nickname: String): Result<Long> =
-        remoteSignUpDataSource.setNickname(nickname)
+    override suspend fun setNickname(nickname: String, loginInfo: LoginInfo): Result<Unit> =
+        remoteSignUpDataSource.setNickname(nickname, loginInfo.toData())
+            .onSuccess { localUserIdentifyInfoDataSource.setIdentifyInfo(it) }
+            .map {}
 
     override suspend fun getUserInfo(): Result<UserInfo> =
         remoteSignUpDataSource.getUserInfo(localUserIdentifyInfoDataSource.getIdentifyInfo()).map {
