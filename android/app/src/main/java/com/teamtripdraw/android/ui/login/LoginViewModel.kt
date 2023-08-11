@@ -51,7 +51,7 @@ class LoginViewModel(
         }
     }
 
-    fun checkUserHasNickName() {
+    fun fetchUserHasNickName() {
         viewModelScope.launch {
             authRepository.getUserInfo()
                 .onSuccess {

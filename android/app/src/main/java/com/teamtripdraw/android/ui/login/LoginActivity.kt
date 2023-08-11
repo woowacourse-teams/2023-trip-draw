@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun existedUserEventListener(loginInfo: LoginInfo) {
-        loginViewModel.checkUserHasNickName()
+        loginViewModel.fetchUserHasNickName()
     }
 
     private fun initNickNameExistsEventObserver() {
