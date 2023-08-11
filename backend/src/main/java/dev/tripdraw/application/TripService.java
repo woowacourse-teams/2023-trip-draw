@@ -125,6 +125,10 @@ public class TripService {
     }
 
     public void delete(LoginUser loginUser, Long tripId) {
-        tripRepository.deleteById(tripId);
+        Member member = getById(loginUser.memberId());
+        Trip trip = getByTripId(tripId);
+        trip.validateAuthorization(member);
+
+        tripRepository.delete(trip);
     }
 }
