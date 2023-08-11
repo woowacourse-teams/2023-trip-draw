@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.ui.signUp
 
 import com.teamtripdraw.android.DefaultViewModelTest
-import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
+import com.teamtripdraw.android.domain.exception.DuplicateNicknameException
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.model.user.NicknameValidState
 import io.mockk.coEvery
@@ -65,7 +65,7 @@ internal class NicknameSetupViewModelTest : DefaultViewModelTest() {
     fun `닉네임이 중복될 경우 닉네임 유효성 상태를 중복 상태로 변경한다`() {
         // given
         sut.nickname.value = "pingter"
-        val result: Result<Long> = Result.failure(DuplicateNickNameException("중복된 닉네임 입니다."))
+        val result: Result<Long> = Result.failure(DuplicateNicknameException("중복된 닉네임 입니다."))
         coEvery { repository.setNickname(sut.nickname.value!!) } returns result
 
         // when
