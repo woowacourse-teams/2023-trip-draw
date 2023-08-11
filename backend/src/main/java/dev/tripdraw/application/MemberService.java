@@ -5,6 +5,8 @@ import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.domain.post.PostRepository;
+import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final TripRepository tripRepository;
+    private final PostRepository postRepository;
     private final AuthTokenManager authTokenManager;
 
-    public MemberService(MemberRepository memberRepository, AuthTokenManager authTokenManager) {
+    public MemberService(
+            MemberRepository memberRepository,
+            TripRepository tripRepository,
+            PostRepository postRepository,
+            AuthTokenManager authTokenManager
+    ) {
         this.memberRepository = memberRepository;
+        this.tripRepository = tripRepository;
+        this.postRepository = postRepository;
         this.authTokenManager = authTokenManager;
     }
 
@@ -37,8 +48,8 @@ public class MemberService {
 
     public void deleteByCode(String code) {
         Long memberId = authTokenManager.extractMemberId(code);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-        member.delete();
+        postRepository.deleteByMemberId(memberId);
+        tripRepository.deleteByMemberId(memberId);
+        memberRepository.deleteById(memberId);
     }
 }

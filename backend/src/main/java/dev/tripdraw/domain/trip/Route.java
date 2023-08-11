@@ -3,6 +3,7 @@ package dev.tripdraw.domain.trip;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
 import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
 
 import dev.tripdraw.exception.trip.TripException;
@@ -16,7 +17,7 @@ import java.util.Objects;
 @Embeddable
 public class Route {
 
-    @OneToMany(fetch = LAZY, cascade = PERSIST)
+    @OneToMany(fetch = LAZY, cascade = {PERSIST, REMOVE})
     @JoinColumn(name = "trip_id", updatable = false, nullable = false)
     private List<Point> points = new ArrayList<>();
 
