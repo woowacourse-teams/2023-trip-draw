@@ -12,6 +12,9 @@ import com.teamtripdraw.android.support.framework.presentation.event.EventObserv
 import com.teamtripdraw.android.support.framework.presentation.loginManager.KakaoLoginManager
 import com.teamtripdraw.android.support.framework.presentation.loginManager.SocialLoginManager
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.main.MainActivity
+import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import com.teamtripdraw.android.ui.signUp.NicknameSetupActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -67,9 +70,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun newUserEventListener(event: Boolean) {
         if (event) {
-            // todo 홈으로 이동
+            moveToMainActivity()
         } else {
-            // todo 닉네임 설정뷰로 이동
+            loginViewModel.existedUserEventValue?.let { loginInfo ->
+                moveToNicknameSetupActivity(loginInfo)
+            }
         }
     }
 
@@ -78,7 +83,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun newUserEventListener(loginInfo: LoginInfo) {
-        // todo 닉네임 설정뷰로 이동
+        moveToNicknameSetupActivity(loginInfo)
+    }
+
+    private fun moveToMainActivity() {
+        val intent = MainActivity.getIntent(this)
+        startActivity(intent)
+    }
+
+    private fun moveToNicknameSetupActivity(loginInfo: LoginInfo) {
+        val intent = NicknameSetupActivity.getIntent(this, loginInfo.toPresentation())
+        startActivity(intent)
     }
 
     override fun onPause() {

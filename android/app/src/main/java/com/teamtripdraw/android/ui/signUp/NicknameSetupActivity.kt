@@ -1,5 +1,7 @@
 package com.teamtripdraw.android.ui.signUp
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
+import com.teamtripdraw.android.ui.model.UiLoginInfo
 
 class NicknameSetupActivity : AppCompatActivity() {
 
@@ -28,7 +31,7 @@ class NicknameSetupActivity : AppCompatActivity() {
     private fun setupNavigation() {
         viewModel.nicknameSetupCompleteEvent.observe(
             this,
-            EventObserver(this@NicknameSetupActivity::navigateNextPage)
+            EventObserver(this@NicknameSetupActivity::navigateNextPage),
         )
     }
 
@@ -37,5 +40,14 @@ class NicknameSetupActivity : AppCompatActivity() {
             startActivity(MainActivity.getIntent(this))
             finish()
         }
+    }
+
+    companion object {
+        private const val UI_LOGIN_INFO = "UI_LOGIN_INFO"
+
+        fun getIntent(context: Context, uiLoginInfo: UiLoginInfo): Intent =
+            Intent(context, NicknameSetupActivity::class.java).apply {
+                putExtra(UI_LOGIN_INFO, uiLoginInfo)
+            }
     }
 }

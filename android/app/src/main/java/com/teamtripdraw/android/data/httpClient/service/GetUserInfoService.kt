@@ -6,8 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface GetUserInfoService {
-    @GET("/members/{memberId}")
+    @GET("/members")
     suspend fun getUserInfo(
-        @Query("accessToken") accessToken: String,
+        @Query("code") accessToken: String,
     ): ResponseState<GetUserInfoResponse>
 }
