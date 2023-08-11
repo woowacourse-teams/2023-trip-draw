@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentMyPageBinding
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.policy.PrivacyPolicy
 
@@ -27,6 +28,8 @@ class MyPageFragment : Fragment() {
 
         initNickname()
         initOpenPrivacyPolicyObserve()
+        initSignOutObserve()
+        initAcountDeletionObserve()
 
         return binding.root
     }
@@ -36,9 +39,28 @@ class MyPageFragment : Fragment() {
     }
 
     private fun initOpenPrivacyPolicyObserve() {
-        viewModel.openPrivacyPolicyEvent.observe(viewLifecycleOwner) {
-            if (it) startActivity(PrivacyPolicy.getIntent(requireContext()))
-        }
+        viewModel.openPrivacyPolicyEvent.observe(
+            viewLifecycleOwner,
+            EventObserver { if (it) startActivity(PrivacyPolicy.getIntent(requireContext())) },
+        )
+    }
+
+    private fun initSignOutObserve() {
+        viewModel.signOutEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                // todo : 화면을 종료시키고, 로그인 화면으로 전환
+            },
+        )
+    }
+
+    private fun initAcountDeletionObserve() {
+        viewModel.openAccountDeletionEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                // todo 회원 탈퇴 페이지로 이동
+            },
+        )
     }
 
     override fun onDestroy() {

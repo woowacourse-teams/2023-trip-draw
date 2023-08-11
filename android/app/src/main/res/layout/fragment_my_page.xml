@@ -48,6 +48,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{myPageViewModel.nickname}"
@@ -139,6 +140,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/td_white"
+            android:onClick="@{() -> myPageViewModel.signOut()}"
             android:padding="16dp"
             android:text="@string/btn_sign_out"
             android:textAppearance="@style/subtitle_1"
@@ -163,6 +165,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
+            android:onClick="@{() -> myPageViewModel.openAccountDeletion()}"
             android:text="@string/btn_account_deletion"
             android:textColor="@color/td_dark_gray"
             app:layout_constraintBottom_toBottomOf="parent"
