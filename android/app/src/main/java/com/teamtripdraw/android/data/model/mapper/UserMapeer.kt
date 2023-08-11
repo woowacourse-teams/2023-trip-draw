@@ -6,5 +6,5 @@ import com.teamtripdraw.android.domain.model.user.UserInfo
 fun DataUserInfo.toDomain(): UserInfo =
     UserInfo(
         memberId = memberId,
-        nickName = nickName,
+        nickname = nickname,
     )

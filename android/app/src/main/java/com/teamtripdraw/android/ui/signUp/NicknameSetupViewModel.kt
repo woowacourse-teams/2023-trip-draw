@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
+import com.teamtripdraw.android.domain.exception.DuplicateNicknameException
 import com.teamtripdraw.android.domain.model.auth.LoginInfo
 import com.teamtripdraw.android.domain.model.user.NicknameValidState
 import com.teamtripdraw.android.domain.repository.AuthRepository
@@ -42,7 +42,7 @@ class NicknameSetupViewModel(
                     _nicknameSetupCompletedEvent.value = Event(true)
                 }.onFailure {
                     when (it) {
-                        is DuplicateNickNameException ->
+                        is DuplicateNicknameException ->
                             _nicknameState.value = NicknameValidState.DUPLICATE
                     }
                 }
