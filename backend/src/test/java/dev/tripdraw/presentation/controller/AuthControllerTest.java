@@ -1,9 +1,10 @@
 package dev.tripdraw.presentation.controller;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -24,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -122,15 +122,27 @@ class AuthControllerTest extends ControllerTest {
         // given
         RegisterRequest registerRequest = new RegisterRequest("저장안된후추", KAKAO, "oauth.kakao.token");
 
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
+        // expect
+        RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .body(registerRequest)
                 .when().post("/oauth/register")
                 .then().log().all()
-                .extract();
+                .statusCode(NOT_FOUND.value());
+    }
 
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    @Test
+    void 신규_회원의_닉네임을_등록할_때_이미_존재하는_닉네임이면_예외가_발생한다() {
+        // given
+        Member member = memberRepository.save(new Member("중복된 닉네임", "kakaoId", KAKAO));
+        RegisterRequest registerRequest = new RegisterRequest(member.nickname(), KAKAO, "oauth.kakao.token");
+
+        // when
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .body(registerRequest)
+                .when().post("/oauth/register")
+                .then().log().all()
+                .statusCode(CONFLICT.value());
     }
 }
