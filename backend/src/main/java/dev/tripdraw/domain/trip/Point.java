@@ -11,9 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
-import org.hibernate.annotations.Where;
 
-@Where(clause = "is_deleted = false")
 @Entity
 public class Point extends BaseEntity {
 
