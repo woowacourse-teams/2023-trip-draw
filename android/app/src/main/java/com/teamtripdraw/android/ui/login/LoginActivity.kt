@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         initKaKaoLoginEventObserver()
         initExistedUserEventObserver()
         initNewUserEventObserver()
-        initNickNameExistsEventObserver()
+        initNicknameExistsEventObserver()
     }
 
     private fun initSocialLoginMangers() {
@@ -61,11 +61,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun existedUserEventListener(loginInfo: LoginInfo) {
-        loginViewModel.fetchUserHasNickName()
+        loginViewModel.fetchUserHasNickname()
     }
 
-    private fun initNickNameExistsEventObserver() {
-        loginViewModel.nickNameExistsEvent.observe(this, EventObserver(this::newUserEventListener))
+    private fun initNicknameExistsEventObserver() {
+        loginViewModel.nicknameExistsEvent.observe(this, EventObserver(this::newUserEventListener))
     }
 
     private fun newUserEventListener(event: Boolean) {

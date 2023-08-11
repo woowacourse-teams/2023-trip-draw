@@ -6,8 +6,8 @@ import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.model.DataLoginInfo
 import com.teamtripdraw.android.data.model.DataUserInfo
-import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
-import com.teamtripdraw.android.domain.exception.InvalidNickNameException
+import com.teamtripdraw.android.domain.exception.DuplicateNicknameException
+import com.teamtripdraw.android.domain.exception.InvalidNicknameException
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
@@ -23,7 +23,7 @@ class RemoteSignUpDataSourceImpl(
         dataLoginInfo: DataLoginInfo,
     ): Result<String> =
         nicknameSetupService.setNickname(getNicknameSetUpRequest(nickname, dataLoginInfo))
-            .process(failureListener = this::setNickNameFailureListener) { body, headers ->
+            .process(failureListener = this::setNicknameFailureListener) { body, headers ->
                 Result.success(body.accessToken)
             }
 
@@ -37,19 +37,19 @@ class RemoteSignUpDataSourceImpl(
             oauthType = dataLoginInfo.platform,
         )
 
-    private fun setNickNameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
+    private fun setNicknameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
         if (code == 409) {
             val message =
                 retrofit.getParsedErrorBody<NicknameSetupFailureResponse>(errorBody)?.message
             return Result.failure(
-                DuplicateNickNameException(
+                DuplicateNicknameException(
                     message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE,
                 ),
             )
         }
         // 중복 닉네임을 제외한 오류들은 code400으로 분기되어있다.(#43 참고)
         return Result.failure(
-            InvalidNickNameException(
+            InvalidNicknameException(
                 DEFAULT_INVALID_NICKNAME_EXCEPTION_MESSAGE,
             ),
         )
@@ -57,7 +57,7 @@ class RemoteSignUpDataSourceImpl(
 
     override suspend fun getUserInfo(accessToken: String): Result<DataUserInfo> =
         getUserInfoService.getUserInfo(accessToken).process { body, headers ->
-            Result.success(DataUserInfo(memberId = body.memberId, nickName = body.nickName))
+            Result.success(DataUserInfo(memberId = body.memberId, nickname = body.nickname))
         }
 
     companion object {
