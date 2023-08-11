@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class GetUserInfoResponse(
     @Json(name = "memberId")
-    val memberId: String,
+    val memberId: Long,
     @Json(name = "nickname")
-    val nickname: String
+    val nickName: String
 )
