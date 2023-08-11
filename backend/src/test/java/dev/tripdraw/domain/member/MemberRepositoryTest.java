@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -38,5 +40,18 @@ class MemberRepositoryTest {
 
         // expect
         assertThat(foundMember).isEmpty();
+    }
+
+    @ParameterizedTest
+    @CsvSource({"통후추, true", "순후추, false"})
+    void 닉네임이_존재하는지_확인한다(String nickname, boolean expected) {
+        // given
+        memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+
+        // when
+        boolean actual = memberRepository.existsByNickname(nickname);
+
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 }
