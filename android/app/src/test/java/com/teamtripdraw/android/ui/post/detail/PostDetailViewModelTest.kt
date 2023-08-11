@@ -52,7 +52,7 @@ class PostDetailViewModelTest : DefaultViewModelTest() {
         coEvery { postRepository.getPost(any()) } returns result
 
         // when
-        sut.getPost()
+        sut.fetchPost()
 
         // then
         assertEquals(post.toDetailPresentation(), sut.postDetail.value)

@@ -55,7 +55,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         coEvery { pointRepository.getPoint(any(), any()) } returns result
 
         // when
-        sut.initWritingMode(pointId)
+        sut.initWritingMode(WritingMode.NEW, pointId)
         val actualLat = sut.point.value?.latitude
         val actualLng = sut.point.value?.longitude
 
