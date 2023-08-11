@@ -1,8 +1,8 @@
-package com.teamtripdraw.android.data.dataSource.nicknameSetup
+package com.teamtripdraw.android.data.dataSource.signUp
 
 import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureResponse
 import com.teamtripdraw.android.data.httpClient.dto.request.NicknameSetUpRequest
-import com.teamtripdraw.android.data.httpClient.service.GetNicknameService
+import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
 import com.teamtripdraw.android.domain.exception.InvalidNickNameException
@@ -10,12 +10,12 @@ import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 
-class RemoteNicknameSetupDataSourceImpl(
+class RemoteSignUpDataSourceImpl(
     private val nicknameSetupService: NicknameSetupService,
-    private val getNicknameService: GetNicknameService,
-    private val retrofit: Retrofit
+    private val getUserInfoService: GetUserInfoService,
+    private val retrofit: Retrofit,
 ) :
-    NicknameSetupDataSource.Remote {
+    SignUpDataSource.Remote {
     override suspend fun setNickname(nickname: String): Result<Long> =
         nicknameSetupService.setNickname(NicknameSetUpRequest(nickname))
             .process(failureListener = this::setNickNameFailureListener) { body, headers ->
@@ -28,22 +28,25 @@ class RemoteNicknameSetupDataSourceImpl(
                 retrofit.getParsedErrorBody<NicknameSetupFailureResponse>(errorBody)?.message
             return Result.failure(
                 DuplicateNickNameException(
-                    message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE
-                )
+                    message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE,
+                ),
             )
         }
         // 중복 닉네임을 제외한 오류들은 code400으로 분기되어있다.(#43 참고)
         return Result.failure(
             InvalidNickNameException(
-                DEFAULT_INVALID_NICKNAME_EXCEPTION_MESSAGE
-            )
+                DEFAULT_INVALID_NICKNAME_EXCEPTION_MESSAGE,
+            ),
         )
     }
 
-    override suspend fun getNickname(nicknameId: Long): Result<String> =
-        getNicknameService.getNickname(nicknameId).process { body, headers ->
-            Result.success(body.nickname)
-        }
+    override suspend fun getUserInfo(accessToken: String): Result<String> {
+        TODO("Not yet implemented")
+    }
+//    override suspend fun getUserInfo(nicknameId: Long): Result<String> =
+//        getNicknameService.getNickname(nicknameId).process { body, headers ->
+//            Result.success(body.nickname)
+//        }
 
     companion object {
         private const val DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE = "중복된 닉네임 입니다."

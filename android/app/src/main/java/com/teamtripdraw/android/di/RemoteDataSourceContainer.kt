@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.di
 
-import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
-import com.teamtripdraw.android.data.dataSource.nicknameSetup.RemoteNicknameSetupDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.signUp.SignUpDataSource
+import com.teamtripdraw.android.data.dataSource.signUp.RemoteSignUpDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.point.PointDataSource
 import com.teamtripdraw.android.data.dataSource.point.RemotePointDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
@@ -15,8 +15,8 @@ class RemoteDataSourceContainer(
     serviceContainer: ServiceContainer,
     retrofitContainer: RetrofitContainer,
 ) {
-    val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote =
-        RemoteNicknameSetupDataSourceImpl(
+    val remoteSignUpDataSource: SignUpDataSource.Remote =
+        RemoteSignUpDataSourceImpl(
             serviceContainer.nicknameSetupService,
             serviceContainer.getNicknameService,
             retrofitContainer.tripDrawRetrofit,
