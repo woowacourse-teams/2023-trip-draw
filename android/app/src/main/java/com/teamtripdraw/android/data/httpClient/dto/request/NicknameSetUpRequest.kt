@@ -7,8 +7,8 @@ import com.squareup.moshi.JsonClass
 data class NicknameSetUpRequest(
     @Json(name = "nickname")
     val nickname: String,
-    @Json(name = "oAuthToken")
-    val oAuthToken: String,
-    @Json(name = "oAuthType")
-    val oAuthType: String
+    @Json(name = "oauthToken")
+    val oauthToken: String,
+    @Json(name = "oauthType")
+    val oauthType: String
 )
