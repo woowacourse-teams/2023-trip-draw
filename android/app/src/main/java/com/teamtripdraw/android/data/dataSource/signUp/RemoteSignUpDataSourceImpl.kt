@@ -33,8 +33,8 @@ class RemoteSignUpDataSourceImpl(
     ): NicknameSetUpRequest =
         NicknameSetUpRequest(
             nickname = nickname,
-            oAuthToken = dataLoginInfo.socialToken,
-            oAuthType = dataLoginInfo.platform,
+            oauthToken = dataLoginInfo.socialToken,
+            oauthType = dataLoginInfo.platform,
         )
 
     private fun setNickNameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
