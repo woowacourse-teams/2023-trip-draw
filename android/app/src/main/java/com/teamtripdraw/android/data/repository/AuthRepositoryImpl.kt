@@ -2,11 +2,14 @@ package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.nicknameSetup.NicknameSetupDataSource
 import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
+import com.teamtripdraw.android.data.model.mapper.toData
+import com.teamtripdraw.android.domain.model.auth.LoginInfo
 import com.teamtripdraw.android.domain.repository.AuthRepository
 
 class AuthRepositoryImpl(
     private val localUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
-    private val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote
+    private val remoteNicknameSetupDataSource: NicknameSetupDataSource.Remote,
+    private val remoteUserIdentifyInfoDataSourceImpl: UserIdentifyInfoDataSource.Remote,
 ) :
     AuthRepository {
     override suspend fun setNickname(nickname: String): Result<Long> =
@@ -17,4 +20,10 @@ class AuthRepositoryImpl(
         remoteNicknameSetupDataSource.getNickname(nicknameId).onSuccess { nickname ->
             localUserIdentifyInfoDataSource.setIdentifyInfo(nickname)
         }
+
+    override suspend fun login(loginInfo: LoginInfo): Result<Boolean> =
+        remoteUserIdentifyInfoDataSourceImpl.issueUserIdentifyInfo(loginInfo.toData())
+            .onSuccess {
+                if (it.isNotBlank()) localUserIdentifyInfoDataSource.setIdentifyInfo(it)
+            }.map { it.isNotBlank() }
 }

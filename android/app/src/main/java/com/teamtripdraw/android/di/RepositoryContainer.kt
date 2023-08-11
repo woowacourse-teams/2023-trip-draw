@@ -11,21 +11,22 @@ import com.teamtripdraw.android.domain.repository.TripRepository
 
 class RepositoryContainer(
     localDataSourceContainer: LocalDataSourceContainer,
-    remoteDataSourceContainer: RemoteDataSourceContainer
+    remoteDataSourceContainer: RemoteDataSourceContainer,
 ) {
     val authRepository: AuthRepository = AuthRepositoryImpl(
         localDataSourceContainer.localUserIdentifyInfoDataSource,
-        remoteDataSourceContainer.remoteNicknameSetupDataSource
+        remoteDataSourceContainer.remoteNicknameSetupDataSource,
+        remoteDataSourceContainer.remoteUserIdentifyInfoDataSourceImpl,
     )
     val tripRepository: TripRepository = TripRepositoryImpl(
         remoteDataSourceContainer.remoteTripDataSource,
-        localDataSourceContainer.localTripDataSource
+        localDataSourceContainer.localTripDataSource,
     )
     val postRepository: PostRepository = PostRepositoryImpl(
-        remoteDataSourceContainer.remotePostDataSource
+        remoteDataSourceContainer.remotePostDataSource,
     )
     val pointRepository: PointRepository = PointRepositoryImpl(
         remoteDataSourceContainer.remotePointDataSource,
-        localDataSourceContainer.localTripDataSource
+        localDataSourceContainer.localTripDataSource,
     )
 }
