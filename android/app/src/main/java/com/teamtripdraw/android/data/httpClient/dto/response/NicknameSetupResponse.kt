@@ -5,6 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class NicknameSetupResponse(
-    @Json(name = "memberId")
-    val memberId: Long
+    @Json(name = "accessToken")
+    val accessToken: String
 )
