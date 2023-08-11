@@ -7,8 +7,8 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface NicknameSetupService {
-    @POST("/members")
+    @POST("/oauth/register")
     suspend fun setNickname(
-        @Body body: NicknameSetUpRequest
+        @Body body: NicknameSetUpRequest,
     ): ResponseState<NicknameSetupResponse>
 }
