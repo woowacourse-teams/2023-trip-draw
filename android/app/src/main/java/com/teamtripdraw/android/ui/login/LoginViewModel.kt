@@ -53,11 +53,12 @@ class LoginViewModel(
 
     fun checkUserHasNickName() {
         viewModelScope.launch {
-            authRepository.getUserInfo().onSuccess {
-                _nickNameExistsEvent.value = Event(it.nickName.isNotBlank())
-            }.onFailure {
-                // todo 로그전략 수립후 로그 작성
-            }
+            authRepository.getUserInfo()
+                .onSuccess {
+                    _nickNameExistsEvent.value = Event(it.nickName.isNotBlank())
+                }.onFailure {
+                    // todo 로그전략 수립후 로그 작성
+                }
         }
     }
 }
