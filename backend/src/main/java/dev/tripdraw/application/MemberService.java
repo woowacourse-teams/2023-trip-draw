@@ -21,8 +21,12 @@ public class MemberService {
     private final PostRepository postRepository;
     private final AuthTokenManager authTokenManager;
 
-    public MemberService(MemberRepository memberRepository, TripRepository tripRepository,
-                         PostRepository postRepository, AuthTokenManager authTokenManager) {
+    public MemberService(
+            MemberRepository memberRepository,
+            TripRepository tripRepository,
+            PostRepository postRepository,
+            AuthTokenManager authTokenManager
+    ) {
         this.memberRepository = memberRepository;
         this.tripRepository = tripRepository;
         this.postRepository = postRepository;
