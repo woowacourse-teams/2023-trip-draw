@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPostDetail
@@ -11,10 +12,11 @@ import com.teamtripdraw.android.ui.model.mapper.toDetailPresentation
 import kotlinx.coroutines.launch
 
 class PostDetailViewModel(
-    private val repository: PostRepository
+    private val repository: PostRepository,
 ) : ViewModel() {
 
-    private val postId: MutableLiveData<Long> = MutableLiveData()
+    var postId: Long = NULL_SUBSTITUTE_POST_ID
+        private set
 
     private val _postDetail: MutableLiveData<UiPostDetail> = MutableLiveData()
     val postDetail: LiveData<UiPostDetail> = _postDetail
@@ -22,13 +24,16 @@ class PostDetailViewModel(
     private val _postDeletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val postDeletedEvent: LiveData<Event<Boolean>> = _postDeletedEvent
 
+    private val _editEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val editEvent: LiveData<Event<Boolean>> = _editEvent
+
     fun initPostId(postId: Long) {
-        this.postId.value = postId
+        this.postId = postId
     }
 
-    fun getPost() {
+    fun fetchPost() {
         viewModelScope.launch {
-            repository.getPost(requireNotNull(postId.value))
+            repository.getPost(postId)
                 .onSuccess {
                     _postDetail.value = it.toDetailPresentation()
                 }
@@ -40,7 +45,7 @@ class PostDetailViewModel(
 
     fun deletePost() {
         viewModelScope.launch {
-            repository.deletePost(requireNotNull(postId.value))
+            repository.deletePost(postId)
                 .onSuccess {
                     _postDeletedEvent.value = Event(true)
                 }
@@ -48,5 +53,9 @@ class PostDetailViewModel(
                     // todo 오류 처리
                 }
         }
+    }
+
+    fun editPost() {
+        _editEvent.value = Event(true)
     }
 }

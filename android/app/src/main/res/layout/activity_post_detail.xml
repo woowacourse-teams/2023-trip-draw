@@ -51,6 +51,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/btn_edit_description"
+                android:onClick="@{() -> postDetailViewModel.editPost()}"
                 android:src="@drawable/ic_edit" />
 
         </com.google.android.material.appbar.MaterialToolbar>
