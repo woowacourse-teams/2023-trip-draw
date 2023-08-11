@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentMyPageBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.myPage.accountDeletion.AccountDeletionActivity
 import com.teamtripdraw.android.ui.policy.PrivacyPolicy
 
 class MyPageFragment : Fragment() {
@@ -58,7 +59,7 @@ class MyPageFragment : Fragment() {
         viewModel.openAccountDeletionEvent.observe(
             viewLifecycleOwner,
             EventObserver {
-                // todo 회원 탈퇴 페이지로 이동
+                if (it) startActivity(AccountDeletionActivity.getIntent(requireContext()))
             },
         )
     }

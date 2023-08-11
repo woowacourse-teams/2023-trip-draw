@@ -34,10 +34,8 @@ class MyPageViewModel() : ViewModel() {
 
     fun signOut() {
         viewModelScope.launch {
-            /*  todo :
-                    repositosy에서 로그아웃 진행
-                    _signOutEvent.value = true
-             */
+            // todo : repositosy에서 로그아웃 진행
+            _signOutEvent.value = Event(true)
         }
     }
 

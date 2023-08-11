@@ -82,6 +82,9 @@
         <activity
             android:name=".ui.policy.PrivacyPolicy"
             android:exported="false" />
+        <activity
+            android:name=".ui.myPage.accountDeletion.AccountDeletionActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
