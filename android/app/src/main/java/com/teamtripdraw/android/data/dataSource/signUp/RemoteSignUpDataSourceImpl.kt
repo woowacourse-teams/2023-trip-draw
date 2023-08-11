@@ -4,6 +4,7 @@ import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetu
 import com.teamtripdraw.android.data.httpClient.dto.request.NicknameSetUpRequest
 import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
+import com.teamtripdraw.android.data.model.DataUserInfo
 import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
 import com.teamtripdraw.android.domain.exception.InvalidNickNameException
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
@@ -40,13 +41,10 @@ class RemoteSignUpDataSourceImpl(
         )
     }
 
-    override suspend fun getUserInfo(accessToken: String): Result<String> {
-        TODO("Not yet implemented")
-    }
-//    override suspend fun getUserInfo(nicknameId: Long): Result<String> =
-//        getNicknameService.getNickname(nicknameId).process { body, headers ->
-//            Result.success(body.nickname)
-//        }
+    override suspend fun getUserInfo(accessToken: String): Result<DataUserInfo> =
+        getUserInfoService.getUserInfo(accessToken).process { body, headers ->
+            Result.success(DataUserInfo(memberId = body.memberId, nickName = body.nickName))
+        }
 
     companion object {
         private const val DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE = "중복된 닉네임 입니다."
