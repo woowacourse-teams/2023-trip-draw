@@ -34,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
         initKaKaoLoginEventObserver()
         initExistedUserEventObserver()
         initNewUserEventObserver()
+        initNickNameExistsEventObserver()
     }
 
     private fun initSocialLoginMangers() {
@@ -57,7 +58,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun existedUserEventListener(loginInfo: LoginInfo) {
-        // todo 메인 액티비티 이동로직, 이전 닉네임 검사후 닉네임 없다면 닉네임 설정뷰로 이동
+        loginViewModel.checkUserHasNickName()
+    }
+
+    private fun initNickNameExistsEventObserver() {
+        loginViewModel.nickNameExistsEvent.observe(this, EventObserver(this::newUserEventListener))
+    }
+
+    private fun newUserEventListener(event: Boolean) {
+        if (event) {
+            // todo 홈으로 이동
+        } else {
+            // todo 닉네임 설정뷰로 이동
+        }
     }
 
     private fun initNewUserEventObserver() {

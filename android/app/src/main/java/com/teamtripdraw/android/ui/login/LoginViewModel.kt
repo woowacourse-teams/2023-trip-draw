@@ -19,8 +19,13 @@ class LoginViewModel(
     private val _existedUserEvent = MutableLiveData<Event<LoginInfo>>()
     val existedUserEvent: LiveData<Event<LoginInfo>> = _existedUserEvent
 
+    val existedUserEventValue: LoginInfo? get() = existedUserEvent.value?.content
+
     private val _newUserEvent = MutableLiveData<Event<LoginInfo>>()
     val newUserEvent: LiveData<Event<LoginInfo>> = _newUserEvent
+
+    private val _nickNameExistsEvent = MutableLiveData<Event<Boolean>>()
+    val nickNameExistsEvent: LiveData<Event<Boolean>> = _nickNameExistsEvent
 
     fun startKakaoLogin() {
         _kakaoLoginEvent.value = true
@@ -43,6 +48,16 @@ class LoginViewModel(
                 }.onFailure {
                     // todo 로그전략 수립후 로그 찍어주기
                 }
+        }
+    }
+
+    fun checkUserHasNickName() {
+        viewModelScope.launch {
+            authRepository.getUserInfo().onSuccess {
+                _nickNameExistsEvent.value = Event(it.nickName.isNotBlank())
+            }.onFailure {
+                // todo 로그전략 수립후 로그 작성
+            }
         }
     }
 }
