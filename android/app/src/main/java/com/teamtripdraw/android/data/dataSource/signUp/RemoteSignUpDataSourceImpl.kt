@@ -4,6 +4,7 @@ import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetu
 import com.teamtripdraw.android.data.httpClient.dto.request.NicknameSetUpRequest
 import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
+import com.teamtripdraw.android.data.model.DataLoginInfo
 import com.teamtripdraw.android.data.model.DataUserInfo
 import com.teamtripdraw.android.domain.exception.DuplicateNickNameException
 import com.teamtripdraw.android.domain.exception.InvalidNickNameException
@@ -17,11 +18,24 @@ class RemoteSignUpDataSourceImpl(
     private val retrofit: Retrofit,
 ) :
     SignUpDataSource.Remote {
-    override suspend fun setNickname(nickname: String): Result<Long> =
-        nicknameSetupService.setNickname(NicknameSetUpRequest(nickname))
+    override suspend fun setNickname(
+        nickname: String,
+        dataLoginInfo: DataLoginInfo,
+    ): Result<String> =
+        nicknameSetupService.setNickname(getNicknameSetUpRequest(nickname, dataLoginInfo))
             .process(failureListener = this::setNickNameFailureListener) { body, headers ->
-                Result.success(body.memberId)
+                Result.success(body.accessToken)
             }
+
+    private fun getNicknameSetUpRequest(
+        nickname: String,
+        dataLoginInfo: DataLoginInfo,
+    ): NicknameSetUpRequest =
+        NicknameSetUpRequest(
+            nickname = nickname,
+            oAuthToken = dataLoginInfo.socialToken,
+            oAuthType = dataLoginInfo.platform,
+        )
 
     private fun setNickNameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
         if (code == 409) {
