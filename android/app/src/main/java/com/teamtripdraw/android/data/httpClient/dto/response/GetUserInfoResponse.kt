@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GetNicknameResponse(
+data class GetUserInfoResponse(
     @Json(name = "memberId")
     val memberId: String,
     @Json(name = "nickname")
