@@ -2,7 +2,6 @@ package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.application.file.FileUploader;
@@ -22,7 +21,6 @@ import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.post.PostException;
-import dev.tripdraw.exception.trip.TripException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,8 +141,7 @@ public class PostService {
     }
 
     private Trip findValidatedTripById(Long tripId, Member member) {
-        Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+        Trip trip = tripRepository.getById(tripId);
         trip.validateAuthorization(member);
         return trip;
     }

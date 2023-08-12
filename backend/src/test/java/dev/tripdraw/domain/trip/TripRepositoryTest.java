@@ -1,11 +1,15 @@
 package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
+import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.exception.trip.TripException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -68,5 +72,28 @@ class TripRepositoryTest {
 
         // then
         assertThat(tripRepository.findById(trip.id())).isEmpty();
+    }
+
+    @Test
+    void 여행_ID로_여행을_조회한다() {
+        // given
+        Trip trip = tripRepository.save(new Trip(TripName.from("제주도 여행"), member));
+
+        // when
+        Trip foundTrip = tripRepository.getById(trip.id());
+
+        // then
+        assertThat(foundTrip).isEqualTo(trip);
+    }
+
+    @Test
+    void 여행_ID로_여행을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long tripId = MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> tripRepository.getById(tripId))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.getMessage());
     }
 }
