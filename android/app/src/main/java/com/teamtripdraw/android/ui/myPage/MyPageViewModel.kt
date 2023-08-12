@@ -62,6 +62,15 @@ class MyPageViewModel(
     }
 
     fun unsubscribe() {
+        viewModelScope.launch {
+            authRepository.unsubscribe()
+                .onSuccess {
+                    _unsubscribeSuccessEvent.value = Event(true)
+                }
+                .onFailure {
+                    // todo 로그전략 수립후 로그 찍기
+                }
+        }
     }
 
     fun logout() {
