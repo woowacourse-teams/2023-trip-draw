@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class AuthTokenManager {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private Long expirationTime;
+    private final Long expirationTime;
 
     public AuthTokenManager(JwtTokenProvider jwtTokenProvider, @Value("${jwt.expiration-time}") Long expirationTime) {
         this.jwtTokenProvider = jwtTokenProvider;

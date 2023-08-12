@@ -1,6 +1,7 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.exception.member.MemberExceptionType.DUPLICATE_NICKNAME;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -85,5 +86,17 @@ class AuthServiceTest {
         assertThatThrownBy(() -> authService.register(registerRequest))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void 신규_회원의_닉네임을_등록할_때_이미_존재하는_닉네임이면_예외가_발생한다() {
+        // given
+        memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, "oauth.kakao.token");
+
+        // expect
+        assertThatThrownBy(() -> authService.register(registerRequest))
+                .isInstanceOf(MemberException.class)
+                .hasMessage(DUPLICATE_NICKNAME.getMessage());
     }
 }

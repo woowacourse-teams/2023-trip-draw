@@ -7,6 +7,7 @@ import dev.tripdraw.dto.auth.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +40,7 @@ public class AuthController {
             description = "닉네임 등록 성공."
     )
     @PostMapping("/oauth/register")
-    public ResponseEntity<OauthResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<OauthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         OauthResponse oauthResponse = authService.register(registerRequest);
         return ResponseEntity.ok(oauthResponse);
     }
