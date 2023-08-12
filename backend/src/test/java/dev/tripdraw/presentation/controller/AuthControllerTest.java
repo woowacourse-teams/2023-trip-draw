@@ -3,6 +3,7 @@ package dev.tripdraw.presentation.controller;
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -137,12 +138,26 @@ class AuthControllerTest extends ControllerTest {
         Member member = memberRepository.save(new Member("중복닉네임", "kakaoId", KAKAO));
         RegisterRequest registerRequest = new RegisterRequest(member.nickname(), KAKAO, "oauth.kakao.token");
 
-        // when
+        // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .body(registerRequest)
                 .when().post("/oauth/register")
                 .then().log().all()
                 .statusCode(CONFLICT.value());
+    }
+
+    @Test
+    void 신규_회원의_닉네임을_등록할_때_닉네임에_공백이_있으면_예외가_발생한다() {
+        // given
+        RegisterRequest registerRequest = new RegisterRequest("공  백", KAKAO, "oauth.kakao.token");
+
+        // expect
+        RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .body(registerRequest)
+                .when().post("/oauth/register")
+                .then().log().all()
+                .statusCode(BAD_REQUEST.value());
     }
 }
