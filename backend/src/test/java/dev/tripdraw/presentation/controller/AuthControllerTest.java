@@ -134,7 +134,7 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void 신규_회원의_닉네임을_등록할_때_이미_존재하는_닉네임이면_예외가_발생한다() {
         // given
-        Member member = memberRepository.save(new Member("중복된 닉네임", "kakaoId", KAKAO));
+        Member member = memberRepository.save(new Member("중복닉네임", "kakaoId", KAKAO));
         RegisterRequest registerRequest = new RegisterRequest(member.nickname(), KAKAO, "oauth.kakao.token");
 
         // when
