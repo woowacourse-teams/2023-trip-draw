@@ -1,5 +1,7 @@
 package com.teamtripdraw.android.ui.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -119,5 +121,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onPause() {
         loginViewModel.resetKakaoLoginEvent()
         super.onPause()
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(context, LoginActivity::class.java)
     }
 }

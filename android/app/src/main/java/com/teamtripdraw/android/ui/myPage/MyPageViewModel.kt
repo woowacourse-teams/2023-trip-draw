@@ -5,10 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.BuildConfig
-import com.teamtripdraw.android.support.framework.presentation.event.Event
+import com.teamtripdraw.android.domain.repository.AuthRepository
+import com.teamtripdraw.android.domain.repository.TripRepository
 import kotlinx.coroutines.launch
 
-class MyPageViewModel() : ViewModel() {
+class MyPageViewModel(
+    private val authRepository: AuthRepository,
+    private val tripRepository: TripRepository,
+) : ViewModel() {
 
     val VERSION_NAME: String = BuildConfig.VERSION_NAME
 
@@ -18,11 +22,13 @@ class MyPageViewModel() : ViewModel() {
     private val _openPrivacyPolicyEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val openPrivacyPolicyEvent: LiveData<Boolean> = _openPrivacyPolicyEvent
 
-    private val _logoutEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
-    val logoutEvent: LiveData<Event<Boolean>> = _logoutEvent
+    private val _logoutEvent: MutableLiveData<Boolean> = MutableLiveData(false)
+    val logoutEvent: LiveData<Boolean> = _logoutEvent
 
     private val _openAccountDeletionEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val openAccountDeletionEvent: LiveData<Boolean> = _openAccountDeletionEvent
+
+    val currentTripId: Long get() = tripRepository.getCurrentTripId()
 
     fun fetchNickname() {
         viewModelScope.launch {
@@ -30,11 +36,8 @@ class MyPageViewModel() : ViewModel() {
         }
     }
 
-    fun logout() {
-        viewModelScope.launch {
-            // todo : repositosy에서 로그아웃 진행
-            _logoutEvent.value = Event(true)
-        }
+    fun startLogoutEvent() {
+        _logoutEvent.value = true
     }
 
     fun openPrivacyPolicy() {
@@ -45,5 +48,13 @@ class MyPageViewModel() : ViewModel() {
     fun openAccountDeletion() {
         _openAccountDeletionEvent.value = true
         _openAccountDeletionEvent.value = false
+    }
+
+    fun logout() {
+        authRepository.logout()
+    }
+
+    fun clearCurrentTripId() {
+        tripRepository.deleteCurrentTripId()
     }
 }

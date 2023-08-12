@@ -32,4 +32,8 @@ class AuthRepositoryImpl(
 
     override fun getAutoLoginState(): Boolean =
         localUserIdentifyInfoDataSource.getIdentifyInfo().isNotBlank()
+
+    override fun logout() {
+        localUserIdentifyInfoDataSource.deleteIdentifyInfo()
+    }
 }

@@ -140,7 +140,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/td_white"
-            android:onClick="@{() -> myPageViewModel.logout()}"
+            android:onClick="@{() -> myPageViewModel.startLogoutEvent()}"
             android:padding="16dp"
             android:text="@string/btn_logout"
             android:textAppearance="@style/subtitle_1"
