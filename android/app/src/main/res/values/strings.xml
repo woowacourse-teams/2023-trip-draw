@@ -72,7 +72,7 @@
     <string name="tv_nickname_title">닉네임</string>
     <string name="btn_privacy_policy">개인정보 처리방침</string>
     <string name="btn_version_info">버전정보</string>
-    <string name="btn_sign_out">로그아웃</string>
+    <string name="btn_logout">로그아웃</string>
     <string name="btn_account_deletion">회원탈퇴</string>
 
     <!-- AccountDeletion -->

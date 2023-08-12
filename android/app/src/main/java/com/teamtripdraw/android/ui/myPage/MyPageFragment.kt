@@ -30,7 +30,7 @@ class MyPageFragment : Fragment() {
         initNickname()
         initOpenPrivacyPolicyObserve()
         initSignOutObserve()
-        initAcountDeletionObserve()
+        initAccountDeletionObserve()
 
         return binding.root
     }
@@ -40,14 +40,13 @@ class MyPageFragment : Fragment() {
     }
 
     private fun initOpenPrivacyPolicyObserve() {
-        viewModel.openPrivacyPolicyEvent.observe(
-            viewLifecycleOwner,
-            EventObserver { if (it) startActivity(PrivacyPolicy.getIntent(requireContext())) },
-        )
+        viewModel.openPrivacyPolicyEvent.observe(viewLifecycleOwner) {
+            if (it) startActivity(PrivacyPolicy.getIntent(requireContext()))
+        }
     }
 
     private fun initSignOutObserve() {
-        viewModel.signOutEvent.observe(
+        viewModel.logoutEvent.observe(
             viewLifecycleOwner,
             EventObserver {
                 // todo : 화면을 종료시키고, 로그인 화면으로 전환
@@ -55,13 +54,10 @@ class MyPageFragment : Fragment() {
         )
     }
 
-    private fun initAcountDeletionObserve() {
-        viewModel.openAccountDeletionEvent.observe(
-            viewLifecycleOwner,
-            EventObserver {
-                if (it) startActivity(AccountDeletionActivity.getIntent(requireContext()))
-            },
-        )
+    private fun initAccountDeletionObserve() {
+        viewModel.openAccountDeletionEvent.observe(viewLifecycleOwner) {
+            if (it) startActivity(AccountDeletionActivity.getIntent(requireContext()))
+        }
     }
 
     override fun onDestroy() {
