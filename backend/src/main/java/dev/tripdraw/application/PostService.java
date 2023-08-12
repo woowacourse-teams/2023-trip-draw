@@ -1,9 +1,6 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
-import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
-import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
 import dev.tripdraw.application.file.FileUploader;
 import dev.tripdraw.domain.file.FileType;
@@ -22,8 +19,6 @@ import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
-import dev.tripdraw.exception.post.PostException;
-import dev.tripdraw.exception.trip.TripException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,7 +78,7 @@ public class PostService {
     }
 
     public PostResponse read(LoginUser loginUser, Long postId) {
-        Post post = findPostById(postId);
+        Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
         return PostResponse.from(post);
@@ -100,7 +95,7 @@ public class PostService {
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
-        Post post = findPostById(postId);
+        Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
 
@@ -110,7 +105,7 @@ public class PostService {
     }
 
     public void delete(LoginUser loginUser, Long postId) {
-        Post post = findPostById(postId);
+        Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
 
@@ -129,11 +124,6 @@ public class PostService {
         Trip trip = tripRepository.getById(tripId);
         trip.validateAuthorization(member);
         return trip;
-    }
-
-    private Post findPostById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
 
     private Post registerFileToPost(MultipartFile file, Post post) {

@@ -110,11 +110,11 @@ class TripRepositoryTest {
     @Test
     void 여행_ID로_여행을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
         // given
-        Long tripId = MIN_VALUE;
+        Long wrongId = MIN_VALUE;
 
         // expect
-        assertThatThrownBy(() -> tripRepository.getById(tripId))
+        assertThatThrownBy(() -> tripRepository.getById(wrongId))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_NOT_FOUND.getMessage());
+                .hasMessage(TRIP_NOT_FOUND.message());
     }
 }
