@@ -1,18 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.myPage.MyPageFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_my_page"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="마이페이지 추후 개발"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+
+        <variable
+            name="myPageViewModel"
+            type="com.teamtripdraw.android.ui.myPage.MyPageViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/td_light_gray"
+        tools:context=".ui.myPage.MyPageFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_my_page"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/td_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:logo="@drawable/ic_toolbar_logo" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_nickname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/td_white"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_my_page">
+
+            <TextView
+                android:id="@+id/tv_my_page_nickname_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_nickname_title"
+                android:textAppearance="@style/subtitle_1"
+                android:textColor="@color/td_dark_gray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{myPageViewModel.nickname}"
+                android:textAppearance="@style/title_2M"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_page_nickname_title"
+                tools:text="통순후추" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_nickname_layout"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_nickname" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_privacy_policy"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_nickname_layout" />
+
+        <TextView
+            android:id="@+id/btn_privacy_policy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/td_white"
+            android:onClick="@{() -> myPageViewModel.openPrivacyPolicy()}"
+            android:padding="16dp"
+            android:text="@string/btn_privacy_policy"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_privacy_policy" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_privacy_policy_version_info"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_privacy_policy" />
+
+        <TextView
+            android:id="@+id/btn_version_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/td_white"
+            android:padding="16dp"
+            android:text="@string/btn_version_info"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_privacy_policy_version_info" />
+
+        <TextView
+            android:id="@+id/tv_version_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@{myPageViewModel.VERSION_NAME}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintBottom_toBottomOf="@id/btn_version_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_version_info"
+            tools:text="1.0.0" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_version_info_logout"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_version_info" />
+
+        <TextView
+            android:id="@+id/btn_logout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/td_white"
+            android:onClick="@{() -> myPageViewModel.logout()}"
+            android:padding="16dp"
+            android:text="@string/btn_logout"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_version_info_logout" />
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_logout"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_logout" />
+
+        <TextView
+            android:id="@+id/btn_account_deletion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:onClick="@{() -> myPageViewModel.openAccountDeletion()}"
+            android:text="@string/btn_account_deletion"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
