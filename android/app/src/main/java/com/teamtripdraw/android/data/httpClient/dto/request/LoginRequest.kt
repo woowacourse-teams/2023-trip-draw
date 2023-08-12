@@ -4,11 +4,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class NicknameSetUpRequest(
-    @Json(name = "nickname")
-    val nickname: String,
+data class LoginRequest(
+    @Json(name = "oauthType")
+    val oauthType: String,
     @Json(name = "oauthToken")
     val oauthToken: String,
-    @Json(name = "oauthType")
-    val oauthType: String
 )

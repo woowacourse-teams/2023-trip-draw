@@ -39,9 +39,18 @@ android {
 
         buildConfigField(
             "String",
+            "KAKAO_NATIVE_APP_KEY",
+            localProperties.getProperty("KAKAO_NATIVE_APP_KEY"),
+        )
+
+        buildConfigField(
+            "String",
             "ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS",
             localProperties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS"),
         )
+
+        manifestPlaceholders["NATIVE_APP_KEY"] =
+            localProperties.getProperty("KAKAO_NATIVE_APP_KEY_NO_QUOTES")
 
         manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
             localProperties.getProperty("NAVER_MAP_CLIENT_ID")
@@ -141,4 +150,7 @@ dependencies {
 
     // Stfalcon
     implementation(libs.stfalcon)
+
+    // kakaoLogin
+    implementation(libs.kakaoUser)
 }

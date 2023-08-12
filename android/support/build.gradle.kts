@@ -54,4 +54,7 @@ dependencies {
 
     // NaverMap
     implementation(libs.bundles.naverMap)
+
+    // kakaoLogin
+    implementation(libs.kakaoUser)
 }

@@ -5,9 +5,10 @@ import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.DeletePointService
 import com.teamtripdraw.android.data.httpClient.service.DeleteTripService
 import com.teamtripdraw.android.data.httpClient.service.GetAllTripsService
-import com.teamtripdraw.android.data.httpClient.service.GetNicknameService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
 import com.teamtripdraw.android.data.httpClient.service.GetTripInfoService
+import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
+import com.teamtripdraw.android.data.httpClient.service.LoginService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
@@ -15,8 +16,8 @@ import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
 class ServiceContainer(retrofitContainer: RetrofitContainer) {
     val nicknameSetupService: NicknameSetupService =
         retrofitContainer.tripDrawRetrofit.create(NicknameSetupService::class.java)
-    val getNicknameService: GetNicknameService =
-        retrofitContainer.tripDrawRetrofit.create(GetNicknameService::class.java)
+    val getNicknameService: GetUserInfoService =
+        retrofitContainer.tripDrawRetrofit.create(GetUserInfoService::class.java)
     val createTripService: CreateTripService =
         retrofitContainer.tripDrawRetrofit.create(CreateTripService::class.java)
     val postService: PostService =
@@ -35,4 +36,6 @@ class ServiceContainer(retrofitContainer: RetrofitContainer) {
         retrofitContainer.tripDrawRetrofit.create(GetAllTripsService::class.java)
     val deleteTripService: DeleteTripService =
         retrofitContainer.tripDrawRetrofit.create(DeleteTripService::class.java)
+    val loginService: LoginService =
+        retrofitContainer.tripDrawRetrofit.create(LoginService::class.java)
 }
