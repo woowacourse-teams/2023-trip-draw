@@ -65,8 +65,10 @@
     <string name="tv_dialog_util_cancel">취소</string>
     <string name="tv_content_delete_check">삭제하시겠습니까?</string>
     <string name="tv_content_save_check">저장하시겠습니까?</string>
+    <string name="tv_content_logout_check">로그아웃하시겠습니까?</string>
     <string name="tv_confirm_delete_check">삭제</string>
     <string name="tv_confirm_save_check">저장</string>
+    <string name="tv_confirm_logout_check">로그아웃</string>
 
     <!-- MyPage -->
     <string name="tv_nickname_title">닉네임</string>
