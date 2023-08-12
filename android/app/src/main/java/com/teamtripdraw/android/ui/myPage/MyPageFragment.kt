@@ -88,7 +88,6 @@ class MyPageFragment : Fragment() {
 
     private fun unsubscribeSuccessEventListener(event: Boolean) {
         if (event) {
-            viewModel.logout()
             finishTravelIfInProgress()
             navigateToLoginActivity()
         }
