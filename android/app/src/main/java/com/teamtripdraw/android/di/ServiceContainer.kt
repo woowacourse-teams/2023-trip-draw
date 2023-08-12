@@ -12,6 +12,8 @@ import com.teamtripdraw.android.data.httpClient.service.LoginService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
+import com.teamtripdraw.android.data.httpClient.service.UnsubscribeService
+import retrofit2.create
 
 class ServiceContainer(retrofitContainer: RetrofitContainer) {
     val nicknameSetupService: NicknameSetupService =
@@ -38,4 +40,6 @@ class ServiceContainer(retrofitContainer: RetrofitContainer) {
         retrofitContainer.tripDrawRetrofit.create(DeleteTripService::class.java)
     val loginService: LoginService =
         retrofitContainer.tripDrawRetrofit.create(LoginService::class.java)
+    val unsubscribeService: UnsubscribeService =
+        retrofitContainer.tripDrawRetrofit.create(UnsubscribeService::class.java)
 }
