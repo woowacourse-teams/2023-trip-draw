@@ -28,11 +28,26 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        autoLogin()
+        initObserver()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
         binding.loginViewModel = loginViewModel
         initSocialLoginMangers()
-        initObserver()
+    }
+
+    private fun autoLogin() {
+        loginViewModel.fetchAutoLoginState()
+    }
+
+    private fun initAutoLoginEventObserver() {
+        loginViewModel.autoLoginEvent.observe(this, EventObserver(this::autoLoginEventListener))
+    }
+
+    private fun autoLoginEventListener(event: Boolean) {
+        if (event) {
+            loginViewModel.fetchUserHasNickname()
+        }
     }
 
     private fun initObserver() {
@@ -40,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
         initExistedUserEventObserver()
         initNewUserEventObserver()
         initNicknameExistsEventObserver()
+        initAutoLoginEventObserver()
     }
 
     private fun initSocialLoginMangers() {

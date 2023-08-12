@@ -29,4 +29,7 @@ class AuthRepositoryImpl(
             .onSuccess {
                 if (it.isNotBlank()) localUserIdentifyInfoDataSource.setIdentifyInfo(it)
             }.map { it.isNotBlank() }
+
+    override fun getAutoLoginState(): Boolean =
+        localUserIdentifyInfoDataSource.getIdentifyInfo().isNotBlank()
 }

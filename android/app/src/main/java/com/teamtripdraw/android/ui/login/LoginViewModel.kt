@@ -27,6 +27,9 @@ class LoginViewModel(
     private val _nicknameExistsEvent = MutableLiveData<Event<Boolean>>()
     val nicknameExistsEvent: LiveData<Event<Boolean>> = _nicknameExistsEvent
 
+    private val _autoLoginEvent = MutableLiveData<Event<Boolean>>()
+    val autoLoginEvent: LiveData<Event<Boolean>> = _autoLoginEvent
+
     fun startKakaoLogin() {
         _kakaoLoginEvent.value = true
     }
@@ -60,5 +63,9 @@ class LoginViewModel(
                     // todo 로그전략 수립후 로그 작성
                 }
         }
+    }
+
+    fun fetchAutoLoginState() {
+        _autoLoginEvent.value = Event(authRepository.getAutoLoginState())
     }
 }
