@@ -91,11 +91,13 @@ class LoginActivity : AppCompatActivity() {
     private fun moveToMainActivity() {
         val intent = MainActivity.getIntent(this)
         startActivity(intent)
+        finish()
     }
 
     private fun moveToNicknameSetupActivity(loginInfo: LoginInfo) {
         val intent = NicknameSetupActivity.getIntent(this, loginInfo.toPresentation())
         startActivity(intent)
+        finish()
     }
 
     override fun onPause() {
