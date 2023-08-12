@@ -7,4 +7,5 @@ interface AuthRepository {
     suspend fun setNickname(nickname: String, loginInfo: LoginInfo): Result<Unit>
     suspend fun getUserInfo(): Result<UserInfo>
     suspend fun login(loginInfo: LoginInfo): Result<Boolean>
+    fun getAutoLoginState(): Boolean
 }
