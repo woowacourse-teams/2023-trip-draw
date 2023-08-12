@@ -33,12 +33,16 @@ class MyPageFragment : Fragment() {
         binding.myPageViewModel = viewModel
 
         initNickname()
+        initObserver()
+
+        return binding.root
+    }
+
+    private fun initObserver(){
         initOpenPrivacyPolicyObserver()
         initLogOutEventObserver()
         initUnsubscribeEventObserver()
         initUnsubscribeSuccessEventObserver()
-
-        return binding.root
     }
 
     private fun initNickname() {
