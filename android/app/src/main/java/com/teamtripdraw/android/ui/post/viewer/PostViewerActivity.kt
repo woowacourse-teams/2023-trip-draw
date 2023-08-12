@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -29,9 +28,14 @@ class PostViewerActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_viewer)
         binding.lifecycleOwner = this
 
+        bindViewModel()
         initTripId()
         initObserve()
         setUpView()
+    }
+
+    private fun bindViewModel() {
+        binding.postViewerViewModel = viewModel
     }
 
     private fun initTripId() {
@@ -41,10 +45,7 @@ class PostViewerActivity : AppCompatActivity() {
 
     private fun initObserve() {
         viewModel.posts.observe(this) {
-            if (it.isNotEmpty()) {
-                binding.tvPostViewerNoPost.visibility = View.GONE
-                adapter.submitList(it)
-            }
+            adapter.submitList(it)
         }
 
         viewModel.openPostDetailEvent.observe(

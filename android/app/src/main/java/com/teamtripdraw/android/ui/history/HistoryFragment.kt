@@ -27,10 +27,16 @@ class HistoryFragment : Fragment() {
     ): View {
         _binding = FragmentHistoryBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
+
+        bindViewModel()
         setAdapter()
         initObserve()
 
         return binding.root
+    }
+
+    private fun bindViewModel() {
+        binding.historyViewModel = viewModel
     }
 
     private fun setAdapter() {
@@ -45,10 +51,7 @@ class HistoryFragment : Fragment() {
 
     private fun initPreviewTripsObserve() {
         viewModel.previewTrips.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                binding.tvHistoryNoTrip.visibility = View.GONE
-                historyAdapter.submitList(it)
-            }
+            historyAdapter.submitList(it)
         }
     }
 

@@ -20,13 +20,19 @@ class HistoryViewModel(
     val previewTrips: LiveData<List<UiPreviewTrip>> =
         Transformations.map(_previewTrips) { trip -> trip.map { it.toPresentation() } }
 
+    private val _noTripMessageEvent = MutableLiveData<Boolean>()
+    val noTripMessageEvent: LiveData<Boolean> = _noTripMessageEvent
+
     private val _previewTripOpenEvent = MutableLiveData<Event<UiPreviewTrip>>()
     val previewTripOpenEvent: LiveData<Event<UiPreviewTrip>> = _previewTripOpenEvent
 
     fun getPreviewTrips() {
         viewModelScope.launch {
             tripRepository.getAllTrips()
-                .onSuccess { _previewTrips.value = it }
+                .onSuccess {
+                    _previewTrips.value = it
+                    _noTripMessageEvent.value = it.isEmpty()
+                }
                 .onFailure { }
         }
     }

@@ -21,6 +21,9 @@ class PostViewerViewModel(
     private val _posts: MutableLiveData<List<UiPostItem>> = MutableLiveData()
     val posts: LiveData<List<UiPostItem>> = _posts
 
+    private val _noPostMessageEvent = MutableLiveData<Boolean>()
+    val noPostMessageEvent: LiveData<Boolean> = _noPostMessageEvent
+
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
 
@@ -36,6 +39,7 @@ class PostViewerViewModel(
             postRepository.getAllPosts(tripId)
                 .onSuccess { posts ->
                     _posts.value = posts.map { post -> post.toPresentation() }
+                    _noPostMessageEvent.value = posts.isEmpty()
                 }
                 .onFailure {
                     _postErrorEvent.value = Event(true)

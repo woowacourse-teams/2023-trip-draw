@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="postViewerViewModel"
+            type="com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel" />
+
+        <variable
             name="onBackClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
@@ -51,10 +55,12 @@
             android:text="@string/tv_post_viewer_no_post"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_dark_gray"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_post_viewer" />
+            app:layout_constraintTop_toBottomOf="@id/tb_post_viewer"
+            app:setMessageVisibility="@{postViewerViewModel.noPostMessageEvent}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_post_viewer"
