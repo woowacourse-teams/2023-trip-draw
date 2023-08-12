@@ -40,6 +40,7 @@
     <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
     <string name="tv_post_viewer_toolbar_title">감상 목록</string>
     <string name="post_viewer_error_description">오류가 발생했습니다</string>
+    <string name="tv_post_viewer_no_post">아직 감상이 기록되지 않았어요.\n 지금 감상을 남겨보세요.</string>
 
     <!-- PostWritingActivity -->
     <string name="page_name">감상 남기기</string>
@@ -79,7 +80,7 @@
     <string name="tv_account_deletion_page_title">회원 탈퇴</string>
     <string name="tv_account_deletion_description">지금 트립 드로우를 탈퇴하면, \n여행중인 정보, 여행 기록, 감상 기록 등이 모두 사라집니다. \n또한, 사라진 정보는 복구가 불가능합니다. \n\n위 유의사항을 모두 확인하였고, 탈퇴를 진행하길 원하신다면 아래의 버튼을 클릭해주세요.</string>
     <string name="btn_account_deletion_complete">트립 드로우 탈퇴</string>
-  
+
     <!-- LoginActivity -->
     <string name="tv_login_sign_in_policy_explain">로그인 시&#160;</string>
     <string name="tv_login_sign_in_policy"><u>이용약관</u>과&#160;</string>
