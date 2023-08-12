@@ -10,6 +10,7 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostDetailBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
+import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 import com.teamtripdraw.android.ui.post.writing.WritingMode
@@ -28,7 +29,8 @@ class PostDetailActivity : AppCompatActivity() {
 
         initIntentData()
         setUpView()
-        initPostDeletedObserve()
+        initOpenDeleteDialogObserve()
+        initDeleteCompleteObserve()
         initEditPostObserve()
     }
 
@@ -49,12 +51,22 @@ class PostDetailActivity : AppCompatActivity() {
         binding.onBackClick = { finish() }
     }
 
-    private fun initPostDeletedObserve() {
-        viewModel.postDeletedEvent.observe(
+    private fun initOpenDeleteDialogObserve() {
+        viewModel.openDeleteDialogEvent.observe(
             this,
-            EventObserver { finish() },
+            EventObserver(this@PostDetailActivity::showDeleteDialog),
         )
     }
+
+    private fun showDeleteDialog(isClick: Boolean) {
+        if (isClick) {
+            DialogUtil(DialogUtil.DELETE_CHECK) { viewModel.deletePost() }
+                .show(supportFragmentManager, this.javaClass.name)
+        }
+    }
+
+    private fun initDeleteCompleteObserve() =
+        viewModel.postDeleteCompletedEvent.observe(this) { if (it) finish() }
 
     private fun initEditPostObserve() {
         viewModel.editEvent.observe(

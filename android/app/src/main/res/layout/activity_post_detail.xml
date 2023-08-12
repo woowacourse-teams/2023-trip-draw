@@ -41,7 +41,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_default"
                 android:contentDescription="@string/btn_delete_description"
-                android:onClick="@{()->postDetailViewModel.deletePost()}"
+                android:onClick="@{()->postDetailViewModel.openDeleteDialog()}"
                 android:src="@drawable/ic_delete" />
 
             <ImageView
