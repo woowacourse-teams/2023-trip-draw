@@ -10,7 +10,7 @@ import com.teamtripdraw.android.databinding.FragmentMyPageBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.myPage.accountDeletion.AccountDeletionActivity
-import com.teamtripdraw.android.ui.policy.PrivacyPolicy
+import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 
 class MyPageFragment : Fragment() {
 
@@ -41,7 +41,7 @@ class MyPageFragment : Fragment() {
 
     private fun initOpenPrivacyPolicyObserve() {
         viewModel.openPrivacyPolicyEvent.observe(viewLifecycleOwner) {
-            if (it) startActivity(PrivacyPolicy.getIntent(requireContext()))
+            if (it) startActivity(PrivacyPolicyActivity.getIntent(requireContext()))
         }
     }
 
