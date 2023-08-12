@@ -1,8 +1,8 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.exception.member.MemberExceptionType.DUPLICATE_NICKNAME;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
@@ -93,10 +93,10 @@ class AuthServiceTest {
         // given
         memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, "oauth.kakao.token");
-        
+
         // expect
         assertThatThrownBy(() -> authService.register(registerRequest))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(NICKNAME_CONFLICT.getMessage());
+                .hasMessage(DUPLICATE_NICKNAME.getMessage());
     }
 }

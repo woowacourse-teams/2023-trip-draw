@@ -1,7 +1,7 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.exception.member.MemberExceptionType.DUPLICATE_NICKNAME;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-import static dev.tripdraw.exception.member.MemberExceptionType.NICKNAME_CONFLICT;
 
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.application.oauth.OauthClient;
@@ -59,16 +59,16 @@ public class AuthService {
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
 
         String nickname = registerRequest.nickname();
-        validateNicknameDuplication(nickname);
+        validateDuplicateNickname(nickname);
         member.changeNickname(nickname);
 
         String accessToken = authTokenManager.generate(member.id());
         return new OauthResponse(accessToken);
     }
 
-    private void validateNicknameDuplication(String nickname) {
+    private void validateDuplicateNickname(String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
-            throw new MemberException(NICKNAME_CONFLICT);
+            throw new MemberException(DUPLICATE_NICKNAME);
         }
     }
 }
