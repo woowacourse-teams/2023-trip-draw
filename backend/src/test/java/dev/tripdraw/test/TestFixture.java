@@ -16,7 +16,7 @@ public class TestFixture {
         return new Member(1L, "통후추", "", OauthType.KAKAO);
     }
 
-    public static Point 위치_정보() {
+    public static Point 위치정보() {
         return new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
     }
 
@@ -25,6 +25,6 @@ public class TestFixture {
     }
 
     public static Post 감상() {
-        return new Post("감상 제목", 위치_정보(), "주소", "감상", 사용자(), 1L);
+        return new Post("감상 제목", 위치정보(), "주소", "감상", 사용자(), 1L);
     }
 }

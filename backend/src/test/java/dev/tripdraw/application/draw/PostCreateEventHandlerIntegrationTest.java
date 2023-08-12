@@ -52,9 +52,7 @@ public class PostCreateEventHandlerIntegrationTest {
                 .willReturn(감상());
 
         // when
-        transactionTemplate.executeWithoutResult(action -> {
-            applicationEventPublisher.publishEvent(postCreateEvent);
-        });
+        transactionTemplate.executeWithoutResult(action -> applicationEventPublisher.publishEvent(postCreateEvent));
 
         // then
         then(routeImageGenerator)
