@@ -153,4 +153,7 @@ dependencies {
 
     // kakaoLogin
     implementation(libs.kakaoUser)
+
+    // splashScreen
+    implementation(libs.splashScreen)
 }
