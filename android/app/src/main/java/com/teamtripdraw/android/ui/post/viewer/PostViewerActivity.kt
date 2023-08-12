@@ -31,7 +31,8 @@ class PostViewerActivity : AppCompatActivity() {
         bindViewModel()
         initTripId()
         initObserve()
-        setUpView()
+        setAdapter()
+        setClickBack()
     }
 
     private fun bindViewModel() {
@@ -44,30 +45,33 @@ class PostViewerActivity : AppCompatActivity() {
     }
 
     private fun initObserve() {
+        initPostsObserve()
+        initOpenPostDetailEventObserve()
+        initPostErrorEventObserve()
+    }
+
+    private fun initPostsObserve() {
         viewModel.posts.observe(this) {
             adapter.submitList(it)
         }
+    }
 
+    private fun initOpenPostDetailEventObserve() {
         viewModel.openPostDetailEvent.observe(
             this,
             EventObserver(this@PostViewerActivity::onPostClick),
         )
-
-        viewModel.postErrorEvent.observe(
-            this,
-            EventObserver(this@PostViewerActivity::onErrorOccurred),
-        )
-    }
-
-    private fun setUpView() {
-        adapter = PostViewerAdapter(viewModel)
-        binding.rvPostViewer.adapter = adapter
-        binding.onBackClick = { finish() }
-        viewModel.getPosts()
     }
 
     private fun onPostClick(postId: Long) {
         startActivity(PostDetailActivity.getIntent(this, postId))
+    }
+
+    private fun initPostErrorEventObserve() {
+        viewModel.postErrorEvent.observe(
+            this,
+            EventObserver(this@PostViewerActivity::onErrorOccurred),
+        )
     }
 
     private fun onErrorOccurred(isErrorOccurred: Boolean) {
@@ -80,6 +84,22 @@ class PostViewerActivity : AppCompatActivity() {
             ).show()
         }
     }
+
+    private fun setAdapter() {
+        adapter = PostViewerAdapter(viewModel)
+        binding.rvPostViewer.adapter = adapter
+    }
+
+    private fun setClickBack() {
+        binding.onBackClick = { finish() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getPosts()
+    }
+
+    private fun getPosts() = viewModel.getPosts()
 
     companion object {
         private const val POST_VIEWER_ERROR = "감상 목록을 불러오는데 오류가 발생했습니다."
