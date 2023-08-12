@@ -1,6 +1,7 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
@@ -125,8 +126,7 @@ public class PostService {
     }
 
     private Trip findValidatedTripById(Long tripId, Member member) {
-        Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+        Trip trip = tripRepository.getById(tripId);
         trip.validateAuthorization(member);
         return trip;
     }
