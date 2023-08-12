@@ -83,6 +83,9 @@ firebaseCrashlyticsPlugIn = "2.9.8"
 # kakaoLogin
 kakaoUser = "2.15.0"
 
+# splashScreen
+splashScreen = "1.0.0-alpha01"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -159,6 +162,9 @@ stfalcon = { module = "com.github.stfalcon-studio:StfalconImageViewer", version.
 
 # kakaoLogin
 kakaoUser = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
+
+# splashScreen
+splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
