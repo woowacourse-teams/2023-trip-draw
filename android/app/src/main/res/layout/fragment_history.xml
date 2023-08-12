@@ -19,6 +19,19 @@
             android:layout_height="@dimen/toolbar_default"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_history_no_trip"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/tv_history_no_trip"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_history" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_trip_history"
             android:layout_width="0dp"

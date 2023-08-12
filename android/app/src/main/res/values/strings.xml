@@ -86,4 +86,7 @@
     <string name="tv_login_sign_in_personal_info"><u>개인정보 처리 방침</u>에&#160;</string>
     <string name="tv_login_sign_in_personal_info_explain">동의하게 됩니다.</string>
 
+    <!-- HistoryFragment -->
+    <string name="tv_history_no_trip">아직 여행이 기록되지 않았어요.\n 여행을 시작하여 새로운 추억을 만들어보세요.</string>
+
 </resources>

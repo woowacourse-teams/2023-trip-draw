@@ -45,7 +45,10 @@ class HistoryFragment : Fragment() {
 
     private fun initPreviewTripsObserve() {
         viewModel.previewTrips.observe(viewLifecycleOwner) {
-            historyAdapter.submitList(it)
+            if (it.isNotEmpty()) {
+                binding.tvHistoryNoTrip.visibility = View.GONE
+                historyAdapter.submitList(it)
+            }
         }
     }
 

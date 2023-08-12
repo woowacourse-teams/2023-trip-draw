@@ -60,8 +60,11 @@ class PostDetailActivity : AppCompatActivity() {
         viewModel.editEvent.observe(
             this,
             EventObserver {
-                val intent = PostWritingActivity.getIntent(this, viewModel.postId, WritingMode.EDIT)
-                startActivity(intent)
+                if (it) {
+                    val intent =
+                        PostWritingActivity.getIntent(this, viewModel.postId, WritingMode.EDIT)
+                    startActivity(intent)
+                }
             },
         )
     }
