@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentMyPageBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.login.LoginActivity
-import com.teamtripdraw.android.ui.myPage.accountDeletion.AccountDeletionActivity
 import com.teamtripdraw.android.ui.policy.PrivacyPolicy
 
 class MyPageFragment : Fragment() {
@@ -33,9 +33,10 @@ class MyPageFragment : Fragment() {
         binding.myPageViewModel = viewModel
 
         initNickname()
-        initOpenPrivacyPolicyObserve()
-        initLogOutEventObserve()
-        initAccountDeletionObserve()
+        initOpenPrivacyPolicyObserver()
+        initLogOutEventObserver()
+        initUnsubscribeEventObserver()
+        initUnsubscribeSuccessEventObserver()
 
         return binding.root
     }
@@ -44,13 +45,13 @@ class MyPageFragment : Fragment() {
         viewModel.fetchNickname()
     }
 
-    private fun initOpenPrivacyPolicyObserve() {
+    private fun initOpenPrivacyPolicyObserver() {
         viewModel.openPrivacyPolicyEvent.observe(viewLifecycleOwner) {
             if (it) startActivity(PrivacyPolicy.getIntent(requireContext()))
         }
     }
 
-    private fun initLogOutEventObserve() {
+    private fun initLogOutEventObserver() {
         viewModel.logoutEvent.observe(viewLifecycleOwner, this::logoutEventListener)
     }
 
@@ -59,21 +60,38 @@ class MyPageFragment : Fragment() {
             DialogUtil(DialogUtil.LOGOUT_CHECK) {
                 viewModel.logout()
                 finishTravelIfInProgress()
-                navigateToMainActivity()
+                navigateToLoginActivity()
             }.show(childFragmentManager, this.javaClass.name)
+            viewModel.resetLogoutEvent()
         }
     }
 
-    private fun initAccountDeletionObserve() {
-        viewModel.openAccountDeletionEvent.observe(viewLifecycleOwner) {
-            if (it) startActivity(AccountDeletionActivity.getIntent(requireContext()))
+    private fun initUnsubscribeEventObserver() {
+        viewModel.unsubscribeEvent.observe(viewLifecycleOwner, this::unsubscribeEventListener)
+    }
+
+    private fun unsubscribeEventListener(event: Boolean) {
+        if (event) {
+            DialogUtil(DialogUtil.UNSUBSCRIBE_CHECK) {
+                viewModel.unsubscribe()
+            }.show(childFragmentManager, this.javaClass.name)
+            viewModel.resetUnsubscribeEvent()
         }
     }
 
-    private fun navigateToMainActivity() {
-        val intent = LoginActivity.getIntent(requireContext())
-        startActivity(intent)
-        requireActivity().finish()
+    private fun initUnsubscribeSuccessEventObserver() {
+        viewModel.unsubscribeSuccessEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this::unsubscribeSuccessEventListener),
+        )
+    }
+
+    private fun unsubscribeSuccessEventListener(event: Boolean) {
+        if (event) {
+            viewModel.logout()
+            finishTravelIfInProgress()
+            navigateToLoginActivity()
+        }
     }
 
     private fun finishTravelIfInProgress() {
@@ -96,6 +114,12 @@ class MyPageFragment : Fragment() {
 
     private fun clearCurrentTripId() {
         viewModel.clearCurrentTripId()
+    }
+
+    private fun navigateToLoginActivity() {
+        val intent = LoginActivity.getIntent(requireContext())
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     override fun onDestroy() {

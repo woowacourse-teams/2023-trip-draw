@@ -12,7 +12,6 @@ import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedViewModel
 import com.teamtripdraw.android.ui.login.LoginViewModel
 import com.teamtripdraw.android.ui.myPage.MyPageViewModel
-import com.teamtripdraw.android.ui.myPage.accountDeletion.AccountDeletionViewModel
 import com.teamtripdraw.android.ui.post.detail.PostDetailViewModel
 import com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel
 import com.teamtripdraw.android.ui.post.writing.PostWritingViewModel
@@ -61,9 +60,7 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     MyPageViewModel(
                         repositoryContainer.authRepository,
                         repositoryContainer.tripRepository,
-                    ) // todo repository 추가 필요
-                isAssignableFrom(AccountDeletionViewModel::class.java) ->
-                    AccountDeletionViewModel() // todo repository 추가 필요
+                    )
                 isAssignableFrom(LoginViewModel::class.java) ->
                     LoginViewModel(repositoryContainer.authRepository)
                 else ->

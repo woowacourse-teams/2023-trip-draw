@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.BuildConfig
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
+import com.teamtripdraw.android.support.framework.presentation.event.Event
 import kotlinx.coroutines.launch
 
 class MyPageViewModel(
@@ -25,8 +26,11 @@ class MyPageViewModel(
     private val _logoutEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val logoutEvent: LiveData<Boolean> = _logoutEvent
 
-    private val _openAccountDeletionEvent: MutableLiveData<Boolean> = MutableLiveData(false)
-    val openAccountDeletionEvent: LiveData<Boolean> = _openAccountDeletionEvent
+    private val _unsubscribeEvent: MutableLiveData<Boolean> = MutableLiveData(false)
+    val unsubscribeEvent: LiveData<Boolean> = _unsubscribeEvent
+
+    private val _unsubscribeSuccessEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val unsubscribeSuccessEvent: LiveData<Event<Boolean>> = _unsubscribeSuccessEvent
 
     val currentTripId: Long get() = tripRepository.getCurrentTripId()
 
@@ -40,14 +44,24 @@ class MyPageViewModel(
         _logoutEvent.value = true
     }
 
+    fun resetLogoutEvent() {
+        _logoutEvent.value = false
+    }
+
     fun openPrivacyPolicy() {
         _openPrivacyPolicyEvent.value = true
         _openPrivacyPolicyEvent.value = false
     }
 
-    fun openAccountDeletion() {
-        _openAccountDeletionEvent.value = true
-        _openAccountDeletionEvent.value = false
+    fun startUnsubscribeEvent() {
+        _unsubscribeEvent.value = true
+    }
+
+    fun resetUnsubscribeEvent() {
+        _unsubscribeEvent.value = false
+    }
+
+    fun unsubscribe() {
     }
 
     fun logout() {
