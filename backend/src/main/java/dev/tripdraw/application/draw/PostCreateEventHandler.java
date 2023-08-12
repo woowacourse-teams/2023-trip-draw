@@ -1,5 +1,7 @@
 package dev.tripdraw.application.draw;
 
+import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
+
 import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.post.PostCreateEvent;
 import dev.tripdraw.domain.post.PostRepository;
@@ -8,7 +10,6 @@ import dev.tripdraw.domain.trip.TripRepository;
 import java.util.List;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
@@ -29,7 +30,7 @@ public class PostCreateEventHandler {
     }
 
     @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     public void handle(PostCreateEvent postCreateEvent) {
         Trip trip = tripRepository.getTripWithPoints(postCreateEvent.tripId());
         Post post = postRepository.getById(postCreateEvent.postId());

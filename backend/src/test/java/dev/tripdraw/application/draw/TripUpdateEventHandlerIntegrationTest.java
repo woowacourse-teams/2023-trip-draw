@@ -45,9 +45,7 @@ public class TripUpdateEventHandlerIntegrationTest {
                 .willReturn(여행());
 
         // when
-        transactionTemplate.executeWithoutResult(action -> {
-            applicationEventPublisher.publishEvent(tripUpdateEvent);
-        });
+        transactionTemplate.executeWithoutResult(action -> applicationEventPublisher.publishEvent(tripUpdateEvent));
 
         // then
         then(routeImageGenerator)

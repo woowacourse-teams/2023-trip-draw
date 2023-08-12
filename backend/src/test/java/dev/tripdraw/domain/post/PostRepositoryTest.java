@@ -75,7 +75,7 @@ class PostRepositoryTest {
     }
 
     @Test
-    void 입력받은_식별자에_대한_감상이_존재하지_않는다면_예외를_던진다() {
+    void 감상_ID에_대한_감상이_존재하지_않는다면_예외를_던진다() {
         // expect
         assertThatThrownBy(() -> postRepository.getById(1L))
                 .isInstanceOf(PostException.class)
