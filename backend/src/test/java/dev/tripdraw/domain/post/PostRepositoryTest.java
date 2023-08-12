@@ -1,7 +1,10 @@
 package dev.tripdraw.domain.post;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
+import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
@@ -9,6 +12,7 @@ import dev.tripdraw.domain.trip.Point;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripName;
 import dev.tripdraw.domain.trip.TripRepository;
+import dev.tripdraw.exception.post.PostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,5 +72,28 @@ class PostRepositoryTest {
 
         // then
         assertThat(postRepository.findById(post.id())).isEmpty();
+    }
+
+    @Test
+    void 감상_ID로_감상을_조회한다() {
+        // given
+        Post post = postRepository.save(new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, trip.id()));
+
+        // when
+        Post foundPost = postRepository.getById(post.id());
+
+        // then
+        assertThat(foundPost).isEqualTo(post);
+    }
+
+    @Test
+    void 감상_ID로_감상을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long wrongId = MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> postRepository.getById(wrongId))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUNT.getMessage());
     }
 }

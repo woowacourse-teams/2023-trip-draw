@@ -55,14 +55,14 @@ class MemberRepositoryTest {
         // then
         assertThat(foundMember).isEqualTo(member);
     }
-    
+
     @Test
     void 회원_ID로_회원을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
         // given
-        Long memberId = MIN_VALUE;
+        Long wrongId = MIN_VALUE;
 
         // expect
-        assertThatThrownBy(() -> memberRepository.getById(memberId))
+        assertThatThrownBy(() -> memberRepository.getById(wrongId))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }

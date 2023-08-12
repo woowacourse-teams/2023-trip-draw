@@ -1,7 +1,6 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
-import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.application.file.FileUploader;
@@ -20,7 +19,6 @@ import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
-import dev.tripdraw.exception.post.PostException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,7 +98,7 @@ public class PostService {
     }
 
     public PostResponse read(LoginUser loginUser, Long postId) {
-        Post post = findPostById(postId);
+        Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
         return PostResponse.from(post);
@@ -115,7 +113,7 @@ public class PostService {
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
-        Post post = findPostById(postId);
+        Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
 
@@ -125,7 +123,7 @@ public class PostService {
     }
 
     public void delete(LoginUser loginUser, Long postId) {
-        Post post = findPostById(postId);
+        Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
 
@@ -144,11 +142,6 @@ public class PostService {
         Trip trip = tripRepository.getById(tripId);
         trip.validateAuthorization(member);
         return trip;
-    }
-
-    private Post findPostById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(POST_NOT_FOUNT));
     }
 
     private Post registerFileToPost(MultipartFile file, Post post) {
