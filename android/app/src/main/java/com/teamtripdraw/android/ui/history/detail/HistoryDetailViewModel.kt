@@ -51,7 +51,7 @@ class HistoryDetailViewModel(
         }
     }
 
-    fun getPosts() {
+    fun fetchPosts() {
         viewModelScope.launch {
             postRepository.getAllPosts(tripId)
                 .onSuccess { posts ->

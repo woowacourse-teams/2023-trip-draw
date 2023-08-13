@@ -58,6 +58,6 @@ class PostDetailViewModelTest : DefaultViewModelTest() {
         sut.deletePost()
 
         // then
-        assertTrue(requireNotNull(sut.postDeletedEvent.value?.content))
+        assertTrue(requireNotNull(sut.postDeleteCompletedEvent.value))
     }
 }
