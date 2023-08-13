@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initObserver() {
         initKaKaoLoginEventObserver()
-        initOpenPersonalInfoEventObserver()
+        initOpenPrivacyPolicyEventObserver()
         initExistedUserEventObserver()
         initNewUserEventObserver()
         initNicknameExistsEventObserver()
@@ -78,8 +78,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun initOpenPersonalInfoEventObserver() {
-        loginViewModel.openPersonalInfoEvent.observe(this) {
+    private fun initOpenPrivacyPolicyEventObserver() {
+        loginViewModel.openPrivacyPolicyEvent.observe(this) {
             if (it) startActivity(PrivacyPolicyActivity.getIntent(this))
         }
     }
