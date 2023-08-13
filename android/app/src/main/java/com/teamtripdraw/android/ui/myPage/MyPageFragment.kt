@@ -12,10 +12,11 @@ import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
-import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.login.LoginActivity
+import com.teamtripdraw.android.ui.policy.OpenSourceLicenseActivity
+import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 
 class MyPageFragment : Fragment() {
 
@@ -38,7 +39,8 @@ class MyPageFragment : Fragment() {
         return binding.root
     }
 
-    private fun initObserver(){
+    private fun initObserver() {
+        initOpenOpenSourceLicenseObserver()
         initOpenPrivacyPolicyObserver()
         initLogOutEventObserver()
         initUnsubscribeEventObserver()
@@ -47,6 +49,12 @@ class MyPageFragment : Fragment() {
 
     private fun initNickname() {
         viewModel.fetchNickname()
+    }
+
+    private fun initOpenOpenSourceLicenseObserver() {
+        viewModel.openOpenSourceLicenseEvent.observe(viewLifecycleOwner) {
+            if (it) startActivity(OpenSourceLicenseActivity.getIntent(requireContext()))
+        }
     }
 
     private fun initOpenPrivacyPolicyObserver() {

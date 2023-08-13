@@ -16,6 +16,9 @@ class LoginViewModel(
     private val _kakaoLoginEvent = MutableLiveData<Boolean>(false)
     val kakaoLoginEvent: LiveData<Boolean> = _kakaoLoginEvent
 
+    private val _openPrivacyPolicyEvent = MutableLiveData<Boolean>(false)
+    val openPrivacyPolicyEvent: LiveData<Boolean> = _openPrivacyPolicyEvent
+
     private val _existedUserEvent = MutableLiveData<Event<LoginInfo>>()
     val existedUserEvent: LiveData<Event<LoginInfo>> = _existedUserEvent
 
@@ -36,6 +39,11 @@ class LoginViewModel(
 
     fun resetKakaoLoginEvent() {
         _kakaoLoginEvent.value = false
+    }
+
+    fun openPrivacyPolicy() {
+        _openPrivacyPolicyEvent.value = true
+        _openPrivacyPolicyEvent.value = false
     }
 
     fun login(platform: LoginPlatform, socialToken: String) {

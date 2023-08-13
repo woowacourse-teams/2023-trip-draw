@@ -17,6 +17,7 @@ import com.teamtripdraw.android.support.framework.presentation.loginManager.Soci
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 import com.teamtripdraw.android.ui.signUp.NicknameSetupActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -54,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initObserver() {
         initKaKaoLoginEventObserver()
+        initOpenPrivacyPolicyEventObserver()
         initExistedUserEventObserver()
         initNewUserEventObserver()
         initNicknameExistsEventObserver()
@@ -73,6 +75,12 @@ class LoginActivity : AppCompatActivity() {
             kakaoLoginManager.startLogin { socialToken ->
                 loginViewModel.login(LoginPlatform.KAKAO, socialToken)
             }
+        }
+    }
+
+    private fun initOpenPrivacyPolicyEventObserver() {
+        loginViewModel.openPrivacyPolicyEvent.observe(this) {
+            if (it) startActivity(PrivacyPolicyActivity.getIntent(this))
         }
     }
 

@@ -65,6 +65,7 @@
             android:id="@+id/tv_login_sign_in_personal_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> loginViewModel.openPrivacyPolicy()}"
             android:text="@string/tv_login_sign_in_personal_info"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_black"
