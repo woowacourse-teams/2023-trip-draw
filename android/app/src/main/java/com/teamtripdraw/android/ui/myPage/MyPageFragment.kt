@@ -12,10 +12,10 @@ import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.login.LoginActivity
-import com.teamtripdraw.android.ui.policy.PrivacyPolicy
 
 class MyPageFragment : Fragment() {
 
@@ -51,7 +51,7 @@ class MyPageFragment : Fragment() {
 
     private fun initOpenPrivacyPolicyObserver() {
         viewModel.openPrivacyPolicyEvent.observe(viewLifecycleOwner) {
-            if (it) startActivity(PrivacyPolicy.getIntent(requireContext()))
+            if (it) startActivity(PrivacyPolicyActivity.getIntent(requireContext()))
         }
     }
 
