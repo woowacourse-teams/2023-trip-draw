@@ -92,7 +92,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.policy.PrivacyPolicy"
+            android:name=".ui.policy.PrivacyPolicyActivity"
             android:exported="false" />
         <activity
             android:name=".ui.myPage.accountDeletion.AccountDeletionActivity"

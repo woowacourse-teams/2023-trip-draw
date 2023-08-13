@@ -8,4 +8,6 @@ interface AuthRepository {
     suspend fun getUserInfo(): Result<UserInfo>
     suspend fun login(loginInfo: LoginInfo): Result<Boolean>
     fun getAutoLoginState(): Boolean
+    fun logout()
+    suspend fun unsubscribe(): Result<Unit>
 }
