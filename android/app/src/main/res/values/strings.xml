@@ -40,6 +40,7 @@
     <string name="iv_post_thumbnail_description">감상 목록 썸네일</string>
     <string name="tv_post_viewer_toolbar_title">감상 목록</string>
     <string name="post_viewer_error_description">오류가 발생했습니다</string>
+    <string name="tv_post_viewer_no_post">아직 감상이 기록되지 않았어요.\n 지금 감상을 남겨보세요.</string>
 
     <!-- PostWritingActivity -->
     <string name="page_name">감상 남기기</string>
@@ -89,6 +90,9 @@
     <string name="tv_login_sign_in_policy"><u>이용약관</u>과&#160;</string>
     <string name="tv_login_sign_in_personal_info"><u>개인정보 처리 방침</u>에&#160;</string>
     <string name="tv_login_sign_in_personal_info_explain">동의하게 됩니다.</string>
+  
+    <!-- HistoryFragment -->
+    <string name="tv_history_no_trip">아직 여행이 기록되지 않았어요.\n 여행을 시작하여 새로운 추억을 만들어보세요.</string>
 
     <!-- PrivacyPolicy -->
     <string name="tv_privacy_policy_content">트립드로우는 사용자의 GPS 경로 및 위치, 사진, 동영상, 음성/문자 메모 등을 이용해 감상을 기록하고, 사용자의 여행 경로를 sns를 통해 손쉽게 공유할 수 있는 서비스를 제공합니다. 이 개인정보 처리방침은 트립드로우가 어떠한 개인정보들을 수집하고, 그 정보를 어떻게 사용하고 제공하는지 알려줍니다. \n\n\n개인정보 수집 항목 \n트립드로우는 서비스 제공을 위해 최소한의 개인정보를 수집하고 있습니다. 수집하는 개인정보는 사용자의 선택에 따라 달라질 수 있지만, 일반적으로 아래와 같은 정보들을 포함합니다. \n\n회원가입 시 \n타서비스 계정(카카오계정 등)을 이용하여 회원 가입을 할 경우 해당 계정의 유저아이디, 이름(닉네임)을 필수항목으로 수집합니다. \n\n서비스 이용 시\n단말기정보(모델명, OS정보, 언어 및 국가정보, 화면사이즈 등), IP주소, 쿠키, 방문일시, 위치정보, 부정이용기록, 서비스 이용 기록, 메타 데이터 등의 정보가 생성되어 수집될 수 있습니다. 메타 데이터에는 사용자가 콘텐츠에 추가한 키워드, 위치 정보, 기타 유사한 정보들이 포함될 수 있습니다. 구체적으로 서비스 이용 과정에서 이용자에 관한 정보를 자동화된 방법으로 생성하여 이를 수집하거나, 이용자 기기의 고유한 정보를 원래의 값을 확인하지 못하도록 안전하게 변환하여 수집합니다. 서비스 이용 과정에서 위치정보가 수집될 수 있으며, 트리플에서 제공하는 위치기반 서비스에 대해서는 ‘위치정보 이용약관’에서 자세하게 규정하고 있습니다. \n\n\n개인정보 수집 방법 \n개인정보를 수집하는 경우에는 반드시 사전에 사용자에게 해당 사실을 알리고 동의를 구하고 있습니다. 회원가입 및 서비스 이용 과정에서 개인정보 수집에 대해 동의를 하고 직접 정보를 입력하는 사용자에 한해 해당 개인정보를 수집합니다. \n\n\n개인정보 이용\n트립드로우는 회원관리, 서비스 개발·제공 및 향상, 안전한 인터넷 이용환경 구축 등의 목적으로만 개인정보를 이용합니다. 이용자 식별, 회원탈퇴 의사의 확인 등 회원관리를 위하여 개인정보를 이용합니다. 트립드로우는 아래와 같이 서비스 제공을 위해 필요한 최소한의 개인정보를 수집하고 있습니다. \n회원 식별/가입의사 확인, 본인/연령 확인, 부정이용 방지. \n신규 서비스 개발, 다양한 서비스 제공, 문의사항 또는 불만처리, 공지사항 전달 \n계정 도용 및 부정 이용 행위 등에 대한 방지 및 제재 \n서비스 이용 기록, 접속 빈도 및 서비스 이용에 대한 통계, 서비스 개선에 활용 \n\n\n개인정보 제공 \n트립드로우는 사용자의 별도의 동의가 있는 경우나 법령에 규정된 경우를 제외하고는 사용자의 개인정보를 제3자에게 제공하지 않습니다. 다만, 개인정보는 부정한 이용으로 인한 분쟁을 방지하기 위해 내부방침에 따라 보존한 다음 파기를 요청한 사용자에 한해 파기됩니다. \n\n\n사용자 및 법정대리인의 권리와 그 행사방법 \n사용자는 트립드로우에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수 있습니다. \n개인정보 열람 요구 \n오류 등이 있을 경우 정정 요구 \n삭제 요구 \n처리 정지 요구 \n\n\n개인정보 보유 및 파기 \n트립드로우는 법령에 따른 개인정보 보유, 이용기간 또는 사용자로부터 개인정보를 수집 시에 동의받은 개인정보 보유, 이용기간 내에서 개인정보를 처리, 보유합니다. 개인정보 처리 및 보유 기간은 다음과 같습니다. \n회원 가입 및 관리 : 탈퇴 요청 시 까지 \n관계 법령 위반에 따른 수사, 조사 등이 진행 중인 경우에는 해당 수사, 조사 종료 시 까지 \n\n사용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용목적이 달성되면 지체없이 파기하나, 사용자가 트립드로우의 회원 자격을 유지하고 있는 동안에는 제공받은 개인정보를 계속 보유합니다. 또한 아래와 같은 경우 그 즉시 개인정보를 파기합니다. \n사용자의 개인정보 파기 요청 \n일시적인 목적에 의해 수집한 개인정보의 경우, 그 이용 목적을 달성 시 \n서비스 탈퇴 요청 \n\n\n개인정보 보호책임자 \n트립드로우는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호 책임자를 지정하고 있습니다. \n성명 : 김수연 \n직책 : 개인개발자 \n문의 : tripdrawaos@gmail.com \n\n\n트립드로우의 개인 정보 보호 정책을 변경하기로 결정하는 경우, 아래의 개인 정보 보호 정책의 수정 날짜를 업데이트합니다. 이 정책은 2023년 8월 12일에 마지막으로 수정되었습니다.</string>
@@ -96,8 +100,6 @@
 
     <!-- OpenSourceLisense -->
     <string name="tv_open_source_license_title">오픈소스 라이선스</string>
-    <string name="tv_open_source_license_content">Android Parcelable \nhttps://developer.android.com/reference/kotlin/android/os/Parcelable \n\n\nGlide \nhttps://github.com/bumptech/glide \n\n\nGoogle Firebase for Android \nhttps://firebase.google.com/docs/android/setup \n\n\nKotlin \nhttps://github.com/JetBrains/kotlin \n\n\nKotlinx.coroutine \nhttps://github.com/Kotlin/kotlinx.coroutines \n\n\nMaterial-BottomNavigation \nhttps://m2.material.io/components/bottom-navigation/android \n\n\nMockk \nhttps://mockk.io/ \n\n\nSquare Moshi \nhttps://github.com/square/moshi \n\n\nSquare OkHttp \nhttps://github.com/square/okhttp \n\n\nSquare Retrofit \nhttps://github.com/square/retrofit
-</string>
-
+    <string name="tv_open_source_license_content">Android Parcelable \nhttps://developer.android.com/reference/kotlin/android/os/Parcelable \n\n\nGlide \nhttps://github.com/bumptech/glide \n\n\nGoogle Firebase for Android \nhttps://firebase.google.com/docs/android/setup \n\n\nKotlin \nhttps://github.com/JetBrains/kotlin \n\n\nKotlinx.coroutine \nhttps://github.com/Kotlin/kotlinx.coroutines \n\n\nMaterial-BottomNavigation \nhttps://m2.material.io/components/bottom-navigation/android \n\n\nMockk \nhttps://mockk.io/ \n\n\nSquare Moshi \nhttps://github.com/square/moshi \n\n\nSquare OkHttp \nhttps://github.com/square/okhttp \n\n\nSquare Retrofit \nhttps://github.com/square/retrofit</string>
 
 </resources>

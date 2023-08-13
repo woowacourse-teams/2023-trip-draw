@@ -46,7 +46,6 @@ class HistoryDetailActivity : AppCompatActivity() {
     private fun setAdapter() {
         adapter = HistoryDetailAdapter(viewModel)
         binding.rvTripHistoryDetail.adapter = adapter
-        viewModel.getPosts()
     }
 
     private fun setClickBack() {
@@ -145,6 +144,13 @@ class HistoryDetailActivity : AppCompatActivity() {
 
     private fun initDeleteCompleteObserve() =
         viewModel.deleteCompleteEvent.observe(this) { if (it) finish() }
+
+    override fun onResume() {
+        super.onResume()
+        fetchPosts()
+    }
+
+    private fun fetchPosts() = viewModel.fetchPosts()
 
     companion object {
         private const val TRIP_ITEM_KEY = "TRIP_ITEM_KEY"

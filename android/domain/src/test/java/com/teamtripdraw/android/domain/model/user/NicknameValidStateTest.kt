@@ -1,6 +1,5 @@
-package user
+package com.teamtripdraw.android.domain.model.user
 
-import com.teamtripdraw.android.domain.model.user.NicknameValidState
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

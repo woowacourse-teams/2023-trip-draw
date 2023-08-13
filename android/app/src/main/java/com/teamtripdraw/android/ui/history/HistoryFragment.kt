@@ -27,10 +27,16 @@ class HistoryFragment : Fragment() {
     ): View {
         _binding = FragmentHistoryBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
+
+        bindViewModel()
         setAdapter()
         initObserve()
 
         return binding.root
+    }
+
+    private fun bindViewModel() {
+        binding.historyViewModel = viewModel
     }
 
     private fun setAdapter() {
@@ -45,7 +51,7 @@ class HistoryFragment : Fragment() {
 
     private fun initPreviewTripsObserve() {
         viewModel.previewTrips.observe(viewLifecycleOwner) {
-            historyAdapter.submitList(it)
+            historyAdapter.submitList(it.previewTrips)
         }
     }
 
@@ -63,10 +69,10 @@ class HistoryFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        getPreviewTrips()
+        fetchPreviewTrips()
     }
 
-    private fun getPreviewTrips() = viewModel.getPreviewTrips()
+    private fun fetchPreviewTrips() = viewModel.fetchPreviewTrips()
 
     override fun onDestroy() {
         super.onDestroy()

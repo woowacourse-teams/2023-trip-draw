@@ -21,8 +21,11 @@ class PostDetailViewModel(
     private val _postDetail: MutableLiveData<UiPostDetail> = MutableLiveData()
     val postDetail: LiveData<UiPostDetail> = _postDetail
 
-    private val _postDeletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val postDeletedEvent: LiveData<Event<Boolean>> = _postDeletedEvent
+    private val _openDeletionEvent = MutableLiveData<Event<Boolean>>()
+    val openDeletionEvent: LiveData<Event<Boolean>> = _openDeletionEvent
+
+    private val _postDeleteCompletedEvent: MutableLiveData<Boolean> = MutableLiveData()
+    val postDeleteCompletedEvent: LiveData<Boolean> = _postDeleteCompletedEvent
 
     private val _editEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
     val editEvent: LiveData<Event<Boolean>> = _editEvent
@@ -43,11 +46,15 @@ class PostDetailViewModel(
         }
     }
 
+    fun openDeletionEvent() {
+        _openDeletionEvent.value = Event(true)
+    }
+
     fun deletePost() {
         viewModelScope.launch {
             repository.deletePost(postId)
                 .onSuccess {
-                    _postDeletedEvent.value = Event(true)
+                    _postDeleteCompletedEvent.value = true
                 }
                 .onFailure {
                     // todo 오류 처리
