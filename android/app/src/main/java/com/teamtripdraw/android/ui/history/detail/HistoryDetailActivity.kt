@@ -145,12 +145,12 @@ class HistoryDetailActivity : AppCompatActivity() {
     private fun initDeleteCompleteObserve() =
         viewModel.deleteCompleteEvent.observe(this) { if (it) finish() }
 
-    override fun onStart() {
-        super.onStart()
-        getPosts()
+    override fun onResume() {
+        super.onResume()
+        fetchPosts()
     }
 
-    private fun getPosts() = viewModel.getPosts()
+    private fun fetchPosts() = viewModel.fetchPosts()
 
     companion object {
         private const val TRIP_ITEM_KEY = "TRIP_ITEM_KEY"

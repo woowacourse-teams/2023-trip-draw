@@ -52,7 +52,7 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun initOpenDeleteDialogObserve() {
-        viewModel.openDeleteDialogEvent.observe(
+        viewModel.openDeletionEvent.observe(
             this,
             EventObserver(this@PostDetailActivity::showDeleteDialog),
         )

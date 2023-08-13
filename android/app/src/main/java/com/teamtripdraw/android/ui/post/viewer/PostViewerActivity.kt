@@ -52,7 +52,7 @@ class PostViewerActivity : AppCompatActivity() {
 
     private fun initPostsObserve() {
         viewModel.posts.observe(this) {
-            adapter.submitList(it)
+            adapter.submitList(it.postItems)
         }
     }
 
@@ -94,12 +94,12 @@ class PostViewerActivity : AppCompatActivity() {
         binding.onBackClick = { finish() }
     }
 
-    override fun onStart() {
-        super.onStart()
-        getPosts()
+    override fun onResume() {
+        super.onResume()
+        fetchPosts()
     }
 
-    private fun getPosts() = viewModel.getPosts()
+    private fun fetchPosts() = viewModel.fetchPosts()
 
     companion object {
         private const val POST_VIEWER_ERROR = "감상 목록을 불러오는데 오류가 발생했습니다."

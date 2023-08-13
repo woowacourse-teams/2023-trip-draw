@@ -21,8 +21,8 @@ class PostDetailViewModel(
     private val _postDetail: MutableLiveData<UiPostDetail> = MutableLiveData()
     val postDetail: LiveData<UiPostDetail> = _postDetail
 
-    private val _openDeleteDialogEvent = MutableLiveData<Event<Boolean>>()
-    val openDeleteDialogEvent: LiveData<Event<Boolean>> = _openDeleteDialogEvent
+    private val _openDeletionEvent = MutableLiveData<Event<Boolean>>()
+    val openDeletionEvent: LiveData<Event<Boolean>> = _openDeletionEvent
 
     private val _postDeleteCompletedEvent: MutableLiveData<Boolean> = MutableLiveData()
     val postDeleteCompletedEvent: LiveData<Boolean> = _postDeleteCompletedEvent
@@ -46,8 +46,8 @@ class PostDetailViewModel(
         }
     }
 
-    fun openDeleteDialog() {
-        _openDeleteDialogEvent.value = Event(true)
+    fun openDeletionEvent() {
+        _openDeletionEvent.value = Event(true)
     }
 
     fun deletePost() {
