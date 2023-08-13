@@ -16,7 +16,8 @@ class RepositoryContainer(
     val authRepository: AuthRepository = AuthRepositoryImpl(
         localDataSourceContainer.localUserIdentifyInfoDataSource,
         remoteDataSourceContainer.remoteSignUpDataSource,
-        remoteDataSourceContainer.remoteUserIdentifyInfoDataSourceImpl,
+        remoteDataSourceContainer.remoteUserIdentifyInfoDataSource,
+        remoteDataSourceContainer.unsubscribeDataSource,
     )
     val tripRepository: TripRepository = TripRepositoryImpl(
         remoteDataSourceContainer.remoteTripDataSource,

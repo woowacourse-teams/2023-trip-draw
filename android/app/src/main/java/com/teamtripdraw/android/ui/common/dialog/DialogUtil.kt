@@ -60,7 +60,8 @@ class DialogUtil(
         binding.tvDialogUtilContent.text = when (dialogMode) {
             DELETE_CHECK -> getString(R.string.tv_content_delete_check)
             SAVE_CHECK -> getString(R.string.tv_content_save_check)
-
+            LOGOUT_CHECK -> getString(R.string.tv_content_logout_check)
+            UNSUBSCRIBE_CHECK -> getString(R.string.tv_content_unsubscribe_check)
             else -> throw IllegalStateException()
         }
     }
@@ -69,6 +70,8 @@ class DialogUtil(
         binding.confirmText = when (dialogMode) {
             DELETE_CHECK -> getString(R.string.tv_confirm_delete_check)
             SAVE_CHECK -> getString(R.string.tv_confirm_save_check)
+            LOGOUT_CHECK -> getString(R.string.tv_confirm_logout_check)
+            UNSUBSCRIBE_CHECK -> getString(R.string.tv_confirm_unsubscribe_check)
             else -> throw IllegalStateException()
         }
     }
@@ -77,6 +80,8 @@ class DialogUtil(
         val textColor = when (dialogMode) {
             DELETE_CHECK -> getColor(requireContext(), R.color.td_red)
             SAVE_CHECK -> getColor(requireContext(), R.color.td_sub_blue)
+            LOGOUT_CHECK -> getColor(requireContext(), R.color.td_red)
+            UNSUBSCRIBE_CHECK -> getColor(requireContext(), R.color.td_red)
             else -> throw IllegalStateException()
         }
         binding.tvDialogUtilConfirm.setTextColor(textColor)
@@ -104,5 +109,7 @@ class DialogUtil(
         private const val DIALOG_WINDOW_SIZE = 0.85
         const val DELETE_CHECK = 0
         const val SAVE_CHECK = 1
+        const val LOGOUT_CHECK = 2
+        const val UNSUBSCRIBE_CHECK = 3
     }
 }
