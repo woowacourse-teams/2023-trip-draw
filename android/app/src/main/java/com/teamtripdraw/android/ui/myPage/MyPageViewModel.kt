@@ -39,7 +39,15 @@ class MyPageViewModel(
 
     fun fetchNickname() {
         viewModelScope.launch {
-            // todo : _nickname.value = repositosy에서 가져온 닉네임
+            viewModelScope.launch {
+                authRepository.getUserInfo()
+                    .onSuccess {
+                        _nickname.value = it.nickname
+                    }
+                    .onFailure {
+                        // todo 로그전략 수립후 로그 찍기
+                    }
+            }
         }
     }
 
