@@ -95,7 +95,7 @@
             android:name=".ui.policy.PrivacyPolicyActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.myPage.accountDeletion.AccountDeletionActivity"
+            android:name=".ui.policy.OpenSourceLicenseActivity"
             android:exported="false" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

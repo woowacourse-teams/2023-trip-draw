@@ -68,14 +68,37 @@
             app:layout_constraintTop_toBottomOf="@id/layout_nickname" />
 
         <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_privacy_policy"
+            android:id="@+id/divider_open_source_license"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
             app:dividerColor="@color/td_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_nickname_layout" />
+            app:layout_constraintTop_toBottomOf="@id/layout_nickname" />
+
+        <TextView
+            android:id="@+id/btn_open_source_license"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/td_white"
+            android:onClick="@{() -> myPageViewModel.openOpenSourceLicense()}"
+            android:padding="16dp"
+            android:text="오픈소스 라이선스"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_open_source_license" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_open_source_license_privacy_policy"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_open_source_license" />
 
         <TextView
             android:id="@+id/btn_privacy_policy"
@@ -89,7 +112,7 @@
             android:textColor="@color/td_black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_privacy_policy" />
+            app:layout_constraintTop_toBottomOf="@id/divider_open_source_license_privacy_policy" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_privacy_policy_version_info"
