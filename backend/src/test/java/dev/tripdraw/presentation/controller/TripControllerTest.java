@@ -1,23 +1,24 @@
 package dev.tripdraw.presentation.controller;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
+import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -40,8 +41,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class TripControllerTest extends ControllerTest {
 
-    private static final String 통후추_BASE64 = "7Ya17ZuE7LaU";
-    private static final String 순후추_BASE64 = "7Iic7ZuE7LaU";
+    private static final String WRONG_TOKEN = "wrong.long.token";
 
     @Autowired
     private TripRepository tripRepository;
@@ -49,24 +49,29 @@ class TripControllerTest extends ControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private AuthTokenManager authTokenManager;
+
     @MockBean
     private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
+    private String huchuToken;
 
     @BeforeEach
     void setUp() {
         super.setUp();
 
-        Member member = memberRepository.save(new Member("통후추"));
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         trip = tripRepository.save(Trip.from(member));
+        huchuToken = authTokenManager.generate(member.id());
     }
 
     @Test
     void 여행을_생성한다() {
         // given & when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().post("/trips")
                 .then().log().all()
                 .extract();
@@ -84,10 +89,10 @@ class TripControllerTest extends ControllerTest {
     void 여행_생성_시_인증에_실패하면_예외를_발생시킨다() {
         // given & expect
         RestAssured.given().log().all()
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .when().post("/trips")
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -103,7 +108,7 @@ class TripControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
@@ -131,18 +136,18 @@ class TripControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
+                .auth().preemptive().oauth2(WRONG_TOKEN)
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
     void 여행을_ID로_조회한다() {
         // given & when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().get("/trips/{tripId}", trip.id())
                 .then().log().all()
                 .extract();
@@ -171,7 +176,7 @@ class TripControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
@@ -179,14 +184,12 @@ class TripControllerTest extends ControllerTest {
 
         PointResponse pointResponse = response.as(PointResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
-
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .auth().preemptive().oauth2(huchuToken)
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(NO_CONTENT.value());
     }
@@ -203,7 +206,7 @@ class TripControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
@@ -211,16 +214,14 @@ class TripControllerTest extends ControllerTest {
 
         PointResponse pointResponse = response.as(PointResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
-
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(순후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .auth().preemptive().oauth2(WRONG_TOKEN)
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
@@ -236,7 +237,7 @@ class TripControllerTest extends ControllerTest {
 
         PointResponse pointResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
@@ -244,20 +245,18 @@ class TripControllerTest extends ControllerTest {
                 .as(PointResponse.class);
 
         TripResponse tripResponse = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().post("/trips")
                 .then().log().all()
                 .extract()
                 .as(TripResponse.class);
 
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(tripResponse.tripId(), pointResponse.pointId());
-
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .auth().preemptive().oauth2(huchuToken)
+                .param("tripId", tripResponse.tripId())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }
@@ -274,28 +273,25 @@ class TripControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(pointCreateRequest)
                 .when().post("/points")
                 .then().log().all()
                 .extract();
 
         PointResponse pointResponse = response.as(PointResponse.class);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), pointResponse.pointId());
 
         RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .auth().preemptive().oauth2(huchuToken)
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all();
 
         // expect
         RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
-                .body(pointDeleteRequest)
-                .when().delete("/points")
+                .auth().preemptive().oauth2(huchuToken)
+                .param("tripId", trip.id())
+                .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(CONFLICT.value());
     }
@@ -304,7 +300,7 @@ class TripControllerTest extends ControllerTest {
     void 전체_여행을_조회한다() {
         // given
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .when().get("/trips")
                 .then().log().all()
                 .extract();
@@ -315,7 +311,14 @@ class TripControllerTest extends ControllerTest {
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
             softly.assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
-                    new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
+                    new TripsSearchResponse(
+                            List.of(new TripSearchResponse(
+                                    trip.id(),
+                                    trip.nameValue(),
+                                    trip.imageUrl(),
+                                    trip.routeImageUrl())
+                            )
+                    )
             );
         });
     }
@@ -328,7 +331,7 @@ class TripControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(tripUpdateRequest)
                 .when().patch("/trips/{tripId}", trip.id())
                 .then().log().all()
@@ -357,8 +360,7 @@ class TripControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .param("tripId", trip.id())
                 .when().get("/points/{pointId}", pointId)
                 .then().log().all()
@@ -381,16 +383,35 @@ class TripControllerTest extends ControllerTest {
         });
     }
 
+    @Test
+    void 여행을_삭제한다() {
+        // expect
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(huchuToken)
+                .when().delete("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .statusCode(NO_CONTENT.value());
+    }
+
+    @Test
+    void 여행을_삭제할_때_인증에_실패하면_예외가_발생한다() {
+        // expect
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(WRONG_TOKEN)
+                .when().delete("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .statusCode(UNAUTHORIZED.value());
+    }
+
     private PointCreateResponse createPointAndGetId(PointCreateRequest request) {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(통후추_BASE64)
+                .auth().preemptive().oauth2(huchuToken)
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
                 .extract();
 
-        PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
-        return pointCreateResponse;
+        return response.as(PointCreateResponse.class);
     }
 }

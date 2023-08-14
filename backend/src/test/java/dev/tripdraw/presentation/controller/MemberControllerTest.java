@@ -1,20 +1,27 @@
 package dev.tripdraw.presentation.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static java.lang.Long.MIN_VALUE;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.dto.member.MemberCreateRequest;
-import dev.tripdraw.dto.member.MemberCreateResponse;
+import dev.tripdraw.domain.post.Post;
+import dev.tripdraw.domain.post.PostRepository;
+import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.domain.trip.Trip;
+import dev.tripdraw.domain.trip.TripName;
+import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -32,84 +39,109 @@ class MemberControllerTest extends ControllerTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    TripRepository tripRepository;
+
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    AuthTokenManager authTokenManager;
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
     }
 
     @Test
-    void 회원가입을_한다() {
+    void code를_입력_받아_사용자를_조회한다() {
         // given
-        MemberCreateRequest request = new MemberCreateRequest("통후추");
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        String code = authTokenManager.generate(member.id());
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .body(request)
-                .when().post("/members")
+                .param("code", code)
+                .when().get("/members")
                 .then().log().all()
-                .statusCode(CREATED.value())
                 .extract();
-        MemberCreateResponse memberCreateResponse = response.as(MemberCreateResponse.class);
 
-        // expect
-        assertThat(memberCreateResponse.memberId()).isNotNull();
-    }
-
-    @Test
-    void 회원가입_시_닉네임에_공백이_있으면_예외를_발생시킨다() {
-        // given
-        MemberCreateRequest invalidRequest = new MemberCreateRequest("통 후추");
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .body(invalidRequest)
-                .when().post("/members")
-                .then().log().all()
-                .statusCode(BAD_REQUEST.value());
-    }
-
-    @Test
-    void 회원가입시_닉네임이_10자가_넘으면_예외를_발생시킨다() {
-        // given
-        MemberCreateRequest invalidRequest = new MemberCreateRequest("통통통통통통통통통후추");
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .body(invalidRequest)
-                .when().post("/members")
-                .then().log().all()
-                .statusCode(BAD_REQUEST.value());
-    }
-
-    @Test
-    void 사용자를_조회한다() {
-        // given
-        Member member = memberRepository.save(new Member("통후추"));
-
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .when().get("/members/{memberId}", member.id())
-                .then().log().all()
-                .statusCode(OK.value())
-                .extract();
+        // then
         MemberSearchResponse memberSearchResponse = response.as(MemberSearchResponse.class);
 
-        // expect
-        assertThat(memberSearchResponse.nickname()).isEqualTo("통후추");
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(memberSearchResponse).usingRecursiveComparison().isEqualTo(
+                    new MemberSearchResponse(member.id(), "통후추")
+            );
+        });
     }
 
     @Test
-    void id에_해당하는_사용자가_없는_경우_예외가_발생한다() {
+    void code를_입력_받아_사용자를_조회할_때_존재하지_않는_사용자라면_예외가_발생한다() {
+        // given
+        String code = authTokenManager.generate(MIN_VALUE);
+
         // expect
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .when().get("/members/{memberId}", Long.MAX_VALUE)
+        RestAssured.given().log().all()
+                .param("code", code)
+                .when().get("/members")
                 .then().log().all()
-                .statusCode(NOT_FOUND.value())
-                .extract();
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void code를_입력_받아_사용자를_조회할_때_이미_삭제된_사용자라면_예외가_발생한다() {
+        // given
+        Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
+        String code = authTokenManager.generate(member.id());
+
+        memberRepository.delete(member);
+
+        // expect
+        RestAssured.given().log().all()
+                .param("code", code)
+                .when().get("/members")
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void code를_입력_받아_사용자를_삭제한다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        String code = authTokenManager.generate(member.id());
+
+        Trip trip = new Trip(TripName.from("통후추의 여행"), member);
+        Point point = new Point(3.14, 5.25, LocalDateTime.now());
+        trip.add(point);
+        tripRepository.save(trip);
+        Post post = postRepository.save(new Post(
+                "제목",
+                point,
+                "위치",
+                "오늘은 날씨가 좋네요.",
+                member,
+                trip.id()
+        ));
+
+        // expect
+        RestAssured.given().log().all()
+                .param("code", code)
+                .when().delete("/members")
+                .then().log().all()
+                .statusCode(NO_CONTENT.value());
+
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(code)
+                .when().get("/trips/{tripId}", trip.id())
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
+
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(code)
+                .when().get("/posts/{postId}", post.id())
+                .then().log().all()
+                .statusCode(FORBIDDEN.value());
     }
 }

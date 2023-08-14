@@ -1,5 +1,6 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
@@ -19,6 +20,7 @@ import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
+import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
@@ -59,7 +61,7 @@ public class PostService {
             PostAndPointCreateRequest postAndPointCreateRequest,
             MultipartFile file
     ) {
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         Trip trip = findValidatedTripById(postAndPointCreateRequest.tripId(), member);
 
         Point point = postAndPointCreateRequest.toPoint();
@@ -89,7 +91,7 @@ public class PostService {
             PostRequest postRequest,
             MultipartFile file
     ) {
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         Trip trip = findValidatedTripById(postRequest.tripId(), member);
 
         Point point = trip.findPointById(postRequest.pointId());
@@ -105,19 +107,45 @@ public class PostService {
 
     public PostResponse read(LoginUser loginUser, Long postId) {
         Post post = findPostById(postId);
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         post.validateAuthorization(member);
         return PostResponse.from(post);
     }
 
     public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
-        Member member = findMemberByNickname(loginUser.nickname());
+        Member member = findMemberById(loginUser.memberId());
         findValidatedTripById(tripId, member);
 
         List<Post> posts = postRepository.findAllByTripId(tripId).stream()
                 .sorted(Comparator.comparing(Post::pointRecordedAt).reversed())
                 .collect(Collectors.toList());
         return PostsResponse.from(posts);
+    }
+
+    public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
+        Post post = findPostById(postId);
+        Member member = findMemberById(loginUser.memberId());
+        post.validateAuthorization(member);
+
+        post.changeTitle(postUpdateRequest.title());
+        post.changeWriting(postUpdateRequest.writing());
+        updateFileOfPost(file, post);
+    }
+
+    public void delete(LoginUser loginUser, Long postId) {
+        Post post = findPostById(postId);
+        Member member = findMemberById(loginUser.memberId());
+        post.validateAuthorization(member);
+
+        postRepository.deleteById(postId);
+    }
+
+    private void updateFileOfPost(MultipartFile file, Post post) {
+        if (file == null) {
+            return;
+        }
+        String imageUrl = fileUploader.upload(file, POST_IMAGE);
+        post.changePostImageUrl(imageUrl);
     }
 
     private Trip findValidatedTripById(Long tripId, Member member) {
@@ -128,9 +156,14 @@ public class PostService {
         return trip;
     }
 
-    private Member findMemberByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname)
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    private Post findPostById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(POST_NOT_FOUNT));
     }
 
     private Post registerFileToPost(MultipartFile file, Post post) {
@@ -142,11 +175,6 @@ public class PostService {
 
         post.changePostImageUrl(fileUrl);
         return post;
-    }
-
-    private Post findPostById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(POST_NOT_FOUNT));
     }
 }
 

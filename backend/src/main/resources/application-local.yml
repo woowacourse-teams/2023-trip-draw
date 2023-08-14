@@ -22,6 +22,7 @@ spring:
 
   flyway:
     enabled: true
+    locations: classpath:db/migration/{vendor}
 
 logging:
   level:
@@ -48,3 +49,20 @@ trip:
   base:
   post:
   route:
+
+jwt:
+  secret-key: ItIsALocalKeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee2222222222222222222222222222222222eeeeeeeeeeyXD
+  expiration-time: 172800000  # 48시간 millisecond
+
+management:
+  endpoint:
+    health:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+oauth:
+  kakao:
+    info-url: https://kapi.kakao.com/v2/user/me

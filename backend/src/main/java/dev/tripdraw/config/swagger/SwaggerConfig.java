@@ -11,8 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-    private static final String BEARER_TYPE = "bearer";
     static final String BEARER_SECURITY_SCHEME_KEY = "Authorization Bearer";
+    private static final String BEARER_TYPE = "bearer";
+    private static final String TOKEN_SAMPLE = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzMiLCJleHAiOjE2OTE4OTA0NjZ9.NlzZEEDWdjovafRPCD1ZvddeRUccZfyZpcUWzGPAI4oK-PKyPM64TIMJ3HyOy29vJtg_MET1c4omWUkGOb4qyQ";
 
     @Bean
     public OpenAPI openAPI() {
@@ -36,7 +37,9 @@ public class SwaggerConfig {
         return new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme(BEARER_TYPE)
-                .description("Base64로 인코딩된 닉네임을 입력해주세요. 통후추 예시) 7Ya17ZuE7LaU");
+                .description(
+                        "로그인하고 받은 JWT를 입력해주세요. 예시) " + TOKEN_SAMPLE
+                );
     }
 
     private Info info() {

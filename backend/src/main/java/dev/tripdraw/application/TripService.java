@@ -12,7 +12,6 @@ import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -43,14 +42,14 @@ public class TripService {
     }
 
     public TripCreateResponse create(LoginUser loginUser) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = Trip.from(member);
         Trip savedTrip = tripRepository.save(trip);
         return TripCreateResponse.from(savedTrip);
     }
 
     public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(pointCreateRequest.tripId());
 
         Point point = pointCreateRequest.toPoint();
@@ -61,10 +60,8 @@ public class TripService {
         return PointCreateResponse.from(point);
     }
 
-    public void deletePoint(LoginUser loginUser, PointDeleteRequest pointDeleteRequest) {
-        Member member = getByNickname(loginUser.nickname());
-        Long tripId = pointDeleteRequest.tripId();
-        Long pointId = pointDeleteRequest.pointId();
+    public void deletePoint(LoginUser loginUser, Long pointId, Long tripId) {
+        Member member = getById(loginUser.memberId());
 
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
@@ -72,8 +69,8 @@ public class TripService {
         trip.deletePointById(pointId);
     }
 
-    private Member getByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname)
+    private Member getById(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
@@ -84,7 +81,7 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripResponse readTripById(LoginUser loginUser, Long id) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(id);
         trip.validateAuthorization(member);
         return TripResponse.from(trip);
@@ -92,13 +89,13 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripsSearchResponse readAllTrips(LoginUser loginUser) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
         return TripsSearchResponse.from(trips);
     }
 
     public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
 
@@ -119,11 +116,19 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public PointResponse readPointByTripAndPointId(LoginUser loginUser, Long tripId, Long pointId) {
-        Member member = getByNickname(loginUser.nickname());
+        Member member = getById(loginUser.memberId());
         Trip trip = getByTripId(tripId);
         trip.validateAuthorization(member);
 
         Point point = trip.findPointById(pointId);
         return PointResponse.from(point);
+    }
+
+    public void delete(LoginUser loginUser, Long tripId) {
+        Member member = getById(loginUser.memberId());
+        Trip trip = getByTripId(tripId);
+        trip.validateAuthorization(member);
+
+        tripRepository.delete(trip);
     }
 }

@@ -21,6 +21,8 @@ import java.util.List;
 @Entity
 public class Trip extends BaseEntity {
 
+    private static final String EMPTY_IMAGE_URL = "";
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "trip_id")
@@ -47,14 +49,16 @@ public class Trip extends BaseEntity {
     }
 
     public Trip(TripName name, Member member) {
-        this(null, name, member, ONGOING);
+        this(null, name, member, ONGOING, EMPTY_IMAGE_URL, EMPTY_IMAGE_URL);
     }
 
-    public Trip(Long id, TripName name, Member member, TripStatus status) {
+    public Trip(Long id, TripName name, Member member, TripStatus status, String imageUrl, String routeImageUrl) {
         this.id = id;
         this.name = name;
         this.member = member;
         this.status = status;
+        this.imageUrl = imageUrl;
+        this.routeImageUrl = routeImageUrl;
     }
 
     public static Trip from(Member member) {
@@ -150,7 +154,9 @@ public class Trip extends BaseEntity {
     }
 
     public List<Point> points() {
-        return route.points();
+        return route.points().stream()
+                .filter(point -> !point.isDeleted())
+                .toList();
     }
 
     public TripStatus status() {

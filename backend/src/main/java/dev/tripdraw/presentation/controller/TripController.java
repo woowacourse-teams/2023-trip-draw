@@ -1,13 +1,13 @@
 package dev.tripdraw.presentation.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import dev.tripdraw.application.TripService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -94,12 +94,13 @@ public class TripController {
             responseCode = "204",
             description = "위치정보 삭제 성공"
     )
-    @DeleteMapping("/points")
+    @DeleteMapping("/points/{pointId}")
     public ResponseEntity<Void> deletePoint(
             @Auth LoginUser loginUser,
-            @RequestBody PointDeleteRequest pointDeleteRequest
+            @PathVariable Long pointId,
+            @RequestParam Long tripId
     ) {
-        tripService.deletePoint(loginUser, pointDeleteRequest);
+        tripService.deletePoint(loginUser, pointId, tripId);
         return ResponseEntity.noContent().build();
     }
 
@@ -127,5 +128,19 @@ public class TripController {
     ) {
         tripService.updateTripById(loginUser, tripId, tripUpdateRequest);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "여행 삭제 API", description = "여행 삭제")
+    @ApiResponse(
+            responseCode = "204",
+            description = "여행 삭제 성공."
+    )
+    @DeleteMapping("/trips/{tripId}")
+    public ResponseEntity<Void> delete(
+            @Auth LoginUser loginUser,
+            @PathVariable Long tripId
+    ) {
+        tripService.delete(loginUser, tripId);
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 }

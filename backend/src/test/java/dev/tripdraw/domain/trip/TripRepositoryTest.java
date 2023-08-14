@@ -1,5 +1,6 @@
 package dev.tripdraw.domain.trip;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -28,7 +29,7 @@ class TripRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(new Member("통후추"));
+        member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
     }
 
     @Test
@@ -46,7 +47,7 @@ class TripRepositoryTest {
             softly.assertThat(trips.get(0)).isEqualTo(trip);
         });
     }
-    
+
     @Test
     void 회원_ID로_여행_목록을_조회할_때_해당_회원의_여행이_없다면_빈_여행_목록을_반환한다() {
         // given & when
@@ -54,5 +55,18 @@ class TripRepositoryTest {
 
         // then
         assertThat(trips).hasSize(0);
+    }
+
+    @Test
+    void 회원_ID로_여행을_삭제한다() {
+        // given
+        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        tripRepository.save(trip);
+
+        // when
+        tripRepository.deleteByMemberId(member.id());
+
+        // then
+        assertThat(tripRepository.findById(trip.id())).isEmpty();
     }
 }

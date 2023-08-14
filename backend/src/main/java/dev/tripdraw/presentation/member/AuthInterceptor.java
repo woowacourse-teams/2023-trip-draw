@@ -29,7 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     ) throws Exception {
         LoginUser loginUser = authExtractor.extract(request);
 
-        if (!memberService.existsByNickname(loginUser.nickname())) {
+        if (!memberService.existsById(loginUser.memberId())) {
             throw new AuthException(AUTH_FAIL);
         }
 

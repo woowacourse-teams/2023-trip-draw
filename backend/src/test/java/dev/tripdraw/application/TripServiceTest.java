@@ -1,5 +1,6 @@
 package dev.tripdraw.application;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.domain.trip.TripStatus.FINISHED;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
@@ -19,7 +20,6 @@ import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
-import dev.tripdraw.dto.trip.PointDeleteRequest;
 import dev.tripdraw.dto.trip.PointResponse;
 import dev.tripdraw.dto.trip.TripCreateResponse;
 import dev.tripdraw.dto.trip.TripResponse;
@@ -57,9 +57,9 @@ class TripServiceTest {
 
     @BeforeEach
     void setUp() {
-        Member member = memberRepository.save(new Member("통후추"));
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         trip = tripRepository.save(Trip.from(member));
-        loginUser = new LoginUser("통후추");
+        loginUser = new LoginUser(member.id());
     }
 
     @Test
@@ -114,10 +114,9 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
 
         // when
-        tripService.deletePoint(loginUser, pointDeleteRequest);
+        tripService.deletePoint(loginUser, response.pointId(), trip.id());
 
         // then
         Point deletedPoint = trip.route().points()
@@ -134,11 +133,10 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
-        LoginUser otherUser = new LoginUser("순후추");
+        LoginUser otherUser = new LoginUser(Long.MIN_VALUE);
 
         // expect
-        assertThatThrownBy(() -> tripService.deletePoint(otherUser, pointDeleteRequest))
+        assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.getMessage());
     }
@@ -150,10 +148,9 @@ class TripServiceTest {
         tripService.addPoint(loginUser, pointCreateRequest);
 
         Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, false, LocalDateTime.now());
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), inExistentPoint.id());
 
         // expect
-        assertThatThrownBy(() -> tripService.deletePoint(loginUser, pointDeleteRequest))
+        assertThatThrownBy(() -> tripService.deletePoint(loginUser, inExistentPoint.id(), trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_IN_TRIP.getMessage());
     }
@@ -163,11 +160,10 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        PointDeleteRequest pointDeleteRequest = new PointDeleteRequest(trip.id(), response.pointId());
-        tripService.deletePoint(loginUser, pointDeleteRequest);
+        tripService.deletePoint(loginUser, response.pointId(), trip.id());
 
         // expect
-        assertThatThrownBy(() -> tripService.deletePoint(loginUser, pointDeleteRequest))
+        assertThatThrownBy(() -> tripService.deletePoint(loginUser, response.pointId(), trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_ALREADY_DELETED.getMessage());
     }
@@ -179,7 +175,14 @@ class TripServiceTest {
 
         // then
         assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(
-                new TripsSearchResponse(List.of(new TripSearchResponse(trip.id(), trip.nameValue())))
+                new TripsSearchResponse(List.of(
+                        new TripSearchResponse(
+                                trip.id(),
+                                trip.nameValue(),
+                                trip.imageUrl(),
+                                trip.routeImageUrl()
+                        )
+                ))
         );
     }
 

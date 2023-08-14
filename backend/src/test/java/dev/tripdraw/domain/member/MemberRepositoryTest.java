@@ -1,10 +1,14 @@
 package dev.tripdraw.domain.member;
 
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -17,31 +21,37 @@ class MemberRepositoryTest {
     private MemberRepository memberRepository;
 
     @Test
-    void 닉네임으로_회원을_조회한다() {
+    void Oauth_ID와_종류로_회원을_조회한다() {
         // given
-        Member member = new Member("member");
+        Member member = new Member("통후추", "kakaoId", KAKAO);
         memberRepository.save(member);
 
         // when
-        Member foundMember = memberRepository.findByNickname("member").get();
+        Member foundMember = memberRepository.findByOauthIdAndOauthType("kakaoId", KAKAO).get();
 
         // then
-        assertThat(foundMember).isEqualTo(member);
+        assertThat(foundMember.nickname()).isEqualTo("통후추");
     }
 
     @Test
-    void 회원이_존재하지_않는경우_false를_반환한다() {
-        // expect
-        assertThat(memberRepository.existsByNickname("통후추")).isFalse();
-    }
-
-    @Test
-    void 회원이_존재하는_경우_true를_반환한다() {
+    void Oauth_ID와_종류로_회원을_조회할_때_존재하지_않으면_빈_Optional을_반환한다() {
         // given
-        Member member = new Member("통후추");
-        memberRepository.save(member);
+        Optional<Member> foundMember = memberRepository.findByOauthIdAndOauthType("wrongKakaoId", KAKAO);
 
         // expect
-        assertThat(memberRepository.existsByNickname(member.nickname())).isTrue();
+        assertThat(foundMember).isEmpty();
+    }
+
+    @ParameterizedTest
+    @CsvSource({"통후추, true", "순후추, false"})
+    void 닉네임이_존재하는지_확인한다(String nickname, boolean expected) {
+        // given
+        memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+
+        // when
+        boolean actual = memberRepository.existsByNickname(nickname);
+
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 }
