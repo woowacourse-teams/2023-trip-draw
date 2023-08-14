@@ -19,6 +19,9 @@ class LoginViewModel(
     private val _openPrivacyPolicyEvent = MutableLiveData<Boolean>(false)
     val openPrivacyPolicyEvent: LiveData<Boolean> = _openPrivacyPolicyEvent
 
+    private val _openTermsOfServiceEvent = MutableLiveData<Boolean>(false)
+    val openTermsOfServiceEvent: LiveData<Boolean> = _openTermsOfServiceEvent
+
     private val _existedUserEvent = MutableLiveData<Event<LoginInfo>>()
     val existedUserEvent: LiveData<Event<LoginInfo>> = _existedUserEvent
 
@@ -44,6 +47,14 @@ class LoginViewModel(
     fun openPrivacyPolicy() {
         _openPrivacyPolicyEvent.value = true
         _openPrivacyPolicyEvent.value = false
+    }
+
+    fun startTermsOfServiceEvent() {
+        _openTermsOfServiceEvent.value = true
+    }
+
+    fun resetTermsOfServiceEvent() {
+        _openTermsOfServiceEvent.value = false
     }
 
     fun login(platform: LoginPlatform, socialToken: String) {

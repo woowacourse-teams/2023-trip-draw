@@ -18,6 +18,7 @@ import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
+import com.teamtripdraw.android.ui.policy.TermsOfServiceActivity
 import com.teamtripdraw.android.ui.signUp.NicknameSetupActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -56,6 +57,7 @@ class LoginActivity : AppCompatActivity() {
     private fun initObserver() {
         initKaKaoLoginEventObserver()
         initOpenPrivacyPolicyEventObserver()
+        initOpenTermsOfServiceEventObserver()
         initExistedUserEventObserver()
         initNewUserEventObserver()
         initNicknameExistsEventObserver()
@@ -81,6 +83,13 @@ class LoginActivity : AppCompatActivity() {
     private fun initOpenPrivacyPolicyEventObserver() {
         loginViewModel.openPrivacyPolicyEvent.observe(this) {
             if (it) startActivity(PrivacyPolicyActivity.getIntent(this))
+            loginViewModel.resetTermsOfServiceEvent()
+        }
+    }
+
+    private fun initOpenTermsOfServiceEventObserver() {
+        loginViewModel.openTermsOfServiceEvent.observe(this) {
+            if (it) startActivity(TermsOfServiceActivity.getIntent(this))
         }
     }
 

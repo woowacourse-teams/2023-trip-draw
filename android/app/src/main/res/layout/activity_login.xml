@@ -53,6 +53,7 @@
             android:id="@+id/tv_login_sign_in_policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{()->loginViewModel.startTermsOfServiceEvent()}"
             android:text="@string/tv_login_sign_in_policy"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_black"
