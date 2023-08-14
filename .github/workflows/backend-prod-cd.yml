@@ -1,0 +1,17 @@
+name: BACKEND-PROD-CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: backend-prod-cd
+
+    steps:
+      - name: 배포 스크립트 실행
+        run: |
+          cd
+          sudo sh deploy.sh
+        working-directory: ${{ env.working-directory }}
