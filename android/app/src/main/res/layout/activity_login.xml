@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="loginViewModel"
+            type="com.teamtripdraw.android.ui.login.LoginViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.login.LoginActivity">
+
+        <ImageView
+            android:id="@+id/iv_login_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/btn_kakao_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_login_logo" />
+
+        <ImageView
+            android:id="@+id/btn_kakao_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:onClick="@{()->loginViewModel.startKakaoLogin()}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_login_sign_in_policy_explain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/img_kakao_login_button" />
+
+        <TextView
+            android:id="@+id/tv_login_sign_in_policy_explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="35dp"
+            android:text="@string/tv_login_sign_in_policy_explain"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_login_sign_in_policy"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_login_sign_in_policy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->loginViewModel.startTermsOfServiceEvent()}"
+            android:text="@string/tv_login_sign_in_policy"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_login_sign_in_policy_explain"
+            app:layout_constraintEnd_toStartOf="@id/tv_login_sign_in_personal_info"
+            app:layout_constraintStart_toEndOf="@+id/tv_login_sign_in_policy_explain"
+            app:layout_constraintTop_toTopOf="@+id/tv_login_sign_in_policy_explain" />
+
+        <TextView
+            android:id="@+id/tv_login_sign_in_personal_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> loginViewModel.openPrivacyPolicy()}"
+            android:text="@string/tv_login_sign_in_personal_info"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_login_sign_in_policy"
+            app:layout_constraintEnd_toStartOf="@id/tv_login_sign_in_personal_info_explain"
+            app:layout_constraintStart_toEndOf="@+id/tv_login_sign_in_policy"
+            app:layout_constraintTop_toTopOf="@+id/tv_login_sign_in_policy" />
+
+        <TextView
+            android:id="@+id/tv_login_sign_in_personal_info_explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_login_sign_in_personal_info_explain"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_login_sign_in_personal_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_login_sign_in_personal_info"
+            app:layout_constraintTop_toTopOf="@+id/tv_login_sign_in_personal_info" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

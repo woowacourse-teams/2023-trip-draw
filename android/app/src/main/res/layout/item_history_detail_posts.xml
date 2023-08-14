@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="historyDetailViewModel"
+            type="com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel" />
+
+        <variable
+            name="postItem"
+            type="com.teamtripdraw.android.ui.model.UiPostItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{()->historyDetailViewModel.openPostDetail(postItem.id)}">
+
+        <ImageView
+            android:id="@+id/iv_history_detail_post_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="@dimen/margin_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setRoundImageWithVisibility="@{postItem.thumbnail}"
+            tools:background="@drawable/shape_td_gray_fill_12_rect" />
+
+        <TextView
+            android:id="@+id/tv_history_detail_post_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_default"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{postItem.title}"
+            android:textAppearance="@style/title_2M"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_history_detail_post_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="한여름의 경주 여행" />
+
+        <TextView
+            android:id="@+id/tv_history_detail_writing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="@{postItem.writing}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_deep_gray"
+            app:layout_constraintEnd_toEndOf="@id/tv_history_detail_post_title"
+            app:layout_constraintStart_toStartOf="@id/tv_history_detail_post_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_history_detail_post_title"
+            tools:text="내용이 이렇게 쭉쭉\n이렇게 쯕쭉쭉" />
+
+        <ImageView
+            android:id="@+id/iv_history_detail_location_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/btn_post_detail_location_icon_description"
+            android:src="@drawable/ic_location"
+            app:layout_constraintBottom_toTopOf="@id/tv_history_detail_post_recorded_at"
+            app:layout_constraintStart_toStartOf="@id/tv_history_detail_writing"
+            app:layout_constraintTop_toBottomOf="@id/tv_history_detail_writing" />
+
+        <TextView
+            android:id="@+id/tv_history_detail_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{postItem.address}"
+            android:textAppearance="@style/caption_1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_history_detail_location_icon"
+            app:layout_constraintStart_toEndOf="@id/iv_history_detail_location_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_history_detail_location_icon"
+            tools:text="제주도 제주시 우도면" />
+
+        <TextView
+            android:id="@+id/tv_history_detail_post_recorded_at"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="8dp"
+            android:text="@{postItem.recordedAt}"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintBottom_toTopOf="@id/divider_history_detail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_history_detail_location_icon"
+            tools:text="2023.07.18 | 21:00" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_history_detail"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

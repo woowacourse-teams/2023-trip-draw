@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="RoundBottomSheetStyleTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundBottomSheetStyle</item>
+    </style>
+
+    <style name="RoundBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_td_white_fill_28_rect</item>
+    </style>
+</resources>

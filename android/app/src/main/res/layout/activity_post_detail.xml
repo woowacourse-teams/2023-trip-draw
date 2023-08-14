@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="postDetailViewModel"
+            type="com.teamtripdraw.android.ui.post.detail.PostDetailViewModel" />
+
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_post_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_post_detail_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/btn_post_viewer_back_description"
+                android:onClick="@{()->onBackClick.invoke()}"
+                android:src="@drawable/ic_back" />
+
+            <ImageView
+                android:id="@+id/btn_post_detail_delete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:contentDescription="@string/btn_delete_description"
+                android:onClick="@{()->postDetailViewModel.openDeletionEvent()}"
+                android:src="@drawable/ic_delete" />
+
+            <ImageView
+                android:id="@+id/btn_post_detail_edit"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/btn_edit_description"
+                android:onClick="@{() -> postDetailViewModel.editPost()}"
+                android:src="@drawable/ic_edit" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintTop_toBottomOf="@id/tb_post_detail" />
+
+        <ScrollView
+            android:id="@+id/sv_post_detail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_post_detail">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_post_detail_recorded_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:text="@{postDetailViewModel.postDetail.recordedAt}"
+                    android:textAppearance="@style/caption_1"
+                    android:textColor="@color/td_medium_gray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="2023.07.23. 21:00" />
+
+                <TextView
+                    android:id="@+id/tv_post_detail_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{postDetailViewModel.postDetail.title}"
+                    android:textAppearance="@style/title_2M"
+                    app:layout_constraintEnd_toStartOf="@id/iv_route"
+                    app:layout_constraintStart_toStartOf="@id/tv_post_detail_recorded_at"
+                    app:layout_constraintTop_toBottomOf="@id/tv_post_detail_recorded_at"
+                    tools:text="우도의 바닷가" />
+
+                <ImageView
+                    android:id="@+id/iv_post_detail_location_icon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/btn_post_detail_location_icon_description"
+                    android:src="@drawable/ic_location"
+                    app:layout_constraintStart_toStartOf="@id/tv_post_detail_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_post_detail_title" />
+
+                <TextView
+                    android:id="@+id/tv_post_detail_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{postDetailViewModel.postDetail.address}"
+                    android:textAppearance="@style/caption_1"
+                    app:layout_constraintStart_toEndOf="@id/iv_post_detail_location_icon"
+                    app:layout_constraintTop_toTopOf="@id/iv_post_detail_location_icon"
+                    tools:text="제주도 제주시 우도면" />
+
+                <ImageView
+                    android:id="@+id/iv_route"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:contentDescription="@string/iv_route_description"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_post_detail_recorded_at"
+                    app:setImageWithVisibility="@{postDetailViewModel.postDetail.routeImageUrl}"
+                    tools:background="@color/td_gray" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_post_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginTop="18dp"
+                    app:dividerColor="@color/td_light_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_post_detail_address" />
+
+                <ImageView
+                    android:id="@+id/iv_image"
+                    android:layout_width="0dp"
+                    android:layout_height="307dp"
+                    android:layout_marginTop="24dp"
+                    android:contentDescription="@string/iv_image_description"
+                    android:scaleType="centerCrop"
+                    app:clickToShowImageViewer="@{postDetailViewModel.postDetail.postImageUrl}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_post_detail"
+                    app:setImageWithVisibility="@{postDetailViewModel.postDetail.postImageUrl}"
+                    tools:background="@color/td_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:paddingHorizontal="@dimen/margin_default"
+                    android:paddingBottom="52dp"
+                    android:text="@{postDetailViewModel.postDetail.writing}"
+                    android:textAppearance="@style/body2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_image"
+                    tools:text="글 내용" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
