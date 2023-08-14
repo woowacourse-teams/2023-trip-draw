@@ -90,7 +90,7 @@
     <string name="tv_login_sign_in_policy"><u>이용약관</u>과&#160;</string>
     <string name="tv_login_sign_in_personal_info"><u>개인정보 처리 방침</u>에&#160;</string>
     <string name="tv_login_sign_in_personal_info_explain">동의하게 됩니다.</string>
-  
+
     <!-- HistoryFragment -->
     <string name="tv_history_no_trip">아직 여행이 기록되지 않았어요.\n 여행을 시작하여 새로운 추억을 만들어보세요.</string>
 
@@ -102,4 +102,7 @@
     <string name="tv_open_source_license_title">오픈소스 라이선스</string>
     <string name="tv_open_source_license_content">Android Parcelable \nhttps://developer.android.com/reference/kotlin/android/os/Parcelable \n\n\nGlide \nhttps://github.com/bumptech/glide \n\n\nGoogle Firebase for Android \nhttps://firebase.google.com/docs/android/setup \n\n\nKotlin \nhttps://github.com/JetBrains/kotlin \n\n\nKotlinx.coroutine \nhttps://github.com/Kotlin/kotlinx.coroutines \n\n\nMaterial-BottomNavigation \nhttps://m2.material.io/components/bottom-navigation/android \n\n\nMockk \nhttps://mockk.io/ \n\n\nSquare Moshi \nhttps://github.com/square/moshi \n\n\nSquare OkHttp \nhttps://github.com/square/okhttp \n\n\nSquare Retrofit \nhttps://github.com/square/retrofit</string>
 
+    <!-- TermsOfServiceActivity -->
+    <string name="tv_terms_of_service_title">이용 약관</string>
+    <string name="tv_terms_of_service_content"></string>
 </resources>
