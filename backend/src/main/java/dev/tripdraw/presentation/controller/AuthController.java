@@ -1,6 +1,7 @@
 package dev.tripdraw.presentation.controller;
 
 import dev.tripdraw.application.AuthService;
+import dev.tripdraw.dto.auth.AccessTokenRefreshRequest;
 import dev.tripdraw.dto.auth.OauthRequest;
 import dev.tripdraw.dto.auth.OauthResponse;
 import dev.tripdraw.dto.auth.RegisterRequest;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +44,17 @@ public class AuthController {
     @PostMapping("/oauth/register")
     public ResponseEntity<OauthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         OauthResponse oauthResponse = authService.register(registerRequest);
+        return ResponseEntity.ok(oauthResponse);
+    }
+
+    @Operation(summary = "Access Token 갱신 API", description = "액세스 토큰을 갱신합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "액세스 토큰 갱신 성공."
+    )
+    @GetMapping("/oauth/refresh")
+    public ResponseEntity<OauthResponse> refresh(@RequestBody AccessTokenRefreshRequest accessTokenRefreshRequest) {
+        OauthResponse oauthResponse = authService.refresh(accessTokenRefreshRequest);
         return ResponseEntity.ok(oauthResponse);
     }
 }

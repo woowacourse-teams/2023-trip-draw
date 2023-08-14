@@ -8,6 +8,7 @@ import dev.tripdraw.application.oauth.OauthClient;
 import dev.tripdraw.application.oauth.OauthClientProvider;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.dto.auth.AccessTokenRefreshRequest;
 import dev.tripdraw.dto.auth.OauthInfo;
 import dev.tripdraw.dto.auth.OauthRequest;
 import dev.tripdraw.dto.auth.OauthResponse;
@@ -70,5 +71,10 @@ public class AuthService {
         if (memberRepository.existsByNickname(nickname)) {
             throw new MemberException(DUPLICATE_NICKNAME);
         }
+    }
+
+    public OauthResponse refresh(AccessTokenRefreshRequest accessTokenRefreshRequest) {
+        Long memberId = authTokenManager.extractMemberId(accessTokenRefreshRequest.accessToken());
+        return new OauthResponse(authTokenManager.generate(memberId));
     }
 }
