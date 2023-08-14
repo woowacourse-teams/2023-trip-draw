@@ -56,6 +56,9 @@ class PostWritingViewModel(
     private val _imageUri: MutableLiveData<String> = MutableLiveData(null)
     val imageUri: LiveData<String> = _imageUri
 
+    private val _hasImage: MutableLiveData<Boolean> = MutableLiveData(false)
+    val hasImage: LiveData<Boolean> = _hasImage
+
     private val _takePictureEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val takePictureEvent: LiveData<Boolean> = _takePictureEvent
 
@@ -69,6 +72,13 @@ class PostWritingViewModel(
     fun updateImage(file: File) {
         imageFile = file
         _imageUri.value = file.toURI().toString()
+        _hasImage.value = true
+    }
+
+    fun deleteImage() {
+        imageFile = null
+        _imageUri.value = null
+        _hasImage.value = false
     }
 
     fun backPage() {
@@ -153,7 +163,7 @@ class PostWritingViewModel(
                     title.value = it.title
                     writing.value = it.writing
                     _imageUri.value = it.postImageUrl
-                        ?: null // todo 무의미한 코드이지만, "Expected non-nullable value"가 떠서 임시 방편.
+                    if (_imageUri.value != null) _hasImage.value = true
                 }
         }
     }

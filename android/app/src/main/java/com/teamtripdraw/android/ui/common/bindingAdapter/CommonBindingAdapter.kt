@@ -3,6 +3,7 @@ package com.teamtripdraw.android.ui.common.bindingAdapter
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.teamtripdraw.android.R
@@ -21,4 +22,14 @@ fun TextView.setMessageVisibility(isVisible: Boolean) {
     if (isVisible) {
         this.visibility = View.VISIBLE
     }
+}
+
+@BindingAdapter("app:setPostWritingImageVisibility")
+fun ConstraintLayout.setPostWritingImageVisibility(isVisible: Boolean) {
+    visibility =
+        if (isVisible) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
 }
