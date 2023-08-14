@@ -24,7 +24,7 @@ public class TimeTravelToFutureWhenRefreshAspect {
 
     private String customTime;
 
-    public void setCustomTime(String customTime) {
+    public void timeTravelTo(String customTime) {
         this.customTime = customTime;
     }
 

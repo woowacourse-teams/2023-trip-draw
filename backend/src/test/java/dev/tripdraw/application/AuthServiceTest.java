@@ -55,8 +55,8 @@ class AuthServiceTest {
 
     @AfterEach
     void clear() {
-        timeTravelToPastWhenLogInAspect.setCustomTime(null);
-        timeTravelToFutureWhenRefreshAspect.setCustomTime(null);
+        timeTravelToPastWhenLogInAspect.timeTravelTo(null);
+        timeTravelToFutureWhenRefreshAspect.timeTravelTo(null);
     }
 
     @Test
@@ -131,7 +131,7 @@ class AuthServiceTest {
         AccessTokenRefreshRequest accessTokenRefreshRequest = new AccessTokenRefreshRequest(validToken);
 
         // when
-        timeTravelToFutureWhenRefreshAspect.setCustomTime("A few seconds later...");
+        timeTravelToFutureWhenRefreshAspect.timeTravelTo("A few seconds later...");
         OauthResponse oauthResponseWithNewAccessToken = authService.refresh(accessTokenRefreshRequest);
 
         // then
@@ -156,7 +156,7 @@ class AuthServiceTest {
     @Test
     void 액세스_토큰_갱신_시에_만료된_토큰이면_예외를_반환한다() {
         // given
-        timeTravelToPastWhenLogInAspect.setCustomTime("호랑이 담배 피던 시절...");
+        timeTravelToPastWhenLogInAspect.timeTravelTo("호랑이 담배 피던 시절...");
         memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         OauthResponse oauthResponse = authService.login(new OauthRequest(KAKAO, "oauth.kakao.token"));
         String expiredToken = oauthResponse.accessToken();

@@ -64,8 +64,8 @@ class AuthControllerTest extends ControllerTest {
 
     @AfterEach
     void clear() {
-        timeTravelToPastWhenLogInAspect.setCustomTime(null);
-        timeTravelToFutureWhenRefreshAspect.setCustomTime(null);
+        timeTravelToPastWhenLogInAspect.timeTravelTo(null);
+        timeTravelToFutureWhenRefreshAspect.timeTravelTo(null);
     }
 
     @Nested
@@ -210,7 +210,7 @@ class AuthControllerTest extends ControllerTest {
             AccessTokenRefreshRequest accessTokenRefreshRequest = new AccessTokenRefreshRequest(validAccessToken);
 
             // when
-            timeTravelToFutureWhenRefreshAspect.setCustomTime("A few moments later...");
+            timeTravelToFutureWhenRefreshAspect.timeTravelTo("A few moments later...");
             ExtractableResponse<Response> refreshResponse = RestAssured.given().log().all()
                     .contentType(APPLICATION_JSON_VALUE)
                     .body(accessTokenRefreshRequest)
@@ -245,7 +245,7 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 만료된_액세스_토큰이면_예외가_발생한다() {
             // given
-            timeTravelToPastWhenLogInAspect.setCustomTime("아주 아주 먼 옛날...");
+            timeTravelToPastWhenLogInAspect.timeTravelTo("아주 아주 먼 옛날...");
             memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
             OauthRequest oauthRequest = new OauthRequest(KAKAO, "oauth.kakao.token");
 

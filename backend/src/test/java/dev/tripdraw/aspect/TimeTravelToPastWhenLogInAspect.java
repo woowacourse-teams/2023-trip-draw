@@ -40,7 +40,7 @@ public class TimeTravelToPastWhenLogInAspect {
         this.oauthClientProvider = oauthClientProvider;
     }
 
-    public void setCustomTime(String customTime) {
+    public void timeTravelTo(String customTime) {
         this.customTime = customTime;
     }
 
