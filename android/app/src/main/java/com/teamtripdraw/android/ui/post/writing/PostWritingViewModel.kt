@@ -42,7 +42,8 @@ class PostWritingViewModel(
     private val _backPageEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
     val backPageEvent: LiveData<Event<Boolean>> = _backPageEvent
 
-    private val _writingCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    private val _writingCompletedEvent: MutableLiveData<Event<Boolean>> =
+        MutableLiveData(Event(false))
     val writingCompletedEvent: LiveData<Event<Boolean>> = _writingCompletedEvent
 
     private val _point: MutableLiveData<Point> = MutableLiveData()
@@ -51,8 +52,9 @@ class PostWritingViewModel(
     private val _address: MutableLiveData<String> = MutableLiveData("")
     val address: LiveData<String> = _address
 
-    private val _imageFile: MutableLiveData<File> = MutableLiveData()
-    val imageFile: LiveData<File> = _imageFile
+    private var imageFile: File? = null
+    private val _imageUri: MutableLiveData<String> = MutableLiveData(null)
+    val imageUri: LiveData<String> = _imageUri
 
     private val _takePictureEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val takePictureEvent: LiveData<Boolean> = _takePictureEvent
@@ -65,7 +67,8 @@ class PostWritingViewModel(
     }
 
     fun updateImage(file: File) {
-        _imageFile.value = file
+        imageFile = file
+        _imageUri.value = file.toURI().toString()
     }
 
     fun backPage() {
@@ -114,7 +117,7 @@ class PostWritingViewModel(
                         title = title.value ?: "",
                         writing = writing.value ?: "",
                         address = address.value ?: "",
-                        imageFile = _imageFile.value,
+                        imageFile = imageFile,
                     )
                     postRepository.addPost(prePost).onSuccess {
                         _writingCompletedEvent.value = Event(true)
@@ -125,7 +128,7 @@ class PostWritingViewModel(
                         postId = postId,
                         title = title.value ?: "",
                         writing = writing.value ?: "",
-                        imageFile = _imageFile.value,
+                        imageFile = imageFile,
                     )
                     postRepository.patchPost(prePatchPost).onSuccess {
                         _writingCompletedEvent.value = Event(true)
@@ -149,7 +152,8 @@ class PostWritingViewModel(
                     _address.value = it.address
                     title.value = it.title
                     writing.value = it.writing
-                    // todo http url을 파일로 변환해 가지고 있도록 하는 작업
+                    _imageUri.value = it.postImageUrl
+                        ?: null // todo 무의미한 코드이지만, "Expected non-nullable value"가 떠서 임시 방편.
                 }
         }
     }
