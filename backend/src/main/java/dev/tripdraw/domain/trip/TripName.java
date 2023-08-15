@@ -1,16 +1,21 @@
 package dev.tripdraw.domain.trip;
 
-import jakarta.persistence.Embeddable;
+import static lombok.AccessLevel.PROTECTED;
 
+import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+@Accessors(fluent = true)
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class TripName {
 
     private static final String TRIP_NAME_PREFIX = "의 여행";
 
     private String name;
-
-    protected TripName() {
-    }
 
     private TripName(String name) {
         this.name = name;
@@ -22,9 +27,5 @@ public class TripName {
 
     public void change(String name) {
         this.name = name;
-    }
-
-    public String name() {
-        return name;
     }
 }

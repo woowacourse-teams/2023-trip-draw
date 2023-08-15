@@ -13,9 +13,11 @@ import dev.tripdraw.dto.auth.OauthRequest;
 import dev.tripdraw.dto.auth.OauthResponse;
 import dev.tripdraw.dto.auth.RegisterRequest;
 import dev.tripdraw.exception.member.MemberException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Transactional
 @Service
 public class AuthService {
@@ -25,16 +27,6 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final OauthClientProvider oauthClientProvider;
     private final AuthTokenManager authTokenManager;
-
-    public AuthService(
-            MemberRepository memberRepository,
-            OauthClientProvider oauthClientProvider,
-            AuthTokenManager authTokenManager
-    ) {
-        this.memberRepository = memberRepository;
-        this.oauthClientProvider = oauthClientProvider;
-        this.authTokenManager = authTokenManager;
-    }
 
     public OauthResponse login(OauthRequest oauthRequest) {
         OauthClient oauthClient = oauthClientProvider.provide(oauthRequest.oauthType());

@@ -5,6 +5,7 @@ import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TR
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
@@ -17,7 +18,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent = true)
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 @Entity
 public class Trip extends BaseEntity {
 
@@ -44,9 +51,6 @@ public class Trip extends BaseEntity {
     private String imageUrl;
 
     private String routeImageUrl;
-
-    protected Trip() {
-    }
 
     public Trip(TripName name, Member member) {
         this(null, name, member, ONGOING, EMPTY_IMAGE_URL, EMPTY_IMAGE_URL);
@@ -129,28 +133,8 @@ public class Trip extends BaseEntity {
                 .toList();
     }
 
-    public Long id() {
-        return id;
-    }
-
     public void deletePointById(Long pointId) {
         route.deletePointById(pointId);
-    }
-
-    public TripName name() {
-        return name;
-    }
-
-    public String nameValue() {
-        return name.name();
-    }
-
-    public Member member() {
-        return member;
-    }
-
-    public Route route() {
-        return route;
     }
 
     public List<Point> points() {
@@ -159,15 +143,7 @@ public class Trip extends BaseEntity {
                 .toList();
     }
 
-    public TripStatus status() {
-        return status;
-    }
-
-    public String imageUrl() {
-        return imageUrl;
-    }
-
-    public String routeImageUrl() {
-        return routeImageUrl;
+    public String nameValue() {
+        return name.name();
     }
 }

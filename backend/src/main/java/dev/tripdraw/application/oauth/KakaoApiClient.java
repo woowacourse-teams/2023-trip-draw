@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 public class KakaoApiClient implements OauthClient {
 
     private static final String BEARER = "Bearer ";
+    
     private final String kakaoInfoUrl;
     private final RestTemplate restTemplate;
 

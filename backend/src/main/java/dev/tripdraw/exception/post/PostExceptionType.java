@@ -19,12 +19,12 @@ public enum PostExceptionType implements ExceptionType {
     }
 
     @Override
-    public HttpStatus getHttpStatus() {
+    public HttpStatus httpStatus() {
         return httpStatus;
     }
 
     @Override
-    public String getMessage() {
+    public String message() {
         return errorMessage;
     }
 }

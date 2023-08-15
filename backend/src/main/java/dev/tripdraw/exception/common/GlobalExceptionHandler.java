@@ -61,7 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleBaseException(BaseException e) {
         ExceptionType exceptionType = e.exceptionType();
         log.warn(e.getMessage(), e);
-        return ResponseEntity.status(exceptionType.getHttpStatus())
-                .body(ExceptionResponse.of(exceptionType.name(), exceptionType.getMessage()));
+        return ResponseEntity.status(exceptionType.httpStatus())
+                .body(ExceptionResponse.of(exceptionType.name(), exceptionType.message()));
     }
 }

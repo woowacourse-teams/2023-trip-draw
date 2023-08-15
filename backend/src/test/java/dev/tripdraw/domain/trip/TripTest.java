@@ -57,7 +57,7 @@ class TripTest {
         // expect
         assertThatThrownBy(() -> trip.validateAuthorization(new Member("other", "kakaoId", KAKAO)))
                 .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_TRIP.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test
@@ -123,7 +123,7 @@ class TripTest {
         // expect
         assertThatThrownBy(() -> trip.changeStatus(null))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_INVALID_STATUS.getMessage());
+                .hasMessage(TRIP_INVALID_STATUS.message());
     }
 
     @Test
@@ -156,7 +156,7 @@ class TripTest {
         // expect
         assertThatThrownBy(() -> trip.deletePointById(point1.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_DELETED.getMessage());
+                .hasMessage(POINT_ALREADY_DELETED.message());
     }
 
     @Test
@@ -171,7 +171,7 @@ class TripTest {
         // expect
         assertThatThrownBy(() -> trip.deletePointById(point2.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_IN_TRIP.getMessage());
+                .hasMessage(POINT_NOT_IN_TRIP.message());
     }
 
     @Test

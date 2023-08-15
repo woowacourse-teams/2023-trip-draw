@@ -12,7 +12,11 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent = true)
+@Getter
 public class RouteImageDrawer {
 
     private static final int IMAGE_TYPE = BufferedImage.TYPE_INT_ARGB;
@@ -82,13 +86,5 @@ public class RouteImageDrawer {
 
     public void dispose() {
         graphics2D.dispose();
-    }
-
-    public BufferedImage bufferedImage() {
-        return bufferedImage;
-    }
-
-    public Graphics2D graphics2D() {
-        return graphics2D;
     }
 }

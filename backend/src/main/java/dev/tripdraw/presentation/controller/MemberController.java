@@ -5,6 +5,7 @@ import dev.tripdraw.dto.member.MemberSearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Member", description = "사용자 관련 API 명세")
+@RequiredArgsConstructor
 @RequestMapping("/members")
 @RestController
 public class MemberController {
 
     private final MemberService memberService;
-
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     @Operation(summary = "사용자 조회 API", description = "사용자를 조회합니다.")
     @ApiResponse(

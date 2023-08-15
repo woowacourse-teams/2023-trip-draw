@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,14 +34,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Post", description = "감상 관련 API 명세")
 @SwaggerAuthorizationRequired
+@RequiredArgsConstructor
 @RestController
 public class PostController {
 
     private final PostService postService;
-
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
 
     @Operation(summary = "현재 위치에 대한 감상 생성 API", description = "현재 위치에 대한 감상을 생성합니다.")
     @ApiResponse(

@@ -4,8 +4,10 @@ import dev.tripdraw.domain.draw.Coordinates;
 import dev.tripdraw.domain.draw.Positions;
 import dev.tripdraw.domain.draw.RouteImageDrawer;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class RouteImageGenerator {
 
@@ -13,10 +15,6 @@ public class RouteImageGenerator {
     private static final int ROUTE_SIZE = 600;
 
     private final RouteImageUploader routeImageUploader;
-
-    public RouteImageGenerator(RouteImageUploader routeImageUploader) {
-        this.routeImageUploader = routeImageUploader;
-    }
 
     public String generate(
             List<Double> latitudes,

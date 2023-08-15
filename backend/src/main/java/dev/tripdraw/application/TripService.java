@@ -20,9 +20,11 @@ import dev.tripdraw.dto.trip.TripsSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Transactional
 @Service
 public class TripService {
@@ -30,17 +32,7 @@ public class TripService {
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
     private final RouteImageGenerator routeImageGenerator;
-
-    public TripService(
-            TripRepository tripRepository,
-            MemberRepository memberRepository,
-            RouteImageGenerator routeImageGenerator
-    ) {
-        this.tripRepository = tripRepository;
-        this.memberRepository = memberRepository;
-        this.routeImageGenerator = routeImageGenerator;
-    }
-
+    
     public TripCreateResponse create(LoginUser loginUser) {
         Member member = getById(loginUser.memberId());
         Trip trip = Trip.from(member);
