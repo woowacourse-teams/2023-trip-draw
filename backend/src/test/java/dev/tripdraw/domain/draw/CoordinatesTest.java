@@ -24,7 +24,7 @@ class CoordinatesTest {
         // expect
         assertThatThrownBy(() -> Coordinates.of(xValues, yValues))
                 .isInstanceOf(DrawException.class)
-                .hasMessage(INVALID_COORDINATES.getMessage());
+                .hasMessage(INVALID_COORDINATES.message());
     }
 
     @Test

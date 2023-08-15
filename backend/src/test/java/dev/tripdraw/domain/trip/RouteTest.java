@@ -56,7 +56,7 @@ class RouteTest {
         // expect
         assertThatThrownBy(() -> route.deletePointById(inexistentPoint.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_IN_TRIP.getMessage());
+                .hasMessage(POINT_NOT_IN_TRIP.message());
     }
 
     @Test
@@ -71,7 +71,7 @@ class RouteTest {
         // expect
         assertThatThrownBy(() -> route.deletePointById(point.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_DELETED.getMessage());
+                .hasMessage(POINT_ALREADY_DELETED.message());
     }
 
     @Test
@@ -100,7 +100,7 @@ class RouteTest {
         // expect
         assertThatThrownBy(() -> route.findPointById(2L))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_FOUND.getMessage());
+                .hasMessage(POINT_NOT_FOUND.message());
     }
 }
 

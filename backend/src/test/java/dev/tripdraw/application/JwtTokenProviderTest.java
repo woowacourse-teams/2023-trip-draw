@@ -61,7 +61,7 @@ class JwtTokenProviderTest {
         // expect
         assertThatThrownBy(() -> jwtTokenProvider.extractSubject(invalidToken))
                 .isInstanceOf(AuthException.class)
-                .hasMessage(INVALID_TOKEN.getMessage());
+                .hasMessage(INVALID_TOKEN.message());
     }
 
     @Test
@@ -73,6 +73,6 @@ class JwtTokenProviderTest {
         // expect
         assertThatThrownBy(() -> jwtTokenProvider.extractSubject(expiredToken))
                 .isInstanceOf(AuthException.class)
-                .hasMessage(EXPIRED_TOKEN.getMessage());
+                .hasMessage(EXPIRED_TOKEN.message());
     }
 }

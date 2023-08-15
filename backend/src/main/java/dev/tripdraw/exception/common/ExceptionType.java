@@ -2,12 +2,11 @@ package dev.tripdraw.exception.common;
 
 import org.springframework.http.HttpStatus;
 
-
 public interface ExceptionType {
 
     String name();
 
-    HttpStatus getHttpStatus();
+    HttpStatus httpStatus();
 
-    String getMessage();
+    String message();
 }

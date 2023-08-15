@@ -28,10 +28,12 @@ import dev.tripdraw.exception.trip.TripException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@RequiredArgsConstructor
 @Transactional
 @Service
 public class PostService {
@@ -41,20 +43,6 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final FileUploader fileUploader;
     private final RouteImageGenerator routeImageGenerator;
-
-    public PostService(
-            PostRepository postRepository,
-            TripRepository tripRepository,
-            MemberRepository memberRepository,
-            FileUploader fileUploader,
-            RouteImageGenerator routeImageGenerator
-    ) {
-        this.postRepository = postRepository;
-        this.tripRepository = tripRepository;
-        this.memberRepository = memberRepository;
-        this.fileUploader = fileUploader;
-        this.routeImageGenerator = routeImageGenerator;
-    }
 
     public PostCreateResponse addAtCurrentPoint(
             LoginUser loginUser,

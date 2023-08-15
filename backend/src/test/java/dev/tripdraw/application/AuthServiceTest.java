@@ -85,7 +85,7 @@ class AuthServiceTest {
         // expect
         assertThatThrownBy(() -> authService.register(registerRequest))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -97,6 +97,6 @@ class AuthServiceTest {
         // expect
         assertThatThrownBy(() -> authService.register(registerRequest))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(DUPLICATE_NICKNAME.getMessage());
+                .hasMessage(DUPLICATE_NICKNAME.message());
     }
 }

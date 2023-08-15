@@ -17,6 +17,7 @@ import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,14 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Trip", description = "여행 관련 API 명세")
 @SwaggerAuthorizationRequired
+@RequiredArgsConstructor
 @RestController
 public class TripController {
 
     private final TripService tripService;
-
-    public TripController(TripService tripService) {
-        this.tripService = tripService;
-    }
 
     @Operation(summary = "여행 생성 API", description = "현재 로그인한 사용자의 여행을 생성합니다.")
     @ApiResponse(

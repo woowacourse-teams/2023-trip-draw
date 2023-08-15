@@ -3,6 +3,7 @@ package dev.tripdraw.domain.trip;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_HAS_POST;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.exception.trip.TripException;
@@ -11,7 +12,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent = true)
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 @Entity
 public class Point extends BaseEntity {
 
@@ -34,9 +41,6 @@ public class Point extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean isDeleted = false;
-
-    protected Point() {
-    }
 
     public Point(Double latitude, Double longitude, LocalDateTime recordedAt) {
         this(null, latitude, longitude, false, recordedAt);
@@ -75,25 +79,5 @@ public class Point extends BaseEntity {
         if (isDeleted) {
             throw new TripException(POINT_ALREADY_DELETED);
         }
-    }
-
-    public Double latitude() {
-        return latitude;
-    }
-
-    public Double longitude() {
-        return longitude;
-    }
-
-    public boolean hasPost() {
-        return hasPost;
-    }
-
-    public LocalDateTime recordedAt() {
-        return recordedAt;
-    }
-
-    public Boolean isDeleted() {
-        return isDeleted;
     }
 }

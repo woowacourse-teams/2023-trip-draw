@@ -1,10 +1,10 @@
 package dev.tripdraw.exception.member;
 
-import dev.tripdraw.exception.common.ExceptionType;
-import org.springframework.http.HttpStatus;
-
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+import dev.tripdraw.exception.common.ExceptionType;
+import org.springframework.http.HttpStatus;
 
 public enum MemberExceptionType implements ExceptionType {
     DUPLICATE_NICKNAME(CONFLICT, "이미 존재하는 닉네임입니다."),
@@ -20,12 +20,12 @@ public enum MemberExceptionType implements ExceptionType {
     }
 
     @Override
-    public HttpStatus getHttpStatus() {
+    public HttpStatus httpStatus() {
         return httpStatus;
     }
 
     @Override
-    public String getMessage() {
+    public String message() {
         return errorMessage;
     }
 }

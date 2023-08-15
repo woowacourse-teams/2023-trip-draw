@@ -8,8 +8,10 @@ import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class AuthExtractor {
 
@@ -17,10 +19,6 @@ public class AuthExtractor {
     private static final String EMPTY = "";
 
     private final AuthTokenManager authTokenManager;
-
-    public AuthExtractor(AuthTokenManager authTokenManager) {
-        this.authTokenManager = authTokenManager;
-    }
 
     public LoginUser extract(HttpServletRequest request) {
         Long memberId = parse(request);

@@ -1,6 +1,7 @@
 package dev.tripdraw.domain.member;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.oauth.OauthType;
@@ -10,7 +11,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent = true)
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 @Entity
 public class Member extends BaseEntity {
 
@@ -28,7 +35,8 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OauthType oauthType;
 
-    protected Member() {
+    public Member(String nickname, String oauthId, OauthType oauthType) {
+        this(null, nickname, oauthId, oauthType);
     }
 
     public Member(Long id, String nickname, String oauthId, OauthType oauthType) {
@@ -38,31 +46,11 @@ public class Member extends BaseEntity {
         this.oauthType = oauthType;
     }
 
-    public Member(String nickname, String oauthId, OauthType oauthType) {
-        this(null, nickname, oauthId, oauthType);
-    }
-
     public static Member of(String oauthId, OauthType oauthType) {
         return new Member(null, null, oauthId, oauthType);
     }
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public Long id() {
-        return id;
-    }
-
-    public String nickname() {
-        return nickname;
-    }
-
-    public String oauthId() {
-        return oauthId;
-    }
-
-    public OauthType oauthType() {
-        return oauthType;
     }
 }
