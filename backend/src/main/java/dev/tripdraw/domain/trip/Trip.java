@@ -152,9 +152,7 @@ public class Trip extends BaseEntity {
     }
 
     public List<Point> points() {
-        return route.points().stream()
-                .filter(point -> !point.isDeleted())
-                .toList();
+        return route.points();
     }
 
     public String nameValue() {

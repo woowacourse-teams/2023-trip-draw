@@ -102,5 +102,21 @@ class RouteTest {
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_FOUND.message());
     }
+
+    @Test
+    void 삭제된_위치정보는_반환하지_않는다() {
+        // given
+        Route route = new Route();
+        Point point1 = new Point(1L, 1.1, 2.1, false, LocalDateTime.now());
+        Point point2 = new Point(2L, 3.1, 4.1, false, LocalDateTime.now());
+        route.add(point1);
+        route.add(point2);
+
+        // when
+        route.deletePointById(1L);
+
+        // then
+        assertThat(route.points()).containsExactly(point2);
+    }
 }
 

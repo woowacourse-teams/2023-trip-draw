@@ -47,4 +47,10 @@ public class Route {
 
         pointToDelete.delete();
     }
+
+    public List<Point> points() {
+        return points.stream()
+                .filter(point -> !point.isDeleted())
+                .toList();
+    }
 }
