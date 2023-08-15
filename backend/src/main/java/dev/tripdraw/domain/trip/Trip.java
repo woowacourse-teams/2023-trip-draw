@@ -2,6 +2,7 @@ package dev.tripdraw.domain.trip;
 
 import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
+import static dev.tripdraw.exception.trip.TripExceptionType.ONE_OR_NO_POINT;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -17,6 +18,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.Duration;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -78,6 +80,18 @@ public class Trip extends BaseEntity {
         if (!this.member.equals(member)) {
             throw new TripException(NOT_AUTHORIZED_TO_TRIP);
         }
+    }
+
+    public TripDuration calculateTripDuration() {
+        List<Point> points = points();
+        if (points.size() == 1 || points.isEmpty()) {
+            throw new TripException(ONE_OR_NO_POINT);
+        }
+        Point startingPoint = points.get(0);
+        Point arrivalPoint = points.get(points.size() - 1);
+
+        Duration between = Duration.between(startingPoint.recordedAt(), arrivalPoint.recordedAt());
+        return TripDuration.of(between);
     }
 
     public void changeStatus(TripStatus status) {

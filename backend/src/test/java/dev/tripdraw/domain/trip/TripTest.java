@@ -278,4 +278,13 @@ class TripTest {
         // expect
         assertThat(trip.points()).containsExactly(point1);
     }
+
+    @Test
+    void 총_여행기간을_반환한다() {
+        // given
+
+        // when
+
+        // then
+    }
 }
