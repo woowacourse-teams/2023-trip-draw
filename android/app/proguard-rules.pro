@@ -95,6 +95,19 @@
   @com.squareup.moshi.FromJson <methods>;
   @com.squareup.moshi.ToJson <methods>;
 }
+# Dto 난독화 방지(isMinifyEnabled = true 와 관련)
+-keepclassmembers class com.teamtripdraw.android.data.httpClient.dto.request.** {
+  <init>(...);
+  <fields>;
+}
+-keepclassmembers class com.teamtripdraw.android.data.httpClient.dto.response.** {
+  <init>(...);
+  <fields>;
+}
+-keepclassmembers class com.teamtripdraw.android.data.httpClient.dto.failureResponse.** {
+  <init>(...);
+  <fields>;
+}
 #---------------------------------------------------moshi
 
 
