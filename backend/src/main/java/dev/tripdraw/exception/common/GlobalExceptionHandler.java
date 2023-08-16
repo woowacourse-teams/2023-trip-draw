@@ -61,9 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ExceptionResponse> handleBaseException(BaseException e) {
         ExceptionType exceptionType = e.exceptionType();
-        if (MDC.get(REQUEST_ID.key()) != null) {
-            log.info(String.format(LOG_FORMAT, MDC.get(REQUEST_ID.key()), e.getMessage()), e);
-        }
+        log.info(String.format(LOG_FORMAT, MDC.get(REQUEST_ID.key()), e.getMessage()), e);
         return ResponseEntity.status(exceptionType.httpStatus())
                 .body(ExceptionResponse.of(exceptionType.name(), exceptionType.message()));
     }
