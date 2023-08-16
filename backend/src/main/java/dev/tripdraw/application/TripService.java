@@ -3,12 +3,12 @@ package dev.tripdraw.application;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
-import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
 import dev.tripdraw.domain.trip.Trip;
 import dev.tripdraw.domain.trip.TripRepository;
+import dev.tripdraw.domain.trip.TripUpdateEvent;
 import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.dto.trip.PointCreateRequest;
 import dev.tripdraw.dto.trip.PointCreateResponse;
@@ -21,6 +21,7 @@ import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.trip.TripException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,8 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
-    private final RouteImageGenerator routeImageGenerator;
-    
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     public TripCreateResponse create(LoginUser loginUser) {
         Member member = getById(loginUser.memberId());
         Trip trip = Trip.from(member);
@@ -93,17 +94,8 @@ public class TripService {
 
         trip.changeName(tripUpdateRequest.name());
         trip.changeStatus(tripUpdateRequest.status());
-        String routeImageName = generateRouteImage(trip);
-        trip.changeRouteImageUrl(routeImageName);
-    }
 
-    private String generateRouteImage(Trip trip) {
-        return routeImageGenerator.generate(
-                trip.getLatitudes(),
-                trip.getLongitudes(),
-                trip.getPointedLatitudes(),
-                trip.getPointedLongitudes()
-        );
+        applicationEventPublisher.publishEvent(new TripUpdateEvent(trip.id()));
     }
 
     @Transactional(readOnly = true)
