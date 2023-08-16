@@ -3,7 +3,7 @@ package dev.tripdraw.application;
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
-import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUNT;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
@@ -222,7 +222,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.read(loginUser, MIN_VALUE))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.message());
+                .hasMessage(POST_NOT_FOUND.message());
     }
 
     @Test
@@ -330,7 +330,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.update(loginUser, MIN_VALUE, postUpdateRequest, null))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.message());
+                .hasMessage(POST_NOT_FOUND.message());
     }
 
     @Test
@@ -374,7 +374,7 @@ class PostServiceTest {
 
         assertThatThrownBy(() -> postService.read(loginUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.message());
+                .hasMessage(POST_NOT_FOUND.message());
     }
 
     @Test
@@ -382,7 +382,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.delete(loginUser, MIN_VALUE))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.message());
+                .hasMessage(POST_NOT_FOUND.message());
     }
 
     @Test

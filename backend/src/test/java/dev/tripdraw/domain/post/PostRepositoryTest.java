@@ -12,6 +12,10 @@ import dev.tripdraw.domain.trip.TripRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import dev.tripdraw.exception.post.PostException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -68,5 +72,13 @@ class PostRepositoryTest {
 
         // then
         assertThat(postRepository.findById(post.id())).isEmpty();
+    }
+
+    @Test
+    void 입력받은_식별자에_대한_감상이_존재하지_않는다면_예외를_던진다() {
+        // expect
+        assertThatThrownBy(() -> postRepository.getById(1L))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUND.message());
     }
 }
