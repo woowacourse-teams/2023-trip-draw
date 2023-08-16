@@ -9,9 +9,11 @@ import dev.tripdraw.domain.post.PostRepository;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
 import dev.tripdraw.exception.member.MemberException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Transactional
 @Service
 public class MemberService {
@@ -20,18 +22,6 @@ public class MemberService {
     private final TripRepository tripRepository;
     private final PostRepository postRepository;
     private final AuthTokenManager authTokenManager;
-
-    public MemberService(
-            MemberRepository memberRepository,
-            TripRepository tripRepository,
-            PostRepository postRepository,
-            AuthTokenManager authTokenManager
-    ) {
-        this.memberRepository = memberRepository;
-        this.tripRepository = tripRepository;
-        this.postRepository = postRepository;
-        this.authTokenManager = authTokenManager;
-    }
 
     @Transactional(readOnly = true)
     public boolean existsById(Long memberId) {

@@ -62,7 +62,7 @@ class AuthExtractorTest {
         // expect
         assertThatThrownBy(() -> authExtractor.extract(request))
                 .isInstanceOf(AuthException.class)
-                .hasMessage(INVALID_AUTH_HEADER.getMessage());
+                .hasMessage(INVALID_AUTH_HEADER.message());
     }
 
     @Test
@@ -77,7 +77,7 @@ class AuthExtractorTest {
         // expect
         assertThatThrownBy(() -> authExtractor.extract(request))
                 .isInstanceOf(AuthException.class)
-                .hasMessage(INVALID_AUTH_HEADER.getMessage());
+                .hasMessage(INVALID_AUTH_HEADER.message());
     }
 
     @Test
@@ -91,6 +91,6 @@ class AuthExtractorTest {
         // expect
         Assertions.assertThatThrownBy(() -> authExtractor.extract(request))
                 .isInstanceOf(AuthException.class)
-                .hasMessage(INVALID_TOKEN.getMessage());
+                .hasMessage(INVALID_TOKEN.message());
     }
 }

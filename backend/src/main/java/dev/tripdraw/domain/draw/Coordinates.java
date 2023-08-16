@@ -81,8 +81,4 @@ public class Coordinates {
                 .map(items::indexOf)
                 .toList();
     }
-
-    public List<Coordinate> items() {
-        return new ArrayList<>(items);
-    }
 }

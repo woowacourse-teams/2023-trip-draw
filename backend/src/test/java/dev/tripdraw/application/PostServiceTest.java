@@ -108,7 +108,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.addAtCurrentPoint(wrongUser, postAndPointCreateRequest, null))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -127,7 +127,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.addAtCurrentPoint(loginUser, requestOfNotExistedTripId, null))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_NOT_FOUND.getMessage());
+                .hasMessage(TRIP_NOT_FOUND.message());
     }
 
     @Test
@@ -164,7 +164,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.addAtExistingLocation(wrongUser, postRequest, null))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -181,7 +181,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedTripId, null))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_NOT_FOUND.getMessage());
+                .hasMessage(TRIP_NOT_FOUND.message());
     }
 
     @Test
@@ -198,7 +198,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.addAtExistingLocation(loginUser, requestOfNotExistedPointId, null))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_FOUND.getMessage());
+                .hasMessage(POINT_NOT_FOUND.message());
     }
 
     @Test
@@ -222,7 +222,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.read(loginUser, MIN_VALUE))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.getMessage());
+                .hasMessage(POST_NOT_FOUNT.message());
     }
 
     @Test
@@ -234,7 +234,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.read(wrongUser, postCreateResponse.postId()))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -245,7 +245,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.read(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
 
     @Test
@@ -277,7 +277,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.readAllByTripId(wrongUser, trip.id()))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -285,7 +285,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.readAllByTripId(loginUser, MIN_VALUE))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_NOT_FOUND.getMessage());
+                .hasMessage(TRIP_NOT_FOUND.message());
     }
 
     @Test
@@ -293,7 +293,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.readAllByTripId(otherUser, trip.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_TRIP.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test
@@ -330,7 +330,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.update(loginUser, MIN_VALUE, postUpdateRequest, null))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.getMessage());
+                .hasMessage(POST_NOT_FOUNT.message());
     }
 
     @Test
@@ -346,7 +346,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.update(wrongUser, postCreateResponse.postId(), postUpdateRequest, null))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -361,7 +361,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.update(otherUser, postCreateResponse.postId(), postUpdateRequest, null))
                 .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
 
     @Test
@@ -374,7 +374,7 @@ class PostServiceTest {
 
         assertThatThrownBy(() -> postService.read(loginUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.getMessage());
+                .hasMessage(POST_NOT_FOUNT.message());
     }
 
     @Test
@@ -382,7 +382,7 @@ class PostServiceTest {
         // given & expect
         assertThatThrownBy(() -> postService.delete(loginUser, MIN_VALUE))
                 .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUNT.getMessage());
+                .hasMessage(POST_NOT_FOUNT.message());
     }
 
     @Test
@@ -394,7 +394,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.delete(wrongUser, postCreateResponse.postId()))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -405,7 +405,7 @@ class PostServiceTest {
         // expect
         assertThatThrownBy(() -> postService.delete(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
 
     private PostCreateResponse createPost() {

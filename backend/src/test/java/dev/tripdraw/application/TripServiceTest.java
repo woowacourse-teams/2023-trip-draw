@@ -92,7 +92,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.addPoint(loginUser, pointCreateRequest))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_NOT_FOUND.getMessage());
+                .hasMessage(TRIP_NOT_FOUND.message());
     }
 
     @Test
@@ -138,7 +138,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -152,7 +152,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(loginUser, inExistentPoint.id(), trip.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_IN_TRIP.getMessage());
+                .hasMessage(POINT_NOT_IN_TRIP.message());
     }
 
     @Test
@@ -165,7 +165,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(loginUser, response.pointId(), trip.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_DELETED.getMessage());
+                .hasMessage(POINT_ALREADY_DELETED.message());
     }
 
     @Test
