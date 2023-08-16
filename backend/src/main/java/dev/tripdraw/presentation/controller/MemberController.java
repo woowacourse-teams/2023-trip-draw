@@ -26,7 +26,7 @@ public class MemberController {
             responseCode = "200",
             description = "사용자 조회 성공."
     )
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<MemberSearchResponse> findByCode(@RequestParam String code) {
         MemberSearchResponse response = memberService.findByCode(code);
         return ResponseEntity.ok(response);

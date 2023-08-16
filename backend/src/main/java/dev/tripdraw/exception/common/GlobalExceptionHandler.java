@@ -1,11 +1,12 @@
 package dev.tripdraw.exception.common;
 
+import static dev.tripdraw.common.MdcToken.REQUEST_ID;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,18 +18,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final String LOG_FORMAT = "[%s] %s";
     private static final String INTERNAL_SERVER_ERROR_MESSAGE = "서버가 응답할 수 없습니다.";
     private static final String METHOD_ARGUMENT_NOT_VALID_MESSAGE = "잘못된 요청입니다.";
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception e) {
         HttpStatus httpStatus = INTERNAL_SERVER_ERROR;
-        log.error(e.getMessage(), e);
+        log.error(String.format(LOG_FORMAT, MDC.get(REQUEST_ID.key()), e.getMessage()), e);
         return ResponseEntity.status(httpStatus)
                 .body(ExceptionResponse.of(httpStatus.name(), INTERNAL_SERVER_ERROR_MESSAGE));
     }
@@ -60,7 +61,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ExceptionResponse> handleBaseException(BaseException e) {
         ExceptionType exceptionType = e.exceptionType();
-        log.warn(e.getMessage(), e);
+        if (MDC.get(REQUEST_ID.key()) != null) {
+            log.info(String.format(LOG_FORMAT, MDC.get(REQUEST_ID.key()), e.getMessage()), e);
+        }
         return ResponseEntity.status(exceptionType.httpStatus())
                 .body(ExceptionResponse.of(exceptionType.name(), exceptionType.message()));
     }
