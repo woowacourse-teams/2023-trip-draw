@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class TestFixture {
 
     public static Member 사용자() {
-        return new Member(1L, "통후추", "id", OauthType.KAKAO);
+        return new Member(1L, "통후추", "", OauthType.KAKAO);
     }
 
     public static Point 위치_정보() {
