@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="historyDetailViewModel"
+            type="com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel" />
+
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:collapsedTitleGravity="center"
+                app:collapsedTitleTextAppearance="@style/subtitle_1"
+                app:contentScrim="@color/td_white"
+                app:expandedTitleGravity="start|bottom"
+                app:expandedTitleTextAppearance="@style/title_1B"
+                app:expandedTitleTextColor="@color/white"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:title="@{historyDetailViewModel.previewTrip.name}">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/td_white"
+                    app:expandedTitleMarginStart="48dp"
+                    app:expandedTitleTextColor="@color/td_black"
+                    app:layout_collapseMode="parallax">
+
+                    <ImageView
+                        android:id="@+id/iv_history_detail_image"
+                        android:layout_width="0dp"
+                        android:layout_height="360dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:setImage="@{historyDetailViewModel.previewTrip.imageUrl}"
+                        tools:background="@color/td_light_blue" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@color/td_black_transparency_15"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_route"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/iv_history_detail_route" />
+
+                    <ImageView
+                        android:id="@+id/iv_history_detail_route"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_image"
+                        app:layout_constraintEnd_toEndOf="@id/iv_history_detail_image"
+                        app:setImage="@{historyDetailViewModel.previewTrip.routeImageUrl}"
+                        tools:background="@color/td_gray" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/tb_history_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/td_white"
+                    app:layout_collapseMode="pin">
+
+                    <ImageView
+                        android:id="@+id/btn_history_detail_back"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@string/btn_post_viewer_back_description"
+                        android:onClick="@{()->onBackClick.invoke()}"
+                        android:src="@drawable/ic_back" />
+
+                    <ImageView
+                        android:id="@+id/btn_history_detail_delete"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:contentDescription="@string/btn_delete_description"
+                        android:src="@drawable/ic_delete" />
+
+                    <ImageView
+                        android:id="@+id/btn_history_detail_edit"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:src="@drawable/ic_edit" />
+
+                    <ImageView
+                        android:id="@+id/btn_history_detail_share"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:src="@drawable/ic_share" />
+
+                </com.google.android.material.appbar.MaterialToolbar>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_trip_history_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/item_history_detail_posts" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

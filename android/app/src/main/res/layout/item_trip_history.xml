@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="historyViewModel"
+            type="com.teamtripdraw.android.ui.history.HistoryViewModel" />
+
+        <variable
+            name="uiPreviewTrip"
+            type="com.teamtripdraw.android.ui.model.UiPreviewTrip" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="@dimen/margin_default"
+        android:background="@drawable/shape_td_gray_line_0_rect"
+        android:onClick="@{()->historyViewModel.openHistoryDetail(uiPreviewTrip)}"
+        android:padding="@dimen/margin_default">
+
+        <ImageView
+            android:id="@+id/iv_history_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_history_title"
+            app:layout_constraintDimensionRatio="5:4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setRoundImageWithVisibility="@{uiPreviewTrip.imageUrl}"
+            tools:background="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:id="@+id/iv_history_route"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/iv_history_image"
+            app:layout_constraintDimensionRatio="5:4"
+            app:layout_constraintEnd_toEndOf="@id/iv_history_image"
+            app:layout_constraintStart_toStartOf="@id/iv_history_image"
+            app:layout_constraintTop_toTopOf="@id/iv_history_image"
+            app:setRoundImageWithVisibility="@{uiPreviewTrip.routeImageUrl}" />
+
+        <TextView
+            android:id="@+id/tv_history_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{uiPreviewTrip.name}"
+            android:textAppearance="@style/subtitle_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/iv_history_image"
+            app:layout_constraintStart_toStartOf="@id/iv_history_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_history_image"
+            tools:text="여수 여행" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

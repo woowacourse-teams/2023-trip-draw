@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="postViewerViewModel"
+            type="com.teamtripdraw.android.ui.post.viewer.PostViewerViewModel" />
+
+        <variable
+            name="onBackClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.post.viewer.PostViewerActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_post_viewer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_post_viewer_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:contentDescription="@string/btn_post_viewer_back_description"
+                android:onClick="@{()->onBackClick.invoke()}"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/tv_post_viewer_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/tv_post_viewer_toolbar_title"
+                android:textAppearance="@style/subtitle_2"
+                android:textColor="@color/td_black" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <TextView
+            android:id="@+id/tv_post_viewer_no_post"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/tv_post_viewer_no_post"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_dark_gray"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_post_viewer"
+            app:setMessageVisibility="@{postViewerViewModel.posts.empty}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_post_viewer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_post_viewer"
+            tools:listitem="@layout/item_post_viewer" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

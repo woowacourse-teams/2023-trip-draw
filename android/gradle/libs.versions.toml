@@ -1,0 +1,191 @@
+[versions]
+# Versions
+compileSdk = "33"
+minSdk = "26"
+targetSdk = "33"
+appVersion = "1.0.0"
+versionCode = "3"
+
+# Kotlin
+kotlin = "1.8.10"
+
+# AndroidX Libraries
+coreKtx = "1.10.1"
+appcompat = "1.6.1"
+constraintlayout = "2.1.4"
+
+# Google Libraries
+material = "1.9.0"
+
+# Test Libraries
+junit = "4.13.2"
+androidTestJunit = "1.1.5"
+androidxTestEspresso = "3.5.1"
+assertj = "3.22.0"
+
+# LiveData Test
+coreTest = "2.2.0"
+
+# Test juit5 support
+mannodermaus = "1.9.3.0"
+supportJunit5 = "5.9.3"
+
+# domain junit5
+junitJupiter = "5.8.2"
+assertjCore = "3.22.0"
+
+# Build Tools and Plugins
+gradleplugin = "7.4.0"
+
+# Networking
+okhttp = "4.11.0"
+retrofit = "2.9.0"
+loggingInterceptor = "4.11.0"
+
+# Moshi
+moshi = "1.14.0"
+moshiConverter = "2.9.0"
+
+# Mockk
+mockk = "1.13.5"
+
+# Glide
+glide = "4.15.1"
+
+# addKtlintFormatGitPreCommitHook
+jlleitschuh = "10.3.0"
+
+# NaverMap
+naverMap = "3.16.2"
+
+# FragmentKtx
+fragmentKtx = "1.5.5"
+
+# gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
+gmsPlayServicesLocation = "20.0.0"
+
+# fireBase
+fireBasePlugIn = "4.3.15"
+fireBaseBom = "32.2.0"
+
+#EncryptedSharedPreference
+encryptedSharedPreference = "1.1.0-alpha06"
+
+# CoroutineTest
+coroutineTest = "1.7.2"
+
+# Stfalcon
+stfalcon = "v1.0.1"
+
+# firebaseCrashlytics
+firebaseCrashlyticsPlugIn = "2.9.8"
+
+# kakaoLogin
+kakaoUser = "2.15.0"
+
+# splashScreen
+splashScreen = "1.0.0-alpha01"
+
+[libraries]
+# AndroidX Libraries
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+
+# Google Libraries
+material = { module = "com.google.android.material:material", version.ref = "material" }
+
+# Test Libraries
+androidTestJunit = { module = "androidx.test.ext:junit", version.ref = "androidTestJunit" }
+androidxTestEspresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxTestEspresso" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+
+# LiveData Test
+coreTest = { module = "androidx.arch.core:core-testing", version.ref = "coreTest" }
+
+# Test juit5 support
+# if you want to use junit5 for Instrumentation Test add jupiterApi to android module
+# for unit test(Required)
+jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "supportJunit5" }
+jupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "supportJunit5" }
+# for Parameterized Tests(Optional)
+parameterizedTest = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "supportJunit5" }
+# for JUnit4-basedTest
+junit4 = { module = "junit:junit", version.ref = "junit" }
+junit4VintageEngine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "supportJunit5" }
+
+# domain junit5
+junitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
+assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertjCore" }
+
+# Networking
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+
+# Moshi
+moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshiConverter = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "moshiConverter" }
+
+# Mockk
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+mockkAgent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
+
+# Glide
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+
+# NaverMap
+naverMap = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
+
+# FragmentKtx
+fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+
+# gmsPlayServicesLocation(네이버 맵 위치용,버전변경 시 #15 이슈 참고후 변경)
+gmsPlayServicesLocation = { module = "com.google.android.gms:play-services-location", version.ref = "gmsPlayServicesLocation" }
+
+# fireBase
+fireBaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "fireBaseBom" }
+# googleAnalytics
+fireBaseAnalyticsKtx = { module = "com.google.firebase:firebase-analytics-ktx" }
+# firebaseCrashlytics
+fireBaseCrashlyticsKtx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+
+#EncryptedSharedPreference
+encryptedSharedPreference = { module = "androidx.security:security-crypto", version.ref = "encryptedSharedPreference" }
+
+# CoroutineTest
+coroutineTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineTest" }
+
+# Stfalcon
+stfalcon = { module = "com.github.stfalcon-studio:StfalconImageViewer", version.ref = "stfalcon" }
+
+# kakaoLogin
+kakaoUser = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
+
+# splashScreen
+splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
+
+[bundles]
+domainTest = ["junitJupiter", "assertjCore"]
+androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest", "coreTest"]
+androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
+httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
+androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
+naverMap = ["naverMap", "gmsPlayServicesLocation"]
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "gradleplugin" }
+androidLibrary = { id = "com.android.library", version.ref = "gradleplugin" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+# addKtlintFormatGitPreCommitHook
+jlleitschuh = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "jlleitschuh" }
+# fireBase
+fireBasePlugIn = { id = "com.google.gms.google-services", version.ref = "fireBasePlugIn" }
+# firebaseCrashlytics
+firebaseCrashlyticsPlugIn = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugIn" }
+
+# use junit5 for test
+mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus" }

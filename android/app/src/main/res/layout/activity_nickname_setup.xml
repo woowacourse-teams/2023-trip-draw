@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="nicknameSetupViewModel"
+            type="com.teamtripdraw.android.ui.signUp.NicknameSetupViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.signUp.NicknameSetupActivity">
+
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="52dp"
+            android:text="@string/tv_main_title"
+            android:textAppearance="@style/title_2B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_sub_title"
+            android:textAppearance="@style/subtitle_2"
+            app:layout_constraintStart_toStartOf="@+id/tv_main_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_main_title" />
+
+        <EditText
+            android:id="@+id/et_nickname"
+            nicknameEditTextState="@{nicknameSetupViewModel.nicknameState}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_default"
+            android:layout_marginTop="50dp"
+            android:afterTextChanged="@{() -> nicknameSetupViewModel.nicknameChangedEvent()}"
+            android:autofillHints="username"
+            android:hint="@string/et_nickname"
+            android:inputType="text"
+            android:maxLength="@{nicknameSetupViewModel.MAX_INPUT_NAME_LENGTH}"
+            android:padding="@dimen/margin_default"
+            android:text="@={nicknameSetupViewModel.nickname}"
+            android:textAppearance="@style/body_1"
+            android:textColorHint="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
+
+        <TextView
+            android:id="@+id/tv_nickname_valid_state_warning_message"
+            nicknameValidStateTextView="@{nicknameSetupViewModel.nicknameState}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_red"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/et_nickname"
+            app:layout_constraintTop_toBottomOf="@id/et_nickname"
+            tools:text="설명글입니다" />
+
+        <TextView
+            android:id="@+id/tv_nickname_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{@string/tv_nickname_length(nicknameSetupViewModel.nickname.length(), nicknameSetupViewModel.MAX_NAME_LENGTH)}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="@id/et_nickname"
+            app:layout_constraintTop_toBottomOf="@id/et_nickname"
+            tools:text="0/10" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_setup_complete"
+            nicknameCompleteButtonState="@{nicknameSetupViewModel.nicknameState}"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_margin="@dimen/margin_default"
+            android:enabled="false"
+            android:onClick="@{() -> nicknameSetupViewModel.setNickname()}"
+            android:text="@string/btn_setup_complete"
+            android:textAppearance="@style/title_2M"
+            android:textColor="@color/td_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
