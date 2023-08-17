@@ -10,6 +10,10 @@ jobs:
     runs-on: backend-prod-cd
 
     steps:
+      - name: 수정 권한 부여
+        run: |
+          sudo chown -R ubuntu:ubuntu ${{ secrets.HOME }}
+
       - name: 서브 모듈 checkout
         uses: actions/checkout@v3
         with:
