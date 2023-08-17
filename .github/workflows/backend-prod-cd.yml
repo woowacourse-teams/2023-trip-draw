@@ -10,11 +10,11 @@ jobs:
     runs-on: backend-prod-cd
 
     steps:
-      - name: 서브모듈 checkout
+      - name: 서브 모듈 checkout
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.TRIP_DRAW_TOKEN }}
-          submodules: true
+          submodules: recursive
 
       - name: 배포 스크립트 실행
         run: |
