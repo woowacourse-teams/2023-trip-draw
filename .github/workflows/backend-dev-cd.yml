@@ -10,16 +10,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: 수정 권한 부여
-        run: |
-          sudo chown -R ubuntu:ubuntu ${{ secrets.HOME }}
-
-      - name: 서브 모듈 checkout
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.TRIP_DRAW_TOKEN }}
-          submodules: recursive
-
       - name: 배포 스크립트 실행
         run: |
           cd
