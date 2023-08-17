@@ -35,7 +35,7 @@ class PointTest {
         // expect
         assertThatThrownBy(point::delete)
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_DELETED.getMessage());
+                .hasMessage(POINT_ALREADY_DELETED.message());
     }
 
     @Test
@@ -59,6 +59,6 @@ class PointTest {
         // expect
         assertThatThrownBy(point::registerPost)
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_HAS_POST.getMessage());
+                .hasMessage(POINT_ALREADY_HAS_POST.message());
     }
 }

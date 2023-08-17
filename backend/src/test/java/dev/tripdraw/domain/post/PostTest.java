@@ -55,7 +55,7 @@ class PostTest {
         // expect
         assertThatThrownBy(() -> post.validateAuthorization(new Member("순후추", "kakaoId", KAKAO)))
                 .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_POST.getMessage());
+                .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
 
     @Test
@@ -83,7 +83,7 @@ class PostTest {
         // expect
         assertThatThrownBy(() -> new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_HAS_POST.getMessage());
+                .hasMessage(POINT_ALREADY_HAS_POST.message());
     }
 
     @Test

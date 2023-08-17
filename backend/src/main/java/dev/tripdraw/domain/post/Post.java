@@ -3,6 +3,7 @@ package dev.tripdraw.domain.post;
 import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
@@ -16,7 +17,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent = true)
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 @Entity
 public class Post extends BaseEntity {
 
@@ -48,9 +55,6 @@ public class Post extends BaseEntity {
     private String postImageUrl;
 
     private String routeImageUrl;
-
-    protected Post() {
-    }
 
     public Post(String title, Point point, String address, String writing, Member member, Long tripId) {
         this(null, title, point, address, writing, member, tripId);
@@ -95,41 +99,5 @@ public class Post extends BaseEntity {
 
     public void changeWriting(String writing) {
         this.writing = writing;
-    }
-
-    public Long id() {
-        return id;
-    }
-
-    public String title() {
-        return title;
-    }
-
-    public Point point() {
-        return point;
-    }
-
-    public String address() {
-        return address;
-    }
-
-    public String writing() {
-        return writing;
-    }
-
-    public Member member() {
-        return member;
-    }
-
-    public Long tripId() {
-        return tripId;
-    }
-
-    public String postImageUrl() {
-        return postImageUrl;
-    }
-
-    public String routeImageUrl() {
-        return routeImageUrl;
     }
 }

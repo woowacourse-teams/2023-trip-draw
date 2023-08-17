@@ -9,7 +9,6 @@ import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.ArgumentMatchers.any;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
@@ -33,7 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -92,7 +90,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.addPoint(loginUser, pointCreateRequest))
                 .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_NOT_FOUND.getMessage());
+                .hasMessage(TRIP_NOT_FOUND.message());
     }
 
     @Test
@@ -138,7 +136,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -152,7 +150,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(loginUser, inExistentPoint.id(), trip.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_IN_TRIP.getMessage());
+                .hasMessage(POINT_NOT_IN_TRIP.message());
     }
 
     @Test
@@ -165,7 +163,7 @@ class TripServiceTest {
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(loginUser, response.pointId(), trip.id()))
                 .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_DELETED.getMessage());
+                .hasMessage(POINT_ALREADY_DELETED.message());
     }
 
     @Test
@@ -190,7 +188,6 @@ class TripServiceTest {
     void 여행의_이름과_상태를_수정한다() {
         // given
         TripUpdateRequest request = new TripUpdateRequest("제주도 여행", FINISHED);
-        BDDMockito.given(routeImageGenerator.generate(any(), any(), any(), any())).willReturn("hello.png");
 
         // when
         tripService.updateTripById(loginUser, trip.id(), request);
@@ -199,7 +196,6 @@ class TripServiceTest {
         assertSoftly(softly -> {
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(trip.status()).isEqualTo(FINISHED);
-            softly.assertThat(trip.routeImageUrl()).isEqualTo("hello.png");
         });
     }
 

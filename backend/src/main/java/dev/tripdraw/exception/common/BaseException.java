@@ -14,6 +14,6 @@ public class BaseException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return exceptionType.getMessage();
+        return exceptionType.message();
     }
 }

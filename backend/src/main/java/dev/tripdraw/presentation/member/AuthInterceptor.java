@@ -7,19 +7,16 @@ import dev.tripdraw.dto.auth.LoginUser;
 import dev.tripdraw.exception.auth.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@RequiredArgsConstructor
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final MemberService memberService;
     private final AuthExtractor authExtractor;
-
-    public AuthInterceptor(MemberService memberService, AuthExtractor authExtractor) {
-        this.memberService = memberService;
-        this.authExtractor = authExtractor;
-    }
 
     @Override
     public boolean preHandle(

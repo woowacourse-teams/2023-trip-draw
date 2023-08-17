@@ -6,6 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -55,6 +56,26 @@ class TripRepositoryTest {
 
         // then
         assertThat(trips).hasSize(0);
+    }
+
+    @Test
+    void 여행_ID를_입력받아_여행_목록과_위치_정보까지_조회한다() {
+        // given
+        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
+        Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
+        trip.add(point1);
+        trip.add(point2);
+        tripRepository.save(trip);
+
+        // when
+        Trip savedTrips = tripRepository.getTripWithPoints(trip.id());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(savedTrips.points()).containsExactly(point1, point2);
+            softly.assertThat(savedTrips).isEqualTo(trip);
+        });
     }
 
     @Test

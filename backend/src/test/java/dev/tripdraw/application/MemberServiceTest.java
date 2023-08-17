@@ -46,7 +46,6 @@ class MemberServiceTest {
     private Trip trip;
     private Post post;
 
-
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
@@ -87,7 +86,7 @@ class MemberServiceTest {
         // expect
         assertThatThrownBy(() -> memberService.findByCode(code))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
@@ -97,7 +96,7 @@ class MemberServiceTest {
         // expect
         assertThatThrownBy(() -> memberService.findByCode(nonExistentCode))
                 .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.getMessage());
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @Test
