@@ -47,6 +47,4 @@ class RouteLengthTest {
                 List.of(new Point(1.1, 1.1, LocalDateTime.now()))
         );
     }
-
-
 }
