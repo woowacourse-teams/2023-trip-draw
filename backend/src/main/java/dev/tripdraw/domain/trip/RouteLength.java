@@ -14,15 +14,16 @@ public class RouteLength {
 
     private final double length;
 
-    private RouteLength(List<Point> points) {
-        this.length = calculateLength(points);
+    private RouteLength(double length) {
+        this.length = length;
     }
 
     public static RouteLength from(List<Point> points) {
-        return new RouteLength(points);
+        double length = calculateLength(points);
+        return new RouteLength(length);
     }
 
-    private Double calculateLength(List<Point> points) {
+    private static double calculateLength(List<Point> points) {
         if (points == null || points.size() <= 1) {
             throw new TripException(ONE_OR_NO_POINT);
         }
@@ -32,7 +33,7 @@ public class RouteLength {
                 .sum();
     }
 
-    private Double distanceBetween(Point startPoint, Point endPoint) {
+    private static double distanceBetween(Point startPoint, Point endPoint) {
         double theta = startPoint.longitude() - endPoint.longitude();
         Double latitude1 = startPoint.latitude();
         Double latitude2 = endPoint.latitude();
