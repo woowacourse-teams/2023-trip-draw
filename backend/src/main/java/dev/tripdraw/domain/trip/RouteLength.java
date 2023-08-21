@@ -23,7 +23,7 @@ public class RouteLength {
     }
 
     private Double calculateLength(List<Point> points) {
-        if (points.isEmpty() || points.size() == 1) {
+        if (points == null || points.size() <= 1) {
             throw new TripException(ONE_OR_NO_POINT);
         }
 
