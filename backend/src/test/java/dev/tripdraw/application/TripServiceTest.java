@@ -117,13 +117,10 @@ class TripServiceTest {
         tripService.deletePoint(loginUser, response.pointId(), trip.id());
 
         // then
-        Point deletedPoint = trip.route().points()
+        assertThat(trip.route().points()
                 .stream()
-                .filter(point -> Objects.equals(point.id(), response.pointId()))
-                .findFirst()
-                .get();
-
-        assertThat(deletedPoint.isDeleted()).isTrue();
+                .anyMatch(point -> Objects.equals(point.id(), response.pointId())))
+                .isFalse();
     }
 
     @Test

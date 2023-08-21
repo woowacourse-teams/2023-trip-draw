@@ -1,23 +1,20 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
-import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.exception.trip.TripException;
-import java.time.LocalDateTime;
-import java.util.List;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.exception.trip.TripExceptionType.*;
+import static org.assertj.core.api.Assertions.*;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -277,5 +274,26 @@ class TripTest {
 
         // expect
         assertThat(trip.points()).containsExactly(point1);
+    }
+
+    @Test
+    void 총_여행기간을_반환한다() {
+        // given
+        Member member = new Member("통후추", "kakaoId", KAKAO);
+        Trip trip = Trip.from(member);
+        Point point1 = new Point(1.1, 2.2, LocalDateTime.of(2023, 3, 3, 0, 0));
+        Point point2 = new Point(3.3, 4.4, LocalDateTime.of(2023, 3, 4, 15, 0));
+        trip.add(point1);
+        trip.add(point2);
+
+        // when
+        TripDuration tripDuration = trip.calculateTripDuration();
+
+        // then
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(tripDuration.durationInMinutes()).isEqualTo("2340분");
+            softly.assertThat(tripDuration.durationInHoursAndMinutes()).isEqualTo("39시간 0분");
+            softly.assertThat(tripDuration.durationInDaysAndHoursAndMinutes()).isEqualTo("1일 15시간 0분");
+        });
     }
 }

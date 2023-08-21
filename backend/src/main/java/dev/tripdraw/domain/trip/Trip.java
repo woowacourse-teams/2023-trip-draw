@@ -1,26 +1,20 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
-import static dev.tripdraw.exception.trip.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_INVALID_STATUS;
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
-
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.exception.trip.TripException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.List;
+
+import static dev.tripdraw.domain.trip.TripStatus.ONGOING;
+import static dev.tripdraw.exception.trip.TripExceptionType.*;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Accessors(fluent = true)
 @Getter
@@ -78,6 +72,17 @@ public class Trip extends BaseEntity {
         if (!this.member.equals(member)) {
             throw new TripException(NOT_AUTHORIZED_TO_TRIP);
         }
+    }
+
+    public TripDuration calculateTripDuration() {
+        List<Point> points = points();
+        if (points.size() == 1 || points.isEmpty()) {
+            throw new TripException(ONE_OR_NO_POINT);
+        }
+        Point startingPoint = points.get(0);
+        Point arrivalPoint = points.get(points.size() - 1);
+
+        return TripDuration.of(startingPoint, arrivalPoint);
     }
 
     public void changeStatus(TripStatus status) {
@@ -138,9 +143,7 @@ public class Trip extends BaseEntity {
     }
 
     public List<Point> points() {
-        return route.points().stream()
-                .filter(point -> !point.isDeleted())
-                .toList();
+        return route.points();
     }
 
     public String nameValue() {

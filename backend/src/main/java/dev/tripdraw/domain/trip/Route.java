@@ -11,12 +11,19 @@ import dev.tripdraw.exception.trip.TripException;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
+import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Accessors(fluent = true)
 @Getter
@@ -46,5 +53,15 @@ public class Route {
                 .orElseThrow(() -> new TripException(POINT_NOT_IN_TRIP));
 
         pointToDelete.delete();
+    }
+
+    public List<Point> points() {
+        return points.stream()
+                .filter(point -> !point.isDeleted())
+                .toList();
+    }
+
+    public RouteLength calculateRouteLength() {
+        return RouteLength.from(points);
     }
 }
