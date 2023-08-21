@@ -12,7 +12,7 @@ public class RouteLength {
 
     private static final double AVERAGE_DISTANCE_FOR_ONE_DEGREE_DIFFERENCE_IN_LATITUDE_ON_KOREA_REGION = 111.1;
 
-    private final Double length;
+    private final double length;
 
     private RouteLength(List<Point> points) {
         this.length = calculateLength(points);
