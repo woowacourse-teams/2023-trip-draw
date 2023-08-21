@@ -15,8 +15,9 @@ public class TripDuration {
         this.duration = duration;
     }
 
-    public static TripDuration of(Duration duration) {
-        return new TripDuration(duration);
+    public static TripDuration of(Point startingPoint, Point arrivalPoint) {
+        Duration between = Duration.between(startingPoint.recordedAt(), arrivalPoint.recordedAt());
+        return new TripDuration(between);
     }
 
     public String durationInMinutes() {
