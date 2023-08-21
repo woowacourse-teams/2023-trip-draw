@@ -1,16 +1,15 @@
 package dev.tripdraw.domain.trip;
 
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_ALREADY_DELETED;
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_FOUND;
-import static dev.tripdraw.exception.trip.TripExceptionType.POINT_NOT_IN_TRIP;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import dev.tripdraw.exception.trip.TripException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static dev.tripdraw.exception.trip.TripExceptionType.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -117,6 +116,44 @@ class RouteTest {
 
         // then
         assertThat(route.points()).containsExactly(point2);
+    }
+
+    @Test
+    void 경로의_거리를_계산한다() {
+        // given
+        Route route = new Route();
+        route.add(new Point(1.1, 1.1, LocalDateTime.now()));
+        route.add(new Point(1.1, 2.1, LocalDateTime.now()));
+        route.add(new Point(2.1, 2.1, LocalDateTime.now()));
+
+        // when
+        RouteLength routeLength = route.calculateRouteLength();
+
+        // then
+        assertThat(routeLength.lengthInKm()).isEqualTo("222.18km");
+    }
+
+    @Test
+    void 경로에_위치정보가_존재하지_않으면_거리를_계산할_때_예외를_발생시킨다() {
+        // given
+        Route route = new Route();
+
+        // expect
+        assertThatThrownBy(route::calculateRouteLength)
+                .isInstanceOf(TripException.class)
+                .hasMessage(ONE_OR_NO_POINT.message());
+    }
+
+    @Test
+    void 경로에_위치정보가_하나만_존재하면_거리를_계산할_때_예외를_발생시킨다() {
+        // given
+        Route route = new Route();
+        route.add(new Point(1.1, 1.1, LocalDateTime.now()));
+
+        // expect
+        assertThatThrownBy(route::calculateRouteLength)
+                .isInstanceOf(TripException.class)
+                .hasMessage(ONE_OR_NO_POINT.message());
     }
 }
 
