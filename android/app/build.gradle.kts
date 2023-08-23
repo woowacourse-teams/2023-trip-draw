@@ -14,6 +14,8 @@ plugins {
     id("com.google.gms.google-services")
     // FireBaseCrashlytics
     id("com.google.firebase.crashlytics")
+    // Sentry
+    id("io.sentry.android.gradle")
 }
 
 android {
@@ -54,6 +56,9 @@ android {
 
         manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
             localProperties.getProperty("NAVER_MAP_CLIENT_ID")
+
+        manifestPlaceholders["SENTRY_DSN"] =
+            localProperties.getProperty("SENTRY_DSN")
     }
 
     buildTypes {

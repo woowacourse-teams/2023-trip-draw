@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    // Sentry
+    id("io.sentry.android.gradle")
 }
 
 android {
