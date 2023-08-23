@@ -1,3 +1,4 @@
+import io.sentry.android.gradle.extensions.InstrumentationFeature
 import java.util.Properties
 
 val localProperties = Properties()
@@ -118,6 +119,33 @@ android {
             }
         }
     }
+}
+
+// sentry 난독화 설정
+sentry {
+    includeProguardMapping.set(true)
+    autoUploadProguardMapping.set(true)
+    experimentalGuardsquareSupport.set(false)
+    uploadNativeSymbols.set(false)
+    autoUploadNativeSymbols.set(true)
+    includeNativeSources.set(false)
+    includeSourceContext.set(false)
+    tracingInstrumentation {
+        enabled.set(true)
+        features.set(
+            setOf(
+                InstrumentationFeature.DATABASE,
+                InstrumentationFeature.FILE_IO,
+                InstrumentationFeature.OKHTTP,
+                InstrumentationFeature.COMPOSE,
+            ),
+        )
+    }
+    autoInstallation {
+        enabled.set(true)
+        sentryVersion.set("6.28.0")
+    }
+    includeDependenciesReport.set(true)
 }
 
 dependencies {
