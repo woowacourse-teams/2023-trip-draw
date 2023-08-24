@@ -5,6 +5,8 @@ val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 val keystoreProperties = Properties()
 keystoreProperties.load(project.rootProject.file("keystore.properties").inputStream())
+val sentryProperties = Properties()
+sentryProperties.load(project.rootProject.file("sentry.properties").inputStream())
 
 plugins {
     id("com.android.application")
@@ -59,7 +61,7 @@ android {
             localProperties.getProperty("NAVER_MAP_CLIENT_ID")
 
         manifestPlaceholders["SENTRY_DSN"] =
-            localProperties.getProperty("SENTRY_DSN")
+            sentryProperties.getProperty("SENTRY_DSN")
     }
 
     buildTypes {
