@@ -50,6 +50,9 @@
         <meta-data
             android:name="io.sentry.traces.profiling.sample-rate"
             android:value="1.0" />
+        <meta-data
+            android:name="io.sentry.debug"
+            android:value="true" />
 
         <service
             android:name=".ui.home.recordingPoint.RecordingPointService"
