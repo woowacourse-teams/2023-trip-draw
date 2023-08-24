@@ -50,9 +50,18 @@
         <meta-data
             android:name="io.sentry.traces.profiling.sample-rate"
             android:value="1.0" />
+        <!-- 디버그 모드 활성화 -->
         <meta-data
             android:name="io.sentry.debug"
             android:value="true" />
+        <!-- ANR 리포팅 비활성화 설정 -->
+        <meta-data
+            android:name="io.sentry.anr.enable"
+            android:value="false" />
+        <meta-data
+            android:name="io.sentry.anr.timeout-interval-millis"
+            android:value="20000" />
+
 
         <service
             android:name=".ui.home.recordingPoint.RecordingPointService"
