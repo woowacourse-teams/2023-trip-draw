@@ -86,8 +86,11 @@ kakaoUser = "2.15.0"
 # splashScreen
 splashScreen = "1.0.0-alpha01"
 
+# sentryPlugin
+sentryPlugin = "3.12.0"
+
 # sentry
-sentry = "3.12.0"
+sentry = "6.28.0"
 
 [libraries]
 # AndroidX Libraries
@@ -169,6 +172,9 @@ kakaoUser = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 # splashScreen
 splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 
+# sentry
+sentry = { module = "io.sentry:sentry-android", version.ref = "sentry" }
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest", "coreTest"]
@@ -191,5 +197,5 @@ fireBasePlugIn = { id = "com.google.gms.google-services", version.ref = "fireBas
 firebaseCrashlyticsPlugIn = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugIn" }
 # use junit5 for test
 mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus" }
-# sentry
-sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
+# sentryPlugin
+sentryPlugin = { id = "io.sentry.android.gradle", version.ref = "sentryPlugin" }
