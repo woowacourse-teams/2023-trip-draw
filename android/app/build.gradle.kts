@@ -191,4 +191,7 @@ dependencies {
 
     // splashScreen
     implementation(libs.splashScreen)
+
+    // timber
+    implementation(libs.timber)
 }

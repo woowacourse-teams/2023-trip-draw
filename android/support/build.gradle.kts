@@ -64,4 +64,7 @@ dependencies {
 
     // sentry
     implementation(libs.sentry)
+
+    // timber
+    implementation(libs.timber)
 }
