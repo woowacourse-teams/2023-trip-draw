@@ -53,8 +53,8 @@ class PostWritingViewModel(
     val address: LiveData<String> = _address
 
     private var imageFile: File? = null
-    private val _imageUri: MutableLiveData<String> = MutableLiveData(null)
-    val imageUri: LiveData<String> = _imageUri
+    private val _imageUri: MutableLiveData<String?> = MutableLiveData(null)
+    val imageUri: LiveData<String?> = _imageUri
 
     private val _hasImage: MutableLiveData<Boolean> = MutableLiveData(false)
     val hasImage: LiveData<Boolean> = _hasImage
