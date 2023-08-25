@@ -2,32 +2,12 @@ package com.teamtripdraw.android.support.framework.presentation.log
 
 import com.teamtripdraw.android.support.BuildConfig.IS_RELEASE
 import io.sentry.Sentry
+import okhttp3.ResponseBody
 import timber.log.Timber
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
-object TripDrawLogUtil : LogUtil {
-
-    private const val DEBUG_GENERAL_ERROR_LOG_FORMAT = "message : %s"
-    private const val DEBUG_HTTP_CLIENT_ERROR_LOG = "DEBUG_HTTP_CLIENT_ERROR_LOG"
-    private const val RELEASE_HTTP_CLIENT_ERROR_LOG = "DEBUG_HTTP_CLIENT_ERROR_LOG"
-    private const val SENTRY_MESSAGE_KEY = "ERROR_MESSAGE"
-    private const val NO_MESSAGE_NOTICE = "입력된 메시지가 없습니다."
-
-
-//    override fun httpClient() {
-//        when (IS_RELEASE) {
-//            true -> httpClientReleaseErrorLog()
-//            false -> httpClientDebugErrorLog()
-//        }
-//    }
-//
-//    private fun httpClientReleaseErrorLog() {
-//        // todo Sentry 연결후 관련 로그 작성
-//    }
-//
-//    private fun httpClientDebugErrorLog() {
-//        Log.e(DEBUG_GENERAL_ERROR_LOG_FORMAT, functionName + (message ?: ""))
-//    }
-
+class TripDrawLogUtil() : LogUtil {
     override fun general(throwable: Throwable?, message: String?) {
         when (IS_RELEASE) {
             true -> generalReleaseErrorLog(throwable, message)
@@ -56,5 +36,95 @@ object TripDrawLogUtil : LogUtil {
                 DEBUG_GENERAL_ERROR_LOG_FORMAT.format(message ?: NO_MESSAGE_NOTICE),
             )
         }
+    }
+
+    inner class HttpClient : LogUtil.HttpClient {
+        override fun failure(code: Int, errorBody: ResponseBody?) {
+            when (IS_RELEASE) {
+                true -> failureReleaseLog(code, errorBody)
+                false -> failureDebugLog(code, errorBody)
+            }
+        }
+
+        private fun failureReleaseLog(code: Int, errorBody: ResponseBody?) {
+            Sentry.captureMessage(SENTRY_RESPONSE_STATE_FAILURE_MESSAGE) { scope ->
+                scope.setTag(SENTRY_HTTP_ERROR_TAG_KEY, RESPONSE_STATE_FAILURE)
+                scope.setContexts(RESPONSE_STATE_FAILURE_CODE_KEY, code)
+                scope.setContexts(
+                    RESPONSE_STATE_FAILURE_ERROR_BODY_KEY,
+                    errorBody ?: NO_ERROR_BODY_MESSAGE,
+                )
+            }
+        }
+
+        private fun failureDebugLog(code: Int, errorBody: ResponseBody?) {
+            Timber.e(DEBUG_RESPONSE_STATE_FAILURE.format(code, errorBody ?: NO_ERROR_BODY_MESSAGE))
+        }
+
+        override fun network(error: UnknownHostException) {
+            when (IS_RELEASE) {
+                true -> networkReleaseLog(error)
+                false -> networkDebugLog(error)
+            }
+        }
+
+        private fun networkReleaseLog(error: UnknownHostException) {
+            // 크래시리틱스
+        }
+
+        private fun networkDebugLog(error: UnknownHostException) {
+            Timber.e(error, RESPONSE_STATE_NETWORK)
+        }
+
+        override fun timeOut(error: SocketTimeoutException) {
+            when (IS_RELEASE) {
+                true -> timeOutReleaseLog(error)
+                false -> timeOutDebugLog(error)
+            }
+        }
+
+        private fun timeOutReleaseLog(error: SocketTimeoutException) {
+            Sentry.captureException(error) { scope ->
+                scope.setTag(SENTRY_HTTP_ERROR_TAG_KEY, RESPONSE_STATE_TIME_OUT)
+            }
+        }
+
+        private fun timeOutDebugLog(error: SocketTimeoutException) {
+            Timber.e(error, RESPONSE_STATE_TIME_OUT)
+        }
+
+        override fun unknown(error: Throwable) {
+            when (IS_RELEASE) {
+                true -> unknownReleaseLog(error)
+                false -> unknownDebugLog(error)
+            }
+        }
+
+        private fun unknownReleaseLog(error: Throwable) {
+            Sentry.captureException(error) { scope ->
+                scope.setTag(SENTRY_HTTP_ERROR_TAG_KEY, RESPONSE_STATE_UNKNOWN)
+            }
+        }
+
+        private fun unknownDebugLog(error: Throwable) {
+            Timber.e(error, RESPONSE_STATE_UNKNOWN)
+        }
+    }
+
+    companion object {
+        private const val DEBUG_GENERAL_ERROR_LOG_FORMAT = "message : %s"
+        private const val SENTRY_MESSAGE_KEY = "ERROR_MESSAGE"
+        private const val NO_MESSAGE_NOTICE = "입력된 메시지가 없습니다."
+        private const val SENTRY_HTTP_ERROR_TAG_KEY = "HTTP_ERROR"
+        private const val DEBUG_RESPONSE_STATE_FAILURE =
+            "RESPONSE_STATE_FAILURE code: %d errorBody: %s"
+        private const val SENTRY_RESPONSE_STATE_FAILURE_MESSAGE = "HTTP_FAILURE"
+        private const val RESPONSE_STATE_FAILURE = "RESPONSE_STATE_FAILURE"
+        private const val RESPONSE_STATE_FAILURE_CODE_KEY = "code"
+        private const val RESPONSE_STATE_FAILURE_ERROR_BODY_KEY = "error body"
+        private const val NO_ERROR_BODY_MESSAGE = "에러 바디가 없습니다."
+        private const val RESPONSE_STATE_NETWORK = "RESPONSE_STATE_NETWORK"
+        private const val RESPONSE_STATE_TIME_OUT = "RESPONSE_STATE_TIME_OUT"
+        private const val RESPONSE_STATE_UNKNOWN = "RESPONSE_STATE_UNKNOWN"
     }
 }
