@@ -10,6 +10,7 @@ import com.teamtripdraw.android.di.RemoteDataSourceContainer
 import com.teamtripdraw.android.di.RepositoryContainer
 import com.teamtripdraw.android.di.RetrofitContainer
 import com.teamtripdraw.android.di.ServiceContainer
+import timber.log.Timber
 
 class TripDrawApplication : Application() {
 
@@ -18,6 +19,7 @@ class TripDrawApplication : Application() {
         initContainer()
         prohibitDarkMode()
         initKakaoSdk()
+        initTimber()
     }
 
     private fun initKakaoSdk() {
@@ -37,6 +39,16 @@ class TripDrawApplication : Application() {
 
     private fun prohibitDarkMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    }
+
+    private fun initTimber() {
+        if (!BuildConfig.IS_RELEASE) Timber.plant(getTripDrawDebugTree())
+    }
+
+    private fun getTripDrawDebugTree() = object : Timber.DebugTree() {
+        override fun createStackElementTag(element: StackTraceElement): String? {
+            return "${element.fileName}:${element.lineNumber}"
+        }
     }
 
     companion object DependencyContainer {
