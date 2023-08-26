@@ -67,4 +67,9 @@ dependencies {
 
     // timber
     implementation(libs.timber)
+
+    // FireBase
+    releaseImplementation(platform(libs.fireBaseBom))
+    // FirebaseCrashlytics
+    releaseImplementation(libs.fireBaseCrashlyticsKtx)
 }
