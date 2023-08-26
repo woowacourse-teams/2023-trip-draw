@@ -1,6 +1,8 @@
-package com.teamtripdraw.android.support.framework.presentation.log
+package com.teamtripdraw.android.support.framework.presentation.log.tripDrawLogUtil
 
+import CrashlyticsHandlerImpl
 import com.teamtripdraw.android.support.BuildConfig.IS_RELEASE
+import com.teamtripdraw.android.support.framework.presentation.log.LogUtil
 import io.sentry.Sentry
 import okhttp3.ResponseBody
 import timber.log.Timber
@@ -39,6 +41,8 @@ class TripDrawLogUtil() : LogUtil {
     }
 
     inner class HttpClient : LogUtil.HttpClient {
+        private val crashlyticsHandler: CrashlyticsHandler = CrashlyticsHandlerImpl()
+
         override fun failure(code: Int, errorBody: ResponseBody?) {
             when (IS_RELEASE) {
                 true -> failureReleaseLog(code, errorBody)
@@ -69,7 +73,11 @@ class TripDrawLogUtil() : LogUtil {
         }
 
         private fun networkReleaseLog(error: UnknownHostException) {
-            // 크래시리틱스
+            crashlyticsHandler.recordException(
+                error,
+                CRASHLYTICS_HTTP_ERROR_KEY_NAME,
+                RESPONSE_STATE_NETWORK,
+            )
         }
 
         private fun networkDebugLog(error: UnknownHostException) {
@@ -116,6 +124,7 @@ class TripDrawLogUtil() : LogUtil {
         private const val SENTRY_MESSAGE_KEY = "ERROR_MESSAGE"
         private const val NO_MESSAGE_NOTICE = "입력된 메시지가 없습니다."
         private const val SENTRY_HTTP_ERROR_TAG_KEY = "HTTP_ERROR"
+        private const val CRASHLYTICS_HTTP_ERROR_KEY_NAME = SENTRY_HTTP_ERROR_TAG_KEY
         private const val DEBUG_RESPONSE_STATE_FAILURE =
             "RESPONSE_STATE_FAILURE code: %d errorBody: %s"
         private const val SENTRY_RESPONSE_STATE_FAILURE_MESSAGE = "HTTP_FAILURE"
