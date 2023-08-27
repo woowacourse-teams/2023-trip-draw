@@ -40,7 +40,8 @@ class TripDrawLogUtil() : LogUtil {
         }
     }
 
-    inner class HttpClient : LogUtil.HttpClient {
+    override val httpClient: LogUtil.HttpClient = object : LogUtil.HttpClient {
+
         private val crashlyticsHandler: CrashlyticsHandler = CrashlyticsHandlerImpl()
 
         override fun failure(code: Int, errorBody: ResponseBody?) {
