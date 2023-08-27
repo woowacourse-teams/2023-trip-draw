@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.data.httpClient.retrofitAdapter
 
-import android.util.Log
+import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import okhttp3.Headers
 import okhttp3.ResponseBody
 import java.net.SocketTimeoutException
@@ -28,7 +28,7 @@ sealed class ResponseState<out T : Any> {
         networkErrorListener: (error: UnknownHostException) -> Result<Nothing> = this::defaultNetworkErrorListener,
         timeOutErrorListener: (error: SocketTimeoutException) -> Result<Nothing> = this::defaultTimeOutErrorListener,
         unknownErrorListener: (error: Throwable) -> Result<Nothing> = this::defaultUnknownErrorListener,
-        successListener: (body: T, headers: Headers) -> Result<R>
+        successListener: (body: T, headers: Headers) -> Result<R>,
     ): Result<R> {
         return when (this) {
             is Success -> {
@@ -50,27 +50,27 @@ sealed class ResponseState<out T : Any> {
     }
 
     private fun defaultFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
-        Log.d("ResponseState.Failure", "code : $code, body : $errorBody")
+        logUtil.httpClient.failure(code, errorBody)
         return Result.failure(
             IllegalAccessException(
-                FAILURE_EXCEPTION_MESSAGE_FORMAT.format(code, errorBody?.string() ?: "")
-            )
+                FAILURE_EXCEPTION_MESSAGE_FORMAT.format(code, errorBody?.string() ?: ""),
+            ),
         )
     }
 
     private fun defaultNetworkErrorListener(error: UnknownHostException): Result<Nothing> {
-        Log.e("ResponseState.NetworkError", "error : $error, message : ${error.message}")
+        logUtil.httpClient.network(error)
         // 네트워크 연결 요청 액티비티 이동로직 혹은 네트워크 끊김 메시지 알림 로직-> 추후작성
         return Result.failure(error)
     }
 
     private fun defaultTimeOutErrorListener(error: SocketTimeoutException): Result<Nothing> {
-        Log.e("ResponseState.TimeOutError", "error : $error, message : ${error.message}")
+        logUtil.httpClient.timeOut(error)
         return Result.failure(error)
     }
 
     private fun defaultUnknownErrorListener(error: Throwable): Result<Nothing> {
-        Log.e("ResponseState.UnknownError", "error : $error, message : ${error.message}")
+        logUtil.httpClient.unknown(error)
         return Result.failure(error)
     }
 
