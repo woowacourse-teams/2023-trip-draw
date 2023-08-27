@@ -5,7 +5,12 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 interface LogUtil {
-    fun general(throwable: Throwable?, message: String? = null)
+
+    val general: General
+
+    interface General {
+        fun log(throwable: Throwable?, message: String? = null)
+    }
 
     val httpClient: HttpClient
 
