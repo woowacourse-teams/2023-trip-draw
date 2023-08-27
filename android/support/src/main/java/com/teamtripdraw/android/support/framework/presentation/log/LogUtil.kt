@@ -6,6 +6,9 @@ import java.net.UnknownHostException
 
 interface LogUtil {
     fun general(throwable: Throwable?, message: String? = null)
+
+    val httpClient: HttpClient
+
     interface HttpClient {
         fun failure(code: Int, errorBody: ResponseBody?)
         fun network(error: UnknownHostException)

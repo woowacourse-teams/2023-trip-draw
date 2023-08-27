@@ -10,6 +10,8 @@ import com.teamtripdraw.android.di.RemoteDataSourceContainer
 import com.teamtripdraw.android.di.RepositoryContainer
 import com.teamtripdraw.android.di.RetrofitContainer
 import com.teamtripdraw.android.di.ServiceContainer
+import com.teamtripdraw.android.support.framework.presentation.log.LogUtil
+import com.teamtripdraw.android.support.framework.presentation.log.tripDrawLogUtil.TripDrawLogUtil
 import timber.log.Timber
 
 class TripDrawApplication : Application() {
@@ -20,6 +22,7 @@ class TripDrawApplication : Application() {
         prohibitDarkMode()
         initKakaoSdk()
         initTimber()
+        initLogUtil()
     }
 
     private fun initKakaoSdk() {
@@ -51,6 +54,10 @@ class TripDrawApplication : Application() {
         }
     }
 
+    private fun initLogUtil() {
+        logUtil = TripDrawLogUtil()
+    }
+
     companion object DependencyContainer {
         lateinit var localPreferenceContainer: LocalPreferenceContainer
         lateinit var retrofitContainer: RetrofitContainer
@@ -58,5 +65,7 @@ class TripDrawApplication : Application() {
         lateinit var localDataSourceContainer: LocalDataSourceContainer
         lateinit var remoteDataSourceContainer: RemoteDataSourceContainer
         lateinit var repositoryContainer: RepositoryContainer
+
+        lateinit var logUtil: LogUtil
     }
 }
