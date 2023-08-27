@@ -10,33 +10,40 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 class TripDrawLogUtil() : LogUtil {
-    override fun general(throwable: Throwable?, message: String?) {
-        when (IS_RELEASE) {
-            true -> generalReleaseErrorLog(throwable, message)
-            false -> generalDebugErrorLog(throwable, message)
-        }
-    }
+    override val general: LogUtil.General = object : LogUtil.General {
 
-    private fun generalReleaseErrorLog(throwable: Throwable?, message: String?) {
-        when (throwable == null) {
-            true -> {
-                Sentry.captureMessage(message ?: NO_MESSAGE_NOTICE)
+        override fun log(throwable: Throwable?, message: String?) {
+            when (IS_RELEASE) {
+                true -> generalReleaseErrorLog(throwable, message)
+                false -> generalDebugErrorLog(throwable, message)
             }
-            false -> {
-                Sentry.captureException(throwable) { scope ->
-                    scope.setContexts(SENTRY_MESSAGE_KEY, message ?: NO_MESSAGE_NOTICE)
+        }
+
+        private fun generalReleaseErrorLog(throwable: Throwable?, message: String?) {
+            when (throwable == null) {
+                true -> {
+                    Sentry.captureMessage(message ?: NO_MESSAGE_NOTICE)
+                }
+                false -> {
+                    Sentry.captureException(throwable) { scope ->
+                        scope.setContexts(SENTRY_MESSAGE_KEY, message ?: NO_MESSAGE_NOTICE)
+                    }
                 }
             }
         }
-    }
 
-    private fun generalDebugErrorLog(throwable: Throwable?, message: String?) {
-        when (throwable == null) {
-            true -> Timber.e(DEBUG_GENERAL_ERROR_LOG_FORMAT.format(message ?: NO_MESSAGE_NOTICE))
-            false -> Timber.e(
-                throwable,
-                DEBUG_GENERAL_ERROR_LOG_FORMAT.format(message ?: NO_MESSAGE_NOTICE),
-            )
+        private fun generalDebugErrorLog(throwable: Throwable?, message: String?) {
+            when (throwable == null) {
+                true -> Timber.e(
+                    DEBUG_GENERAL_ERROR_LOG_FORMAT.format(
+                        message ?: NO_MESSAGE_NOTICE,
+                    ),
+                )
+                false -> Timber.e(
+                    throwable,
+                    DEBUG_GENERAL_ERROR_LOG_FORMAT.format(message ?: NO_MESSAGE_NOTICE),
+                )
+            }
         }
     }
 
