@@ -6,7 +6,6 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.post.PostRepository;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
-import dev.tripdraw.exception.member.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

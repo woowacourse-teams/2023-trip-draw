@@ -1,8 +1,5 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
-
-import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.trip.Point;
