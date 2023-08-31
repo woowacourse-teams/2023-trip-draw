@@ -1,4 +1,4 @@
-package dev.tripdraw.domain.draw;
+package dev.tripdraw.draw.domain;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;

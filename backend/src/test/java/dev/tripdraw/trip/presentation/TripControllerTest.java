@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import dev.tripdraw.application.draw.RouteImageGenerator;
+import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;

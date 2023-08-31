@@ -1,9 +1,10 @@
-package dev.tripdraw.application.draw;
+package dev.tripdraw.draw.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
+import dev.tripdraw.draw.application.RouteImageUploader;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -29,7 +30,7 @@ class RouteImageUploaderTest {
         // expect
         try (MockedStatic<ImageIO> imageIO = Mockito.mockStatic(ImageIO.class)) {
             String imageUrl = routeImageUploader.upload(bufferedImage);
-            
+
             imageIO.verify(
                     () -> ImageIO.write(any(BufferedImage.class), any(String.class), any(File.class)),
                     times(1)

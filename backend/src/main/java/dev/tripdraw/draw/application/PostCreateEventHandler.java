@@ -1,4 +1,4 @@
-package dev.tripdraw.application.draw;
+package dev.tripdraw.draw.application;
 
 import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
 

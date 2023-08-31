@@ -1,10 +1,10 @@
-package dev.tripdraw.domain.draw;
+package dev.tripdraw.draw.domain;
 
-import static dev.tripdraw.exception.draw.DrawExceptionType.INVALID_COORDINATES;
+import static dev.tripdraw.draw.exception.DrawExceptionType.INVALID_COORDINATES;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import dev.tripdraw.exception.draw.DrawException;
+import dev.tripdraw.draw.exception.DrawException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

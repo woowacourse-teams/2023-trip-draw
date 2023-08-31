@@ -1,4 +1,4 @@
-package dev.tripdraw.domain.draw;
+package dev.tripdraw.draw.domain;
 
 import static java.awt.BasicStroke.CAP_ROUND;
 import static java.awt.BasicStroke.JOIN_ROUND;

@@ -1,9 +1,12 @@
-package dev.tripdraw.domain.draw;
+package dev.tripdraw.draw.domain;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
+import dev.tripdraw.draw.domain.Position;
+import dev.tripdraw.draw.domain.Positions;
+import dev.tripdraw.draw.domain.RouteImageDrawer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;

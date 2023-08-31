@@ -1,10 +1,12 @@
-package dev.tripdraw.application.draw;
+package dev.tripdraw.draw.application;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import dev.tripdraw.draw.application.RouteImageGenerator;
+import dev.tripdraw.draw.application.RouteImageUploader;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;

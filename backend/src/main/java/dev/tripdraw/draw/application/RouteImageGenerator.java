@@ -1,8 +1,8 @@
-package dev.tripdraw.application.draw;
+package dev.tripdraw.draw.application;
 
-import dev.tripdraw.domain.draw.Coordinates;
-import dev.tripdraw.domain.draw.Positions;
-import dev.tripdraw.domain.draw.RouteImageDrawer;
+import dev.tripdraw.draw.domain.Coordinates;
+import dev.tripdraw.draw.domain.Positions;
+import dev.tripdraw.draw.domain.RouteImageDrawer;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

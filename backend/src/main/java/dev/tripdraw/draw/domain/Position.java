@@ -1,4 +1,4 @@
-package dev.tripdraw.domain.draw;
+package dev.tripdraw.draw.domain;
 
 public record Position(Integer x, Integer y) {
 }

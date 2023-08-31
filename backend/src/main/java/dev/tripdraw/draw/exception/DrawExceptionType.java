@@ -1,4 +1,4 @@
-package dev.tripdraw.exception.draw;
+package dev.tripdraw.draw.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 

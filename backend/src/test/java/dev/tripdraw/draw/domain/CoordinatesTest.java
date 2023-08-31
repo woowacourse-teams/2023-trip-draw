@@ -1,11 +1,14 @@
-package dev.tripdraw.domain.draw;
+package dev.tripdraw.draw.domain;
 
-import static dev.tripdraw.exception.draw.DrawExceptionType.INVALID_COORDINATES;
+import static dev.tripdraw.draw.exception.DrawExceptionType.INVALID_COORDINATES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import dev.tripdraw.exception.draw.DrawException;
+import dev.tripdraw.draw.domain.Coordinates;
+import dev.tripdraw.draw.domain.Position;
+import dev.tripdraw.draw.domain.Positions;
+import dev.tripdraw.draw.exception.DrawException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
