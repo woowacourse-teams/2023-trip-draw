@@ -1,8 +1,8 @@
 package dev.tripdraw.file.application;
 
-import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
+import static dev.tripdraw.file.domain.FileType.POST_IMAGE;
 
-import dev.tripdraw.domain.file.FileType;
+import dev.tripdraw.file.domain.FileType;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

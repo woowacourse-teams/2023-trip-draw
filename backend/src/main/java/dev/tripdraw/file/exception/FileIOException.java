@@ -1,7 +1,7 @@
 package dev.tripdraw.file.exception;
 
-import dev.tripdraw.exception.common.BaseException;
-import dev.tripdraw.exception.common.ExceptionType;
+import dev.tripdraw.common.exception.BaseException;
+import dev.tripdraw.common.exception.ExceptionType;
 
 public class FileIOException extends BaseException {
 

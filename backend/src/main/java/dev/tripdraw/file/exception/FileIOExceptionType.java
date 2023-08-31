@@ -3,7 +3,7 @@ package dev.tripdraw.file.exception;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
-import dev.tripdraw.exception.common.ExceptionType;
+import dev.tripdraw.common.exception.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum FileIOExceptionType implements ExceptionType {

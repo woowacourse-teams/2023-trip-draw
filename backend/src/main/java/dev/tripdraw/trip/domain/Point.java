@@ -5,7 +5,7 @@ import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_HAS_PO
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import dev.tripdraw.domain.common.BaseEntity;
+import dev.tripdraw.common.entity.BaseEntity;
 import dev.tripdraw.trip.exception.TripException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

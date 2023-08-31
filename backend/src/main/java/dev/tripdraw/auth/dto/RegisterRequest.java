@@ -1,7 +1,7 @@
 package dev.tripdraw.auth.dto;
 
 import dev.tripdraw.auth.domain.OauthType;
-import dev.tripdraw.dto.validation.NoWhiteSpace;
+import dev.tripdraw.common.validation.NoWhiteSpace;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record RegisterRequest(

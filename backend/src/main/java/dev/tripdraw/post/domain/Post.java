@@ -5,10 +5,10 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import dev.tripdraw.domain.common.BaseEntity;
+import dev.tripdraw.common.entity.BaseEntity;
 import dev.tripdraw.member.domain.Member;
-import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.post.exception.PostException;
+import dev.tripdraw.trip.domain.Point;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

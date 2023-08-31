@@ -8,7 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import dev.tripdraw.domain.file.FileType;
+import dev.tripdraw.file.domain.FileType;
 import dev.tripdraw.file.exception.FileIOException;
 import java.io.File;
 import java.io.IOException;

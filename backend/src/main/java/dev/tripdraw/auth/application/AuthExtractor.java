@@ -4,7 +4,6 @@ import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_AUTH_HEADER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.util.StringUtils.hasText;
 
-import dev.tripdraw.auth.application.AuthTokenManager;
 import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.auth.exception.AuthException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import dev.tripdraw.exception.common.ExceptionType;
+import dev.tripdraw.common.exception.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum TripExceptionType implements ExceptionType {

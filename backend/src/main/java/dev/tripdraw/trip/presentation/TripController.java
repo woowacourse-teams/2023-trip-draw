@@ -4,7 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import dev.tripdraw.trip.application.TripService;
-import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
+import dev.tripdraw.common.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.trip.dto.PointCreateRequest;
 import dev.tripdraw.trip.dto.PointCreateResponse;

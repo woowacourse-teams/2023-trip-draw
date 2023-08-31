@@ -4,7 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-import dev.tripdraw.exception.common.ExceptionType;
+import dev.tripdraw.common.exception.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum AuthExceptionType implements ExceptionType {

@@ -2,7 +2,7 @@ package dev.tripdraw.file.application;
 
 import static dev.tripdraw.file.exception.FileIOExceptionType.FILE_SAVE_FAIL;
 
-import dev.tripdraw.domain.file.FileType;
+import dev.tripdraw.file.domain.FileType;
 import dev.tripdraw.file.exception.FileIOException;
 import java.io.File;
 import java.io.IOException;
