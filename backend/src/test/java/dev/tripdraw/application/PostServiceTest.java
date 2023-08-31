@@ -1,7 +1,7 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
 import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
@@ -27,7 +27,7 @@ import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
-import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.member.exception.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;

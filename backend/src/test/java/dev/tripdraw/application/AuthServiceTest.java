@@ -1,20 +1,20 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
-import static dev.tripdraw.exception.member.MemberExceptionType.DUPLICATE_NICKNAME;
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.member.exception.MemberExceptionType.DUPLICATE_NICKNAME;
+import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import dev.tripdraw.application.oauth.OauthClientProvider;
 import dev.tripdraw.common.TestKakaoApiClient;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.dto.auth.OauthRequest;
 import dev.tripdraw.dto.auth.OauthResponse;
 import dev.tripdraw.dto.auth.RegisterRequest;
-import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.member.exception.MemberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

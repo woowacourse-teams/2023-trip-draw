@@ -13,8 +13,8 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.application.oauth.AuthTokenManager;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;

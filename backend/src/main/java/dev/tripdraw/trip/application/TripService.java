@@ -1,7 +1,7 @@
 package dev.tripdraw.trip.application;
 
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;

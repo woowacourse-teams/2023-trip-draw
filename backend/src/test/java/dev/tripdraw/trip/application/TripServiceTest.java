@@ -1,7 +1,7 @@
 package dev.tripdraw.trip.application;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_IN_TRIP;
@@ -12,10 +12,10 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.application.ServiceTest;
 import dev.tripdraw.application.draw.RouteImageGenerator;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.dto.auth.LoginUser;
-import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.member.exception.MemberException;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;

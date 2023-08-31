@@ -1,4 +1,4 @@
-package dev.tripdraw.presentation.controller;
+package dev.tripdraw.member.presentation;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static java.lang.Long.MIN_VALUE;
@@ -9,11 +9,11 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 import dev.tripdraw.application.oauth.AuthTokenManager;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.post.PostRepository;
-import dev.tripdraw.dto.member.MemberSearchResponse;
+import dev.tripdraw.member.dto.MemberSearchResponse;
 import dev.tripdraw.test.ControllerTest;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;

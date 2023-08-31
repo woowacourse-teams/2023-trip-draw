@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.trip.exception.TripException;

@@ -1,4 +1,4 @@
-package dev.tripdraw.exception.member;
+package dev.tripdraw.member.exception;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;

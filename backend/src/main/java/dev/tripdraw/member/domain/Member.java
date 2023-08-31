@@ -1,4 +1,4 @@
-package dev.tripdraw.domain.member;
+package dev.tripdraw.member.domain;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;

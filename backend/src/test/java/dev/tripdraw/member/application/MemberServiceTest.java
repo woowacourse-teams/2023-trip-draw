@@ -1,23 +1,25 @@
-package dev.tripdraw.application;
+package dev.tripdraw.member.application;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import dev.tripdraw.application.ServiceTest;
 import dev.tripdraw.application.oauth.AuthTokenManager;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.application.MemberService;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.post.PostRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripName;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.dto.member.MemberSearchResponse;
-import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.member.dto.MemberSearchResponse;
+import dev.tripdraw.member.exception.MemberException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,18 +1,18 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.member.MemberExceptionType.DUPLICATE_NICKNAME;
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.member.exception.MemberExceptionType.DUPLICATE_NICKNAME;
+import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.application.oauth.OauthClient;
 import dev.tripdraw.application.oauth.OauthClientProvider;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.dto.auth.OauthInfo;
 import dev.tripdraw.dto.auth.OauthRequest;
 import dev.tripdraw.dto.auth.OauthResponse;
 import dev.tripdraw.dto.auth.RegisterRequest;
-import dev.tripdraw.exception.member.MemberException;
+import dev.tripdraw.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

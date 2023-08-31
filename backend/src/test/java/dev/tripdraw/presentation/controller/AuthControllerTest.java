@@ -11,8 +11,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import dev.tripdraw.application.oauth.OauthClientProvider;
 import dev.tripdraw.common.TestKakaoApiClient;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.dto.auth.OauthRequest;
 import dev.tripdraw.dto.auth.OauthResponse;
 import dev.tripdraw.dto.auth.RegisterRequest;

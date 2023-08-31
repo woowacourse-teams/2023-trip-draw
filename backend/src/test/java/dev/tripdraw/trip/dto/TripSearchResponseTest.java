@@ -4,7 +4,7 @@ import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static dev.tripdraw.trip.domain.TripStatus.ONGOING;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripName;
 import org.junit.jupiter.api.DisplayNameGeneration;

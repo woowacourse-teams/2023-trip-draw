@@ -4,8 +4,8 @@ import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
 
 import dev.tripdraw.application.file.FileUploader;
 import dev.tripdraw.domain.file.FileType;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.post.PostCreateEvent;
 import dev.tripdraw.domain.post.PostRepository;

@@ -1,7 +1,7 @@
-package dev.tripdraw.presentation.controller;
+package dev.tripdraw.member.presentation;
 
-import dev.tripdraw.application.MemberService;
-import dev.tripdraw.dto.member.MemberSearchResponse;
+import dev.tripdraw.member.application.MemberService;
+import dev.tripdraw.member.dto.MemberSearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

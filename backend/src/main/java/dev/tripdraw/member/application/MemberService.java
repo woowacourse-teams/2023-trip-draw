@@ -1,11 +1,11 @@
-package dev.tripdraw.application;
+package dev.tripdraw.member.application;
 
 import dev.tripdraw.application.oauth.AuthTokenManager;
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.member.MemberRepository;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.domain.post.PostRepository;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.dto.member.MemberSearchResponse;
+import dev.tripdraw.member.dto.MemberSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

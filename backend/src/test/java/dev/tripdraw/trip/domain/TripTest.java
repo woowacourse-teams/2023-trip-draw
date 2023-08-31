@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;
 import java.util.List;

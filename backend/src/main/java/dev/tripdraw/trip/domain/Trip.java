@@ -8,7 +8,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
-import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.trip.exception.TripException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

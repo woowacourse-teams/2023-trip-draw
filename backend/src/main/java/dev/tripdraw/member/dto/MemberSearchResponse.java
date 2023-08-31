@@ -1,6 +1,6 @@
-package dev.tripdraw.dto.member;
+package dev.tripdraw.member.dto;
 
-import dev.tripdraw.domain.member.Member;
+import dev.tripdraw.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Objects;
 
