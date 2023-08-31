@@ -1,6 +1,6 @@
 package dev.tripdraw.post.application;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.post.exception.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
@@ -18,11 +18,10 @@ import dev.tripdraw.application.ServiceTest;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.post.application.PostService;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.dto.auth.LoginUser;
+import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;

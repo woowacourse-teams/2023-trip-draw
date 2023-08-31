@@ -1,6 +1,6 @@
 package dev.tripdraw.member.application;
 
-import dev.tripdraw.application.oauth.AuthTokenManager;
+import dev.tripdraw.auth.application.AuthTokenManager;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.PostRepository;

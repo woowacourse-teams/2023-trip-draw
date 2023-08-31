@@ -1,8 +1,8 @@
 package dev.tripdraw.config;
 
-import dev.tripdraw.presentation.member.AuthArgumentResolver;
-import dev.tripdraw.presentation.member.AuthExtractor;
-import dev.tripdraw.presentation.member.AuthInterceptor;
+import dev.tripdraw.auth.presentation.AuthArgumentResolver;
+import dev.tripdraw.auth.application.AuthExtractor;
+import dev.tripdraw.auth.presentation.AuthInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

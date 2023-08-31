@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.domain;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;

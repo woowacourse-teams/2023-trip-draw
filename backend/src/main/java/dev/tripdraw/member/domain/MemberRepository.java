@@ -2,7 +2,7 @@ package dev.tripdraw.member.domain;
 
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 
-import dev.tripdraw.domain.oauth.OauthType;
+import dev.tripdraw.auth.domain.OauthType;
 import dev.tripdraw.member.exception.MemberException;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

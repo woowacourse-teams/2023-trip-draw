@@ -1,14 +1,12 @@
 package dev.tripdraw.member.domain;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.member.exception.MemberException;
-import dev.tripdraw.member.domain.Member;
-import dev.tripdraw.member.domain.MemberRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

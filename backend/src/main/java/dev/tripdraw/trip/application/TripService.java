@@ -6,7 +6,7 @@ import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
-import dev.tripdraw.dto.auth.LoginUser;
+import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.trip.dto.PointCreateRequest;
 import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;

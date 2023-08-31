@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.presentation;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import dev.tripdraw.draw.application.RouteImageGenerator;
-import dev.tripdraw.application.oauth.AuthTokenManager;
+import dev.tripdraw.auth.application.AuthTokenManager;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.test.ControllerTest;

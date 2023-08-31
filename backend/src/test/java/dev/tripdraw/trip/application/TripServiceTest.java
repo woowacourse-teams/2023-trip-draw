@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.application;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_DELETED;
@@ -14,7 +14,7 @@ import dev.tripdraw.application.ServiceTest;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.dto.auth.LoginUser;
+import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.member.exception.MemberException;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;

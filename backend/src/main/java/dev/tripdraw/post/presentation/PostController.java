@@ -7,14 +7,14 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.post.application.PostService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
-import dev.tripdraw.dto.auth.LoginUser;
+import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
-import dev.tripdraw.presentation.member.Auth;
+import dev.tripdraw.auth.presentation.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

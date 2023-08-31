@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import dev.tripdraw.trip.application.TripService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
-import dev.tripdraw.dto.auth.LoginUser;
+import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.trip.dto.PointCreateRequest;
 import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;
@@ -13,7 +13,7 @@ import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
-import dev.tripdraw.presentation.member.Auth;
+import dev.tripdraw.auth.presentation.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

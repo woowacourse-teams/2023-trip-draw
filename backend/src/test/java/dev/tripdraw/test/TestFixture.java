@@ -1,7 +1,7 @@
 package dev.tripdraw.test;
 
 import dev.tripdraw.member.domain.Member;
-import dev.tripdraw.domain.oauth.OauthType;
+import dev.tripdraw.auth.domain.OauthType;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;

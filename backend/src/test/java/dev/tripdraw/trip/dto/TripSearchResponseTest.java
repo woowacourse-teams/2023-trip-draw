@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.dto;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.trip.domain.TripStatus.ONGOING;
 import static org.assertj.core.api.Assertions.assertThat;
 

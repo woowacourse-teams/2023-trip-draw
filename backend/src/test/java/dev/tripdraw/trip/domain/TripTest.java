@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.domain;
 
-import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_IN_TRIP;
