@@ -2,23 +2,23 @@ package dev.tripdraw.post.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
 
-import dev.tripdraw.application.file.FileUploader;
+import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.domain.file.FileType;
+import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
-import dev.tripdraw.trip.domain.Point;
-import dev.tripdraw.trip.domain.Trip;
-import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
+import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;

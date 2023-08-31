@@ -1,4 +1,4 @@
-package dev.tripdraw.application;
+package dev.tripdraw.test;
 
 import jakarta.transaction.Transactional;
 import java.lang.annotation.ElementType;

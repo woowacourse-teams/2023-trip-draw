@@ -1,9 +1,9 @@
-package dev.tripdraw.application.file;
+package dev.tripdraw.file.application;
 
-import static dev.tripdraw.exception.file.FileIOExceptionType.FILE_SAVE_FAIL;
+import static dev.tripdraw.file.exception.FileIOExceptionType.FILE_SAVE_FAIL;
 
 import dev.tripdraw.domain.file.FileType;
-import dev.tripdraw.exception.file.FileIOException;
+import dev.tripdraw.file.exception.FileIOException;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package dev.tripdraw.application.file;
+package dev.tripdraw.file.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FilePath {
-    
+
     private final String base;
     private final String postImagePath;
 

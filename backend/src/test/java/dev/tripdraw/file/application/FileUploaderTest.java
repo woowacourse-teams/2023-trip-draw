@@ -1,4 +1,4 @@
-package dev.tripdraw.application.file;
+package dev.tripdraw.file.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import dev.tripdraw.domain.file.FileType;
-import dev.tripdraw.exception.file.FileIOException;
+import dev.tripdraw.file.exception.FileIOException;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;

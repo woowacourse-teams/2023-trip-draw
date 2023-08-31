@@ -1,4 +1,4 @@
-package dev.tripdraw.application.file;
+package dev.tripdraw.file.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

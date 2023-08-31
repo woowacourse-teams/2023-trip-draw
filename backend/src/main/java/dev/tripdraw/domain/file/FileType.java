@@ -1,9 +1,9 @@
 package dev.tripdraw.domain.file;
 
-import static dev.tripdraw.exception.file.FileIOExceptionType.INVALID_CONTENT_TYPE;
+import static dev.tripdraw.file.exception.FileIOExceptionType.INVALID_CONTENT_TYPE;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
-import dev.tripdraw.exception.file.FileIOException;
+import dev.tripdraw.file.exception.FileIOException;
 import java.util.Arrays;
 import java.util.Objects;
 import lombok.Getter;
