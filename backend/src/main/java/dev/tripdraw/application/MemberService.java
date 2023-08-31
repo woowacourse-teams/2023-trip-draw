@@ -4,7 +4,7 @@ import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.post.PostRepository;
-import dev.tripdraw.domain.trip.TripRepository;
+import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

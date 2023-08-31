@@ -2,7 +2,7 @@ package dev.tripdraw.dto.post;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.post.Post;
-import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.trip.domain.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

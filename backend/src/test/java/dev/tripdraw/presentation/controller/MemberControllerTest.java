@@ -13,11 +13,12 @@ import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.post.PostRepository;
-import dev.tripdraw.domain.trip.Point;
-import dev.tripdraw.domain.trip.Trip;
-import dev.tripdraw.domain.trip.TripName;
-import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
+import dev.tripdraw.test.ControllerTest;
+import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripName;
+import dev.tripdraw.trip.domain.TripRepository;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -49,7 +50,7 @@ class MemberControllerTest extends ControllerTest {
     AuthTokenManager authTokenManager;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         RestAssured.port = port;
     }
 

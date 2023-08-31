@@ -15,16 +15,17 @@ import dev.tripdraw.application.draw.RouteImageGenerator;
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.domain.trip.Trip;
-import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.post.PostAndPointCreateRequest;
 import dev.tripdraw.dto.post.PostCreateResponse;
 import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
-import dev.tripdraw.dto.trip.PointCreateRequest;
-import dev.tripdraw.dto.trip.PointResponse;
+import dev.tripdraw.test.ControllerTest;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripRepository;
+import dev.tripdraw.trip.dto.PointCreateRequest;
+import dev.tripdraw.trip.dto.PointResponse;
 import io.restassured.RestAssured;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
@@ -59,7 +60,7 @@ class PostControllerTest extends ControllerTest {
     private String huchuToken;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         super.setUp();
 
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));

@@ -2,9 +2,9 @@ package dev.tripdraw.application.draw;
 
 import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
 
-import dev.tripdraw.domain.trip.Trip;
-import dev.tripdraw.domain.trip.TripRepository;
-import dev.tripdraw.domain.trip.TripUpdateEvent;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripRepository;
+import dev.tripdraw.trip.domain.TripUpdateEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;

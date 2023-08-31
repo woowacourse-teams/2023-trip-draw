@@ -16,6 +16,7 @@ import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.dto.auth.OauthRequest;
 import dev.tripdraw.dto.auth.OauthResponse;
 import dev.tripdraw.dto.auth.RegisterRequest;
+import dev.tripdraw.test.ControllerTest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -42,7 +43,7 @@ class AuthControllerTest extends ControllerTest {
     MemberRepository memberRepository;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         RestAssured.port = port;
 
         when(oauthClientProvider.provide(KAKAO))

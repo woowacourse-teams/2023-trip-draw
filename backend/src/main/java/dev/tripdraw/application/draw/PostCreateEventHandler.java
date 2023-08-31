@@ -5,8 +5,8 @@ import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMI
 import dev.tripdraw.domain.post.Post;
 import dev.tripdraw.domain.post.PostCreateEvent;
 import dev.tripdraw.domain.post.PostRepository;
-import dev.tripdraw.domain.trip.Trip;
-import dev.tripdraw.domain.trip.TripRepository;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripRepository;
 import java.util.List;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;

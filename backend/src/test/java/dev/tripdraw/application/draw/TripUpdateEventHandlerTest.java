@@ -6,8 +6,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
-import dev.tripdraw.domain.trip.TripRepository;
-import dev.tripdraw.domain.trip.TripUpdateEvent;
+import dev.tripdraw.trip.domain.TripRepository;
+import dev.tripdraw.trip.domain.TripUpdateEvent;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class TripUpdateEventHandlerTest {
 
     @Mock
     private TripRepository tripRepository;
-    
+
     @InjectMocks
     private TripUpdateEventHandler tripUpdateEventHandler;
 

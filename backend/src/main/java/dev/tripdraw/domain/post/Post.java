@@ -7,7 +7,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.trip.Point;
+import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.exception.post.PostException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

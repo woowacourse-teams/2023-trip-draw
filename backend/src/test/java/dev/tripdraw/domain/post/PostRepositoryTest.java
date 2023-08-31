@@ -8,10 +8,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
-import dev.tripdraw.domain.trip.Point;
-import dev.tripdraw.domain.trip.Trip;
-import dev.tripdraw.domain.trip.TripName;
-import dev.tripdraw.domain.trip.TripRepository;
+import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripName;
+import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.exception.post.PostException;
 import java.time.LocalDateTime;
 import java.util.List;
