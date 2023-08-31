@@ -1,8 +1,8 @@
-package dev.tripdraw.domain.post;
+package dev.tripdraw.post.domain;
 
-import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
+import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
 
-import dev.tripdraw.exception.post.PostException;
+import dev.tripdraw.post.exception.PostException;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

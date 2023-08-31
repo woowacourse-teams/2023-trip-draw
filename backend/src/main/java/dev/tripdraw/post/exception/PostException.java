@@ -1,4 +1,4 @@
-package dev.tripdraw.exception.post;
+package dev.tripdraw.post.exception;
 
 import dev.tripdraw.exception.common.BaseException;
 import dev.tripdraw.exception.common.ExceptionType;

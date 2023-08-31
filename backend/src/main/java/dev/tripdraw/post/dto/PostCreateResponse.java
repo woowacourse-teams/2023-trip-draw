@@ -1,6 +1,6 @@
-package dev.tripdraw.dto.post;
+package dev.tripdraw.post.dto;
 
-import dev.tripdraw.domain.post.Post;
+import dev.tripdraw.post.domain.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record PostCreateResponse(

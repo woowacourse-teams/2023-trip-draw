@@ -1,18 +1,20 @@
-package dev.tripdraw.domain.post;
+package dev.tripdraw.post.domain;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
-import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
+import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
 import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
+import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripName;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.exception.post.PostException;
+import dev.tripdraw.post.exception.PostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

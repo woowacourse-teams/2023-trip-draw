@@ -1,4 +1,4 @@
-package dev.tripdraw.domain.post;
+package dev.tripdraw.post.domain;
 
 public record PostCreateEvent(Long postId, Long tripId) {
 }

@@ -1,6 +1,6 @@
-package dev.tripdraw.domain.post;
+package dev.tripdraw.post.domain;
 
-import static dev.tripdraw.exception.post.PostExceptionType.NOT_AUTHORIZED_TO_POST;
+import static dev.tripdraw.post.exception.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -8,7 +8,7 @@ import static lombok.AccessLevel.PROTECTED;
 import dev.tripdraw.domain.common.BaseEntity;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.trip.domain.Point;
-import dev.tripdraw.exception.post.PostException;
+import dev.tripdraw.post.exception.PostException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -9,11 +9,10 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.application.ServiceTest;
 import dev.tripdraw.application.oauth.AuthTokenManager;
-import dev.tripdraw.member.application.MemberService;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.domain.post.Post;
-import dev.tripdraw.domain.post.PostRepository;
+import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripName;

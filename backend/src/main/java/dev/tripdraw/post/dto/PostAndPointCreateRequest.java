@@ -1,10 +1,10 @@
-package dev.tripdraw.dto.post;
+package dev.tripdraw.post.dto;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import dev.tripdraw.member.domain.Member;
-import dev.tripdraw.domain.post.Post;
+import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.trip.domain.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

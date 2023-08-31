@@ -1,19 +1,19 @@
-package dev.tripdraw.presentation.controller;
+package dev.tripdraw.post.presentation;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-import dev.tripdraw.application.PostService;
+import dev.tripdraw.post.application.PostService;
 import dev.tripdraw.config.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.dto.auth.LoginUser;
-import dev.tripdraw.dto.post.PostAndPointCreateRequest;
-import dev.tripdraw.dto.post.PostCreateResponse;
-import dev.tripdraw.dto.post.PostRequest;
-import dev.tripdraw.dto.post.PostResponse;
-import dev.tripdraw.dto.post.PostUpdateRequest;
-import dev.tripdraw.dto.post.PostsResponse;
+import dev.tripdraw.post.dto.PostAndPointCreateRequest;
+import dev.tripdraw.post.dto.PostCreateResponse;
+import dev.tripdraw.post.dto.PostRequest;
+import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostUpdateRequest;
+import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.presentation.member.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

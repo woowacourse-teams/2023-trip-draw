@@ -1,4 +1,4 @@
-package dev.tripdraw.presentation.controller;
+package dev.tripdraw.post.presentation;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -15,12 +15,12 @@ import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.dto.post.PostAndPointCreateRequest;
-import dev.tripdraw.dto.post.PostCreateResponse;
-import dev.tripdraw.dto.post.PostRequest;
-import dev.tripdraw.dto.post.PostResponse;
-import dev.tripdraw.dto.post.PostUpdateRequest;
-import dev.tripdraw.dto.post.PostsResponse;
+import dev.tripdraw.post.dto.PostAndPointCreateRequest;
+import dev.tripdraw.post.dto.PostCreateResponse;
+import dev.tripdraw.post.dto.PostRequest;
+import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostUpdateRequest;
+import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.test.ControllerTest;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;

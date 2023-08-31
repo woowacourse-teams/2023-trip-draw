@@ -7,10 +7,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
-import dev.tripdraw.domain.post.PostCreateEvent;
-import dev.tripdraw.domain.post.PostRepository;
-import dev.tripdraw.draw.application.PostCreateEventHandler;
-import dev.tripdraw.draw.application.RouteImageGenerator;
+import dev.tripdraw.post.domain.PostCreateEvent;
+import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.TripRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

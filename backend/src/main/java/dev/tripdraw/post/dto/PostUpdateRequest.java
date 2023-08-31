@@ -1,4 +1,4 @@
-package dev.tripdraw.dto.post;
+package dev.tripdraw.post.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

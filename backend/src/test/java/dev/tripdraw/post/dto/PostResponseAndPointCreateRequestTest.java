@@ -1,7 +1,8 @@
-package dev.tripdraw.dto.post;
+package dev.tripdraw.post.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.trip.domain.Point;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;

@@ -2,9 +2,9 @@ package dev.tripdraw.draw.application;
 
 import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
 
-import dev.tripdraw.domain.post.Post;
-import dev.tripdraw.domain.post.PostCreateEvent;
-import dev.tripdraw.domain.post.PostRepository;
+import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.domain.PostCreateEvent;
+import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import java.util.List;

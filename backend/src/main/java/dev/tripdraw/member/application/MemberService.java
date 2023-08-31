@@ -3,7 +3,7 @@ package dev.tripdraw.member.application;
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.domain.post.PostRepository;
+import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.member.dto.MemberSearchResponse;
 import lombok.RequiredArgsConstructor;

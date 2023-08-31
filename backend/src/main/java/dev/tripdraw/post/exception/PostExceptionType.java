@@ -1,4 +1,4 @@
-package dev.tripdraw.exception.post;
+package dev.tripdraw.post.exception;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
