@@ -1,7 +1,6 @@
 package dev.tripdraw.application;
 
 import static dev.tripdraw.domain.file.FileType.POST_IMAGE;
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.exception.post.PostExceptionType.POST_NOT_FOUND;
 import static dev.tripdraw.exception.trip.TripExceptionType.TRIP_NOT_FOUND;
 
@@ -22,7 +21,6 @@ import dev.tripdraw.dto.post.PostRequest;
 import dev.tripdraw.dto.post.PostResponse;
 import dev.tripdraw.dto.post.PostUpdateRequest;
 import dev.tripdraw.dto.post.PostsResponse;
-import dev.tripdraw.exception.member.MemberException;
 import dev.tripdraw.exception.post.PostException;
 import dev.tripdraw.exception.trip.TripException;
 import java.util.Comparator;
@@ -50,7 +48,7 @@ public class PostService {
             PostAndPointCreateRequest postAndPointCreateRequest,
             MultipartFile file
     ) {
-        Member member = findMemberById(loginUser.memberId());
+        Member member = memberRepository.getById(loginUser.memberId());
         Trip trip = findValidatedTripById(postAndPointCreateRequest.tripId(), member);
 
         Point point = postAndPointCreateRequest.toPoint();
@@ -70,7 +68,7 @@ public class PostService {
             PostRequest postRequest,
             MultipartFile file
     ) {
-        Member member = findMemberById(loginUser.memberId());
+        Member member = memberRepository.getById(loginUser.memberId());
         Trip trip = findValidatedTripById(postRequest.tripId(), member);
 
         Point point = trip.findPointById(postRequest.pointId());
@@ -85,13 +83,13 @@ public class PostService {
 
     public PostResponse read(LoginUser loginUser, Long postId) {
         Post post = findPostById(postId);
-        Member member = findMemberById(loginUser.memberId());
+        Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
         return PostResponse.from(post);
     }
 
     public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
-        Member member = findMemberById(loginUser.memberId());
+        Member member = memberRepository.getById(loginUser.memberId());
         findValidatedTripById(tripId, member);
 
         List<Post> posts = postRepository.findAllByTripId(tripId).stream()
@@ -102,7 +100,7 @@ public class PostService {
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
         Post post = findPostById(postId);
-        Member member = findMemberById(loginUser.memberId());
+        Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
 
         post.changeTitle(postUpdateRequest.title());
@@ -112,7 +110,7 @@ public class PostService {
 
     public void delete(LoginUser loginUser, Long postId) {
         Post post = findPostById(postId);
-        Member member = findMemberById(loginUser.memberId());
+        Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
 
         postRepository.deleteById(postId);
@@ -127,16 +125,10 @@ public class PostService {
     }
 
     private Trip findValidatedTripById(Long tripId, Member member) {
-
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
         trip.validateAuthorization(member);
         return trip;
-    }
-
-    private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
     private Post findPostById(Long postId) {

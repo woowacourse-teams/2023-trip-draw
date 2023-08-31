@@ -1,8 +1,12 @@
 package dev.tripdraw.domain.member;
 
 import static dev.tripdraw.domain.oauth.OauthType.KAKAO;
+import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
+import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import dev.tripdraw.exception.member.MemberException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -40,6 +44,29 @@ class MemberRepositoryTest {
 
         // expect
         assertThat(foundMember).isEmpty();
+    }
+
+    @Test
+    void 회원_ID로_회원을_조회한다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+
+        // when
+        Member foundMember = memberRepository.getById(member.id());
+
+        // then
+        assertThat(foundMember).isEqualTo(member);
+    }
+
+    @Test
+    void 회원_ID로_회원을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long memberId = MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> memberRepository.getById(memberId))
+                .isInstanceOf(MemberException.class)
+                .hasMessage(MEMBER_NOT_FOUND.message());
     }
 
     @ParameterizedTest
