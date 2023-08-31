@@ -1,14 +1,11 @@
 package dev.tripdraw.application;
 
-import static dev.tripdraw.exception.member.MemberExceptionType.MEMBER_NOT_FOUND;
-
 import dev.tripdraw.application.oauth.AuthTokenManager;
 import dev.tripdraw.domain.member.Member;
 import dev.tripdraw.domain.member.MemberRepository;
 import dev.tripdraw.domain.post.PostRepository;
 import dev.tripdraw.domain.trip.TripRepository;
 import dev.tripdraw.dto.member.MemberSearchResponse;
-import dev.tripdraw.exception.member.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +28,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MemberSearchResponse findByCode(String code) {
         Long memberId = authTokenManager.extractMemberId(code);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+        Member member = memberRepository.getById(memberId);
         return MemberSearchResponse.from(member);
     }
 
