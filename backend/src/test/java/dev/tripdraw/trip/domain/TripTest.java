@@ -245,19 +245,4 @@ class TripTest {
         // then
         assertThat(pointedLongitudes).containsExactly(2.2, 6.6);
     }
-
-    @Test
-    void 여행의_위치정보_중_삭제되지_않은_위치정보를_반환한다() {
-        // given
-        Member member = new Member("통후추", "kakaoId", KAKAO);
-        Trip trip = Trip.from(member);
-        Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
-        Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
-        trip.add(point1);
-        trip.add(point2);
-        point2.delete();
-
-        // expect
-        assertThat(trip.points()).containsExactly(point1);
-    }
 }

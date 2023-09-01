@@ -1,6 +1,5 @@
 package dev.tripdraw.trip.domain;
 
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_HAS_POST;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -45,9 +44,6 @@ public class Point extends BaseEntity {
     @ManyToOne
     private Trip trip;
 
-    @Column(nullable = false)
-    private Boolean isDeleted = false;
-
     public Point(Double latitude, Double longitude, LocalDateTime recordedAt) {
         this(null, latitude, longitude, false, recordedAt, null);
     }
@@ -80,18 +76,6 @@ public class Point extends BaseEntity {
     private void validateNotPosted() {
         if (hasPost) {
             throw new TripException(POINT_ALREADY_HAS_POST);
-        }
-    }
-
-    public void delete() {
-        validateNotDeleted();
-
-        isDeleted = true;
-    }
-
-    private void validateNotDeleted() {
-        if (isDeleted) {
-            throw new TripException(POINT_ALREADY_DELETED);
         }
     }
 }
