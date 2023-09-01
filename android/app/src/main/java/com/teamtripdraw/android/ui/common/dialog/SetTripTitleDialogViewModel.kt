@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.trip.PreSetTripTitle
 import com.teamtripdraw.android.domain.model.trip.PreviewTrip
@@ -60,6 +61,7 @@ class SetTripTitleDialogViewModel(
                 _titleSetupCompletedEvent.value = Event(true)
             }.onFailure {
                 // todo 오류 처리
+                TripDrawApplication.logUtil.general.log(it, it.message)
             }
         }
     }
