@@ -2,7 +2,6 @@ package dev.tripdraw.member.domain;
 
 import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
-import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -59,7 +58,7 @@ class MemberRepositoryTest {
     @Test
     void 회원_ID로_회원을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
         // given
-        Long wrongId = MIN_VALUE;
+        Long wrongId = Long.MIN_VALUE;
 
         // expect
         assertThatThrownBy(() -> memberRepository.getById(wrongId))

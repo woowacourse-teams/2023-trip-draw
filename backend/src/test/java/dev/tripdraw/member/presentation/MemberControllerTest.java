@@ -1,7 +1,6 @@
 package dev.tripdraw.member.presentation;
 
 import static dev.tripdraw.auth.domain.OauthType.KAKAO;
-import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -81,7 +80,7 @@ class MemberControllerTest extends ControllerTest {
     @Test
     void code를_입력_받아_사용자를_조회할_때_존재하지_않는_사용자라면_예외가_발생한다() {
         // given
-        String code = authTokenManager.generate(MIN_VALUE);
+        String code = authTokenManager.generate(Long.MIN_VALUE);
 
         // expect
         RestAssured.given().log().all()

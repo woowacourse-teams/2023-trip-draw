@@ -1,22 +1,20 @@
 package dev.tripdraw.trip.domain;
 
+import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.exception.TripException;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import java.time.LocalDateTime;
-
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
-import static java.lang.Long.MIN_VALUE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -57,7 +55,7 @@ class PointRepositoryTest {
     @Test
     void 위치정보_ID로_위치정보를_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
         // given
-        Long wrongId = MIN_VALUE;
+        Long wrongId = Long.MIN_VALUE;
 
         // expect
         assertThatThrownBy(() -> pointRepository.getById(wrongId))

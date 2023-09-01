@@ -4,7 +4,6 @@ import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
-import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -83,7 +82,7 @@ class TripServiceTest {
     @Test
     void 여행에_위치정보를_추가할_때_해당_여행이_존재하지_않으면_예외를_발생시킨다() {
         // given
-        Long nonExistentId = MIN_VALUE;
+        Long nonExistentId = Long.MIN_VALUE;
         PointCreateRequest pointCreateRequest = new PointCreateRequest(nonExistentId, 1.1, 2.2, LocalDateTime.now());
 
         // expect
@@ -128,7 +127,7 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        LoginUser otherUser = new LoginUser(MIN_VALUE);
+        LoginUser otherUser = new LoginUser(Long.MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))
