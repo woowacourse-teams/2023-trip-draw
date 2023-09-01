@@ -2,7 +2,6 @@ package dev.tripdraw.trip.domain;
 
 import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
-import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -59,7 +58,7 @@ class TripRepositoryTest {
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
 
         // then
-        assertThat(trips).hasSize(0);
+        assertThat(trips).isEmpty();
     }
 
     @Test
@@ -110,7 +109,7 @@ class TripRepositoryTest {
     @Test
     void 여행_ID로_여행을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
         // given
-        Long wrongId = MIN_VALUE;
+        Long wrongId = Long.MIN_VALUE;
 
         // expect
         assertThatThrownBy(() -> tripRepository.getById(wrongId))

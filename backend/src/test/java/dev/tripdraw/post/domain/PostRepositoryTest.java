@@ -2,17 +2,16 @@ package dev.tripdraw.post.domain;
 
 import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
-import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
+import dev.tripdraw.post.exception.PostException;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripName;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.post.exception.PostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -89,7 +88,7 @@ class PostRepositoryTest {
     @Test
     void 감상_ID로_감상을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
         // given
-        Long wrongId = MIN_VALUE;
+        Long wrongId = Long.MIN_VALUE;
 
         // expect
         assertThatThrownBy(() -> postRepository.getById(wrongId))

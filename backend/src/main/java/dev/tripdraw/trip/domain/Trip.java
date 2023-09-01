@@ -72,6 +72,13 @@ public class Trip extends BaseEntity {
 
     public void add(Point point) {
         route.add(point);
+        if (point.trip() != this) {
+            point.setTrip(this);
+        }
+    }
+
+    public boolean contains(Point point) {
+        return route.contains(point);
     }
 
     public void validateAuthorization(Member member) {
@@ -93,10 +100,6 @@ public class Trip extends BaseEntity {
 
     public void changeName(String name) {
         this.name.change(name);
-    }
-
-    public Point findPointById(Long pointId) {
-        return route.findPointById(pointId);
     }
 
     public void changeImageUrl(String imageUrl) {
@@ -133,14 +136,8 @@ public class Trip extends BaseEntity {
                 .toList();
     }
 
-    public void deletePointById(Long pointId) {
-        route.deletePointById(pointId);
-    }
-
     public List<Point> points() {
-        return route.points().stream()
-                .filter(point -> !point.isDeleted())
-                .toList();
+        return route.points();
     }
 
     public String nameValue() {

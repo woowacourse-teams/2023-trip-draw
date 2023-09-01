@@ -1,6 +1,5 @@
 package dev.tripdraw.trip.domain;
 
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_DELETED;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_HAS_POST;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -11,6 +10,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,23 +40,32 @@ public class Point extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime recordedAt;
 
-    @Column(nullable = false)
-    private Boolean isDeleted = false;
+    @JoinColumn(name = "trip_id")
+    @ManyToOne
+    private Trip trip;
 
     public Point(Double latitude, Double longitude, LocalDateTime recordedAt) {
-        this(null, latitude, longitude, false, recordedAt);
+        this(null, latitude, longitude, false, recordedAt, null);
     }
 
-    public Point(Long id, Double latitude, Double longitude, boolean hasPost, LocalDateTime recordedAt) {
+    public Point(Double latitude, Double longitude, boolean hasPost, LocalDateTime recordedAt) {
+        this(null, latitude, longitude, hasPost, recordedAt, null);
+    }
+
+    public Point(Long id, Double latitude, Double longitude, boolean hasPost, LocalDateTime recordedAt, Trip trip) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.hasPost = hasPost;
         this.recordedAt = recordedAt;
+        this.trip = trip;
     }
 
-    public Long id() {
-        return id;
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+        if (!trip.contains(this)) {
+            trip.add(this);
+        }
     }
 
     public void registerPost() {
@@ -66,18 +76,6 @@ public class Point extends BaseEntity {
     private void validateNotPosted() {
         if (hasPost) {
             throw new TripException(POINT_ALREADY_HAS_POST);
-        }
-    }
-
-    public void delete() {
-        validateNotDeleted();
-
-        isDeleted = true;
-    }
-
-    private void validateNotDeleted() {
-        if (isDeleted) {
-            throw new TripException(POINT_ALREADY_DELETED);
         }
     }
 }
