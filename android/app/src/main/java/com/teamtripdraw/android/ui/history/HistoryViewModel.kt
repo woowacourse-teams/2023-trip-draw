@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.trip.PreviewTrip
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
@@ -30,7 +31,9 @@ class HistoryViewModel(
                 .onSuccess {
                     _previewTrips.value = it
                 }
-                .onFailure { }
+                .onFailure {
+                    TripDrawApplication.logUtil.general.log(it, it.message)
+                }
         }
     }
 

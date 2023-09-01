@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
@@ -58,6 +59,7 @@ class PostDetailViewModel(
                 }
                 .onFailure {
                     // todo 오류 처리
+                    TripDrawApplication.logUtil.general.log(it, it.message)
                 }
         }
     }

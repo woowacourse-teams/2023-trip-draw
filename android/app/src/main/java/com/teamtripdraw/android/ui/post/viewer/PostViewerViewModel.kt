@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PostRepository
@@ -42,6 +43,7 @@ class PostViewerViewModel(
                 }
                 .onFailure {
                     _postErrorEvent.value = Event(true)
+                    TripDrawApplication.logUtil.general.log(it, it.message)
                 }
         }
     }
