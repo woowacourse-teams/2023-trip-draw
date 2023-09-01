@@ -1,6 +1,8 @@
 package dev.tripdraw.post.application;
 
 import static dev.tripdraw.file.domain.FileType.POST_IMAGE;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
@@ -21,7 +23,6 @@ import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -90,7 +91,7 @@ public class PostService {
 
         return postRepository.findAllByTripId(tripId).stream()
                 .sorted(Comparator.comparing(Post::pointRecordedAt).reversed())
-                .collect(Collectors.collectingAndThen(Collectors.toList(), PostsResponse::from));
+                .collect(collectingAndThen(toList(), PostsResponse::from));
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
