@@ -43,6 +43,7 @@ class PostDetailViewModel(
                 }
                 .onFailure {
                     // todo 오류 처리
+                    TripDrawApplication.logUtil.general.log(it, it.message)
                 }
         }
     }
