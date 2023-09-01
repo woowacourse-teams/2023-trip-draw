@@ -27,7 +27,6 @@ public class Route {
     }
 
     public boolean contains(Point point) {
-        return points.stream()
-                .anyMatch(it -> it == point);
+        return points.contains(point);
     }
 }
