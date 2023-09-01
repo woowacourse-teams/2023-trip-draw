@@ -1,12 +1,12 @@
 package dev.tripdraw.test;
 
-import dev.tripdraw.domain.member.Member;
-import dev.tripdraw.domain.oauth.OauthType;
-import dev.tripdraw.domain.post.Post;
-import dev.tripdraw.domain.trip.Point;
-import dev.tripdraw.domain.trip.Trip;
-import dev.tripdraw.domain.trip.TripName;
-import dev.tripdraw.domain.trip.TripStatus;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.auth.domain.OauthType;
+import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripName;
+import dev.tripdraw.trip.domain.TripStatus;
 import java.time.LocalDateTime;
 
 @SuppressWarnings("NonAsciiCharacters")
