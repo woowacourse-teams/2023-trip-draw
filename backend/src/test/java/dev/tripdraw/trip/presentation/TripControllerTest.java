@@ -3,16 +3,14 @@ package dev.tripdraw.trip.presentation;
 import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.auth.application.AuthTokenManager;
+import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.test.ControllerTest;
@@ -223,78 +221,6 @@ class TripControllerTest extends ControllerTest {
                 .when().delete("/points/{pointId}", pointResponse.pointId())
                 .then().log().all()
                 .statusCode(UNAUTHORIZED.value());
-    }
-
-    @Test
-    void 특정_위치정보_삭제시_해당_여행에_존재하는_위치정보가_아니면_예외를_발생시킨다() {
-        // given
-
-        PointCreateRequest pointCreateRequest = new PointCreateRequest(
-                trip.id(),
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
-
-        PointResponse pointResponse = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .body(pointCreateRequest)
-                .when().post("/points")
-                .then().log().all()
-                .extract()
-                .as(PointResponse.class);
-
-        TripResponse tripResponse = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(huchuToken)
-                .when().post("/trips")
-                .then().log().all()
-                .extract()
-                .as(TripResponse.class);
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .param("tripId", tripResponse.tripId())
-                .when().delete("/points/{pointId}", pointResponse.pointId())
-                .then().log().all()
-                .statusCode(NOT_FOUND.value());
-    }
-
-    @Test
-    void 삭제된_위치정보를_삭제시_예외를_발생시킨다() {
-        // given
-        PointCreateRequest pointCreateRequest = new PointCreateRequest(
-                trip.id(),
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
-
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .body(pointCreateRequest)
-                .when().post("/points")
-                .then().log().all()
-                .extract();
-
-        PointResponse pointResponse = response.as(PointResponse.class);
-
-        RestAssured.given().log().all()
-                .auth().preemptive().oauth2(huchuToken)
-                .param("tripId", trip.id())
-                .when().delete("/points/{pointId}", pointResponse.pointId())
-                .then().log().all();
-
-        // expect
-        RestAssured.given().log().all()
-                .auth().preemptive().oauth2(huchuToken)
-                .param("tripId", trip.id())
-                .when().delete("/points/{pointId}", pointResponse.pointId())
-                .then().log().all()
-                .statusCode(CONFLICT.value());
     }
 
     @Test

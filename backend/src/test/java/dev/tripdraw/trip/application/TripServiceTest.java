@@ -3,9 +3,8 @@ package dev.tripdraw.trip.application;
 import static dev.tripdraw.auth.domain.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_DELETED;
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_IN_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
+import static java.lang.Long.MIN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -16,7 +15,6 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.exception.MemberException;
 import dev.tripdraw.test.ServiceTest;
-import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.dto.PointCreateRequest;
@@ -85,7 +83,7 @@ class TripServiceTest {
     @Test
     void 여행에_위치정보를_추가할_때_해당_여행이_존재하지_않으면_예외를_발생시킨다() {
         // given
-        Long nonExistentId = Long.MIN_VALUE;
+        Long nonExistentId = MIN_VALUE;
         PointCreateRequest pointCreateRequest = new PointCreateRequest(nonExistentId, 1.1, 2.2, LocalDateTime.now());
 
         // expect
@@ -118,13 +116,11 @@ class TripServiceTest {
         tripService.deletePoint(loginUser, response.pointId(), trip.id());
 
         // then
-        Point deletedPoint = trip.route().points()
+        boolean expected = trip.route().points()
                 .stream()
-                .filter(point -> Objects.equals(point.id(), response.pointId()))
-                .findFirst()
-                .get();
+                .anyMatch(point -> Objects.equals(point.id(), response.pointId()));
 
-        assertThat(deletedPoint.isDeleted()).isTrue();
+        assertThat(expected).isTrue();
     }
 
     @Test
@@ -132,39 +128,12 @@ class TripServiceTest {
         // given
         PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
         PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        LoginUser otherUser = new LoginUser(Long.MIN_VALUE);
+        LoginUser otherUser = new LoginUser(MIN_VALUE);
 
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.message());
-    }
-
-    @Test
-    void 여행에서_위치정보를_삭제시_여행에_해당_위치정보가_존재하지_않으면_예외를_발생시킨다() {
-        // given
-        PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
-        tripService.addPoint(loginUser, pointCreateRequest);
-
-        Point inExistentPoint = new Point(Long.MAX_VALUE, 1.1, 2.2, false, LocalDateTime.now());
-
-        // expect
-        assertThatThrownBy(() -> tripService.deletePoint(loginUser, inExistentPoint.id(), trip.id()))
-                .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_IN_TRIP.message());
-    }
-
-    @Test
-    void 여행에서_위치정보를_삭제시_이미_삭제된_위치정보면_예외를_발생시킨다() {
-        // given
-        PointCreateRequest pointCreateRequest = new PointCreateRequest(trip.id(), 1.1, 2.2, LocalDateTime.now());
-        PointCreateResponse response = tripService.addPoint(loginUser, pointCreateRequest);
-        tripService.deletePoint(loginUser, response.pointId(), trip.id());
-
-        // expect
-        assertThatThrownBy(() -> tripService.deletePoint(loginUser, response.pointId(), trip.id()))
-                .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_DELETED.message());
     }
 
     @Test

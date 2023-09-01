@@ -1,15 +1,11 @@
 package dev.tripdraw.trip.domain;
 
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_DELETED;
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
-import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_IN_TRIP;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -17,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class RouteTest {
 
     @Test
-    void 경로에_좌표를_추가한다() {
+    void 경로에_위치정보를_추가한다() {
         // given
         Route route = new Route();
         Point point = new Point(1.1, 2.2, LocalDateTime.now());
@@ -29,78 +25,29 @@ class RouteTest {
         assertThat(route.points()).hasSize(1);
     }
 
-    @Test
-    void 경로에서_위치정보를_삭제한다() {
-        // given
-        Route route = new Route();
-        Point point = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
-        route.add(point);
-        Long id = point.id();
+    @Nested
+    class 위치정보_포함_여부를_확인할_때 {
 
-        // when
-        route.deletePointById(id);
+        @Test
+        void 위치정보_포함하면_참값을_반환한다() {
+            // given
+            Route route = new Route();
+            Point point = new Point(1.1, 2.2, LocalDateTime.now());
+            route.add(point);
 
-        // then
-        assertThat(point.isDeleted()).isTrue();
-    }
+            // expect
+            assertThat(route.contains(point)).isTrue();
+        }
 
-    @Test
-    void 경로에_존재하지_않는_위치정보를_삭제하면_예외를_발생시킨다() {
-        // given
-        Route route = new Route();
-        Point point = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
-        Point inexistentPoint = new Point(2L, 1.1, 2.2, false, LocalDateTime.now());
+        @Test
+        void 위치정보를_포함하지_않으면_참값을_반환하지_않는다() {
+            // given
+            Route route = new Route();
+            Point point = new Point(1.1, 2.2, LocalDateTime.now());
 
-        route.add(point);
-
-        // expect
-        assertThatThrownBy(() -> route.deletePointById(inexistentPoint.id()))
-                .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_IN_TRIP.message());
-    }
-
-    @Test
-    void 이미_삭제된_위치정보를_삭제하면_예외를_발생시킨다() {
-        // given
-        Route route = new Route();
-        Point point = new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
-
-        route.add(point);
-        route.deletePointById(point.id());
-
-        // expect
-        assertThatThrownBy(() -> route.deletePointById(point.id()))
-                .isInstanceOf(TripException.class)
-                .hasMessage(POINT_ALREADY_DELETED.message());
-    }
-
-    @Test
-    void 위치를_ID로_조회한다() {
-        // given
-        Route route = new Route();
-        Point point1 = new Point(1L, 1.1, 2.1, false, LocalDateTime.now());
-        Point point2 = new Point(2L, 1.2, 2.2, false, LocalDateTime.now());
-        route.add(point1);
-        route.add(point2);
-
-        // when
-        Point foundPoint = route.findPointById(1L);
-
-        // then
-        assertThat(foundPoint).isEqualTo(point1);
-    }
-
-    @Test
-    void 위치를_존재하지_않는_ID로_조회하면_예외가_발생한다() {
-        // given
-        Route route = new Route();
-        Point point = new Point(1L, 1.1, 2.1, false, LocalDateTime.now());
-        route.add(point);
-
-        // expect
-        assertThatThrownBy(() -> route.findPointById(2L))
-                .isInstanceOf(TripException.class)
-                .hasMessage(POINT_NOT_FOUND.message());
+            // expect
+            assertThat(route.contains(point)).isFalse();
+        }
     }
 }
 

@@ -1,12 +1,13 @@
 package dev.tripdraw.trip.application;
 
+import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
-import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.trip.dto.PointCreateRequest;
 import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TripService {
 
     private final TripRepository tripRepository;
+    private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -39,22 +41,22 @@ public class TripService {
     public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
         Member member = memberRepository.getById(loginUser.memberId());
         Trip trip = tripRepository.getById(pointCreateRequest.tripId());
+        trip.validateAuthorization(member);
 
         Point point = pointCreateRequest.toPoint();
-        trip.validateAuthorization(member);
-        trip.add(point);
+        point.setTrip(trip);
+        pointRepository.save(point);
 
-        tripRepository.flush();
         return PointCreateResponse.from(point);
     }
 
     public void deletePoint(LoginUser loginUser, Long pointId, Long tripId) {
         Member member = memberRepository.getById(loginUser.memberId());
-
         Trip trip = tripRepository.getById(tripId);
         trip.validateAuthorization(member);
 
-        trip.deletePointById(pointId);
+        Point point = pointRepository.getById(pointId);
+        pointRepository.delete(point);
     }
 
     @Transactional(readOnly = true)
@@ -89,7 +91,7 @@ public class TripService {
         Trip trip = tripRepository.getById(tripId);
         trip.validateAuthorization(member);
 
-        Point point = trip.findPointById(pointId);
+        Point point = pointRepository.getById(pointId);
         return PointResponse.from(point);
     }
 

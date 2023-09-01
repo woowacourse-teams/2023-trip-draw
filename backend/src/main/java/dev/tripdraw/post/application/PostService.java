@@ -17,10 +17,10 @@ import dev.tripdraw.post.dto.PostResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,6 +35,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
+    private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
     private final FileUploader fileUploader;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -48,8 +49,8 @@ public class PostService {
         Trip trip = findValidatedTripById(postAndPointCreateRequest.tripId(), member);
 
         Point point = postAndPointCreateRequest.toPoint();
-        trip.add(point);
-        tripRepository.flush();
+        point.setTrip(trip);
+        pointRepository.save(point);
 
         Post post = postAndPointCreateRequest.toPost(member, point);
         Post savedPost = postRepository.save(registerFileToPost(file, post));
@@ -66,8 +67,7 @@ public class PostService {
     ) {
         Member member = memberRepository.getById(loginUser.memberId());
         Trip trip = findValidatedTripById(postRequest.tripId(), member);
-
-        Point point = trip.findPointById(postRequest.pointId());
+        Point point = pointRepository.getById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
         Post savedPost = postRepository.save(registerFileToPost(file, post));
@@ -88,10 +88,9 @@ public class PostService {
         Member member = memberRepository.getById(loginUser.memberId());
         findValidatedTripById(tripId, member);
 
-        List<Post> posts = postRepository.findAllByTripId(tripId).stream()
+        return postRepository.findAllByTripId(tripId).stream()
                 .sorted(Comparator.comparing(Post::pointRecordedAt).reversed())
-                .collect(Collectors.toList());
-        return PostsResponse.from(posts);
+                .collect(Collectors.collectingAndThen(Collectors.toList(), PostsResponse::from));
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {

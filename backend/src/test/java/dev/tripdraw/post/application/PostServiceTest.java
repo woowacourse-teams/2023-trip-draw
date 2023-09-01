@@ -28,6 +28,7 @@ import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.post.exception.PostException;
 import dev.tripdraw.test.ServiceTest;
 import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.exception.TripException;
@@ -49,6 +50,10 @@ class PostServiceTest {
     private TripRepository tripRepository;
 
     @Autowired
+    private PointRepository pointRepository;
+
+
+    @Autowired
     private MemberRepository memberRepository;
 
     @MockBean
@@ -65,8 +70,8 @@ class PostServiceTest {
         Member otherMember = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
         trip = tripRepository.save(Trip.from(member));
         point = new Point(1.1, 2.1, LocalDateTime.now());
-        trip.add(point);
-        tripRepository.flush();
+        point.setTrip(trip);
+        pointRepository.save(point);
         loginUser = new LoginUser(member.id());
         otherUser = new LoginUser(otherMember.id());
     }
