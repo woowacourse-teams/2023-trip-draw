@@ -59,7 +59,7 @@ class TripRepositoryTest {
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
 
         // then
-        assertThat(trips).hasSize(0);
+        assertThat(trips).isEmpty();
     }
 
     @Test

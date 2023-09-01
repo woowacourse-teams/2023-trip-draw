@@ -1,7 +1,7 @@
 package dev.tripdraw.test;
 
-import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.auth.domain.OauthType;
+import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
@@ -17,7 +17,7 @@ public class TestFixture {
     }
 
     public static Point 위치정보() {
-        return new Point(1L, 1.1, 2.2, false, LocalDateTime.now());
+        return new Point(1L, 1.1, 2.2, false, LocalDateTime.now(), 여행());
     }
 
     public static Trip 여행() {

@@ -8,8 +8,8 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.member.domain.Member;
-import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.post.exception.PostException;
+import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
