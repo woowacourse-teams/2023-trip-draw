@@ -6,7 +6,6 @@ import dev.tripdraw.auth.domain.OauthType;
 import dev.tripdraw.member.exception.MemberException;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.lang.NonNull;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
@@ -14,8 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByNickname(String nickname);
 
-    @NonNull
-    default Member getById(@NonNull Long id) {
+    default Member getById(Long id) {
         return findById(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
