@@ -10,7 +10,8 @@ public class AuthTokenManager {
     private final JwtTokenProvider jwtTokenProvider;
     private final Long expirationTime;
 
-    public AuthTokenManager(JwtTokenProvider jwtTokenProvider, @Value("${jwt.expiration-time}") Long expirationTime) {
+    public AuthTokenManager(JwtTokenProvider jwtTokenProvider,
+                            @Value("${jwt.access.expiration-time}") Long expirationTime) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.expirationTime = expirationTime;
     }

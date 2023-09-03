@@ -51,8 +51,12 @@ trip:
   route:
 
 jwt:
-  secret-key: ItIsALocalKeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee2222222222222222222222222222222222eeeeeeeeeeyXD
-  expiration-time: 172800000  # 48시간 millisecond
+  access:
+    secret-key: ACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKEN
+    expiration-time: 1800000  # 30 minutes
+  refresh:
+    secret-key: REFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFR
+    expiration-time: 1209600000  # 14 days
 
 oauth:
   kakao:
