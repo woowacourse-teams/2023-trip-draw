@@ -1,6 +1,7 @@
 package dev.tripdraw.auth.presentation;
 
 import dev.tripdraw.auth.application.AuthExtractor;
+import dev.tripdraw.common.auth.Auth;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

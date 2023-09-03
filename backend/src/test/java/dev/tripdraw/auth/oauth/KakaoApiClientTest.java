@@ -1,14 +1,14 @@
 package dev.tripdraw.auth.oauth;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import dev.tripdraw.auth.domain.OauthType;
 import dev.tripdraw.auth.dto.KakaoInfoResponse;
 import dev.tripdraw.auth.dto.OauthInfo;
+import dev.tripdraw.common.auth.OauthType;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;

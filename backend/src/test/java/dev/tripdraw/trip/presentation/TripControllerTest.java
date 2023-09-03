@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.presentation;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CREATED;

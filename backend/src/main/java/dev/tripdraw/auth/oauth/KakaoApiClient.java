@@ -3,9 +3,9 @@ package dev.tripdraw.auth.oauth;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
-import dev.tripdraw.auth.domain.OauthType;
 import dev.tripdraw.auth.dto.KakaoInfoResponse;
 import dev.tripdraw.auth.dto.OauthInfo;
+import dev.tripdraw.common.auth.OauthType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

@@ -8,8 +8,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.auth.exception.AuthException;
+import dev.tripdraw.common.auth.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

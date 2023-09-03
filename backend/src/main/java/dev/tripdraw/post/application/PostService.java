@@ -4,7 +4,7 @@ import static dev.tripdraw.file.domain.FileType.POST_IMAGE;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import dev.tripdraw.auth.dto.LoginUser;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.file.domain.FileType;
 import dev.tripdraw.member.domain.Member;

@@ -3,7 +3,7 @@ package dev.tripdraw.auth.oauth;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
-import dev.tripdraw.auth.domain.OauthType;
+import dev.tripdraw.common.auth.OauthType;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.stereotype.Component;

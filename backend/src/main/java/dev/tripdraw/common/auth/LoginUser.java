@@ -1,4 +1,4 @@
-package dev.tripdraw.auth.dto;
+package dev.tripdraw.common.auth;
 
 import io.swagger.v3.oas.annotations.Hidden;
 

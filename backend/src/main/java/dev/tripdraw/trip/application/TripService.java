@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.application;
 
-import dev.tripdraw.auth.dto.LoginUser;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Point;

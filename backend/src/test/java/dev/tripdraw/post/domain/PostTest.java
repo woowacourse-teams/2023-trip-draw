@@ -1,6 +1,6 @@
 package dev.tripdraw.post.domain;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.post.exception.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_HAS_POST;
 import static org.assertj.core.api.Assertions.assertThat;

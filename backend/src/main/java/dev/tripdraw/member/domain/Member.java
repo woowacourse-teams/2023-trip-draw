@@ -3,7 +3,7 @@ package dev.tripdraw.member.domain;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import dev.tripdraw.auth.domain.OauthType;
+import dev.tripdraw.common.auth.OauthType;
 import dev.tripdraw.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
