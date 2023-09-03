@@ -2,6 +2,7 @@ package dev.tripdraw.auth.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import dev.tripdraw.auth.config.AccessTokenConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -16,8 +17,9 @@ class AuthTokenManagerTest {
 
     @BeforeEach
     void setUp() {
+        String key = "test2222222222eeeeeeeeeeee222222222asdfasdfasdfasdfasdssssssssssaaaaaaaaaavvvvvvvfsdfsf2eeeeeeeeeeeee";
         jwtTokenProvider = new JwtTokenProvider(
-                "test2222222222eeeeeeeeeeee222222222asdfasdfasdfasdfasdssssssssssaaaaaaaaaavvvvvvvfsdfsf2eeeeeeeeeeeee"
+                new AccessTokenConfig(key, ACCESS_TOKEN_EXPIRE_TIME)
         );
     }
 

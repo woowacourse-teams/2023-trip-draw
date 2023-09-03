@@ -1,6 +1,5 @@
 package dev.tripdraw.auth.application;
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,15 +16,11 @@ public class AuthTokenManager {
     }
 
     public String generate(Long memberId) {
-        long now = (new Date()).getTime();
-        Date accessTokenExpiredAt = new Date(now + expirationTime);
-
         String subject = memberId.toString();
-
-        return jwtTokenProvider.generate(subject, accessTokenExpiredAt);
+        return jwtTokenProvider.generateAccessToken(subject);
     }
 
     public Long extractMemberId(String accessToken) {
-        return Long.valueOf(jwtTokenProvider.extractSubject(accessToken));
+        return Long.valueOf(jwtTokenProvider.extractAccessToken(accessToken));
     }
 }

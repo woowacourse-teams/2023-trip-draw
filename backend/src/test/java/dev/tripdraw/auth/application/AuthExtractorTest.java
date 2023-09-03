@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import dev.tripdraw.auth.config.AccessTokenConfig;
 import dev.tripdraw.auth.exception.AuthException;
 import dev.tripdraw.common.auth.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +26,12 @@ class AuthExtractorTest {
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
 
     private AuthTokenManager authTokenManager;
+    private AccessTokenConfig accessTokenConfig;
 
     @BeforeEach
     void setUp() {
-        authTokenManager = new AuthTokenManager(new JwtTokenProvider(TEST_SECRET_KEY), ACCESS_TOKEN_EXPIRE_TIME);
+        accessTokenConfig = new AccessTokenConfig(TEST_SECRET_KEY, ACCESS_TOKEN_EXPIRE_TIME);
+        authTokenManager = new AuthTokenManager(new JwtTokenProvider(accessTokenConfig), ACCESS_TOKEN_EXPIRE_TIME);
     }
 
     @Test
@@ -51,7 +54,7 @@ class AuthExtractorTest {
     void 요청_헤더에_Bearer_형식이_아닌_다른_인증정보를_사용하는_경우_예외가_발생한다() {
         // given
         AuthExtractor authExtractor = new AuthExtractor(
-                new AuthTokenManager(new JwtTokenProvider(TEST_SECRET_KEY), ACCESS_TOKEN_EXPIRE_TIME)
+                new AuthTokenManager(new JwtTokenProvider(accessTokenConfig), ACCESS_TOKEN_EXPIRE_TIME)
         );
         HttpServletRequest request = mock(HttpServletRequest.class);
         String encoded = "Basic eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjkxNTE1Mzk2fQ.WEDBjEXfIAd4MaUTK29ElnnGYmYNCKSHLGVPJHlyf2DNECDX8QDqvigUCBzO4ULmpnxr4GiZZqdQyeH1BgU0Ag";
@@ -67,7 +70,7 @@ class AuthExtractorTest {
     void 요청_헤더에_인증_정보가_없을_경우_예외를_발생시킨다() {
         // given
         AuthExtractor authExtractor = new AuthExtractor(
-                new AuthTokenManager(new JwtTokenProvider(TEST_SECRET_KEY), ACCESS_TOKEN_EXPIRE_TIME)
+                new AuthTokenManager(new JwtTokenProvider(accessTokenConfig), ACCESS_TOKEN_EXPIRE_TIME)
         );
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getHeader(AUTHORIZATION)).thenReturn(null);

@@ -2,13 +2,12 @@ package dev.tripdraw.auth.application;
 
 import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_TOKEN;
 import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_TOKEN;
+import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_ACCESS_TOKEN_설정;
+import static dev.tripdraw.test.fixture.AuthFixture.테스트_ACCESS_TOKEN_설정;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.auth.exception.AuthException;
-import java.time.Instant;
-import java.util.Date;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -17,24 +16,15 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class JwtTokenProviderTest {
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
-    private static final Date EXPIRED_AT = new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME);
-
-    private JwtTokenProvider jwtTokenProvider;
-
-    @BeforeEach
-    void setUp() {
-        String secretKey = "test2222222222eeeeeeeeeeee222222222asdfasdfasdfasdfasdssssssssssaaaaaaaaaavvvvvvvfsdfsf2eeeeeeeeeeeee";
-        jwtTokenProvider = new JwtTokenProvider(secretKey);
-    }
+    private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(테스트_ACCESS_TOKEN_설정());
 
     @Test
     void 토큰_정보를_추출한다() {
         // given
-        String accessToken = jwtTokenProvider.generate("memberId", EXPIRED_AT);
+        String accessToken = jwtTokenProvider.generateAccessToken("memberId");
 
         // when
-        String subject = jwtTokenProvider.extractSubject(accessToken);
+        String subject = jwtTokenProvider.extractAccessToken(accessToken);
 
         // then
         assertThat(subject).isEqualTo("memberId");
@@ -46,7 +36,7 @@ class JwtTokenProviderTest {
         String subject = "memberId";
 
         // when
-        String accessToken = jwtTokenProvider.generate(subject, EXPIRED_AT);
+        String accessToken = jwtTokenProvider.generateAccessToken(subject);
 
         // then
         assertThat(accessToken).isNotEmpty();
@@ -58,7 +48,7 @@ class JwtTokenProviderTest {
         String invalidToken = "Invalid.Token.XD";
 
         // expect
-        assertThatThrownBy(() -> jwtTokenProvider.extractSubject(invalidToken))
+        assertThatThrownBy(() -> jwtTokenProvider.extractAccessToken(invalidToken))
                 .isInstanceOf(AuthException.class)
                 .hasMessage(INVALID_TOKEN.message());
     }
@@ -66,11 +56,11 @@ class JwtTokenProviderTest {
     @Test
     void 만료된_토큰의_정보를_추출할_때_예외를_발생시킨다() {
         // given
-        Date expiredDate = Date.from(Instant.now().minusSeconds(1));
-        String expiredToken = jwtTokenProvider.generate("memberId", expiredDate);
+        JwtTokenProvider expiredTokenProvider = new JwtTokenProvider(만료된_토큰_생성용_ACCESS_TOKEN_설정());
+        String expiredToken = expiredTokenProvider.generateAccessToken("memberId");
 
         // expect
-        assertThatThrownBy(() -> jwtTokenProvider.extractSubject(expiredToken))
+        assertThatThrownBy(() -> jwtTokenProvider.extractAccessToken(expiredToken))
                 .isInstanceOf(AuthException.class)
                 .hasMessage(EXPIRED_TOKEN.message());
     }
