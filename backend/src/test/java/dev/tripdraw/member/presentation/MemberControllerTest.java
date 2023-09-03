@@ -7,7 +7,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
-import dev.tripdraw.auth.application.AuthTokenManager;
+import dev.tripdraw.auth.application.JwtTokenProvider;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.dto.MemberSearchResponse;
@@ -46,7 +46,7 @@ class MemberControllerTest extends ControllerTest {
     PostRepository postRepository;
 
     @Autowired
-    AuthTokenManager authTokenManager;
+    JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     public void setUp() {
@@ -57,7 +57,7 @@ class MemberControllerTest extends ControllerTest {
     void code를_입력_받아_사용자를_조회한다() {
         // given
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        String code = authTokenManager.generate(member.id());
+        String code = jwtTokenProvider.generateAccessToken(member.id().toString());
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -80,7 +80,7 @@ class MemberControllerTest extends ControllerTest {
     @Test
     void code를_입력_받아_사용자를_조회할_때_존재하지_않는_사용자라면_예외가_발생한다() {
         // given
-        String code = authTokenManager.generate(Long.MIN_VALUE);
+        String code = jwtTokenProvider.generateAccessToken("-1");
 
         // expect
         RestAssured.given().log().all()
@@ -94,7 +94,7 @@ class MemberControllerTest extends ControllerTest {
     void code를_입력_받아_사용자를_조회할_때_이미_삭제된_사용자라면_예외가_발생한다() {
         // given
         Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
-        String code = authTokenManager.generate(member.id());
+        String code = jwtTokenProvider.generateAccessToken(member.id().toString());
 
         memberRepository.delete(member);
 
@@ -110,7 +110,7 @@ class MemberControllerTest extends ControllerTest {
     void code를_입력_받아_사용자를_삭제한다() {
         // given
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        String code = authTokenManager.generate(member.id());
+        String code = jwtTokenProvider.generateAccessToken(member.id().toString());
 
         Trip trip = new Trip(TripName.from("통후추의 여행"), member);
         Point point = new Point(3.14, 5.25, LocalDateTime.now());

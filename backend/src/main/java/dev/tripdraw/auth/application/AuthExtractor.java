@@ -17,7 +17,7 @@ public class AuthExtractor {
     private static final String AUTHORIZATION_PREFIX = "Bearer ";
     private static final String EMPTY = "";
 
-    private final AuthTokenManager authTokenManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public LoginUser extract(HttpServletRequest request) {
         Long memberId = parse(request);
@@ -38,6 +38,6 @@ public class AuthExtractor {
 
     private Long parseCredential(String header) {
         String credential = header.replace(AUTHORIZATION_PREFIX, EMPTY);
-        return authTokenManager.extractMemberId(credential);
+        return Long.valueOf(jwtTokenProvider.extractAccessToken(credential));
     }
 }

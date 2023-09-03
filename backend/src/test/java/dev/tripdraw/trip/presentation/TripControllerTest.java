@@ -9,7 +9,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import dev.tripdraw.auth.application.AuthTokenManager;
+import dev.tripdraw.auth.application.JwtTokenProvider;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -49,7 +49,7 @@ class TripControllerTest extends ControllerTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private AuthTokenManager authTokenManager;
+    private JwtTokenProvider jwtTokenProvider;
 
     @MockBean
     private RouteImageGenerator routeImageGenerator;
@@ -63,7 +63,7 @@ class TripControllerTest extends ControllerTest {
 
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         trip = tripRepository.save(Trip.from(member));
-        huchuToken = authTokenManager.generate(member.id());
+        huchuToken = jwtTokenProvider.generateAccessToken(member.id().toString());
     }
 
     @Test
