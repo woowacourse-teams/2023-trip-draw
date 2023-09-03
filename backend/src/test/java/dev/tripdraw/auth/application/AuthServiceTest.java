@@ -3,8 +3,8 @@ package dev.tripdraw.auth.application;
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.DUPLICATE_NICKNAME;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.Mockito.when;
 
 import dev.tripdraw.auth.dto.OauthRequest;
@@ -28,7 +28,7 @@ class AuthServiceTest {
     private AuthService authService;
 
     @MockBean
-    OauthClientProvider oauthClientProvider;
+    private OauthClientProvider oauthClientProvider;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -48,7 +48,10 @@ class AuthServiceTest {
         OauthResponse response = authService.login(oauthRequest);
 
         // then
-        assertThat(response.accessToken()).isNotEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(response.accessToken()).isNotEmpty();
+            softly.assertThat(response.refreshToken()).isNotEmpty();
+        });
     }
 
     @Test
@@ -60,7 +63,10 @@ class AuthServiceTest {
         OauthResponse response = authService.login(oauthRequest);
 
         // then
-        assertThat(response.accessToken()).isEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(response.accessToken()).isEmpty();
+            softly.assertThat(response.refreshToken()).isEmpty();
+        });
     }
 
     @Test
@@ -75,7 +81,10 @@ class AuthServiceTest {
         OauthResponse response = authService.register(registerRequest);
 
         // then
-        assertThat(response.accessToken()).isNotEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(response.accessToken()).isNotEmpty();
+            softly.assertThat(response.refreshToken()).isNotEmpty();
+        });
     }
 
     @Test

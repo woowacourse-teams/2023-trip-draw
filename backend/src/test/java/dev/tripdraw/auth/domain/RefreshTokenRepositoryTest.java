@@ -29,4 +29,17 @@ class RefreshTokenRepositoryTest {
         // then
         assertThat(findToken).isPresent();
     }
+
+    @Test
+    void 사용자_아이디를_입력받아_해당되는_모든_RefreshToken을_제거한다() {
+        // given
+        refreshTokenRepository.save(new RefreshToken(1L, "refreshToken"));
+        refreshTokenRepository.save(new RefreshToken(1L, "refreshToken"));
+
+        // when
+        refreshTokenRepository.deleteByMemberId(1L);
+
+        // then
+        assertThat(refreshTokenRepository.count()).isZero();
+    }
 }

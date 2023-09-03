@@ -73,6 +73,7 @@ class AuthControllerTest extends ControllerTest {
             assertSoftly(softly -> {
                 softly.assertThat(response.statusCode()).isEqualTo(OK.value());
                 softly.assertThat(oauthResponse.accessToken()).isNotNull();
+                softly.assertThat(oauthResponse.refreshToken()).isNotNull();
             });
         }
 
@@ -95,6 +96,7 @@ class AuthControllerTest extends ControllerTest {
             assertSoftly(softly -> {
                 softly.assertThat(response.statusCode()).isEqualTo(OK.value());
                 softly.assertThat(oauthResponse.accessToken()).isEmpty();
+                softly.assertThat(oauthResponse.refreshToken()).isEmpty();
             });
         }
     }
@@ -124,6 +126,7 @@ class AuthControllerTest extends ControllerTest {
             assertSoftly(softly -> {
                 softly.assertThat(response.statusCode()).isEqualTo(OK.value());
                 softly.assertThat(oauthResponse.accessToken()).isNotEmpty();
+                softly.assertThat(oauthResponse.refreshToken()).isNotEmpty();
             });
         }
 
