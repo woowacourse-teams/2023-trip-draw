@@ -3,6 +3,7 @@ package dev.tripdraw.auth.application;
 import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_AUTH_HEADER;
 import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_TOKEN;
 import static dev.tripdraw.test.fixture.AuthFixture.테스트_ACCESS_TOKEN_설정;
+import static dev.tripdraw.test.fixture.AuthFixture.테스트_REFRESH_TOKEN_설정;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -21,7 +22,10 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AuthExtractorTest {
 
-    private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(테스트_ACCESS_TOKEN_설정());
+    private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(
+            테스트_ACCESS_TOKEN_설정(),
+            테스트_REFRESH_TOKEN_설정()
+    );
     private final AuthExtractor authExtractor = new AuthExtractor(jwtTokenProvider);
 
     @Test

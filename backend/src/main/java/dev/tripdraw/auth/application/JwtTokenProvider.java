@@ -1,11 +1,12 @@
 package dev.tripdraw.auth.application;
 
-import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_TOKEN;
+import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_ACCESS_TOKEN;
+import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_REFRESH_TOKEN;
 import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_TOKEN;
 
 import dev.tripdraw.auth.config.AccessTokenConfig;
+import dev.tripdraw.auth.config.RefreshTokenConfig;
 import dev.tripdraw.auth.exception.AuthException;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -21,11 +22,16 @@ public class JwtTokenProvider {
 
     private final Key accessKey;
     private final Long accessTokenExpirationTime;
+    private final Key refreshKey;
+    private final Long refreshTokenExpirationTime;
 
-    public JwtTokenProvider(AccessTokenConfig accessTokenConfig) {
-        byte[] keyBytes = Decoders.BASE64.decode(accessTokenConfig.secretKey());
-        this.accessKey = Keys.hmacShaKeyFor(keyBytes);
+    public JwtTokenProvider(AccessTokenConfig accessTokenConfig, RefreshTokenConfig refreshTokenConfig) {
+        byte[] accessKeyBytes = Decoders.BASE64.decode(accessTokenConfig.secretKey());
+        this.accessKey = Keys.hmacShaKeyFor(accessKeyBytes);
         this.accessTokenExpirationTime = accessTokenConfig.expirationTime();
+        byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshTokenConfig.secretKey());
+        this.refreshKey = Keys.hmacShaKeyFor(refreshKeyBytes);
+        this.refreshTokenExpirationTime = refreshTokenConfig.expirationTime();
     }
 
     public String generateAccessToken(String subject) {
@@ -39,19 +45,39 @@ public class JwtTokenProvider {
     }
 
     public String extractAccessToken(String accessToken) {
-        Claims claims = parseClaims(accessToken, accessKey);
-        return claims.getSubject();
-    }
-
-    private Claims parseClaims(String token, Key key) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(accessKey)
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseClaimsJws(accessToken)
+                    .getBody()
+                    .getSubject();
         } catch (ExpiredJwtException e) {
-            throw new AuthException(EXPIRED_TOKEN);
+            throw new AuthException(EXPIRED_ACCESS_TOKEN);
+        } catch (JwtException e) {
+            throw new AuthException(INVALID_TOKEN);
+        }
+    }
+
+    public String generateRefreshToken() {
+        final Date now = new Date();
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + refreshTokenExpirationTime))
+                .signWith(refreshKey, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public void validateRefreshToken(String refreshToken) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(refreshKey)
+                    .build()
+                    .parseClaimsJws(refreshToken)
+                    .getBody()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            throw new AuthException(EXPIRED_REFRESH_TOKEN);
         } catch (JwtException e) {
             throw new AuthException(INVALID_TOKEN);
         }
