@@ -4,6 +4,7 @@ import dev.tripdraw.auth.application.AuthService;
 import dev.tripdraw.auth.dto.OauthRequest;
 import dev.tripdraw.auth.dto.OauthResponse;
 import dev.tripdraw.auth.dto.RegisterRequest;
+import dev.tripdraw.auth.dto.TokenRefreshRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,6 +41,17 @@ public class AuthController {
     @PostMapping("/oauth/register")
     public ResponseEntity<OauthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         OauthResponse oauthResponse = authService.register(registerRequest);
+        return ResponseEntity.ok(oauthResponse);
+    }
+
+    @Operation(summary = "토큰 재발급 API", description = "리프레쉬 토큰을 이용하여 토큰을 재발급합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "토큰 재발급 성공."
+    )
+    @PostMapping("/oauth/refresh")
+    public ResponseEntity<OauthResponse> refresh(@Valid @RequestBody TokenRefreshRequest tokenRefreshRequest) {
+        OauthResponse oauthResponse = authService.refresh(tokenRefreshRequest);
         return ResponseEntity.ok(oauthResponse);
     }
 }

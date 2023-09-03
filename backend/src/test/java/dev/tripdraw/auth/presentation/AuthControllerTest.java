@@ -1,17 +1,24 @@
 package dev.tripdraw.auth.presentation;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_ACCESS_TOKEN_설정;
+import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_REFRESH_TOKEN_설정;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import dev.tripdraw.auth.application.JwtTokenProvider;
+import dev.tripdraw.auth.domain.RefreshToken;
+import dev.tripdraw.auth.domain.RefreshTokenRepository;
 import dev.tripdraw.auth.dto.OauthRequest;
 import dev.tripdraw.auth.dto.OauthResponse;
 import dev.tripdraw.auth.dto.RegisterRequest;
+import dev.tripdraw.auth.dto.TokenRefreshRequest;
 import dev.tripdraw.auth.oauth.OauthClientProvider;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -34,18 +41,23 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 class AuthControllerTest extends ControllerTest {
 
     @LocalServerPort
-    int port;
+    private int port;
 
     @MockBean
-    OauthClientProvider oauthClientProvider;
+    private OauthClientProvider oauthClientProvider;
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     public void setUp() {
         RestAssured.port = port;
-
         when(oauthClientProvider.provide(KAKAO))
                 .thenReturn(new TestKakaoApiClient());
     }
@@ -171,6 +183,56 @@ class AuthControllerTest extends ControllerTest {
                     .when().post("/oauth/register")
                     .then().log().all()
                     .statusCode(BAD_REQUEST.value());
+        }
+    }
+
+    @Nested
+    class Refresh_토큰_재발급_시 {
+
+        @Test
+        void 만료기간이_남은_Refresh_토큰이면_Access_토큰과_Refresh_토큰을_재발급한다() {
+            // given
+            Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+            String refreshToken = jwtTokenProvider.generateRefreshToken();
+            refreshTokenRepository.save(new RefreshToken(member.id(), refreshToken));
+            TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(refreshToken);
+
+            // when
+            ExtractableResponse<Response> response = RestAssured.given().log().all()
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .body(tokenRefreshRequest)
+                    .when().post("/oauth/refresh")
+                    .then().log().all()
+                    .extract();
+
+            // then
+            OauthResponse oauthResponse = response.as(OauthResponse.class);
+
+            assertSoftly(softly -> {
+                softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+                softly.assertThat(oauthResponse.accessToken()).isNotEmpty();
+                softly.assertThat(oauthResponse.refreshToken()).isNotEmpty();
+            });
+        }
+
+        @Test
+        void 만료기간이_지난_Refresh_토큰이면_401_예외가_발생한다() {
+            // given
+            Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+            JwtTokenProvider expiredTokenProvider = new JwtTokenProvider(
+                    만료된_토큰_생성용_ACCESS_TOKEN_설정(),
+                    만료된_토큰_생성용_REFRESH_TOKEN_설정()
+            );
+            String expiredToken = expiredTokenProvider.generateRefreshToken();
+            refreshTokenRepository.save(new RefreshToken(member.id(), expiredToken));
+            TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(expiredToken);
+
+            RestAssured.given().log().all()
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .body(tokenRefreshRequest)
+                    .when().post("/oauth/refresh")
+                    .then().log().all()
+                    .statusCode(UNAUTHORIZED.value());
         }
     }
 }

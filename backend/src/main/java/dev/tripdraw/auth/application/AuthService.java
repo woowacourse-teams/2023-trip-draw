@@ -1,5 +1,6 @@
 package dev.tripdraw.auth.application;
 
+import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_TOKEN;
 import static dev.tripdraw.member.exception.MemberExceptionType.DUPLICATE_NICKNAME;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 
@@ -9,6 +10,8 @@ import dev.tripdraw.auth.dto.OauthInfo;
 import dev.tripdraw.auth.dto.OauthRequest;
 import dev.tripdraw.auth.dto.OauthResponse;
 import dev.tripdraw.auth.dto.RegisterRequest;
+import dev.tripdraw.auth.dto.TokenRefreshRequest;
+import dev.tripdraw.auth.exception.AuthException;
 import dev.tripdraw.auth.oauth.OauthClient;
 import dev.tripdraw.auth.oauth.OauthClientProvider;
 import dev.tripdraw.member.domain.Member;
@@ -45,14 +48,14 @@ public class AuthService {
         }
 
         Member findMember = member.orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-        return generateToken(findMember);
+        return generateToken(findMember.id());
     }
 
-    private OauthResponse generateToken(Member member) {
-        String accessToken = jwtTokenProvider.generateAccessToken(member.id().toString());
+    private OauthResponse generateToken(Long memberId) {
+        String accessToken = jwtTokenProvider.generateAccessToken(memberId.toString());
         String refreshToken = jwtTokenProvider.generateRefreshToken();
-        refreshTokenRepository.deleteByMemberId(member.id());
-        RefreshToken savedRefreshToken = refreshTokenRepository.save(new RefreshToken(member.id(), refreshToken));
+        refreshTokenRepository.deleteByMemberId(memberId);
+        RefreshToken savedRefreshToken = refreshTokenRepository.save(new RefreshToken(memberId, refreshToken));
         return new OauthResponse(accessToken, savedRefreshToken.token());
     }
 
@@ -66,12 +69,19 @@ public class AuthService {
         String nickname = registerRequest.nickname();
         validateDuplicateNickname(nickname);
         member.changeNickname(nickname);
-        return generateToken(member);
+        return generateToken(member.id());
     }
 
     private void validateDuplicateNickname(String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
             throw new MemberException(DUPLICATE_NICKNAME);
         }
+    }
+
+    public OauthResponse refresh(TokenRefreshRequest tokenRefreshRequest) {
+        jwtTokenProvider.validateRefreshToken(tokenRefreshRequest.refreshToken());
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenRefreshRequest.refreshToken())
+                .orElseThrow(() -> new AuthException(INVALID_TOKEN));
+        return generateToken(refreshToken.memberId());
     }
 }

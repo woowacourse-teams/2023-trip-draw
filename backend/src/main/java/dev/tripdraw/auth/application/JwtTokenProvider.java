@@ -15,6 +15,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -62,6 +63,7 @@ public class JwtTokenProvider {
     public String generateRefreshToken() {
         final Date now = new Date();
         return Jwts.builder()
+                .setSubject(UUID.randomUUID().toString())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + refreshTokenExpirationTime))
                 .signWith(refreshKey, SignatureAlgorithm.HS512)
@@ -73,9 +75,7 @@ public class JwtTokenProvider {
             Jwts.parserBuilder()
                     .setSigningKey(refreshKey)
                     .build()
-                    .parseClaimsJws(refreshToken)
-                    .getBody()
-                    .getSubject();
+                    .parseClaimsJws(refreshToken);
         } catch (ExpiredJwtException e) {
             throw new AuthException(EXPIRED_REFRESH_TOKEN);
         } catch (JwtException e) {
