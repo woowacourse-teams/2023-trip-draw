@@ -36,13 +36,21 @@ public class JwtTokenProvider {
     }
 
     public String generateAccessToken(String subject) {
+        return generateToken(subject, accessTokenExpirationTime, accessKey);
+    }
+
+    private String generateToken(String subject, Long expirationTime, Key key) {
         final Date now = new Date();
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + accessTokenExpirationTime))
-                .signWith(accessKey, SignatureAlgorithm.HS512)
+                .setExpiration(new Date(now.getTime() + expirationTime))
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public String generateRefreshToken() {
+        return generateToken(UUID.randomUUID().toString(), refreshTokenExpirationTime, refreshKey);
     }
 
     public String extractAccessToken(String accessToken) {
@@ -58,16 +66,6 @@ public class JwtTokenProvider {
         } catch (JwtException e) {
             throw new AuthException(INVALID_TOKEN);
         }
-    }
-
-    public String generateRefreshToken() {
-        final Date now = new Date();
-        return Jwts.builder()
-                .setSubject(UUID.randomUUID().toString())
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + refreshTokenExpirationTime))
-                .signWith(refreshKey, SignatureAlgorithm.HS512)
-                .compact();
     }
 
     public void validateRefreshToken(String refreshToken) {
