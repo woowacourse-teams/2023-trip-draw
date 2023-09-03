@@ -26,6 +26,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // configuration processor
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -62,4 +65,9 @@ tasks.register('copySecret', Copy) {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// configuration processor
+tasks.named('compileJava') {
+    inputs.files(tasks.named('processResources'))
 }
