@@ -27,12 +27,15 @@ public class JwtTokenProvider {
     private final Long refreshTokenExpirationTime;
 
     public JwtTokenProvider(AccessTokenConfig accessTokenConfig, RefreshTokenConfig refreshTokenConfig) {
-        byte[] accessKeyBytes = Decoders.BASE64.decode(accessTokenConfig.secretKey());
-        this.accessKey = Keys.hmacShaKeyFor(accessKeyBytes);
+        this.accessKey = generateKey(accessTokenConfig.secretKey());
         this.accessTokenExpirationTime = accessTokenConfig.expirationTime();
-        byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshTokenConfig.secretKey());
-        this.refreshKey = Keys.hmacShaKeyFor(refreshKeyBytes);
+        this.refreshKey = generateKey(refreshTokenConfig.secretKey());
         this.refreshTokenExpirationTime = refreshTokenConfig.expirationTime();
+    }
+
+    private Key generateKey(String secret) {
+        byte[] accessKeyBytes = Decoders.BASE64.decode(secret);
+        return Keys.hmacShaKeyFor(accessKeyBytes);
     }
 
     public String generateAccessToken(String subject) {
