@@ -20,7 +20,8 @@ class RefreshTokenRepositoryTest {
     @Test
     void 토큰을_입력받아_refreshToken_객체를_반환한다() {
         // given
-        RefreshToken refreshToken = new RefreshToken(1L, "refreshToken");
+        long memberId = 1L;
+        RefreshToken refreshToken = new RefreshToken(memberId, "refreshToken");
         refreshTokenRepository.save(refreshToken);
 
         // when
@@ -33,11 +34,12 @@ class RefreshTokenRepositoryTest {
     @Test
     void 사용자_아이디를_입력받아_해당되는_모든_RefreshToken을_제거한다() {
         // given
-        refreshTokenRepository.save(new RefreshToken(1L, "refreshToken"));
-        refreshTokenRepository.save(new RefreshToken(1L, "refreshToken"));
+        long memberId = 1L;
+        refreshTokenRepository.save(new RefreshToken(memberId, "refreshToken"));
+        refreshTokenRepository.save(new RefreshToken(memberId, "refreshToken"));
 
         // when
-        refreshTokenRepository.deleteByMemberId(1L);
+        refreshTokenRepository.deleteByMemberId(memberId);
 
         // then
         assertThat(refreshTokenRepository.count()).isZero();
