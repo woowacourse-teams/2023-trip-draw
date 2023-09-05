@@ -1,6 +1,6 @@
 package dev.tripdraw.auth.dto;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import java.time.LocalDateTime;

@@ -1,12 +1,12 @@
 package dev.tripdraw.member.application;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import dev.tripdraw.auth.application.AuthTokenManager;
+import dev.tripdraw.auth.application.JwtTokenProvider;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.dto.MemberSearchResponse;
@@ -33,7 +33,7 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private AuthTokenManager authTokenManager;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private TripRepository tripRepository;
@@ -49,7 +49,7 @@ class MemberServiceTest {
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        code = authTokenManager.generate(member.id());
+        code = jwtTokenProvider.generateAccessToken(member.id().toString());
 
         trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member));
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
@@ -79,7 +79,7 @@ class MemberServiceTest {
     void code를_입력_받아_사용자를_조회할_때_이미_삭제된_사용자라면_예외를_발생시킨다() {
         // given
         Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
-        String code = authTokenManager.generate(member.id());
+        String code = jwtTokenProvider.generateAccessToken(member.id().toString());
 
         memberRepository.deleteById(member.id());
 
@@ -91,7 +91,7 @@ class MemberServiceTest {
 
     @Test
     void code를_입력_받아_사용자를_조회할_때_존재하지_않는_사용자라면_예외를_발생시킨다() {
-        String nonExistentCode = authTokenManager.generate(Long.MIN_VALUE);
+        String nonExistentCode = jwtTokenProvider.generateAccessToken("-1");
 
         // expect
         assertThatThrownBy(() -> memberService.findByCode(nonExistentCode))

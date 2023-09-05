@@ -2,10 +2,7 @@ package dev.tripdraw.auth.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record OauthResponse(
-
-        @Schema(description = "Access Token", example = TOKEN_SAMPLE)
-        String accessToken,
+public record TokenRefreshRequest(
 
         @Schema(description = "Refresh Token", example = TOKEN_SAMPLE)
         String refreshToken

@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.domain;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_INVALID_STATUS;
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,6 +1,6 @@
 package dev.tripdraw.auth.oauth;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;

@@ -1,6 +1,6 @@
 package dev.tripdraw.auth.dto;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

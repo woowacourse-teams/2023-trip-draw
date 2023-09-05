@@ -1,4 +1,4 @@
-package dev.tripdraw.auth.domain;
+package dev.tripdraw.common.auth;
 
 public enum OauthType {
     KAKAO,

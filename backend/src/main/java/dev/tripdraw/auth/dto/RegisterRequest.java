@@ -1,6 +1,6 @@
 package dev.tripdraw.auth.dto;
 
-import dev.tripdraw.auth.domain.OauthType;
+import dev.tripdraw.common.auth.OauthType;
 import dev.tripdraw.common.validation.NoWhiteSpace;
 import io.swagger.v3.oas.annotations.media.Schema;
 

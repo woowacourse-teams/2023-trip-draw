@@ -1,6 +1,6 @@
 package dev.tripdraw.post.application;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.post.exception.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 
-import dev.tripdraw.auth.dto.LoginUser;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;

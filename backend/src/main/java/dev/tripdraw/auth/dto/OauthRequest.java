@@ -1,6 +1,6 @@
 package dev.tripdraw.auth.dto;
 
-import dev.tripdraw.auth.domain.OauthType;
+import dev.tripdraw.common.auth.OauthType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record OauthRequest(
@@ -11,6 +11,5 @@ public record OauthRequest(
         @Schema(description = "Access Token", example = TOKEN_SAMPLE)
         String oauthToken
 ) {
-
     private static final String TOKEN_SAMPLE = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzMiLCJleHAiOjE2OTE4OTA0NjZ9.NlzZEEDWdjovafRPCD1ZvddeRUccZfyZpcUWzGPAI4oK-PKyPM64TIMJ3HyOy29vJtg_MET1c4omWUkGOb4qyQ";
 }

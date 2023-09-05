@@ -1,10 +1,12 @@
 package dev.tripdraw.auth.application;
 
-import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_TOKEN;
+import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_ACCESS_TOKEN;
+import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_REFRESH_TOKEN;
 import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_TOKEN;
 
+import dev.tripdraw.auth.config.AccessTokenConfig;
+import dev.tripdraw.auth.config.RefreshTokenConfig;
 import dev.tripdraw.auth.exception.AuthException;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,41 +15,70 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenProvider {
 
-    private final Key key;
+    private final Key accessKey;
+    private final Long accessTokenExpirationTime;
+    private final Key refreshKey;
+    private final Long refreshTokenExpirationTime;
 
-    public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+    public JwtTokenProvider(AccessTokenConfig accessTokenConfig, RefreshTokenConfig refreshTokenConfig) {
+        this.accessKey = generateKey(accessTokenConfig.secretKey());
+        this.accessTokenExpirationTime = accessTokenConfig.expirationTime();
+        this.refreshKey = generateKey(refreshTokenConfig.secretKey());
+        this.refreshTokenExpirationTime = refreshTokenConfig.expirationTime();
     }
 
-    public String generate(String subject, Date expiredAt) {
+    private Key generateKey(String secret) {
+        byte[] accessKeyBytes = Decoders.BASE64.decode(secret);
+        return Keys.hmacShaKeyFor(accessKeyBytes);
+    }
+
+    public String generateAccessToken(String subject) {
+        return generateToken(subject, accessTokenExpirationTime, accessKey);
+    }
+
+    private String generateToken(String subject, Long expirationTime, Key key) {
+        final Date now = new Date();
         return Jwts.builder()
                 .setSubject(subject)
-                .setExpiration(expiredAt)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + expirationTime))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public String extractSubject(String accessToken) {
-        Claims claims = parseClaims(accessToken);
-        return claims.getSubject();
+    public String generateRefreshToken() {
+        return generateToken(UUID.randomUUID().toString(), refreshTokenExpirationTime, refreshKey);
     }
 
-    private Claims parseClaims(String accessToken) {
+    public String extractAccessToken(String accessToken) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(accessKey)
                     .build()
                     .parseClaimsJws(accessToken)
-                    .getBody();
+                    .getBody()
+                    .getSubject();
         } catch (ExpiredJwtException e) {
-            throw new AuthException(EXPIRED_TOKEN);
+            throw new AuthException(EXPIRED_ACCESS_TOKEN);
+        } catch (JwtException e) {
+            throw new AuthException(INVALID_TOKEN);
+        }
+    }
+
+    public void validateRefreshToken(String refreshToken) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(refreshKey)
+                    .build()
+                    .parseClaimsJws(refreshToken);
+        } catch (ExpiredJwtException e) {
+            throw new AuthException(EXPIRED_REFRESH_TOKEN);
         } catch (JwtException e) {
             throw new AuthException(INVALID_TOKEN);
         }

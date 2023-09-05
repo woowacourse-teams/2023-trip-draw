@@ -3,9 +3,9 @@ package dev.tripdraw.auth.presentation;
 import static dev.tripdraw.auth.exception.AuthExceptionType.AUTH_FAIL;
 
 import dev.tripdraw.auth.application.AuthExtractor;
-import dev.tripdraw.member.application.MemberService;
-import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.auth.exception.AuthException;
+import dev.tripdraw.common.auth.LoginUser;
+import dev.tripdraw.member.application.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,15 +1,22 @@
 package dev.tripdraw.auth.application;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.auth.exception.AuthExceptionType.EXPIRED_REFRESH_TOKEN;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.DUPLICATE_NICKNAME;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThat;
+import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_ACCESS_TOKEN_설정;
+import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_REFRESH_TOKEN_설정;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.Mockito.when;
 
+import dev.tripdraw.auth.domain.RefreshToken;
+import dev.tripdraw.auth.domain.RefreshTokenRepository;
 import dev.tripdraw.auth.dto.OauthRequest;
 import dev.tripdraw.auth.dto.OauthResponse;
 import dev.tripdraw.auth.dto.RegisterRequest;
+import dev.tripdraw.auth.dto.TokenRefreshRequest;
+import dev.tripdraw.auth.exception.AuthException;
 import dev.tripdraw.auth.oauth.OauthClientProvider;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -28,10 +35,16 @@ class AuthServiceTest {
     private AuthService authService;
 
     @MockBean
-    OauthClientProvider oauthClientProvider;
+    private OauthClientProvider oauthClientProvider;
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +61,10 @@ class AuthServiceTest {
         OauthResponse response = authService.login(oauthRequest);
 
         // then
-        assertThat(response.accessToken()).isNotEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(response.accessToken()).isNotEmpty();
+            softly.assertThat(response.refreshToken()).isNotEmpty();
+        });
     }
 
     @Test
@@ -60,7 +76,10 @@ class AuthServiceTest {
         OauthResponse response = authService.login(oauthRequest);
 
         // then
-        assertThat(response.accessToken()).isEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(response.accessToken()).isEmpty();
+            softly.assertThat(response.refreshToken()).isEmpty();
+        });
     }
 
     @Test
@@ -75,7 +94,10 @@ class AuthServiceTest {
         OauthResponse response = authService.register(registerRequest);
 
         // then
-        assertThat(response.accessToken()).isNotEmpty();
+        assertSoftly(softly -> {
+            softly.assertThat(response.accessToken()).isNotEmpty();
+            softly.assertThat(response.refreshToken()).isNotEmpty();
+        });
     }
 
     @Test
@@ -99,5 +121,43 @@ class AuthServiceTest {
         assertThatThrownBy(() -> authService.register(registerRequest))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(DUPLICATE_NICKNAME.message());
+    }
+
+    @Test
+    void Refresh_토큰_재발급시_입력받은_토큰이_만료되는_경우_예외가_발생한다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        JwtTokenProvider expiredTokenProvider = new JwtTokenProvider(
+                만료된_토큰_생성용_ACCESS_TOKEN_설정(),
+                만료된_토큰_생성용_REFRESH_TOKEN_설정()
+        );
+        String expiredToken = expiredTokenProvider.generateRefreshToken();
+        refreshTokenRepository.save(new RefreshToken(member.id(), expiredToken));
+        TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(expiredToken);
+
+        // expect
+        assertThatThrownBy(() -> authService.refresh(tokenRefreshRequest))
+                .isInstanceOf(AuthException.class)
+                .hasMessage(EXPIRED_REFRESH_TOKEN.message());
+    }
+
+    @Test
+    void Refresh_토큰을_입력받아_Access_토큰과_Refresh_토큰을_재발급한다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        String refreshToken = jwtTokenProvider.generateRefreshToken();
+        refreshTokenRepository.save(new RefreshToken(member.id(), refreshToken));
+        TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(refreshToken);
+
+        // when
+        OauthResponse response = authService.refresh(tokenRefreshRequest);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(response.accessToken()).isNotEmpty();
+            softly.assertThat(response.refreshToken()).isNotEmpty();
+            softly.assertThat(refreshTokenRepository.findByToken(refreshToken)).isEmpty();
+            softly.assertThat(refreshTokenRepository.findByToken(response.refreshToken())).isPresent();
+        });
     }
 }

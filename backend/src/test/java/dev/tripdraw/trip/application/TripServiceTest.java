@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.application;
 
-import static dev.tripdraw.auth.domain.OauthType.KAKAO;
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import dev.tripdraw.auth.dto.LoginUser;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;

@@ -4,8 +4,8 @@ import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_AUTH_HEADER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.util.StringUtils.hasText;
 
-import dev.tripdraw.auth.dto.LoginUser;
 import dev.tripdraw.auth.exception.AuthException;
+import dev.tripdraw.common.auth.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class AuthExtractor {
     private static final String AUTHORIZATION_PREFIX = "Bearer ";
     private static final String EMPTY = "";
 
-    private final AuthTokenManager authTokenManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public LoginUser extract(HttpServletRequest request) {
         Long memberId = parse(request);
@@ -38,6 +38,6 @@ public class AuthExtractor {
 
     private Long parseCredential(String header) {
         String credential = header.replace(AUTHORIZATION_PREFIX, EMPTY);
-        return authTokenManager.extractMemberId(credential);
+        return Long.valueOf(jwtTokenProvider.extractAccessToken(credential));
     }
 }
