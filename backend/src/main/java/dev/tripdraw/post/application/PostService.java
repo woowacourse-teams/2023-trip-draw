@@ -99,7 +99,7 @@ public class PostService {
         trip.validateAuthorization(member);
 
         return postRepository.findAllByTripId(tripId).stream()
-                .sorted(comparing(Post::id).reversed())
+                .sorted(comparing(Post::pointRecordedAt).reversed())
                 .collect(collectingAndThen(toList(), PostsResponse::from));
     }
 
