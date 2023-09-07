@@ -1,6 +1,6 @@
 package dev.tripdraw.file.application;
 
-import static dev.tripdraw.file.domain.FileType.POST_IMAGE;
+import static dev.tripdraw.file.domain.FileType.IMAGE;
 
 import dev.tripdraw.file.domain.FileType;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class FilePath {
 
     public String getPath(FileType fileType) {
         Map<FileType, String> typeAndPath = Map.of(
-                POST_IMAGE, postImagePath
+                IMAGE, postImagePath
         );
 
         return typeAndPath.get(fileType);
@@ -28,7 +28,7 @@ public class FilePath {
 
     public String getPathWithBase(FileType fileType) {
         Map<FileType, String> typeAndPath = Map.of(
-                POST_IMAGE, base + postImagePath
+                IMAGE, base + postImagePath
         );
 
         return typeAndPath.get(fileType);

@@ -1,12 +1,10 @@
 package dev.tripdraw.post.application;
 
-import static dev.tripdraw.file.domain.FileType.POST_IMAGE;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
-import dev.tripdraw.file.domain.FileType;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
@@ -116,7 +114,7 @@ public class PostService {
         if (file == null) {
             return;
         }
-        String imageUrl = fileUploader.upload(file, POST_IMAGE);
+        String imageUrl = fileUploader.upload(file);
         post.changePostImageUrl(imageUrl);
     }
 
@@ -130,8 +128,7 @@ public class PostService {
         if (file == null) {
             return post;
         }
-        FileType type = FileType.from(file.getContentType());
-        String fileUrl = fileUploader.upload(file, type);
+        String fileUrl = fileUploader.upload(file);
 
         post.changePostImageUrl(fileUrl);
         return post;

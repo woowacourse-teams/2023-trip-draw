@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @Getter
 public enum FileType {
-    POST_IMAGE(IMAGE_JPEG_VALUE, ".jpg"),
+    IMAGE(IMAGE_JPEG_VALUE, ".jpg"),
     ;
 
     private final String contentType;
