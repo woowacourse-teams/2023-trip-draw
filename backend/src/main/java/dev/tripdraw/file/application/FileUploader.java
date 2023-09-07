@@ -19,6 +19,9 @@ public class FileUploader {
     private final FileUrlMaker fileUrlMaker;
 
     public String upload(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
         FileType type = FileType.from(file.getContentType());
         UUID id = UUID.randomUUID();
         String filePathWithBase = filePath.getPathWithBase(type) + id + type.extension();
