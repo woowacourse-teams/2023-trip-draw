@@ -1,12 +1,11 @@
 package dev.tripdraw.post.application;
 
-import static dev.tripdraw.file.domain.FileType.POST_IMAGE;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
-import dev.tripdraw.file.domain.FileType;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
@@ -22,7 +21,6 @@ import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -47,18 +45,25 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = memberRepository.getById(loginUser.memberId());
-        Trip trip = findValidatedTripById(postAndPointCreateRequest.tripId(), member);
-
-        Point point = postAndPointCreateRequest.toPoint();
-        point.setTrip(trip);
-        pointRepository.save(point);
+        Trip trip = tripRepository.getById(postAndPointCreateRequest.tripId());
+        trip.validateAuthorization(member);
+        Point point = pointRepository.save(postAndPointCreateRequest.toPoint(trip));
 
         Post post = postAndPointCreateRequest.toPost(member, point);
-        Post savedPost = postRepository.save(registerFileToPost(file, post));
+        uploadImage(file, post, trip);
+        Post savedPost = postRepository.save(post);
 
         applicationEventPublisher.publishEvent(new PostCreateEvent(post.id(), trip.id()));
-
         return PostCreateResponse.from(savedPost);
+    }
+
+    private void uploadImage(MultipartFile file, Post post, Trip trip) {
+        String filename = fileUploader.upload(file);
+        if (filename == null) {
+            return;
+        }
+        post.changePostImageUrl(filename);
+        trip.changeImageUrl(filename);
     }
 
     public PostCreateResponse addAtExistingLocation(
@@ -67,17 +72,19 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = memberRepository.getById(loginUser.memberId());
-        Trip trip = findValidatedTripById(postRequest.tripId(), member);
+        Trip trip = tripRepository.getById(postRequest.tripId());
+        trip.validateAuthorization(member);
         Point point = pointRepository.getById(postRequest.pointId());
 
         Post post = postRequest.toPost(member, point);
-        Post savedPost = postRepository.save(registerFileToPost(file, post));
+        uploadImage(file, post, trip);
+        Post savedPost = postRepository.save(post);
 
         applicationEventPublisher.publishEvent(new PostCreateEvent(post.id(), trip.id()));
-
         return PostCreateResponse.from(savedPost);
     }
 
+    @Transactional(readOnly = true)
     public PostResponse read(LoginUser loginUser, Long postId) {
         Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
@@ -85,12 +92,14 @@ public class PostService {
         return PostResponse.from(post);
     }
 
+    @Transactional(readOnly = true)
     public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
         Member member = memberRepository.getById(loginUser.memberId());
-        findValidatedTripById(tripId, member);
+        Trip trip = tripRepository.getById(tripId);
+        trip.validateAuthorization(member);
 
         return postRepository.findAllByTripId(tripId).stream()
-                .sorted(Comparator.comparing(Post::pointRecordedAt).reversed())
+                .sorted(comparing(Post::pointRecordedAt).reversed())
                 .collect(collectingAndThen(toList(), PostsResponse::from));
     }
 
@@ -98,43 +107,19 @@ public class PostService {
         Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
+        Trip trip = tripRepository.getById(post.tripId());
+        trip.validateAuthorization(member);
 
         post.changeTitle(postUpdateRequest.title());
         post.changeWriting(postUpdateRequest.writing());
-        updateFileOfPost(file, post);
+        uploadImage(file, post, trip);
     }
 
     public void delete(LoginUser loginUser, Long postId) {
         Post post = postRepository.getById(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
-
         postRepository.deleteById(postId);
-    }
-
-    private void updateFileOfPost(MultipartFile file, Post post) {
-        if (file == null) {
-            return;
-        }
-        String imageUrl = fileUploader.upload(file, POST_IMAGE);
-        post.changePostImageUrl(imageUrl);
-    }
-
-    private Trip findValidatedTripById(Long tripId, Member member) {
-        Trip trip = tripRepository.getById(tripId);
-        trip.validateAuthorization(member);
-        return trip;
-    }
-
-    private Post registerFileToPost(MultipartFile file, Post post) {
-        if (file == null) {
-            return post;
-        }
-        FileType type = FileType.from(file.getContentType());
-        String fileUrl = fileUploader.upload(file, type);
-
-        post.changePostImageUrl(fileUrl);
-        return post;
     }
 }
 

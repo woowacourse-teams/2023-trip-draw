@@ -18,16 +18,16 @@ public class FileUploader {
     private final FilePath filePath;
     private final FileUrlMaker fileUrlMaker;
 
-    public String upload(MultipartFile file, FileType fileType) {
+    public String upload(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             return null;
         }
-
+        FileType type = FileType.from(file.getContentType());
         UUID id = UUID.randomUUID();
-        String filePathWithBase = filePath.getPathWithBase(fileType) + id + fileType.extension();
+        String filePathWithBase = filePath.getPathWithBase(type) + id + type.extension();
         fileUpload(file, filePathWithBase);
 
-        return fileUrlMaker.make(filePath.getPath(fileType) + id + fileType.extension());
+        return fileUrlMaker.make(filePath.getPath(type) + id + type.extension());
     }
 
     private void fileUpload(MultipartFile file, String filePathWithBase) {

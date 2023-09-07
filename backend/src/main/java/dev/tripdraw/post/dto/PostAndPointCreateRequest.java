@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.Trip;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,6 +47,10 @@ public record PostAndPointCreateRequest(
 
     public Point toPoint() {
         return new Point(latitude, longitude, recordedAt);
+    }
+
+    public Point toPoint(Trip trip) {
+        return new Point(latitude, longitude, recordedAt, trip);
     }
 
     public Post toPost(Member member, Point point) {

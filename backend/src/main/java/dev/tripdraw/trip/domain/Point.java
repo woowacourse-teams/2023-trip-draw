@@ -48,6 +48,10 @@ public class Point extends BaseEntity {
         this(null, latitude, longitude, false, recordedAt, null);
     }
 
+    public Point(Double latitude, Double longitude, LocalDateTime recordedAt, Trip trip) {
+        this(null, latitude, longitude, false, recordedAt, trip);
+    }
+
     public Point(Double latitude, Double longitude, boolean hasPost, LocalDateTime recordedAt) {
         this(null, latitude, longitude, hasPost, recordedAt, null);
     }

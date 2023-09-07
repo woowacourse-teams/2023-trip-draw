@@ -12,9 +12,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
+import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.exception.MemberException;
@@ -35,9 +38,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.web.multipart.MultipartFile;
 
 @ServiceTest
 class PostServiceTest {
@@ -56,6 +59,9 @@ class PostServiceTest {
 
     @MockBean
     private RouteImageGenerator routeImageGenerator;
+
+    @MockBean
+    private FileUploader fileUploader;
 
     private Trip trip;
     private LoginUser loginUser;
@@ -77,7 +83,7 @@ class PostServiceTest {
     @Test
     void 현재_위치에_대한_감상을_생성한다() {
         // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
+        PostAndPointCreateRequest request = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
                 "제주특별자치도 제주시 애월읍 소길리",
@@ -88,8 +94,7 @@ class PostServiceTest {
         );
 
         // when
-        PostCreateResponse postCreateResponse = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest,
-                null);
+        PostCreateResponse postCreateResponse = postService.addAtCurrentPoint(loginUser, request, null);
 
         // then
         assertThat(postCreateResponse.postId()).isNotNull();
@@ -144,7 +149,7 @@ class PostServiceTest {
                 "제주특별자치도 제주시 애월읍 소길리",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
-        BDDMockito.given(routeImageGenerator.generate(any(), any(), any(), any())).willReturn("hello.png");
+        given(routeImageGenerator.generate(any(), any(), any(), any())).willReturn("hello.png");
 
         // when
         PostCreateResponse postCreateResponse = postService.addAtExistingLocation(loginUser, postRequest, null);
@@ -223,7 +228,7 @@ class PostServiceTest {
 
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
-        // given & expect
+        // expect
         assertThatThrownBy(() -> postService.read(loginUser, Long.MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
@@ -286,7 +291,7 @@ class PostServiceTest {
 
     @Test
     void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_여행_ID이면_예외가_발생한다() {
-        // given & expect
+        // expect
         assertThatThrownBy(() -> postService.readAllByTripId(loginUser, Long.MIN_VALUE))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.message());
@@ -294,7 +299,7 @@ class PostServiceTest {
 
     @Test
     void 특정_여행의_모든_감상을_조회할_때_로그인_한_사용자가_여행의_주인이_아니면_예외가_발생한다() {
-        // given & expect
+        // expect
         assertThatThrownBy(() -> postService.readAllByTripId(otherUser, trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
@@ -325,7 +330,6 @@ class PostServiceTest {
     @Test
     void 감상을_수정할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
                 "수정한 내용입니다."
@@ -383,7 +387,7 @@ class PostServiceTest {
 
     @Test
     void 감상을_삭제할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
-        // given & expect
+        // expect
         assertThatThrownBy(() -> postService.delete(loginUser, Long.MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
@@ -410,6 +414,28 @@ class PostServiceTest {
         assertThatThrownBy(() -> postService.delete(otherUser, postCreateResponse.postId()))
                 .isInstanceOf(PostException.class)
                 .hasMessage(NOT_AUTHORIZED_TO_POST.message());
+    }
+
+    @Test
+    void 이미지를_저장하는_경우_여행의_대표이미지도_변경한다() {
+        // given
+        PostAndPointCreateRequest request = new PostAndPointCreateRequest(
+                trip.id(),
+                "우도의 바닷가",
+                "제주특별자치도 제주시 애월읍 소길리",
+                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                1.1,
+                2.2,
+                LocalDateTime.of(2023, 7, 18, 20, 24)
+        );
+        MultipartFile multipartFile = mock(MultipartFile.class);
+        given(fileUploader.upload(any())).willReturn("hello.png");
+
+        // when
+        postService.addAtCurrentPoint(loginUser, request, multipartFile);
+
+        // then
+        assertThat(trip.imageUrl()).isEqualTo("hello.png");
     }
 
     private PostCreateResponse createPost() {
