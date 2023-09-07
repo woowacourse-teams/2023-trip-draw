@@ -68,7 +68,7 @@ class FileUploaderTest {
     }
 
     @Test
-    void 파일_저장에_실패할시_예외륿_발생시킨다() throws IOException {
+    void 파일_저장에_실패할시_예외를_발생시킨다() throws IOException {
         // given
         MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
         when(multipartFile.getContentType()).thenReturn(IMAGE.contentType());
