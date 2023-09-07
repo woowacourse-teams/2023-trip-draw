@@ -59,7 +59,7 @@ class TripDetailViewModel(
                     _tripTitle.value = it.name
                 }
                 .onFailure {
-                    TripDrawApplication.logUtil.general.log(it, it.message)
+                    TripDrawApplication.logUtil.general.log(it)
                 }
         }
     }

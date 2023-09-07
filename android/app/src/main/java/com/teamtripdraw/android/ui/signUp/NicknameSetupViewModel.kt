@@ -42,7 +42,7 @@ class NicknameSetupViewModel(
                 .onSuccess {
                     _nicknameSetupCompletedEvent.value = Event(true)
                 }.onFailure {
-                    TripDrawApplication.logUtil.general.log(it, it.message)
+                    TripDrawApplication.logUtil.general.log(it)
                     when (it) {
                         is DuplicateNicknameException ->
                             _nicknameState.value = NicknameValidState.DUPLICATE

@@ -32,7 +32,7 @@ class HistoryViewModel(
                     _previewTrips.value = it
                 }
                 .onFailure {
-                    TripDrawApplication.logUtil.general.log(it, it.message)
+                    TripDrawApplication.logUtil.general.log(it)
                 }
         }
     }

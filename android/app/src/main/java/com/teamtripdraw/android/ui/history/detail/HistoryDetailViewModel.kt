@@ -59,7 +59,7 @@ class HistoryDetailViewModel(
                     _posts.value = posts.map { post -> post.toPresentation() }
                 }
                 .onFailure {
-                    TripDrawApplication.logUtil.general.log(it, it.message)
+                    TripDrawApplication.logUtil.general.log(it)
                 }
         }
     }

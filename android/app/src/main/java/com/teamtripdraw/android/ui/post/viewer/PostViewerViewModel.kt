@@ -43,7 +43,7 @@ class PostViewerViewModel(
                 }
                 .onFailure {
                     _postErrorEvent.value = Event(true)
-                    TripDrawApplication.logUtil.general.log(it, it.message)
+                    TripDrawApplication.logUtil.general.log(it)
                 }
         }
     }
