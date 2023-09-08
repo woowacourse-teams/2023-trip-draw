@@ -25,7 +25,7 @@ public record TripSearchResponse(
                 trip.id(),
                 trip.nameValue(),
                 Objects.requireNonNullElse(trip.imageUrl(), EMPTY_IMAGE_URL),
-                Objects.requireNonNullElse(trip.imageUrl(), EMPTY_IMAGE_URL)
+                Objects.requireNonNullElse(trip.routeImageUrl(), EMPTY_IMAGE_URL)
         );
     }
 }

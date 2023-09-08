@@ -3,6 +3,7 @@ package dev.tripdraw.post.dto;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.trip.dto.PointResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Objects;
 
 public record PostResponse(
         @Schema(description = "감상의 Id", example = "1")
@@ -30,6 +31,8 @@ public record PostResponse(
         String routeImageUrl
 ) {
 
+    private static final String EMPTY_IMAGE_URL = "";
+
     public static PostResponse from(Post post) {
         return new PostResponse(
                 post.id(),
@@ -38,8 +41,8 @@ public record PostResponse(
                 post.address(),
                 post.writing(),
                 PointResponse.from(post.point()),
-                post.postImageUrl(),
-                post.routeImageUrl()
+                Objects.requireNonNullElse(post.postImageUrl(), EMPTY_IMAGE_URL),
+                Objects.requireNonNullElse(post.routeImageUrl(), EMPTY_IMAGE_URL)
         );
     }
 }

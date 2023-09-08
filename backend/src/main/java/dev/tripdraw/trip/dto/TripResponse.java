@@ -4,6 +4,7 @@ import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+import java.util.Objects;
 
 public record TripResponse(
         @Schema(description = "여행 Id", example = "1")
@@ -25,14 +26,16 @@ public record TripResponse(
         String routeImageUrl
 ) {
 
+    private static final String EMPTY_IMAGE_URL = "";
+
     public static TripResponse from(Trip trip) {
         return new TripResponse(
                 trip.id(),
                 trip.nameValue(),
                 generateRoute(trip),
                 trip.status(),
-                trip.imageUrl(),
-                trip.routeImageUrl()
+                Objects.requireNonNullElse(trip.imageUrl(), EMPTY_IMAGE_URL),
+                Objects.requireNonNullElse(trip.routeImageUrl(), EMPTY_IMAGE_URL)
         );
     }
 
