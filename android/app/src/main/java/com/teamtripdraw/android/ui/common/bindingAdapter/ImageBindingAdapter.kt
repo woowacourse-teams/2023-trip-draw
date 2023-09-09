@@ -50,14 +50,3 @@ fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
         .transform(CenterCrop(), RoundedCorners(20))
         .into(this)
 }
-
-@BindingAdapter("app:setPostWritingImage")
-fun ImageView.setPostWritingImage(imgUrl: String?) {
-    if (imgUrl == null) return
-    Glide.with(this.context)
-        .load(imgUrl)
-        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
-        .transform(CenterCrop(), RoundedCorners(20))
-        .into(this)
-}
