@@ -1,6 +1,7 @@
 package com.teamtripdraw.android.ui.post.writing
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -52,12 +53,17 @@ class PostWritingViewModel(
     private val _address: MutableLiveData<String> = MutableLiveData("")
     val address: LiveData<String> = _address
 
-    private var imageFile: File? = null
+    // 기기에서 선택된 이미지가 저장되며, 서버에 이미지 저장을 요청할 때 이용됩니다.
+    private var imageFile: MutableLiveData<File?> = MutableLiveData()
+
+    // 기기에서 선택된 이미지 파일의 uri 또는 서버로부터 받아온 image uri가 저장됩니다. view에 표시될 때 이용됩니다.
     private val _imageUri: MutableLiveData<String?> = MutableLiveData(null)
     val imageUri: LiveData<String?> = _imageUri
 
-    private val _hasImage: MutableLiveData<Boolean> = MutableLiveData(false)
-    val hasImage: LiveData<Boolean> = _hasImage
+    val hasImage: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>().apply {
+        this.addSource(imageUri) { value -> this.setValue(value?.isNotBlank()) }
+        this.addSource(imageFile) { value -> this.setValue(value != null) }
+    }
 
     private val _takePictureEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val takePictureEvent: LiveData<Boolean> = _takePictureEvent
@@ -70,15 +76,13 @@ class PostWritingViewModel(
     }
 
     fun updateImage(file: File) {
-        imageFile = file
+        imageFile.value = file
         _imageUri.value = file.toURI().toString()
-        _hasImage.value = true
     }
 
     fun deleteImage() {
-        imageFile = null
+        imageFile.value = null
         _imageUri.value = null
-        _hasImage.value = false
     }
 
     fun backPage() {
@@ -127,7 +131,7 @@ class PostWritingViewModel(
                         title = title.value ?: "",
                         writing = writing.value ?: "",
                         address = address.value ?: "",
-                        imageFile = imageFile,
+                        imageFile = imageFile.value,
                     )
                     postRepository.addPost(prePost).onSuccess {
                         _writingCompletedEvent.value = Event(true)
@@ -138,7 +142,7 @@ class PostWritingViewModel(
                         postId = postId,
                         title = title.value ?: "",
                         writing = writing.value ?: "",
-                        imageFile = imageFile,
+                        imageFile = imageFile.value,
                     )
                     postRepository.patchPost(prePatchPost).onSuccess {
                         _writingCompletedEvent.value = Event(true)
@@ -163,7 +167,6 @@ class PostWritingViewModel(
                     title.value = it.title
                     writing.value = it.writing
                     _imageUri.value = it.postImageUrl
-                    if (_imageUri.value != null) _hasImage.value = true
                 }
         }
     }
