@@ -59,7 +59,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:background="@color/td_black_transparency_15"
+                        android:background="@color/td_black_transparency_30"
                         app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_route"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +72,7 @@
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_image"
                         app:layout_constraintEnd_toEndOf="@id/iv_history_detail_image"
-                        app:setImage="@{historyDetailViewModel.previewTrip.routeImageUrl}"
+                        app:setImageWithVisibility="@{historyDetailViewModel.previewTrip.routeImageUrl}"
                         tools:background="@color/td_gray" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

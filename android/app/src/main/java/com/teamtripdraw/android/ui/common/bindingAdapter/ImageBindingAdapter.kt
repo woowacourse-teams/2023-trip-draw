@@ -19,8 +19,8 @@ fun ImageView.setImageWithVisibility(imgUrl: String?) {
     this.visibility = View.VISIBLE
     Glide.with(this.context)
         .load(imgUrl)
-        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .placeholder(R.drawable.shape_td_logo_fill_10_rect)
+        .error(R.drawable.shape_td_logo_fill_10_rect)
         .into(this)
 }
 
@@ -46,8 +46,8 @@ fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
     this.visibility = View.VISIBLE
     Glide.with(this.context)
         .load(imgUrl)
-        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .placeholder(R.drawable.shape_td_logo_fill_10_rect)
+        .error(R.drawable.shape_td_logo_fill_10_rect)
         .transform(CenterCrop(), RoundedCorners(20))
         .into(this)
 }
