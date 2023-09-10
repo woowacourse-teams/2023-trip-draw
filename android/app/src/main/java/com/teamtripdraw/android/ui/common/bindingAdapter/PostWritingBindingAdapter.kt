@@ -30,7 +30,7 @@ fun TextView.setPostWritingCompleteButtonState(state: PostWritingValidState) {
 }
 
 @BindingAdapter("app:setPostWritingImageVisibility")
-fun ConstraintLayout.setPostWritingImageVisibility(isVisible: Boolean) {
+fun ImageView.setPostWritingImageVisibility(isVisible: Boolean) {
     visibility =
         if (isVisible) {
             View.VISIBLE

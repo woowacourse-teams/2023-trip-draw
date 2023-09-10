@@ -133,35 +133,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_location_icon" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/iv_post_writing_image_thumbnail"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/et_writing"
             app:layout_constraintEnd_toEndOf="@+id/et_writing"
-            app:setPostWritingImageVisibility="@{postWritingViewModel.hasImage}">
+            app:setPostWritingImage="@{postWritingViewModel.imageUri}"
+            app:setPostWritingImageVisibility="@{postWritingViewModel.hasImage}"
+            tools:src="@mipmap/ic_app_logo_round" />
 
-            <ImageView
-                android:id="@+id/iv_post_writing_image_thumbnail"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:setPostWritingImage="@{postWritingViewModel.imageUri}"
-                tools:src="@mipmap/ic_app_logo_round" />
-
-            <ImageView
-                android:id="@+id/btn_post_writing_image_delete"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:onClick="@{() -> postWritingViewModel.deleteImage()}"
-                android:src="@drawable/ic_image_delete"
-                app:layout_constraintBottom_toTopOf="@id/iv_post_writing_image_thumbnail"
-                app:layout_constraintEnd_toEndOf="@id/iv_post_writing_image_thumbnail"
-                app:layout_constraintStart_toEndOf="@id/iv_post_writing_image_thumbnail"
-                app:layout_constraintTop_toTopOf="@id/iv_post_writing_image_thumbnail" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/btn_post_writing_image_delete"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:onClick="@{() -> postWritingViewModel.deleteImage()}"
+            android:src="@drawable/ic_image_delete"
+            app:layout_constraintBottom_toTopOf="@id/iv_post_writing_image_thumbnail"
+            app:layout_constraintEnd_toEndOf="@id/iv_post_writing_image_thumbnail"
+            app:layout_constraintStart_toEndOf="@id/iv_post_writing_image_thumbnail"
+            app:layout_constraintTop_toTopOf="@id/iv_post_writing_image_thumbnail"
+            app:setPostWritingImageVisibility="@{postWritingViewModel.hasImage}" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_content_file"
