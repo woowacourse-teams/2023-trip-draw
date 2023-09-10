@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setRoundImageWithVisibility="@{uiPreviewTrip.imageUrl}"
+            app:setRoundImage="@{uiPreviewTrip.imageUrl}"
             tools:background="@drawable/ic_launcher_background" />
 
         <TextView

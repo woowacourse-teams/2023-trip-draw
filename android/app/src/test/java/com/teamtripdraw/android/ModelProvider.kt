@@ -11,8 +11,8 @@ fun getPost(
     writing: String = "",
     address: String = "",
     point: Point = getPoint(),
-    postImageUrl: String? = null,
-    routeImageUrl: String? = null,
+    postImageUrl: String = "",
+    routeImageUrl: String = "",
 ): Post = Post(
     postId = postId,
     tripId = tripId,

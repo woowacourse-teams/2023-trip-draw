@@ -6,5 +6,5 @@ data class UiPostItem(
     val address: String,
     val writing: String,
     val recordedAt: String,
-    val thumbnail: String?
+    val thumbnail: String,
 )

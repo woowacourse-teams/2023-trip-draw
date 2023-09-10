@@ -7,6 +7,6 @@ data class Trip(
     val name: String,
     val route: Route,
     val status: String,
-    val imageUrl: String?,
-    val routeImageUrl: String?,
+    val imageUrl: String,
+    val routeImageUrl: String,
 )

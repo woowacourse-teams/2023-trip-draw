@@ -12,7 +12,7 @@ import java.io.File
 
 @BindingAdapter("app:setImageWithVisibility")
 fun ImageView.setImageWithVisibility(imgUrl: String?) {
-    if (imgUrl == null) {
+    if (imgUrl == null || imgUrl.isBlank()) {
         this.visibility = View.GONE
         return
     }
@@ -38,8 +38,8 @@ fun ImageView.clickToShowImageViewer(imgUrl: String?) {
 }
 
 @BindingAdapter("app:setRoundImageWithVisibility")
-fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
-    if (imgUrl == null) {
+fun ImageView.setRoundImageWithVisibility(imgUrl: String) {
+    if (imgUrl.isBlank()) {
         this.visibility = View.GONE
         return
     }
