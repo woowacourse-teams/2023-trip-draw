@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.BuildConfig
+import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
@@ -45,7 +46,7 @@ class MyPageViewModel(
                         _nickname.value = it.nickname
                     }
                     .onFailure {
-                        // todo 로그전략 수립후 로그 찍기
+                        logUtil.general.log(it)
                     }
             }
         }
@@ -84,7 +85,7 @@ class MyPageViewModel(
                     _unsubscribeSuccessEvent.value = Event(true)
                 }
                 .onFailure {
-                    // todo 로그전략 수립후 로그 찍기
+                    logUtil.general.log(it)
                 }
         }
     }

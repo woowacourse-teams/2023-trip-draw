@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationResult
+import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.domain.model.point.Route
@@ -121,7 +122,7 @@ class HomeViewModel(
             ).onSuccess {
                 _openPostWritingEvent.value = Event(it)
             }.onFailure {
-                // todo log전략 수립후 서버로 전송되는 로그 찍기
+                logUtil.general.log(it)
             }
         }
     }
