@@ -12,6 +12,7 @@ import java.net.UnknownHostException
 class ResponseStateCall<T : Any>(private val call: Call<T>, private val responseType: Type) :
     Call<ResponseState<T>> {
 
+    @Suppress("UNCHECKED_CAST")
     override fun enqueue(callback: Callback<ResponseState<T>>) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
