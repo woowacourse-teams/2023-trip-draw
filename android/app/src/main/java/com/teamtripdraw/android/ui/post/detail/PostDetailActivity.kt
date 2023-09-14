@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostDetailBinding
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
+import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
@@ -40,11 +40,11 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun initIntentData() {
-        val postId = intent.getLongExtra(POST_ID_KEY, NULL_SUBSTITUTE_POST_ID)
-        if (postId == NULL_SUBSTITUTE_POST_ID) {
+        val postId = intent.getLongExtra(POST_ID_KEY, Post.NULL_SUBSTITUTE_ID)
+        if (postId == Post.NULL_SUBSTITUTE_ID) {
             throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
         }
-        viewModel.initPostId(intent.getLongExtra(POST_ID_KEY, NULL_SUBSTITUTE_POST_ID))
+        viewModel.initPostId(intent.getLongExtra(POST_ID_KEY, Post.NULL_SUBSTITUTE_ID))
     }
 
     private fun setUpView() {

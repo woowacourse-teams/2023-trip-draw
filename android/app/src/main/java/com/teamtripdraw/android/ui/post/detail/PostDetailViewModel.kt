@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.TripDrawApplication
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
+import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPostDetail
@@ -16,7 +16,7 @@ class PostDetailViewModel(
     private val repository: PostRepository,
 ) : ViewModel() {
 
-    var postId: Long = NULL_SUBSTITUTE_POST_ID
+    var postId: Long = Post.NULL_SUBSTITUTE_ID
         private set
 
     private val _postDetail: MutableLiveData<UiPostDetail> = MutableLiveData()
