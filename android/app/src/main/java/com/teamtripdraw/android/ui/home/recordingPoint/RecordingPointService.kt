@@ -17,7 +17,7 @@ import com.google.android.gms.location.LocationServices
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
+import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
@@ -32,7 +32,7 @@ class RecordingPointService : Service() {
     private var currentTripId by Delegates.notNull<Long>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val _updatedTripId = MutableLiveData<Long>(NULL_SUBSTITUTE_POINT_ID)
+    private val _updatedTripId = MutableLiveData<Long>(Point.NULL_SUBSTITUTE_ID)
     val updatedTripId: LiveData<Long> = _updatedTripId
 
     private fun recordPoint(locationResult: LocationResult) {
@@ -108,7 +108,7 @@ class RecordingPointService : Service() {
     inner class RecordingPointBinder : Binder() {
         fun getUpdatedTripIdHolder(): LiveData<Long> = updatedTripId
         fun updatedTripIdHolderInitializeState() {
-            _updatedTripId.value = NULL_SUBSTITUTE_POINT_ID
+            _updatedTripId.value = Point.NULL_SUBSTITUTE_ID
         }
     }
 

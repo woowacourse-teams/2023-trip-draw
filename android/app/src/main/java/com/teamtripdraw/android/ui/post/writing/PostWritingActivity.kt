@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
+import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
@@ -69,14 +69,14 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun initIntentData() {
-        val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, NULL_SUBSTITUTE_POINT_ID)
+        val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, Point.NULL_SUBSTITUTE_ID)
         val postId = intent.getLongExtra(INTENT_KEY_POST_ID, Post.NULL_SUBSTITUTE_ID)
 
         when {
-            pointId != NULL_SUBSTITUTE_POINT_ID && postId == Post.NULL_SUBSTITUTE_ID -> {
+            pointId != Point.NULL_SUBSTITUTE_ID && postId == Post.NULL_SUBSTITUTE_ID -> {
                 viewModel.initWritingMode(WritingMode.NEW, pointId)
             }
-            postId != Post.NULL_SUBSTITUTE_ID && pointId == NULL_SUBSTITUTE_POINT_ID -> {
+            postId != Post.NULL_SUBSTITUTE_ID && pointId == Point.NULL_SUBSTITUTE_ID -> {
                 viewModel.initWritingMode(WritingMode.EDIT, postId)
             }
             else -> throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
