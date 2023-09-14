@@ -32,18 +32,23 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
     private val httpLoggingInterceptor: HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.HEADERS }
 
-    private val tripDrawDispatcher = Dispatcher().apply {
+    private val generalOKHttpDispatcher = Dispatcher().apply {
         maxRequestsPerHost = 10
     }
 
-    private val tripDrawOkHttpClient: OkHttpClient =
+    private val generalOKHttpClient: OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
-            .addInterceptor(authorizationInterceptor)
             .addInterceptor(httpLoggingInterceptor)
-            .dispatcher(tripDrawDispatcher)
+            .dispatcher(generalOKHttpDispatcher)
+            .build()
+
+    // newBuilder 사용시 OkHttp의 기존 설정을 그대로 가져갈 수 있음 -> ConnectionPool,Dispatcher 등등 공유
+    private val tripDrawOkHttpClient: OkHttpClient =
+        generalOKHttpClient.newBuilder()
+            .addInterceptor(authorizationInterceptor)
             .build()
 
     val moshi: Moshi = Moshi.Builder()
@@ -54,6 +59,14 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
         Retrofit.Builder()
             .baseUrl(BuildConfig.TRIP_DRAW_BASE_URL)
             .client(tripDrawOkHttpClient)
+            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+    val naverGeocoderRetrofit: Retrofit =
+        Retrofit.Builder()
+            .baseUrl("수달이 채워넣을 부분")
+            .client(generalOKHttpClient)
             .addCallAdapterFactory(ResponseStateCallAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
