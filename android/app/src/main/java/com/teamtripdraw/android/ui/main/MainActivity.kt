@@ -57,7 +57,8 @@ class MainActivity : AppCompatActivity() {
     private enum class BottomNavigationMenuType(@IdRes private val resourceId: Int) {
         HOME(R.id.menu_bn_home),
         HISTORY(R.id.menu_bn_history),
-        MY_PAGE(R.id.menu_bn_my_page);
+        MY_PAGE(R.id.menu_bn_my_page),
+        ;
 
         companion object {
             fun resourceIdToMenuType(@IdRes resourceId: Int): BottomNavigationMenuType =

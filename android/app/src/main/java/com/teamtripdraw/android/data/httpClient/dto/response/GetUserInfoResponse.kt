@@ -8,5 +8,5 @@ data class GetUserInfoResponse(
     @Json(name = "memberId")
     val memberId: Long,
     @Json(name = "nickname")
-    val nickname: String
+    val nickname: String,
 )

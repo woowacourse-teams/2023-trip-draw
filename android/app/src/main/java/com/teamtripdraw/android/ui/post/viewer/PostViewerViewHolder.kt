@@ -8,7 +8,7 @@ import com.teamtripdraw.android.ui.model.UiPostItem
 
 class PostViewerViewHolder(
     private val binding: ItemPostViewerBinding,
-    viewModel: PostViewerViewModel
+    viewModel: PostViewerViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {

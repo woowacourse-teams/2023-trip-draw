@@ -10,12 +10,12 @@ import com.teamtripdraw.android.domain.repository.PointRepository
 
 class PointRepositoryImpl(
     private val pointDataSource: PointDataSource.Remote,
-    private val tripDataSource: TripDataSource.Local
+    private val tripDataSource: TripDataSource.Local,
 ) : PointRepository {
     override suspend fun createRecordingPoint(prePoint: PrePoint, tripId: Long?): Result<Long> =
         pointDataSource.createRecordingPoint(
             prePoint.toData(),
-            tripId ?: tripDataSource.getCurrentTripId()
+            tripId ?: tripDataSource.getCurrentTripId(),
         )
 
     override suspend fun getPoint(pointId: Long, tripId: Long): Result<Point> =

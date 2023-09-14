@@ -7,6 +7,6 @@ inline fun <reified T> Retrofit.getParsedErrorBody(errorBody: ResponseBody?): T?
     errorBody?.let {
         responseBodyConverter<T>(
             T::class.java,
-            T::class.java.annotations
+            T::class.java.annotations,
         ).convert(errorBody)
     }

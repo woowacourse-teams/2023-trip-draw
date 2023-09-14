@@ -8,5 +8,5 @@ data class NicknameSetupFailureResponse(
     @Json(name = "exceptionCode")
     val exceptionCode: String,
     @Json(name = "message")
-    val message: String
+    val message: String,
 )

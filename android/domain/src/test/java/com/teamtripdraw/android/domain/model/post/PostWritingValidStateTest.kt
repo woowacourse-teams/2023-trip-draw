@@ -48,5 +48,4 @@ internal class PostWritingValidStateTest {
         // then
         assertThat(actual).isEqualTo(expected)
     }
-
 }

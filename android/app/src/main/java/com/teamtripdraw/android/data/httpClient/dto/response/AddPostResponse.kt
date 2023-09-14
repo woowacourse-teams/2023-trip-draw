@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class AddPostResponse(
     @Json(name = "postId")
-    val postId: Long
+    val postId: Long,
 )

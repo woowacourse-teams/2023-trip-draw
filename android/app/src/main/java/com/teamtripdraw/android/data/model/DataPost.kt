@@ -8,5 +8,5 @@ data class DataPost(
     val address: String,
     val point: DataPoint,
     val postImageUrl: String?,
-    val routeImageUrl: String?
+    val routeImageUrl: String?,
 )

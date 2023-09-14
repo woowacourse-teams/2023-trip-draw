@@ -8,4 +8,3 @@ fun LoginInfo.toData(): DataLoginInfo =
         platform = platform.name,
         socialToken = socialToken,
     )
-
