@@ -9,4 +9,8 @@ data class Trip(
     val status: String,
     val imageUrl: String?,
     val routeImageUrl: String?,
-)
+) {
+    companion object {
+        const val NULL_SUBSTITUTE_ID = -1L
+    }
+}

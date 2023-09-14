@@ -24,7 +24,7 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION_PERMISSION_REQUEST_CODE
@@ -106,7 +106,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.homeViewModel = homeViewModel
         binding.fabState = fabState
-        if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID) bindRecordingPointService()
+        if (homeViewModel.tripId != Trip.NULL_SUBSTITUTE_ID) bindRecordingPointService()
         return binding.root
     }
 
@@ -269,7 +269,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID && recordingPointServiceBindingState) {
+        if (homeViewModel.tripId != Trip.NULL_SUBSTITUTE_ID && recordingPointServiceBindingState) {
             unbindRecordingPointService()
         }
         _binding = null

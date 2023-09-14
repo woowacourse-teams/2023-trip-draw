@@ -18,8 +18,8 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.PrePoint
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -94,8 +94,8 @@ class RecordingPointService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        currentTripId = intent.getLongExtra(TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
-        if (currentTripId != NULL_SUBSTITUTE_TRIP_ID) {
+        currentTripId = intent.getLongExtra(TRIP_ID, Trip.NULL_SUBSTITUTE_ID)
+        if (currentTripId != Trip.NULL_SUBSTITUTE_ID) {
             getUpdateLocation(fusedLocationClient, this, this::recordPoint)
         } else {
             logUtil.general.log(message = WRONG_TRIP_ID_ERROR)

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentMyPageBinding
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
@@ -106,7 +106,7 @@ class MyPageFragment : Fragment() {
     }
 
     private fun finishTravelIfInProgress() {
-        if (viewModel.currentTripId != NULL_SUBSTITUTE_TRIP_ID) {
+        if (viewModel.currentTripId != Trip.NULL_SUBSTITUTE_ID) {
             stopRecordingPointAlarmManager()
             stopRecordingPointService()
             clearCurrentTripId()

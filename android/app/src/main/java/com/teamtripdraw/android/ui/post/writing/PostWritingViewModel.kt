@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
 import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
@@ -28,7 +28,7 @@ class PostWritingViewModel(
     val MAX_INPUT_TITLE_LENGTH = PostWritingValidState.MAX_TITLE_LENGTH
     val MAX_INPUT_WRITING_LENGTH = PostWritingValidState.MAX_WRITING_LENGTH
 
-    private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+    private var tripId: Long = Trip.NULL_SUBSTITUTE_ID
     private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
     private var postId: Long = NULL_SUBSTITUTE_POST_ID
     private lateinit var writingMode: WritingMode
