@@ -1,6 +1,7 @@
 package com.teamtripdraw.android.data.httpClient.retrofitAdapter
 
 import com.teamtripdraw.android.data.httpClient.dto.failureResponse.GeneralFailureResponse
+import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.Headers
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -8,6 +9,7 @@ import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 import java.lang.reflect.Type
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -15,7 +17,7 @@ import java.net.UnknownHostException
 class ResponseStateCall<T : Any>(
     private val call: Call<T>,
     private val responseType: Type,
-    private val jsonConverter: JsonConverter,
+    private val retrofit: Retrofit,
 ) :
     Call<ResponseState<T>> {
 
@@ -102,12 +104,8 @@ class ResponseStateCall<T : Any>(
 
     private fun getTokenExpiryType(errorBody: ResponseBody?): TokenExpiryType {
         val generalFailureResponse =
-            jsonConverter.toKotlinClass<GeneralFailureResponse>(
-                errorBody?.string() ?: throw IllegalStateException(
-                    EXPIRED_TOKEN_RESPONSE_HAS_NO_ERROR_BODY,
-                ),
-                GeneralFailureResponse::class.java,
-            ) ?: throw IllegalStateException(EXPIRED_TOKEN_RESPONSE_HAS_NO_ERROR_BODY)
+            retrofit.getParsedErrorBody<GeneralFailureResponse>(errorBody)
+                ?: throw IllegalStateException(EXPIRED_TOKEN_RESPONSE_HAS_NO_ERROR_BODY)
         val exceptionCode = generalFailureResponse.exceptionCode
         return TokenExpiryType.getByServerExceptionCode(exceptionCode)
     }
@@ -134,7 +132,7 @@ class ResponseStateCall<T : Any>(
     }
 
     override fun clone(): Call<ResponseState<T>> =
-        ResponseStateCall(call.clone(), responseType, jsonConverter)
+        ResponseStateCall(call.clone(), responseType, retrofit)
 
     override fun isExecuted(): Boolean = call.isExecuted
 

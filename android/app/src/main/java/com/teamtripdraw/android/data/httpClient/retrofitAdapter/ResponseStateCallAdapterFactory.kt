@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-class ResponseStateCallAdapterFactory(private val jsonConverter: JsonConverter) :
+class ResponseStateCallAdapterFactory() :
     CallAdapter.Factory() {
 
     override fun get(
@@ -34,6 +34,6 @@ class ResponseStateCallAdapterFactory(private val jsonConverter: JsonConverter) 
 
         val bodyType = getParameterUpperBound(0, responseType)
 
-        return ResponseStateCallAdapter<Any>(bodyType, jsonConverter)
+        return ResponseStateCallAdapter<Any>(bodyType, retrofit)
     }
 }
