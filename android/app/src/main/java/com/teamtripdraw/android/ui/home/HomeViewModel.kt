@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationResult
 import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.domain.model.point.Route
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
@@ -57,7 +57,7 @@ class HomeViewModel(
     private val _finishTripCompleteEvent = MutableLiveData<Boolean>()
     val finishTripCompleteEvent: LiveData<Boolean> = _finishTripCompleteEvent
 
-    var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+    var tripId: Long = Trip.NULL_SUBSTITUTE_ID
         private set
 
     override var markerSelectedState: Boolean = false
@@ -71,7 +71,7 @@ class HomeViewModel(
     private fun initHomeUiState() {
         updateHomeUiState(
             when (tripId) {
-                NULL_SUBSTITUTE_TRIP_ID -> HomeUiState.BEFORE_TRIP
+                Trip.NULL_SUBSTITUTE_ID -> HomeUiState.BEFORE_TRIP
                 else -> HomeUiState.ON_TRIP
             },
         )
@@ -97,7 +97,7 @@ class HomeViewModel(
     }
 
     override fun updateTripInfo() {
-        if (tripId == NULL_SUBSTITUTE_TRIP_ID) return
+        if (tripId == Trip.NULL_SUBSTITUTE_ID) return
         viewModelScope.launch {
             tripRepository.getCurrentTripRoute(tripId)
                 .onSuccess {

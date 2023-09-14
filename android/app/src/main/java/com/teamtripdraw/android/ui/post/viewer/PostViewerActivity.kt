@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostViewerBinding
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
@@ -39,7 +39,7 @@ class PostViewerActivity : AppCompatActivity() {
     }
 
     private fun initTripId() {
-        val tripId = intent.getLongExtra(TRIP_ID_KEY, NULL_SUBSTITUTE_TRIP_ID)
+        val tripId = intent.getLongExtra(TRIP_ID_KEY, Trip.NULL_SUBSTITUTE_ID)
         viewModel.updateTripId(tripId)
     }
 
