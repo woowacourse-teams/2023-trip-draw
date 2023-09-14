@@ -31,32 +31,26 @@ class ResponseStateCall<T : Any>(
 
                 if (response.isSuccessful) {
                     if (body != null) {
-                        successWithBodyProcess(callback, headers, body)
+                        successWithBodyAction(callback, headers, body)
                     } else {
                         if (responseType == Unit::class.java) {
-                            successWithOutBodyProcess(callback, headers)
+                            successWithOutBodyAction(callback, headers)
                         } else {
-                            unknownErrorByEmptyBodyProcess(callback)
+                            unknownErrorByEmptyBodyAction(callback)
                         }
                     }
                 } else {
-                    requestFailureProcess(callback, code, errorBody)
+                    responseFailureAction(callback, code, errorBody)
                 }
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                val errorResponse = when (t) {
-                    // todo UnknownHostException 네트워크 연결 상태 확인 코드 추후 처리
-                    is UnknownHostException -> ResponseState.NetworkError(t)
-                    is SocketTimeoutException -> ResponseState.TimeOutError(t)
-                    else -> ResponseState.UnknownError(t)
-                }
-                callback.onResponse(this@ResponseStateCall, Response.success(errorResponse))
+                requestFailureAction(t, callback)
             }
         })
     }
 
-    private fun successWithBodyProcess(
+    private fun successWithBodyAction(
         callback: Callback<ResponseState<T>>,
         headers: Headers,
         body: T,
@@ -68,7 +62,7 @@ class ResponseStateCall<T : Any>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun successWithOutBodyProcess(
+    private fun successWithOutBodyAction(
         callback: Callback<ResponseState<T>>,
         headers: Headers,
     ) {
@@ -78,7 +72,7 @@ class ResponseStateCall<T : Any>(
         )
     }
 
-    private fun unknownErrorByEmptyBodyProcess(callback: Callback<ResponseState<T>>) {
+    private fun unknownErrorByEmptyBodyAction(callback: Callback<ResponseState<T>>) {
         callback.onResponse(
             this@ResponseStateCall,
             Response.success(
@@ -87,18 +81,18 @@ class ResponseStateCall<T : Any>(
         )
     }
 
-    private fun requestFailureProcess(
+    private fun responseFailureAction(
         callback: Callback<ResponseState<T>>,
         code: Int,
         errorBody: ResponseBody?,
     ) {
         if (code == TOKEN_EXPIRED_CODE) {
             when (getTokenExpiryType(errorBody)) {
-                TokenExpiryType.REFRESH_TOKEN -> refreshTokenExpiredProcess()
-                TokenExpiryType.ACCESS_TOKEN -> accessTokenExpiredProcess()
+                TokenExpiryType.REFRESH_TOKEN -> refreshTokenExpiredAction()
+                TokenExpiryType.ACCESS_TOKEN -> accessTokenExpiredAction()
             }
         } else {
-            generalRequestFailureProcess(callback, code, errorBody)
+            generalResponseFailureAction(callback, code, errorBody)
         }
     }
 
@@ -110,13 +104,13 @@ class ResponseStateCall<T : Any>(
         return TokenExpiryType.getByServerExceptionCode(exceptionCode)
     }
 
-    private fun accessTokenExpiredProcess() {
+    private fun accessTokenExpiredAction() {
     }
 
-    private fun refreshTokenExpiredProcess() {
+    private fun refreshTokenExpiredAction() {
     }
 
-    private fun generalRequestFailureProcess(
+    private fun generalResponseFailureAction(
         callback: Callback<ResponseState<T>>,
         code: Int,
         errorBody: ResponseBody?,
@@ -125,6 +119,19 @@ class ResponseStateCall<T : Any>(
             this@ResponseStateCall,
             Response.success(ResponseState.Failure(code, errorBody)),
         )
+    }
+
+    private fun requestFailureAction(
+        throwable: Throwable,
+        callback: Callback<ResponseState<T>>,
+    ) {
+        val errorResponse = when (throwable) {
+            // todo UnknownHostException 네트워크 연결 상태 확인 코드 추후 처리
+            is UnknownHostException -> ResponseState.NetworkError(throwable)
+            is SocketTimeoutException -> ResponseState.TimeOutError(throwable)
+            else -> ResponseState.UnknownError(throwable)
+        }
+        callback.onResponse(this@ResponseStateCall, Response.success(errorResponse))
     }
 
     override fun execute(): Response<ResponseState<T>> {
