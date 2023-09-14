@@ -28,6 +28,11 @@ public class RefreshToken extends BaseEntity {
     private String token;
 
     public RefreshToken(Long memberId, String token) {
+        this(null, memberId, token);
+    }
+
+    public RefreshToken(Long id, Long memberId, String token) {
+        this.id = id;
         this.memberId = memberId;
         this.token = token;
     }
