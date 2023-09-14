@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.data.dataSource.signUp
 
-import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureResponse
+import com.teamtripdraw.android.data.httpClient.dto.failureResponse.GeneralFailureResponse
 import com.teamtripdraw.android.data.httpClient.dto.request.NicknameSetUpRequest
 import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
@@ -40,7 +40,7 @@ class RemoteSignUpDataSourceImpl(
     private fun setNicknameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
         if (code == 409) {
             val message =
-                retrofit.getParsedErrorBody<NicknameSetupFailureResponse>(errorBody)?.message
+                retrofit.getParsedErrorBody<GeneralFailureResponse>(errorBody)?.message
             return Result.failure(
                 DuplicateNicknameException(
                     message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE,
