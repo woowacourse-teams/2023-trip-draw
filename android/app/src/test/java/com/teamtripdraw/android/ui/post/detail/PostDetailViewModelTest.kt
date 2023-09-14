@@ -7,11 +7,7 @@ import com.teamtripdraw.android.getPost
 import com.teamtripdraw.android.ui.model.mapper.toDetailPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -22,17 +18,11 @@ class PostDetailViewModelTest : DefaultViewModelTest() {
     private lateinit var sut: PostDetailViewModel
     private lateinit var postRepository: PostRepository
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+    @Before
+    fun setUp() {
         postRepository = mockk()
         sut = PostDetailViewModel(postRepository)
         sut.initPostId(0L)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test

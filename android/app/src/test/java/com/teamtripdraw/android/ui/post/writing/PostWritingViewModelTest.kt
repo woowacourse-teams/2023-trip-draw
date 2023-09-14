@@ -15,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
@@ -25,10 +26,8 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
     private lateinit var pointRepository: PointRepository
     private lateinit var tripRepository: TripRepository
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-
+    @Before
+    fun setUp() {
         postRepository = mockk()
         pointRepository = mockk()
         tripRepository = mockk()
@@ -38,11 +37,6 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
             pointRepository = pointRepository,
             tripRepository = tripRepository,
         )
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test

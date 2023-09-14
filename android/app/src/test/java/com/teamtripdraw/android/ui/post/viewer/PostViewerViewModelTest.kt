@@ -8,11 +8,7 @@ import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -26,17 +22,11 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
     private lateinit var tripRepository: TripRepository
     private lateinit var postRepository: PostRepository
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+    @Before
+    fun setUp() {
         tripRepository = mockk(relaxed = true)
         postRepository = mockk()
         sut = PostViewerViewModel(tripRepository, postRepository)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test

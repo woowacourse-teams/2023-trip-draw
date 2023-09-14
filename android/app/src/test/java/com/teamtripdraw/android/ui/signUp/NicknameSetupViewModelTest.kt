@@ -12,6 +12,8 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 internal class NicknameSetupViewModelTest : DefaultViewModelTest() {
@@ -20,16 +22,10 @@ internal class NicknameSetupViewModelTest : DefaultViewModelTest() {
     private lateinit var sut: NicknameSetupViewModel
     private lateinit var repository: AuthRepository
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+    @Before
+    fun setUp() {
         repository = mockk()
         sut = NicknameSetupViewModel(repository)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test

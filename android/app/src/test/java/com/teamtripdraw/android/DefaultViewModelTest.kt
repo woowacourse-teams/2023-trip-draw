@@ -1,19 +1,19 @@
 package com.teamtripdraw.android
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import org.junit.After
-import org.junit.Before
+import com.teamtripdraw.android.testRule.MainCoroutineRule
 import org.junit.Rule
 
+/**
+ * LiveData와 Coroutine을 테스트 할 수 있도록하는 기능을 제공합니다.
+ */
 abstract class DefaultViewModelTest {
 
     // LiveData Test
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    @Before
-    abstract fun setUp()
-
-    @After
-    abstract fun tearDown()
+    // Coroutine Test
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule()
 }
