@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class CreateRecordingPointResponse(
     @Json(name = "pointId")
-    val pointId: Long
+    val pointId: Long,
 )

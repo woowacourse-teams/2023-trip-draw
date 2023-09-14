@@ -7,5 +7,5 @@ data class UiPostDetail(
     val writing: String,
     val recordedAt: String,
     val postImageUrl: String?,
-    val routeImageUrl: String?
+    val routeImageUrl: String?,
 )

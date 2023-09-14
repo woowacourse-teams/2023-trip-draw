@@ -14,5 +14,5 @@ data class GetPostPointResponse(
     @Json(name = "hasPost")
     val hasPost: Boolean,
     @Json(name = "recordedAt")
-    val recordedAt: String
+    val recordedAt: String,
 )

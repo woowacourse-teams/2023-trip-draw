@@ -20,5 +20,5 @@ data class GetPostResponse(
     @Json(name = "tripId")
     val tripId: Long,
     @Json(name = "writing")
-    val writing: String
+    val writing: String,
 )

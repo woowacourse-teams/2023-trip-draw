@@ -11,12 +11,12 @@ import com.teamtripdraw.android.data.model.DataPrePoint
 class RemotePointDataSourceImpl(
     private val createRecordingPointService: CreateRecordingPointService,
     private val getPointService: GetPointService,
-    private val deletePointService: DeletePointService
+    private val deletePointService: DeletePointService,
 ) : PointDataSource.Remote {
 
     override suspend fun createRecordingPoint(
         dataPrePoint: DataPrePoint,
-        tripId: Long
+        tripId: Long,
     ): Result<Long> =
         createRecordingPointService.createRecordingPoint(dataPrePoint.toHttpRequest(tripId))
             .process { body, headers -> Result.success(body.pointId) }

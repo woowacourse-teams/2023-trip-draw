@@ -18,13 +18,13 @@ class RecordingPointAlarmManager(private val context: Context) {
             context,
             RECORD_REQUEST_CODE,
             RecordingPointService.getTripIdIntent(intent, tripId),
-            FLAG_IMMUTABLE
+            FLAG_IMMUTABLE,
         )
         alarmManager.setRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
             SystemClock.elapsedRealtime() + RECORD_INTERVAL_TIME,
             RECORD_INTERVAL_TIME,
-            pendingIntent
+            pendingIntent,
         )
     }
 
@@ -33,7 +33,7 @@ class RecordingPointAlarmManager(private val context: Context) {
             context,
             RECORD_REQUEST_CODE,
             intent,
-            FLAG_NO_CREATE or FLAG_IMMUTABLE
+            FLAG_NO_CREATE or FLAG_IMMUTABLE,
         )
         if (pendingIntent != null) {
             alarmManager.cancel(pendingIntent)

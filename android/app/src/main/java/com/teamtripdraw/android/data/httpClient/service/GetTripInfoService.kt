@@ -8,6 +8,6 @@ import retrofit2.http.Path
 interface GetTripInfoService {
     @GET("/trips/{tripId}")
     suspend fun getTripInfo(
-        @Path("tripId") tripId: Long
+        @Path("tripId") tripId: Long,
     ): ResponseState<GetTripInfoResponse>
 }

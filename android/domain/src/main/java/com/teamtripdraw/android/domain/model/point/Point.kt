@@ -7,5 +7,5 @@ data class Point(
     val latitude: Double,
     val longitude: Double,
     val hasPost: Boolean,
-    val recordedAt: LocalDateTime
+    val recordedAt: LocalDateTime,
 )

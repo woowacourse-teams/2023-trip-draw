@@ -8,7 +8,7 @@ import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
 class HistoryViewHolder(
     private val binding: ItemTripHistoryBinding,
-    viewModel: HistoryViewModel
+    viewModel: HistoryViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {

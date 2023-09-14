@@ -10,7 +10,7 @@ data class Post(
     val address: String,
     val point: Point,
     val postImageUrl: String?,
-    val routeImageUrl: String?
+    val routeImageUrl: String?,
 ) {
 
     companion object {
@@ -20,14 +20,14 @@ data class Post(
             pointId: Long,
             title: String,
             writing: String,
-            address: String
+            address: String,
         ): PrePost {
             return PrePost(
                 tripId = tripId,
                 pointId = pointId,
                 title = title,
                 writing = writing,
-                address = address
+                address = address,
             )
         }
     }

@@ -8,5 +8,5 @@ data class SetTripTitleRequest(
     @Json(name = "name")
     val name: String,
     @Json(name = "status")
-    val status: String
+    val status: String,
 )
