@@ -7,84 +7,59 @@ import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND
 import dev.tripdraw.auth.domain.RefreshToken;
 import dev.tripdraw.auth.domain.RefreshTokenRepository;
 import dev.tripdraw.auth.dto.OauthInfo;
-import dev.tripdraw.auth.dto.OauthRequest;
 import dev.tripdraw.auth.dto.OauthResponse;
-import dev.tripdraw.auth.dto.RegisterRequest;
-import dev.tripdraw.auth.dto.TokenRefreshRequest;
 import dev.tripdraw.auth.exception.AuthException;
-import dev.tripdraw.auth.oauth.OauthClient;
-import dev.tripdraw.auth.oauth.OauthClientProvider;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.exception.MemberException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class AuthService {
 
-    private static final String EMPTY_TOKEN = "";
+    private static final OauthResponse EMPTY_TOKEN_RESPONSE = new OauthResponse("", "");
 
-    private final TransactionTemplate transactionTemplate;
-    private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final OauthClientProvider oauthClientProvider;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberRepository memberRepository;
 
-    public OauthResponse login(OauthRequest oauthRequest) {
-        OauthClient oauthClient = oauthClientProvider.provide(oauthRequest.oauthType());
-        OauthInfo oauthInfo = oauthClient.requestOauthInfo(oauthRequest.oauthToken());
-
-        Optional<Member> member = memberRepository.findByOauthIdAndOauthType(
-                oauthInfo.oauthId(),
-                oauthInfo.oauthType()
-        );
-        if (member.isEmpty()) {
-            memberRepository.save(Member.of(oauthInfo.oauthId(), oauthInfo.oauthType()));
-            return new OauthResponse(EMPTY_TOKEN, EMPTY_TOKEN);
-        }
-
-        Member findMember = member.orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-        return generateToken(findMember.id());
+    public OauthResponse login(OauthInfo oauthInfo) {
+        return memberRepository.findByOauthIdAndOauthType(oauthInfo.oauthId(), oauthInfo.oauthType())
+                .map(member -> generateOAuthResponse(member.id()))
+                .orElseGet(() -> {
+                    memberRepository.save(Member.of(oauthInfo.oauthId(), oauthInfo.oauthType()));
+                    return EMPTY_TOKEN_RESPONSE;
+                });
     }
 
-    public OauthResponse register(RegisterRequest registerRequest) {
-        OauthClient oauthClient = oauthClientProvider.provide(registerRequest.oauthType());
-        OauthInfo oauthInfo = oauthClient.requestOauthInfo(registerRequest.oauthToken());
-
-        return transactionTemplate.execute(status -> {
-            Member member = memberRepository.findByOauthIdAndOauthType(oauthInfo.oauthId(), oauthInfo.oauthType())
-                    .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-            validateDuplicateNickname(registerRequest.nickname());
-            member.changeNickname(registerRequest.nickname());
-            return generateToken(member.id());
-        });
-    }
-
-    private OauthResponse generateToken(Long memberId) {
+    private OauthResponse generateOAuthResponse(Long memberId) {
         String accessToken = jwtTokenProvider.generateAccessToken(memberId.toString());
         String refreshToken = jwtTokenProvider.generateRefreshToken();
 
-        RefreshToken savedRefreshToken = transactionTemplate.execute(status -> {
-            refreshTokenRepository.deleteByMemberId(memberId);
-            return refreshTokenRepository.save(new RefreshToken(memberId, refreshToken));
-        });
-        return new OauthResponse(accessToken, savedRefreshToken.token());
+        refreshTokenRepository.deleteByMemberId(memberId);
+        refreshTokenRepository.save(new RefreshToken(memberId, refreshToken));
+        return new OauthResponse(accessToken, refreshToken);
     }
 
-    private void validateDuplicateNickname(String nickname) {
+    public OauthResponse register(OauthInfo oauthInfo, String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
             throw new MemberException(DUPLICATE_NICKNAME);
         }
+
+        Member member = memberRepository.findByOauthIdAndOauthType(oauthInfo.oauthId(), oauthInfo.oauthType())
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+        member.changeNickname(nickname);
+        return generateOAuthResponse(member.id());
     }
 
-    public OauthResponse refresh(TokenRefreshRequest tokenRefreshRequest) {
-        jwtTokenProvider.validateRefreshToken(tokenRefreshRequest.refreshToken());
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenRefreshRequest.refreshToken())
+    public OauthResponse refresh(String token) {
+        jwtTokenProvider.validateRefreshToken(token);
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new AuthException(INVALID_TOKEN));
-        return generateToken(refreshToken.memberId());
+        return generateOAuthResponse(refreshToken.memberId());
     }
 }
