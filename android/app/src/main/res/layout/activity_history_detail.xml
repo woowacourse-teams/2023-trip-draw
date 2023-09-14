@@ -72,7 +72,8 @@
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_image"
                         app:layout_constraintEnd_toEndOf="@id/iv_history_detail_image"
-                        app:setImageWithVisibility="@{historyDetailViewModel.previewTrip.routeImageUrl}"
+                        app:setImage="@{historyDetailViewModel.previewTrip.routeImageUrl}"
+                        app:setImageVisibility="@{historyDetailViewModel.previewTrip.routeImageUrl}"
                         tools:background="@color/td_gray" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

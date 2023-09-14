@@ -10,18 +10,13 @@ import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamtripdraw.android.R
 import java.io.File
 
-@BindingAdapter("app:setImageWithVisibility")
-fun ImageView.setImageWithVisibility(imgUrl: String?) {
-    if (imgUrl == null || imgUrl.isBlank()) {
+@BindingAdapter("app:setImageVisibility")
+fun ImageView.setImageVisibility(imgUrl: String?) {
+    if (imgUrl.isNullOrBlank()) {
         this.visibility = View.GONE
         return
     }
     this.visibility = View.VISIBLE
-    Glide.with(this.context)
-        .load(imgUrl)
-        .placeholder(R.drawable.shape_td_logo_fill_10_rect)
-        .error(R.drawable.shape_td_logo_fill_10_rect)
-        .into(this)
 }
 
 @BindingAdapter("app:clickToShowImageViewer")
@@ -37,32 +32,41 @@ fun ImageView.clickToShowImageViewer(imgUrl: String?) {
     }
 }
 
-@BindingAdapter("app:setRoundImageWithVisibility")
-fun ImageView.setRoundImageWithVisibility(imgUrl: String) {
-    if (imgUrl.isBlank()) {
-        this.visibility = View.GONE
-        return
-    }
-    this.visibility = View.VISIBLE
+@BindingAdapter("app:setRoundImage")
+fun ImageView.setRoundImage(imgUrl: String?) {
     Glide.with(this.context)
         .load(imgUrl)
-        .placeholder(R.drawable.shape_td_logo_fill_10_rect)
-        .error(R.drawable.shape_td_logo_fill_10_rect)
+        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.img_default_image)
         .transform(CenterCrop(), RoundedCorners(20))
         .into(this)
 }
 
-@BindingAdapter("app:setRoundImageWithVisibility")
-fun ImageView.setRoundImageWithVisibility(imgFile: File?) {
+@BindingAdapter("app:setRoundImageFile")
+fun ImageView.setRoundImageFile(imgFile: File?) {
+    Glide.with(this.context)
+        .load(imgFile)
+        .placeholder(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .transform(CenterCrop(), RoundedCorners(20))
+        .into(this)
+}
+
+@BindingAdapter("app:setFileVisibility")
+fun ImageView.setFileVisibility(imgFile: File?) {
     if (imgFile == null) {
         this.visibility = View.GONE
         return
     }
     this.visibility = View.VISIBLE
+}
+
+@BindingAdapter("app:setTripThumbnailImage")
+fun ImageView.setTripThumbnailImage(imgUrl: String) {
     Glide.with(this.context)
-        .load(imgFile)
+        .load(imgUrl)
         .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.img_default_trip_thumbnail)
         .transform(CenterCrop(), RoundedCorners(20))
         .into(this)
 }

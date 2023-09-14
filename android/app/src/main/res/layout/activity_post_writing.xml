@@ -139,7 +139,8 @@
             android:layout_height="56dp"
             app:layout_constraintBottom_toBottomOf="@+id/et_writing"
             app:layout_constraintEnd_toEndOf="@+id/et_writing"
-            app:setRoundImageWithVisibility="@{postWritingViewModel.imageFile}" />
+            app:setFileVisibility="@{postWritingViewModel.imageFile}"
+            app:setRoundImageFile="@{postWritingViewModel.imageFile}" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_content_file"

@@ -132,7 +132,8 @@
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_post_detail_recorded_at"
-                    app:setImageWithVisibility="@{postDetailViewModel.postDetail.routeImageUrl}"
+                    app:setImage="@{postDetailViewModel.postDetail.routeImageUrl}"
+                    app:setImageVisibility="@{postDetailViewModel.postDetail.routeImageUrl}"
                     tools:background="@color/td_gray" />
 
                 <com.google.android.material.divider.MaterialDivider
@@ -157,7 +158,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_post_detail"
-                    app:setImageWithVisibility="@{postDetailViewModel.postDetail.postImageUrl}"
+                    app:setImage="@{postDetailViewModel.postDetail.postImageUrl}"
+                    app:setImageVisibility="@{postDetailViewModel.postDetail.postImageUrl}"
                     tools:background="@color/td_gray" />
 
                 <TextView
