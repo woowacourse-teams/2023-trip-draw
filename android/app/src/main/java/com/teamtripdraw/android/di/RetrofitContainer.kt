@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.teamtripdraw.android.BuildConfig
 import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.JsonConverter
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseStateCallAdapterFactory
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
@@ -50,11 +51,16 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
         .add(KotlinJsonAdapterFactory())
         .build()
 
+    private val jsonConverterForTokenExpired = object : JsonConverter {
+        override fun <T : Any> toKotlinClass(errorBody: String, clazz: Class<T>): T? =
+            moshi.adapter(clazz).fromJson(errorBody)
+    }
+
     val tripDrawRetrofit: Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.TRIP_DRAW_BASE_URL)
             .client(tripDrawOkHttpClient)
-            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
+            .addCallAdapterFactory(ResponseStateCallAdapterFactory(jsonConverterForTokenExpired))
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
