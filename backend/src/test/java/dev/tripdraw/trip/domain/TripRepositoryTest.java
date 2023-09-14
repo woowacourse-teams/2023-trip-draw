@@ -95,6 +95,20 @@ class TripRepositoryTest {
     }
 
     @Test
+    void 회원_ID로_모든_여행을_삭제한다() {
+        // given
+        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        tripRepository.save(trip);
+        tripRepository.save(new Trip(TripName.from("제주도 여행"), member));
+
+        // when
+        tripRepository.deleteByMemberId(member.id());
+
+        // then
+        assertThat(tripRepository.findById(trip.id())).isEmpty();
+    }
+
+    @Test
     void 여행_ID로_여행을_조회한다() {
         // given
         Trip trip = tripRepository.save(new Trip(TripName.from("제주도 여행"), member));
