@@ -1,6 +1,8 @@
 package com.teamtripdraw.android.data.httpClient.retrofitAdapter
 
+import okhttp3.Headers
 import okhttp3.Request
+import okhttp3.ResponseBody
 import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
@@ -12,7 +14,6 @@ import java.net.UnknownHostException
 class ResponseStateCall<T : Any>(private val call: Call<T>, private val responseType: Type) :
     Call<ResponseState<T>> {
 
-    @Suppress("UNCHECKED_CAST")
     override fun enqueue(callback: Callback<ResponseState<T>>) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -23,40 +24,22 @@ class ResponseStateCall<T : Any>(private val call: Call<T>, private val response
 
                 if (response.isSuccessful) {
                     if (body != null) {
-                        callback.onResponse(
-                            this@ResponseStateCall,
-                            Response.success(ResponseState.Success(body, headers)),
-                        )
+                        successWithBodyProcess(callback, headers, body)
                     } else {
                         if (responseType == Unit::class.java) {
-                            callback.onResponse(
-                                this@ResponseStateCall,
-                                Response.success(ResponseState.Success(Unit as T, headers)),
-                            )
+                            successWithOutBodyProcess(callback, headers)
                         } else {
-                            callback.onResponse(
-                                this@ResponseStateCall,
-                                Response.success(
-                                    ResponseState.UnknownError(
-                                        IllegalArgumentException(
-                                            RETURN_TYPE_NOT_UNIT_ERROR,
-                                        ),
-                                    ),
-                                ),
-                            )
+                            unknownErrorByEmptyBodyProcess(callback)
                         }
                     }
                 } else {
-                    callback.onResponse(
-                        this@ResponseStateCall,
-                        Response.success(ResponseState.Failure(code, errorBody)),
-                    )
+                    requestFailureProcess(callback, code, errorBody)
                 }
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 val errorResponse = when (t) {
-                    // UnknownHostException 네트워크 연결 상태 확인 코드 추후 처리
+                    // todo UnknownHostException 네트워크 연결 상태 확인 코드 추후 처리
                     is UnknownHostException -> ResponseState.NetworkError(t)
                     is SocketTimeoutException -> ResponseState.TimeOutError(t)
                     else -> ResponseState.UnknownError(t)
@@ -64,6 +47,48 @@ class ResponseStateCall<T : Any>(private val call: Call<T>, private val response
                 callback.onResponse(this@ResponseStateCall, Response.success(errorResponse))
             }
         })
+    }
+
+    private fun successWithBodyProcess(
+        callback: Callback<ResponseState<T>>,
+        headers: Headers,
+        body: T,
+    ) {
+        callback.onResponse(
+            this@ResponseStateCall,
+            Response.success(ResponseState.Success(body, headers)),
+        )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun successWithOutBodyProcess(
+        callback: Callback<ResponseState<T>>,
+        headers: Headers,
+    ) {
+        callback.onResponse(
+            this@ResponseStateCall,
+            Response.success(ResponseState.Success(Unit as T, headers)),
+        )
+    }
+
+    private fun unknownErrorByEmptyBodyProcess(callback: Callback<ResponseState<T>>) {
+        callback.onResponse(
+            this@ResponseStateCall,
+            Response.success(
+                ResponseState.UnknownError(IllegalArgumentException(RETURN_TYPE_NOT_UNIT_ERROR)),
+            ),
+        )
+    }
+
+    private fun requestFailureProcess(
+        callback: Callback<ResponseState<T>>,
+        code: Int,
+        errorBody: ResponseBody?,
+    ) {
+        callback.onResponse(
+            this@ResponseStateCall,
+            Response.success(ResponseState.Failure(code, errorBody)),
+        )
     }
 
     override fun execute(): Response<ResponseState<T>> {
