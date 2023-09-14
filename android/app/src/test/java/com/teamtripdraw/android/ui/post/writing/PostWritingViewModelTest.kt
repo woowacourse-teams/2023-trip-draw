@@ -6,15 +6,10 @@ import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
-import com.teamtripdraw.android.getPoint
-import com.teamtripdraw.android.getPost
+import com.teamtripdraw.android.testDouble.DummyPoint
+import com.teamtripdraw.android.testDouble.DummyPost
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
@@ -45,7 +40,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         val pointId: Long = 0
         val expectedLat = 0.1
         val expectedLng = 0.2
-        val point = getPoint(pointId = pointId, latitude = expectedLat, longitude = expectedLng)
+        val point = DummyPoint(pointId = pointId, latitude = expectedLat, longitude = expectedLng)
         val getCurrentTripIdResult: Long = 0
         coEvery { tripRepository.getCurrentTripId() } returns getCurrentTripIdResult
         val getPointResult: Result<Point> = Result.success(point)
@@ -70,7 +65,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         val expectedWriting =
             "피카츄 라이츄 파이리 꼬부기 버터풀 야도란 피죤투 또가스, 서로 생긴 모습은 달라도 우리는 모두 친구, 산에서 들에서 때리고 뒹굴고 ~~"
         val expectedImageUri = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/490.png"
-        val expectedPost: Post = getPost(
+        val expectedPost: Post = DummyPost(
             postId = postId,
             address = expectedAddress,
             title = expectedTitle,
