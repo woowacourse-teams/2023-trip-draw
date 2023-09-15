@@ -5,18 +5,23 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
+import dev.tripdraw.common.domain.Paging;
 import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
+import dev.tripdraw.post.domain.SearchConditions;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchRequest;
+import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
+import dev.tripdraw.post.dto.PostsSearchResponse;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
@@ -26,6 +31,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -120,6 +127,19 @@ public class PostService {
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
         postRepository.deleteById(postId);
+    }
+
+    public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
+        SearchConditions searchConditions = postSearchRequest.condition().toSearchConditions();
+        Paging paging = postSearchRequest.paging().toPaging();
+        List<Post> posts = postRepository.findAllByConditions(searchConditions, paging);
+
+        List<PostSearchResponse> postSearchResponses = posts.stream()
+                .map(PostSearchResponse::from)
+                .toList();
+        boolean hasNextPage = (posts.size() == postSearchRequest.paging().limit() + 1);
+
+        return PostsSearchResponse.of(postSearchResponses, hasNextPage);
     }
 }
 

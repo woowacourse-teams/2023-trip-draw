@@ -16,6 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import dev.tripdraw.common.auth.LoginUser;
+import dev.tripdraw.common.dto.SearchPaging;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
@@ -25,8 +26,12 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchConditions;
+import dev.tripdraw.post.dto.PostSearchRequest;
+import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
+import dev.tripdraw.post.dto.PostsSearchResponse;
 import dev.tripdraw.post.exception.PostException;
 import dev.tripdraw.test.ServiceTest;
 import dev.tripdraw.trip.domain.Point;
@@ -34,13 +39,14 @@ import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.exception.TripException;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @ServiceTest
 class PostServiceTest {
@@ -86,7 +92,7 @@ class PostServiceTest {
         PostAndPointCreateRequest request = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -107,7 +113,7 @@ class PostServiceTest {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -126,7 +132,7 @@ class PostServiceTest {
         PostAndPointCreateRequest requestOfNotExistedTripId = new PostAndPointCreateRequest(
                 Long.MIN_VALUE,
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -146,7 +152,7 @@ class PostServiceTest {
                 trip.id(),
                 point.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
         given(routeImageGenerator.generate(any(), any(), any(), any())).willReturn("hello.png");
@@ -166,7 +172,7 @@ class PostServiceTest {
                 trip.id(),
                 point.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -183,7 +189,7 @@ class PostServiceTest {
                 Long.MIN_VALUE,
                 point.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -200,7 +206,7 @@ class PostServiceTest {
                 trip.id(),
                 Long.MIN_VALUE,
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -213,7 +219,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         // when
         PostResponse postResponse = postService.read(loginUser, postCreateResponse.postId());
@@ -237,7 +243,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
         LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
 
         // expect
@@ -249,7 +255,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         // expect
         assertThatThrownBy(() -> postService.read(otherUser, postCreateResponse.postId()))
@@ -260,8 +266,8 @@ class PostServiceTest {
     @Test
     void 특정_여행의_모든_감상을_조회한다() {
         // given
-        createPost();
-        createPost2();
+        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
+        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         // when
         PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
@@ -270,10 +276,8 @@ class PostServiceTest {
         List<PostResponse> posts = postsResponse.posts();
         assertSoftly(softly -> {
             softly.assertThat(posts.get(0).postId()).isNotNull();
-            softly.assertThat(posts.get(0).title()).isEqualTo("우도의 땅콩 아이스크림");
             softly.assertThat(posts.get(0).pointResponse().pointId()).isNotNull();
             softly.assertThat(posts.get(1).postId()).isNotNull();
-            softly.assertThat(posts.get(1).title()).isEqualTo("우도의 바닷가");
             softly.assertThat(posts.get(1).pointResponse().pointId()).isNotNull();
         });
     }
@@ -306,9 +310,40 @@ class PostServiceTest {
     }
 
     @Test
+    void 조건에_해당하는_모든_여행을_조회한다() {
+        // given
+        PostCreateResponse jejuMay = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 5, 12, 15, 30));
+        PostCreateResponse jejuJuly = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 12, 15, 30));
+        PostCreateResponse seoulJuly = createPost("서울특별시 송파구 문정동", LocalDateTime.of(2023, 7, 12, 15, 30));
+
+        PostSearchRequest postSearchRequestJeju = new PostSearchRequest(
+                PostSearchConditions.builder()
+                        .address("제주특별자치도 제주시 애월읍")
+                        .build(),
+                new SearchPaging(null, 10)
+        );
+
+        PostSearchRequest postSearchRequestJuly = new PostSearchRequest(
+                PostSearchConditions.builder()
+                        .months(List.of(7))
+                        .build(),
+                new SearchPaging(null, 10)
+        );
+
+        // when
+        PostsSearchResponse postsSearchJejuResponse = postService.readAll(postSearchRequestJeju);
+        PostsSearchResponse postsSearchJulyResponse = postService.readAll(postSearchRequestJuly);
+
+        // then
+        assertThat(postsSearchJejuResponse.posts().stream().map(PostSearchResponse::postId).toList()).containsExactly(jejuJuly.postId(), jejuMay.postId());
+        assertThat(postsSearchJulyResponse.posts().stream().map(PostSearchResponse::postId).toList()).containsExactly(seoulJuly.postId(), jejuJuly.postId());
+
+    }
+
+    @Test
     void 감상을_수정한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
                 "수정한 내용입니다."
@@ -344,7 +379,7 @@ class PostServiceTest {
     @Test
     void 감상을_수정할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
                 "수정한 내용입니다."
@@ -360,7 +395,7 @@ class PostServiceTest {
     @Test
     void 감상을_수정할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
                 "수정한 내용입니다."
@@ -375,7 +410,7 @@ class PostServiceTest {
     @Test
     void 감상을_삭제한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         // expect
         assertDoesNotThrow(() -> postService.delete(loginUser, postCreateResponse.postId()));
@@ -396,7 +431,7 @@ class PostServiceTest {
     @Test
     void 감상을_삭제할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
         LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
 
         // expect
@@ -408,7 +443,7 @@ class PostServiceTest {
     @Test
     void 감상을_삭제할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         // expect
         assertThatThrownBy(() -> postService.delete(otherUser, postCreateResponse.postId()))
@@ -422,7 +457,7 @@ class PostServiceTest {
         PostAndPointCreateRequest request = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -438,31 +473,15 @@ class PostServiceTest {
         assertThat(trip.imageUrl()).isEqualTo("hello.png");
     }
 
-    private PostCreateResponse createPost() {
+    private PostCreateResponse createPost(String address, LocalDateTime localDateTime) {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                address,
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
-
-        return postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, null);
-    }
-
-    private PostCreateResponse createPost2() {
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                trip.id(),
-                "우도의 땅콩 아이스크림",
-                "제주특별자치도 제주시 애월읍 소길리",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                1.2,
-                2.2,
-                LocalDateTime.of(2023, 7, 20, 12, 13)
-        );
-
+                localDateTime);
         return postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, null);
     }
 }
