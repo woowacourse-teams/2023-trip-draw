@@ -1,87 +1,53 @@
-package com.teamtripdraw.android.data.httpClient.retrofitAdapter
+package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
 
 import com.teamtripdraw.android.data.httpClient.dto.failureResponse.GeneralFailureResponse
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.TokenExpiryType
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.Headers
-import okhttp3.Request
 import okhttp3.ResponseBody
-import okio.Timeout
-import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.lang.reflect.Type
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class ResponseStateCall<T : Any>(
-    private val call: Call<T>,
-    private val responseType: Type,
+class EnqueueActions<T : Any>(
+    private val responseStateCall: ResponseStateCall<T>,
     private val retrofit: Retrofit,
-) :
-    Call<ResponseState<T>> {
+) {
 
-    override fun enqueue(callback: Callback<ResponseState<T>>) {
-        call.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                val headers = response.headers()
-                val body = response.body()
-                val code = response.code()
-                val errorBody = response.errorBody()
-
-                if (response.isSuccessful) {
-                    if (body != null) {
-                        successWithBodyAction(callback, headers, body)
-                    } else {
-                        if (responseType == Unit::class.java) {
-                            successWithOutBodyAction(callback, headers)
-                        } else {
-                            unknownErrorByEmptyBodyAction(callback)
-                        }
-                    }
-                } else {
-                    responseFailureAction(callback, code, errorBody)
-                }
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                requestFailureAction(t, callback)
-            }
-        })
-    }
-
-    private fun successWithBodyAction(
+    fun successWithBodyAction(
         callback: Callback<ResponseState<T>>,
         headers: Headers,
         body: T,
     ) {
         callback.onResponse(
-            this@ResponseStateCall,
+            responseStateCall,
             Response.success(ResponseState.Success(body, headers)),
         )
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun successWithOutBodyAction(
+    fun successWithOutBodyAction(
         callback: Callback<ResponseState<T>>,
         headers: Headers,
     ) {
         callback.onResponse(
-            this@ResponseStateCall,
+            responseStateCall,
             Response.success(ResponseState.Success(Unit as T, headers)),
         )
     }
 
-    private fun unknownErrorByEmptyBodyAction(callback: Callback<ResponseState<T>>) {
+    fun unknownErrorByEmptyBodyAction(callback: Callback<ResponseState<T>>) {
         callback.onResponse(
-            this@ResponseStateCall,
+            responseStateCall,
             Response.success(
                 ResponseState.UnknownError(IllegalArgumentException(RETURN_TYPE_NOT_UNIT_ERROR)),
             ),
         )
     }
 
-    private fun responseFailureAction(
+    fun responseFailureAction(
         callback: Callback<ResponseState<T>>,
         code: Int,
         errorBody: ResponseBody?,
@@ -116,40 +82,31 @@ class ResponseStateCall<T : Any>(
         errorBody: ResponseBody?,
     ) {
         callback.onResponse(
-            this@ResponseStateCall,
+            responseStateCall,
             Response.success(ResponseState.Failure(code, errorBody)),
         )
     }
 
-    private fun requestFailureAction(
+    fun requestFailureAction(
         throwable: Throwable,
         callback: Callback<ResponseState<T>>,
     ) {
         val errorResponse = when (throwable) {
-            // todo UnknownHostException 네트워크 연결 상태 확인 코드 추후 처리
-            is UnknownHostException -> ResponseState.NetworkError(throwable)
-            is SocketTimeoutException -> ResponseState.TimeOutError(throwable)
+            is UnknownHostException -> networkErrorAction(throwable)
+            is SocketTimeoutException -> timeOutErrorAction(throwable)
             else -> ResponseState.UnknownError(throwable)
         }
-        callback.onResponse(this@ResponseStateCall, Response.success(errorResponse))
+        callback.onResponse(responseStateCall, Response.success(errorResponse))
     }
 
-    override fun execute(): Response<ResponseState<T>> {
-        throw UnsupportedOperationException("해당 커스텀 callAdpater에서는 execute를 지원하지 않습니다.")
+    private fun networkErrorAction(unknownHostException: UnknownHostException): ResponseState.NetworkError {
+        // todo UnknownHostException 네트워크 연결 상태 확인 코드 추가 및 관련 에러처리
+        return ResponseState.NetworkError(unknownHostException)
     }
 
-    override fun clone(): Call<ResponseState<T>> =
-        ResponseStateCall(call.clone(), responseType, retrofit)
-
-    override fun isExecuted(): Boolean = call.isExecuted
-
-    override fun cancel() = call.cancel()
-
-    override fun isCanceled(): Boolean = call.isCanceled
-
-    override fun request(): Request = call.request()
-
-    override fun timeout(): Timeout = call.timeout()
+    private fun timeOutErrorAction(socketTimeoutException: SocketTimeoutException): ResponseState.TimeOutError {
+        return ResponseState.TimeOutError(socketTimeoutException)
+    }
 
     companion object {
         private const val RETURN_TYPE_NOT_UNIT_ERROR =

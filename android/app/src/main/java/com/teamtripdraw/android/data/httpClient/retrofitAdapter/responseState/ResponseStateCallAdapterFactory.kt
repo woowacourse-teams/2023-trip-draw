@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.data.httpClient.retrofitAdapter
+package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
 
 import retrofit2.Call
 import retrofit2.CallAdapter

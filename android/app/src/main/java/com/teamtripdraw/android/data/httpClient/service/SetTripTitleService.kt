@@ -1,7 +1,7 @@
 package com.teamtripdraw.android.data.httpClient.service
 
 import com.teamtripdraw.android.data.httpClient.dto.request.SetTripTitleRequest
-import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ResponseState
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.ResponseState
 import retrofit2.http.Body
 import retrofit2.http.PATCH
 import retrofit2.http.Path
