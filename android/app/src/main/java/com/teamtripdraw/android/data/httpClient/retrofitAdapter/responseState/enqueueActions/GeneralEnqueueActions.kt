@@ -11,6 +11,15 @@ import retrofit2.Retrofit
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
+/**
+ * EnqueueActions을 커스텀 하고싶다면 상속받아 커스텀 Actions를 만들어 사용합니다.
+ * 이때 주의점으로 주생성자 내에서 responseStateCall,retrofit의 순서를 지켜주셔야 합니다.
+ *
+ * @param responseStateCall: 결과처리를 위한 ResponseStateCall 객체 자체를 뜻합니다.
+ * @param retrofit: GeneralEnqueueActions에서는 사용하지 않지만 에러바디 컨버팅 혹은 여타 오류처리를 위해 제공합니다.
+ *
+ * 다른 추가적인 주생성자 매개변수의 경우 앞서 설명한 두 매개변수 다음에 위치하도록 순서에 맞춰서 추가해주시길 바랍니다.
+ */
 open class GeneralEnqueueActions<T : Any>(
     protected val responseStateCall: ResponseStateCall<T>,
     protected val retrofit: Retrofit,

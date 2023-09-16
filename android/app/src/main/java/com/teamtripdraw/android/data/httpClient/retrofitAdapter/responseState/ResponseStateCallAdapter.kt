@@ -10,11 +10,17 @@ import kotlin.reflect.KClass
 class ResponseStateCallAdapter<R : Any>(
     private val responseType: Type,
     private val retrofit: Retrofit,
-    private val enqueueActionsType: KClass<GeneralEnqueueActions<R>>,
+    private val enqueueActionsType: KClass<out GeneralEnqueueActions<*>>,
 ) :
     CallAdapter<R, Call<ResponseState<R>>> {
     override fun responseType(): Type = responseType
 
+    @Suppress("UNCHECKED_CAST")
     override fun adapt(call: Call<R>): Call<ResponseState<R>> =
-        ResponseStateCall(call, responseType, retrofit, enqueueActionsType)
+        ResponseStateCall(
+            call,
+            responseType,
+            retrofit,
+            enqueueActionsType as KClass<GeneralEnqueueActions<R>>,
+        )
 }

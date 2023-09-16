@@ -8,7 +8,9 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-class ResponseStateCallAdapterFactory(private val enqueueActionsType: KClass<GeneralEnqueueActions<Any>>) :
+class ResponseStateCallAdapterFactory(
+    private val enqueueActionsType: KClass<out GeneralEnqueueActions<*>> = GeneralEnqueueActions::class,
+) :
     CallAdapter.Factory() {
 
     override fun get(

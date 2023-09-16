@@ -64,13 +64,13 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-    val naverGeocoderRetrofit: Retrofit =
-        Retrofit.Builder()
-            .baseUrl("수달이 채워넣을 부분")
-            .client(generalOKHttpClient)
-            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
+//    val naverGeocoderRetrofit: Retrofit =
+//        Retrofit.Builder()
+//            .baseUrl("수달이 채워넣을 부분")
+//            .client(generalOKHttpClient)
+//            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
+//            .addConverterFactory(MoshiConverterFactory.create(moshi))
+//            .build()
 
     companion object {
         private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
