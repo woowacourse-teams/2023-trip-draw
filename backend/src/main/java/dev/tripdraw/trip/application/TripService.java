@@ -1,10 +1,12 @@
 package dev.tripdraw.trip.application;
 
 import dev.tripdraw.common.auth.LoginUser;
+import dev.tripdraw.common.domain.Paging;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
+import dev.tripdraw.trip.domain.SearchConditions;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
@@ -13,8 +15,10 @@ import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
+import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
+import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -68,10 +72,26 @@ public class TripService {
     }
 
     @Transactional(readOnly = true)
-    public TripsSearchResponse readAllTrips(LoginUser loginUser) {
+    public TripsSearchResponseOfMember readAllTripsOf(LoginUser loginUser) {
         Member member = memberRepository.getById(loginUser.memberId());
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
-        return TripsSearchResponse.from(trips);
+        return TripsSearchResponseOfMember.from(trips);
+    }
+
+    @Transactional(readOnly = true)
+    public TripsSearchResponse readAllTrips(TripSearchRequest tripSearchRequest) {
+        SearchConditions searchConditions = tripSearchRequest.condition().toSearchConditions();
+        Paging paging = tripSearchRequest.paging().toPaging();
+
+        List<Trip> trips = tripRepository.findAllByConditions(
+                searchConditions,
+                paging
+        );
+
+        if (paging.hasNextPage(trips.size())) {
+            return TripsSearchResponse.of(trips.subList(0, paging.limit()), true);
+        }
+        return TripsSearchResponse.of(trips, false);
     }
 
     public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {

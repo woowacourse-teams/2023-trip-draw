@@ -12,8 +12,10 @@ import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
+import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
+import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -76,10 +78,10 @@ public class TripController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "여행 조회 API", description = "단일 여행의 정보를 조회합니다.")
+    @Operation(summary = "나의 여행 조회 API", description = "회원 한 명의 단일 여행 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "여행 조회 성공."
+            description = "나의 여행 조회 성공."
     )
     @GetMapping("/trips/{tripId}")
     public ResponseEntity<TripResponse> readById(@Auth LoginUser loginUser, @PathVariable Long tripId) {
@@ -102,15 +104,29 @@ public class TripController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "여행 전체 조회 API", description = "모든 여행의 정보를 조회합니다.")
+    @Operation(summary = "나의 여행 전체 조회 API", description = "회원 한 명의 모든 여행 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "여행 전체 조회 성공."
+            description = "나의 여행 전체 조회 성공."
+    )
+    @GetMapping("/trips/mine")
+    public ResponseEntity<TripsSearchResponseOfMember> readAllOf(@Auth LoginUser loginUser) {
+        TripsSearchResponseOfMember response = tripService.readAllTripsOf(loginUser);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "모든 회원 여행 전체 조회 API", description = "모든 회원의 여행 정보를 조건에 따라 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "모든 회원 여행 전체 조회 성공."
     )
     @GetMapping("/trips")
-    public ResponseEntity<TripsSearchResponse> readAll(@Auth LoginUser loginUser) {
-        TripsSearchResponse response = tripService.readAllTrips(loginUser);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<TripsSearchResponse> readAll(
+            @Auth LoginUser loginUser,
+            @RequestBody TripSearchRequest tripSearchRequest
+    ) {
+        TripsSearchResponse tripsSearchResponse = tripService.readAllTrips(tripSearchRequest);
+        return ResponseEntity.ok(tripsSearchResponse);
     }
 
     @Operation(summary = "여행 이름 수정 및 종료 API", description = "여행 이름을 수정하고, 여행을 종료합니다.")

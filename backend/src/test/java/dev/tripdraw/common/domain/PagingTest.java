@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -22,5 +23,17 @@ class PagingTest {
 
         // then
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void limit이_100을_넘기면_100으로_조정된다() {
+        // given
+        int limit = 101;
+
+        // when
+        Paging paging = new Paging(1L, limit);
+        
+        // then
+        assertThat(paging.limit()).isEqualTo(100);
     }
 }

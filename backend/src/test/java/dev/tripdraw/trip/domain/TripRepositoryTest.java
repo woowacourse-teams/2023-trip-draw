@@ -1,12 +1,12 @@
 package dev.tripdraw.trip.domain;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.test.SearchConditionsTestFixture.addressSearchConditions;
-import static dev.tripdraw.test.SearchConditionsTestFixture.daysOfWeekSearchConditions;
-import static dev.tripdraw.test.SearchConditionsTestFixture.emptySearchConditions;
-import static dev.tripdraw.test.SearchConditionsTestFixture.monthsSearchConditions;
-import static dev.tripdraw.test.SearchConditionsTestFixture.yearsSearchConditions;
-import static dev.tripdraw.test.TestFixture.위치정보;
+import static dev.tripdraw.test.fixture.SearchConditionsFixture.addressSearchConditions;
+import static dev.tripdraw.test.fixture.SearchConditionsFixture.daysOfWeekSearchConditions;
+import static dev.tripdraw.test.fixture.SearchConditionsFixture.emptySearchConditions;
+import static dev.tripdraw.test.fixture.SearchConditionsFixture.monthsSearchConditions;
+import static dev.tripdraw.test.fixture.SearchConditionsFixture.yearsSearchConditions;
+import static dev.tripdraw.test.fixture.TestFixture.위치정보;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,6 +22,7 @@ import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -140,14 +141,29 @@ class TripRepositoryTest {
     class 조건에_따라_여행을_조회할_때 {
 
         @Nested
-        class 개수_제한을_입력하면 {
+        class 개수_제한이 {
 
             @ParameterizedTest
             @CsvSource({"0, 1", "1, 2", "2, 3"})
-            void 개수_제한보다_하나_더_반환한다(int limit, int expectedSize) {
+            void 여행의_개수보다_적으면_개수_제한보다_하나_더_반환한다(int limit, int expectedSize) {
                 // given
                 jeju_2023_1_1_Sun();
                 jeju_2023_1_1_Sun();
+                jeju_2023_1_1_Sun();
+
+                Paging paging = new Paging(null, limit);
+
+                // when
+                List<Trip> trips = tripRepository.findAllByConditions(emptySearchConditions(), paging);
+
+                // then
+                assertThat(trips).hasSize(expectedSize);
+            }
+
+            @ParameterizedTest
+            @CsvSource({"1, 1", "2, 1"})
+            void 여행의_개수보다_많거나_같으면_모든_여행을_반환한다(int limit, int expectedSize) {
+                // given
                 jeju_2023_1_1_Sun();
 
                 Paging paging = new Paging(null, limit);
@@ -213,7 +229,7 @@ class TripRepositoryTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 Trip jeju2023_2_1_Wed = jeju_2023_2_1_Wed();
 
-                SearchConditions searchConditions = yearsSearchConditions(List.of(2023));
+                SearchConditions searchConditions = yearsSearchConditions(Set.of(2023));
 
                 // when
                 List<Trip> trips = tripRepository.findAllByConditions(searchConditions, new Paging(null, 10));
@@ -231,7 +247,7 @@ class TripRepositoryTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 Trip jeju2023_2_1_Wed = jeju_2023_2_1_Wed();
 
-                SearchConditions searchConditions = yearsSearchConditions(List.of(2023, 2021));
+                SearchConditions searchConditions = yearsSearchConditions(Set.of(2023, 2021));
 
                 // when
                 List<Trip> trips = tripRepository.findAllByConditions(searchConditions, new Paging(null, 10));
@@ -257,7 +273,7 @@ class TripRepositoryTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                SearchConditions searchConditions = monthsSearchConditions(List.of(1));
+                SearchConditions searchConditions = monthsSearchConditions(Set.of(1));
 
                 // when
                 List<Trip> trips = tripRepository.findAllByConditions(searchConditions, new Paging(null, 10));
@@ -275,7 +291,7 @@ class TripRepositoryTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                SearchConditions searchConditions = monthsSearchConditions(List.of(1, 3));
+                SearchConditions searchConditions = monthsSearchConditions(Set.of(1, 3));
 
                 // when
                 List<Trip> trips = tripRepository.findAllByConditions(searchConditions, new Paging(null, 10));
@@ -301,7 +317,7 @@ class TripRepositoryTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                SearchConditions searchConditions = daysOfWeekSearchConditions(List.of(1));
+                SearchConditions searchConditions = daysOfWeekSearchConditions(Set.of(1));
 
                 // when
                 List<Trip> trips = tripRepository.findAllByConditions(searchConditions, new Paging(null, 10));
@@ -319,7 +335,7 @@ class TripRepositoryTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                SearchConditions searchConditions = daysOfWeekSearchConditions(List.of(1, 3));
+                SearchConditions searchConditions = daysOfWeekSearchConditions(Set.of(1, 3));
 
                 // when
                 List<Trip> trips = tripRepository.findAllByConditions(searchConditions, new Paging(null, 10));
@@ -399,11 +415,11 @@ class TripRepositoryTest {
                 jeju_2023_2_1_Wed();
 
                 SearchConditions searchConditions = new SearchConditions(
-                        List.of(2023),
-                        List.of(1),
-                        List.of(),
-                        List.of(),
-                        List.of(),
+                        Set.of(2023),
+                        Set.of(1),
+                        Set.of(),
+                        Set.of(),
+                        Set.of(),
                         "서울특별시"
                 );
 
