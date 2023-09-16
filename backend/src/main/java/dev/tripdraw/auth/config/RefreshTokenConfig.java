@@ -7,5 +7,4 @@ public record RefreshTokenConfig(
         String secretKey,
         Long expirationTime
 ) {
-
 }

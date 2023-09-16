@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class TokenGenerateService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     public OauthResponse refresh(String token) {
         jwtTokenProvider.validateRefreshToken(token);
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
@@ -25,6 +25,7 @@ public class TokenGenerateService {
         return generate(refreshToken.memberId());
     }
 
+    @Transactional
     public OauthResponse generate(Long memberId) {
         String accessToken = jwtTokenProvider.generateAccessToken(memberId.toString());
         String refreshToken = jwtTokenProvider.generateRefreshToken();

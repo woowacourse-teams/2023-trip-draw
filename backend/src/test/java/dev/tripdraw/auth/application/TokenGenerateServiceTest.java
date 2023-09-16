@@ -1,6 +1,8 @@
 package dev.tripdraw.auth.application;
 
 import static dev.tripdraw.auth.exception.AuthExceptionType.INVALID_TOKEN;
+import static dev.tripdraw.test.fixture.AuthFixture.테스트_ACCESS_TOKEN_설정;
+import static dev.tripdraw.test.fixture.AuthFixture.테스트_REFRESH_TOKEN_설정;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -17,22 +19,27 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class TokenGenerateServiceTest {
 
-    @Autowired
+    @InjectMocks
     private TokenGenerateService tokenGenerateService;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    @Spy
+    private JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(
+            테스트_ACCESS_TOKEN_설정(),
+            테스트_REFRESH_TOKEN_설정()
+    );
 
-    @MockBean
+    @Mock
     private RefreshTokenRepository refreshTokenRepository;
 
     @Test
