@@ -7,11 +7,13 @@ import okhttp3.Headers
 import okhttp3.ResponseBody
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 open class GeneralEnqueueActions<T : Any>(
-    private val responseStateCall: ResponseStateCall<T>,
+    protected val responseStateCall: ResponseStateCall<T>,
+    protected val retrofit: Retrofit,
 ) {
     open fun successWithBodyAction(
         callback: Callback<ResponseState<T>>,

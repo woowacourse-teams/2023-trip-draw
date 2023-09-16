@@ -1,7 +1,6 @@
 package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
 
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.GeneralEnqueueActions
-import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawEnqueueActions
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -9,16 +8,29 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.lang.reflect.Type
+import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
+import kotlin.reflect.full.primaryConstructor
 
 class ResponseStateCall<T : Any>(
     private val call: Call<T>,
     private val responseType: Type,
     private val retrofit: Retrofit,
+    private val enqueueActionsType: KClass<GeneralEnqueueActions<T>>,
 ) :
     Call<ResponseState<T>> {
 
-    private val enqueueActions: GeneralEnqueueActions<T> =
-        TripDrawEnqueueActions(this, retrofit)
+    private val enqueueActions: GeneralEnqueueActions<T> = initEnqueueActions(enqueueActionsType)
+
+    private fun initEnqueueActions(enqueueActionsType: KClass<GeneralEnqueueActions<T>>):
+        GeneralEnqueueActions<T> {
+        val enqueueActionsPrimaryConstructor: KFunction<GeneralEnqueueActions<T>> =
+            enqueueActionsType.primaryConstructor ?: throw IllegalStateException(
+                NULL_ENQUEUE_ACTIONS_PRIMARY_CONSTRUCTOR,
+            )
+        // todo 여기에 인자 넣는거 해야
+        return enqueueActionsPrimaryConstructor.call()
+    }
 
     override fun enqueue(callback: Callback<ResponseState<T>>) {
         call.enqueue(object : Callback<T> {
@@ -54,7 +66,7 @@ class ResponseStateCall<T : Any>(
     }
 
     override fun clone(): Call<ResponseState<T>> =
-        ResponseStateCall(call.clone(), responseType, retrofit)
+        ResponseStateCall(call.clone(), responseType, retrofit, enqueueActionsType)
 
     override fun isExecuted(): Boolean = call.isExecuted
 
@@ -65,4 +77,9 @@ class ResponseStateCall<T : Any>(
     override fun request(): Request = call.request()
 
     override fun timeout(): Timeout = call.timeout()
+
+    companion object {
+        private const val NULL_ENQUEUE_ACTIONS_PRIMARY_CONSTRUCTOR =
+            "입력하신 EnqueueActions 클래스의 primary 생성자가 null값입니다.EnqueueActions 주생성자를 확인하세요"
+    }
 }

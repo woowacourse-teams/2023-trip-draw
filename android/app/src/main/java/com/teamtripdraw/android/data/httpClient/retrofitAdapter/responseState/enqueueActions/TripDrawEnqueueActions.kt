@@ -13,9 +13,9 @@ import retrofit2.Callback
 import retrofit2.Retrofit
 
 class TripDrawEnqueueActions<T : Any>(
-    private val responseStateCall: ResponseStateCall<T>,
-    private val retrofit: Retrofit,
-) : GeneralEnqueueActions<T>(responseStateCall) {
+    responseStateCall: ResponseStateCall<T>,
+    retrofit: Retrofit,
+) : GeneralEnqueueActions<T>(responseStateCall, retrofit) {
     override fun responseFailureAction(
         callback: Callback<ResponseState<T>>,
         code: Int,
