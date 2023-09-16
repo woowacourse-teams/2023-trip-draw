@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.common.domain.Paging;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -42,21 +43,21 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
         return trip.id.lt(lastViewedId);
     }
 
-    private BooleanExpression tripsRecordedAtYears(List<Integer> years) {
+    private BooleanExpression tripsRecordedAtYears(Set<Integer> years) {
         if (years.isEmpty()) {
             return null;
         }
         return point.recordedAt.year().in(years);
     }
 
-    private BooleanExpression tripsRecordedAtMonths(List<Integer> months) {
+    private BooleanExpression tripsRecordedAtMonths(Set<Integer> months) {
         if (months.isEmpty()) {
             return null;
         }
         return point.recordedAt.month().in(months);
     }
 
-    private BooleanExpression tripsRecordedAtDaysOfWeek(List<Integer> daysOfWeek) {
+    private BooleanExpression tripsRecordedAtDaysOfWeek(Set<Integer> daysOfWeek) {
         if (daysOfWeek.isEmpty()) {
             return null;
         }
@@ -67,6 +68,6 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
         if (address.isEmpty()) {
             return null;
         }
-        return post.address.contains(address);
+        return post.address.like(address + "%");
     }
 }
