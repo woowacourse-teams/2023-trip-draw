@@ -1,5 +1,7 @@
 package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
 
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.GeneralEnqueueActions
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawEnqueueActions
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -15,8 +17,8 @@ class ResponseStateCall<T : Any>(
 ) :
     Call<ResponseState<T>> {
 
-    private val enqueueActions: EnqueueActions<T> =
-        EnqueueActions(this, retrofit)
+    private val enqueueActions: GeneralEnqueueActions<T> =
+        TripDrawEnqueueActions(this, retrofit)
 
     override fun enqueue(callback: Callback<ResponseState<T>>) {
         call.enqueue(object : Callback<T> {

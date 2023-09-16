@@ -1,22 +1,19 @@
-package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
+package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions
 
-import com.teamtripdraw.android.data.httpClient.dto.failureResponse.GeneralFailureResponse
-import com.teamtripdraw.android.data.httpClient.retrofitAdapter.TokenExpiryType
-import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.ServerType.*
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.ResponseState
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.ResponseStateCall
 import okhttp3.Headers
 import okhttp3.ResponseBody
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class EnqueueActions<T : Any>(
+open class GeneralEnqueueActions<T : Any>(
     private val responseStateCall: ResponseStateCall<T>,
-    private val retrofit: Retrofit,
 ) {
-
-    fun successWithBodyAction(
+    open fun successWithBodyAction(
         callback: Callback<ResponseState<T>>,
         headers: Headers,
         body: T,
@@ -28,7 +25,7 @@ class EnqueueActions<T : Any>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun successWithOutBodyAction(
+    open fun successWithOutBodyAction(
         callback: Callback<ResponseState<T>>,
         headers: Headers,
     ) {
@@ -38,7 +35,7 @@ class EnqueueActions<T : Any>(
         )
     }
 
-    fun unknownErrorByEmptyBodyAction(callback: Callback<ResponseState<T>>) {
+    open fun unknownErrorByEmptyBodyAction(callback: Callback<ResponseState<T>>) {
         callback.onResponse(
             responseStateCall,
             Response.success(
@@ -47,36 +44,7 @@ class EnqueueActions<T : Any>(
         )
     }
 
-    fun responseFailureAction(
-        callback: Callback<ResponseState<T>>,
-        code: Int,
-        errorBody: ResponseBody?,
-    ) {
-        if (code == TOKEN_EXPIRED_CODE) {
-            when (getTokenExpiryType(errorBody)) {
-                TokenExpiryType.REFRESH_TOKEN -> refreshTokenExpiredAction()
-                TokenExpiryType.ACCESS_TOKEN -> accessTokenExpiredAction()
-            }
-        } else {
-            generalResponseFailureAction(callback, code, errorBody)
-        }
-    }
-
-    private fun getTokenExpiryType(errorBody: ResponseBody?): TokenExpiryType {
-        val generalFailureResponse =
-            retrofit.getParsedErrorBody<GeneralFailureResponse>(errorBody)
-                ?: throw IllegalStateException(EXPIRED_TOKEN_RESPONSE_HAS_NO_ERROR_BODY)
-        val exceptionCode = generalFailureResponse.exceptionCode
-        return TokenExpiryType.getByServerExceptionCode(exceptionCode)
-    }
-
-    private fun accessTokenExpiredAction() {
-    }
-
-    private fun refreshTokenExpiredAction() {
-    }
-
-    private fun generalResponseFailureAction(
+    open fun responseFailureAction(
         callback: Callback<ResponseState<T>>,
         code: Int,
         errorBody: ResponseBody?,
@@ -87,7 +55,7 @@ class EnqueueActions<T : Any>(
         )
     }
 
-    fun requestFailureAction(
+    open fun requestFailureAction(
         throwable: Throwable,
         callback: Callback<ResponseState<T>>,
     ) {
@@ -111,8 +79,5 @@ class EnqueueActions<T : Any>(
     companion object {
         private const val RETURN_TYPE_NOT_UNIT_ERROR =
             "Body가 존재하지 않지만, Unit 이외의 타입으로 정의했습니다. ResponseState<Unit>로 정의하세요"
-        private const val EXPIRED_TOKEN_RESPONSE_HAS_NO_ERROR_BODY =
-            "토큰 에러 관련 에러바디의 값이 null값입니다"
-        private const val TOKEN_EXPIRED_CODE = 401
     }
 }
