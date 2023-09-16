@@ -7,4 +7,6 @@ import com.squareup.moshi.JsonClass
 data class NicknameSetupResponse(
     @Json(name = "accessToken")
     val accessToken: String,
+    @Json(name = "refreshToken")
+    val refreshToken: String,
 )
