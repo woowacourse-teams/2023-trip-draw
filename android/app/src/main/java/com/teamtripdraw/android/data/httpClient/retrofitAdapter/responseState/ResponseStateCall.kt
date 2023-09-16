@@ -17,19 +17,21 @@ class ResponseStateCall<T : Any>(
     private val responseType: Type,
     private val retrofit: Retrofit,
     private val enqueueActionsType: KClass<GeneralEnqueueActions<T>>,
+    private val enqueueActionParameters: List<Any>,
 ) :
     Call<ResponseState<T>> {
 
-    private val enqueueActions: GeneralEnqueueActions<T> = initEnqueueActions(enqueueActionsType)
+    private val enqueueActions: GeneralEnqueueActions<T> = initEnqueueActions()
 
-    private fun initEnqueueActions(enqueueActionsType: KClass<GeneralEnqueueActions<T>>):
+    private fun initEnqueueActions():
         GeneralEnqueueActions<T> {
         val enqueueActionsPrimaryConstructor: KFunction<GeneralEnqueueActions<T>> =
             enqueueActionsType.primaryConstructor ?: throw IllegalStateException(
                 NULL_ENQUEUE_ACTIONS_PRIMARY_CONSTRUCTOR,
             )
-        // todo 여기에 인자 넣는거 해야
-        return enqueueActionsPrimaryConstructor.call()
+        val enqueueActionParametersWithResponseStateCall: List<Any> =
+            enqueueActionParameters.toMutableList().apply { add(0, this@ResponseStateCall) }
+        return enqueueActionsPrimaryConstructor.call(*enqueueActionParametersWithResponseStateCall.toTypedArray())
     }
 
     override fun enqueue(callback: Callback<ResponseState<T>>) {
@@ -66,7 +68,13 @@ class ResponseStateCall<T : Any>(
     }
 
     override fun clone(): Call<ResponseState<T>> =
-        ResponseStateCall(call.clone(), responseType, retrofit, enqueueActionsType)
+        ResponseStateCall(
+            call.clone(),
+            responseType,
+            retrofit,
+            enqueueActionsType,
+            enqueueActionParameters,
+        )
 
     override fun isExecuted(): Boolean = call.isExecuted
 

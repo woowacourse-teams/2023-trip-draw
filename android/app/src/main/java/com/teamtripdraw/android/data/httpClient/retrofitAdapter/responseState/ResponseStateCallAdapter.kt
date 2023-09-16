@@ -11,6 +11,7 @@ class ResponseStateCallAdapter<R : Any>(
     private val responseType: Type,
     private val retrofit: Retrofit,
     private val enqueueActionsType: KClass<out GeneralEnqueueActions<*>>,
+    private val enqueueActionParameters: List<Any>,
 ) :
     CallAdapter<R, Call<ResponseState<R>>> {
     override fun responseType(): Type = responseType
@@ -22,5 +23,6 @@ class ResponseStateCallAdapter<R : Any>(
             responseType,
             retrofit,
             enqueueActionsType as KClass<GeneralEnqueueActions<R>>,
+            enqueueActionParameters,
         )
 }

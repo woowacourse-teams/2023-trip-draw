@@ -10,8 +10,8 @@ import kotlin.reflect.KClass
 
 class ResponseStateCallAdapterFactory(
     private val enqueueActionsType: KClass<out GeneralEnqueueActions<*>> = GeneralEnqueueActions::class,
-) :
-    CallAdapter.Factory() {
+    private vararg val enqueueActionParameters: Any,
+) : CallAdapter.Factory() {
 
     override fun get(
         returnType: Type,
@@ -38,6 +38,14 @@ class ResponseStateCallAdapterFactory(
 
         val bodyType = getParameterUpperBound(0, responseType)
 
-        return ResponseStateCallAdapter<Any>(bodyType, retrofit, enqueueActionsType)
+        val enqueueActionParametersWithRetrofit: List<Any> =
+            enqueueActionParameters.toMutableList().apply { add(0, retrofit) }
+
+        return ResponseStateCallAdapter<Any>(
+            bodyType,
+            retrofit,
+            enqueueActionsType,
+            enqueueActionParametersWithRetrofit,
+        )
     }
 }
