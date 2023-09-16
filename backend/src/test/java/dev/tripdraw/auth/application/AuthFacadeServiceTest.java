@@ -2,7 +2,7 @@ package dev.tripdraw.auth.application;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 import dev.tripdraw.auth.domain.RefreshToken;
 import dev.tripdraw.auth.domain.RefreshTokenRepository;
@@ -46,7 +46,7 @@ class AuthFacadeServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(oauthClientProvider.provide(KAKAO)).thenReturn(new TestKakaoApiClient());
+        given(oauthClientProvider.provide(KAKAO)).willReturn(new TestKakaoApiClient());
     }
 
     @Test

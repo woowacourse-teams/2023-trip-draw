@@ -21,19 +21,20 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
-    @Autowired
+    @InjectMocks
     private AuthService authService;
 
-    @MockBean
+    @Mock
     private MemberRepository memberRepository;
 
     private final OauthInfo oauthInfo = new OauthInfo("id", KAKAO);
