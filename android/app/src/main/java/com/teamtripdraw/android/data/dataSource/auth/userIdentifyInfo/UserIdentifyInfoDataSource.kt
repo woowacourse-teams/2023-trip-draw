@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.data.dataSource.userIdentifyInfo
+package com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo
 
 import com.teamtripdraw.android.data.model.DataLoginInfo
 import com.teamtripdraw.android.data.model.DataUserIdentifyInfo
@@ -12,9 +12,5 @@ interface UserIdentifyInfoDataSource {
         fun getRefreshToken(): String
 
         fun deleteIdentifyInfo()
-    }
-
-    interface Remote {
-        suspend fun issueUserIdentifyInfo(dataLoginInfo: DataLoginInfo): Result<DataUserIdentifyInfo>
     }
 }

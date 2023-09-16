@@ -3,7 +3,7 @@ package com.teamtripdraw.android.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.teamtripdraw.android.BuildConfig
-import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
+import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.ResponseStateCallAdapterFactory
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawEnqueueActions
 import okhttp3.Dispatcher
@@ -23,7 +23,7 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
                         .newBuilder()
                         .addHeader(
                             "Authorization",
-                            AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getIdentifyInfo()),
+                            AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getAccessToken()),
                         )
                         .build(),
                 )

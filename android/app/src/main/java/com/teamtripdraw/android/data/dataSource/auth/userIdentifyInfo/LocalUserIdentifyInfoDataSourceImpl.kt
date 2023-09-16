@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.data.dataSource.userIdentifyInfo
+package com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

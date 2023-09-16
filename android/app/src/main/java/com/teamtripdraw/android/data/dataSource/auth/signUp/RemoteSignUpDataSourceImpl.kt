@@ -1,10 +1,12 @@
-package com.teamtripdraw.android.data.dataSource.signUp
+package com.teamtripdraw.android.data.dataSource.auth.signUp
 
 import com.teamtripdraw.android.data.httpClient.dto.failureResponse.GeneralFailureResponse
+import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.request.NicknameSetUpRequest
 import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.model.DataLoginInfo
+import com.teamtripdraw.android.data.model.DataUserIdentifyInfo
 import com.teamtripdraw.android.data.model.DataUserInfo
 import com.teamtripdraw.android.domain.exception.DuplicateNicknameException
 import com.teamtripdraw.android.domain.exception.InvalidNicknameException
@@ -21,10 +23,10 @@ class RemoteSignUpDataSourceImpl(
     override suspend fun setNickname(
         nickname: String,
         dataLoginInfo: DataLoginInfo,
-    ): Result<String> =
+    ): Result<DataUserIdentifyInfo> =
         nicknameSetupService.setNickname(getNicknameSetUpRequest(nickname, dataLoginInfo))
             .process(failureListener = this::setNicknameFailureListener) { body, headers ->
-                Result.success(body.accessToken)
+                Result.success(body.toData())
             }
 
     private fun getNicknameSetUpRequest(

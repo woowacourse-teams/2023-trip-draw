@@ -1,17 +1,18 @@
 package com.teamtripdraw.android.di
 
+import com.teamtripdraw.android.data.dataSource.auth.login.LoginDataSource
+import com.teamtripdraw.android.data.dataSource.auth.login.RemoteLoginDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.auth.signUp.RemoteSignUpDataSourceImpl
+import com.teamtripdraw.android.data.dataSource.auth.signUp.SignUpDataSource
+import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.dataSource.point.PointDataSource
 import com.teamtripdraw.android.data.dataSource.point.RemotePointDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.dataSource.post.remote.RemotePostDataSourceImpl
-import com.teamtripdraw.android.data.dataSource.signUp.RemoteSignUpDataSourceImpl
-import com.teamtripdraw.android.data.dataSource.signUp.SignUpDataSource
 import com.teamtripdraw.android.data.dataSource.trip.RemoteTripDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.trip.TripDataSource
 import com.teamtripdraw.android.data.dataSource.unsubscribe.RemoteUnsubscribeDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.unsubscribe.UnsubscribeDataSource
-import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.RemoteUserIdentifyInfoDataSourceImpl
-import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
 
 class RemoteDataSourceContainer(
     serviceContainer: ServiceContainer,
@@ -42,12 +43,12 @@ class RemoteDataSourceContainer(
             serviceContainer.getPointService,
             serviceContainer.deletePointService,
         )
-    val remoteUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Remote =
-        RemoteUserIdentifyInfoDataSourceImpl(
-            serviceContainer.loginService,
-        )
-    val unsubscribeDataSource: UnsubscribeDataSource.Remote =
+    val remoteUnsubscribeDataSource: UnsubscribeDataSource.Remote =
         RemoteUnsubscribeDataSourceImpl(
             serviceContainer.unsubscribeService,
+        )
+    val remoteLoginDataSource: LoginDataSource.Remote =
+        RemoteLoginDataSourceImpl(
+            serviceContainer.loginService,
         )
 }
