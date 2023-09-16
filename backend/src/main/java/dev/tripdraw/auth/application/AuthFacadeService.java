@@ -14,18 +14,23 @@ public class AuthFacadeService {
 
     private final OAuthService oAuthService;
     private final AuthService authService;
+    private final TokenGenerateService tokenGenerateService;
 
     public OauthResponse login(OauthRequest oauthRequest) {
         OauthInfo oauthInfo = oAuthService.request(oauthRequest.oauthType(), oauthRequest.oauthToken());
-        return authService.login(oauthInfo);
+        return authService.login(oauthInfo)
+                .map(member -> tokenGenerateService.generate(member.id()))
+                .orElseGet(tokenGenerateService::generateEmptyToken);
     }
 
     public OauthResponse register(RegisterRequest registerRequest) {
         OauthInfo oauthInfo = oAuthService.request(registerRequest.oauthType(), registerRequest.oauthToken());
-        return authService.register(oauthInfo, registerRequest.nickname());
+        return authService.register(oauthInfo, registerRequest.nickname())
+                .map(member -> tokenGenerateService.generate(member.id()))
+                .orElseGet(tokenGenerateService::generateEmptyToken);
     }
 
     public OauthResponse refresh(TokenRefreshRequest tokenRefreshRequest) {
-        return authService.refresh(tokenRefreshRequest.refreshToken());
+        return tokenGenerateService.refresh(tokenRefreshRequest.refreshToken());
     }
 }
