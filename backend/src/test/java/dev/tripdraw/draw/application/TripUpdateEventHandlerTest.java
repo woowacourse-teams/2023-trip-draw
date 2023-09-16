@@ -6,8 +6,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
-import dev.tripdraw.draw.application.RouteImageGenerator;
-import dev.tripdraw.draw.application.TripUpdateEventHandler;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
 import org.junit.jupiter.api.DisplayNameGeneration;

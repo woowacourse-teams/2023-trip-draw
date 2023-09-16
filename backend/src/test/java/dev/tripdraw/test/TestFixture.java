@@ -20,6 +20,10 @@ public class TestFixture {
         return new Point(1L, 1.1, 2.2, false, LocalDateTime.now(), 여행());
     }
 
+    public static Point 위치정보(int year, int month, int dayOfMonth, int hour, int minute) {
+        return new Point(1.1, 2.2, LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+    }
+
     public static Trip 여행() {
         return new Trip(1L, TripName.from("통후추"), 사용자(), TripStatus.ONGOING, "", "");
     }
