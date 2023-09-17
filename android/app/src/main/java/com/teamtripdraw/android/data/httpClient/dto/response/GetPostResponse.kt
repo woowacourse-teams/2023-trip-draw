@@ -12,9 +12,9 @@ data class GetPostResponse(
     @Json(name = "postId")
     val postId: Long,
     @Json(name = "postImageUrl")
-    val postImageUrl: String?,
+    val postImageUrl: String,
     @Json(name = "routeImageUrl")
-    val routeImageUrl: String?,
+    val routeImageUrl: String,
     @Json(name = "title")
     val title: String,
     @Json(name = "tripId")

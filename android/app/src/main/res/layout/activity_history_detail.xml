@@ -48,17 +48,18 @@
                         android:id="@+id/iv_history_detail_image"
                         android:layout_width="0dp"
                         android:layout_height="360dp"
+                        android:onClick="@{()->historyDetailViewModel.openTripDetail()}"
                         android:scaleType="centerCrop"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:setImage="@{historyDetailViewModel.previewTrip.imageUrl}"
+                        app:loadPostImage="@{historyDetailViewModel.previewTrip.imageUrl}"
                         tools:background="@color/td_light_blue" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:background="@color/td_black_transparency_15"
+                        android:background="@color/td_black_transparency_30"
                         app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_route"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +72,8 @@
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="@id/iv_history_detail_image"
                         app:layout_constraintEnd_toEndOf="@id/iv_history_detail_image"
-                        app:setImage="@{historyDetailViewModel.previewTrip.routeImageUrl}"
+                        app:loadPostImage="@{historyDetailViewModel.previewTrip.routeImageUrl}"
+                        app:setImageVisibility="@{historyDetailViewModel.previewTrip.routeImageUrl}"
                         tools:background="@color/td_gray" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -98,6 +100,7 @@
                         android:layout_gravity="end"
                         android:layout_marginEnd="@dimen/margin_default"
                         android:contentDescription="@string/btn_delete_description"
+                        android:onClick="@{()->historyDetailViewModel.openDeleteDialog()}"
                         android:src="@drawable/ic_delete" />
 
                     <ImageView
@@ -106,6 +109,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="end"
                         android:layout_marginEnd="@dimen/margin_default"
+                        android:onClick="@{()->historyDetailViewModel.openEditTitle()}"
                         android:src="@drawable/ic_edit" />
 
                     <ImageView

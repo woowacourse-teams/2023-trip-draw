@@ -7,6 +7,6 @@ data class DataPost(
     val writing: String,
     val address: String,
     val point: DataPoint,
-    val postImageUrl: String?,
-    val routeImageUrl: String?,
+    val postImageUrl: String,
+    val routeImageUrl: String,
 )

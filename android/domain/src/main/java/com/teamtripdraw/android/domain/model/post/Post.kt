@@ -9,8 +9,8 @@ data class Post(
     val writing: String,
     val address: String,
     val point: Point,
-    val postImageUrl: String?,
-    val routeImageUrl: String?,
+    val postImageUrl: String,
+    val routeImageUrl: String,
 ) {
 
     companion object {
