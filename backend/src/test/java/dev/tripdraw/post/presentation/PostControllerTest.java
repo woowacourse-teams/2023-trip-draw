@@ -588,7 +588,6 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 다른_사용자들의_감상을_조회한다() {
         // given
-        // 제주특별자치도 제주시 애월읍, 시간
         PostCreateResponse jejuJuly20hourPostResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
         PostCreateResponse jejuAugust17hourPostResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 8, 18, 17, 24));
         PostCreateResponse jejuSeptember17hourPostResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 9, 18, 17, 24));
