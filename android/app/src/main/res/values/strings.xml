@@ -13,7 +13,8 @@
 
     <!-- bottom navigation -->
     <string name="menu_bn_home">홈</string>
-    <string name="menu_bn_history">나의 여행</string>
+    <string name="menu_bn_history">모두의 여행</string>
+    <string name="menu_bn_post">모두의 감상</string>
     <string name="menu_bn_my_page">마이페이지</string>
 
     <!-- HomeFragment -->

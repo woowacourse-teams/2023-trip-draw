@@ -11,6 +11,11 @@
         android:title="@string/menu_bn_history" />
 
     <item
+        android:id="@+id/menu_bn_post"
+        android:icon="@drawable/ic_post"
+        android:title="@string/menu_bn_post" />
+
+    <item
         android:id="@+id/menu_bn_my_page"
         android:icon="@drawable/ic_my_page"
         android:title="@string/menu_bn_my_page" />

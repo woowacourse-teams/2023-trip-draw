@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.replace
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityMainBinding
+import com.teamtripdraw.android.ui.allPosts.AllPostsFragment
 import com.teamtripdraw.android.ui.history.HistoryFragment
 import com.teamtripdraw.android.ui.home.HomeFragment
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.HISTORY
@@ -45,6 +46,11 @@ class MainActivity : AppCompatActivity() {
                         .replace<HistoryFragment>(R.id.fcv_main).commit()
                     return@setOnItemSelectedListener true
                 }
+                BottomNavigationMenuType.POSTS -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace<AllPostsFragment>(R.id.fcv_main).commit()
+                    return@setOnItemSelectedListener true
+                }
                 MY_PAGE -> {
                     supportFragmentManager.beginTransaction()
                         .replace<MyPageFragment>(R.id.fcv_main).commit()
@@ -57,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     private enum class BottomNavigationMenuType(@IdRes private val resourceId: Int) {
         HOME(R.id.menu_bn_home),
         HISTORY(R.id.menu_bn_history),
+        POSTS(R.id.menu_bn_post),
         MY_PAGE(R.id.menu_bn_my_page),
         ;
 
