@@ -1,38 +1,36 @@
 package com.teamtripdraw.android.ui.history
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.teamtripdraw.android.databinding.FragmentHistoryBinding
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.teamtripdraw.android.R
+import com.teamtripdraw.android.databinding.ActivityMyHistoryBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
-class HistoryFragment : Fragment() {
+class HistoryActivity : AppCompatActivity() {
 
-    private var _binding: FragmentHistoryBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: ActivityMyHistoryBinding
 
     private lateinit var historyAdapter: HistoryAdapter
     private val viewModel: HistoryViewModel by viewModels { tripDrawViewModelFactory }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentHistoryBinding.inflate(inflater)
-        binding.lifecycleOwner = viewLifecycleOwner
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_history)
+
+        binding.lifecycleOwner = this
+        binding.historyViewModel = viewModel
 
         bindViewModel()
         setAdapter()
         initObserve()
-
-        return binding.root
     }
 
     private fun bindViewModel() {
@@ -47,24 +45,32 @@ class HistoryFragment : Fragment() {
     private fun initObserve() {
         initPreviewTripsObserve()
         initHistoryOpenObserveEvent()
+        initBackPageObserve()
     }
 
     private fun initPreviewTripsObserve() {
-        viewModel.previewTrips.observe(viewLifecycleOwner) {
+        viewModel.previewTrips.observe(this) {
             historyAdapter.submitList(it.previewTrips)
         }
     }
 
     private fun initHistoryOpenObserveEvent() {
         viewModel.previewTripOpenEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@HistoryFragment::onHistoryClick),
+            this,
+            EventObserver(this@HistoryActivity::onHistoryClick),
         )
     }
 
     private fun onHistoryClick(previewTrip: UiPreviewTrip) {
-        val intent = HistoryDetailActivity.getIntent(requireContext(), previewTrip)
+        val intent = HistoryDetailActivity.getIntent(this, previewTrip)
         startActivity(intent)
+    }
+
+    private fun initBackPageObserve() {
+        viewModel.backPageEvent.observe(
+            this,
+            EventObserver { if (it) finish() },
+        )
     }
 
     override fun onStart() {
@@ -74,8 +80,10 @@ class HistoryFragment : Fragment() {
 
     private fun fetchPreviewTrips() = viewModel.fetchPreviewTrips()
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    companion object {
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, HistoryActivity::class.java)
+        }
     }
 }

@@ -25,6 +25,9 @@ class HistoryViewModel(
     private val _previewTripOpenEvent = MutableLiveData<Event<UiPreviewTrip>>()
     val previewTripOpenEvent: LiveData<Event<UiPreviewTrip>> = _previewTripOpenEvent
 
+    private val _backPageEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val backPageEvent: LiveData<Event<Boolean>> = _backPageEvent
+
     fun fetchPreviewTrips() {
         viewModelScope.launch {
             tripRepository.getAllTrips()
@@ -39,5 +42,9 @@ class HistoryViewModel(
 
     fun openHistoryDetail(previewTrip: UiPreviewTrip) {
         _previewTripOpenEvent.value = Event(previewTrip)
+    }
+
+    fun backPage() {
+        _backPageEvent.value = Event(true)
     }
 }

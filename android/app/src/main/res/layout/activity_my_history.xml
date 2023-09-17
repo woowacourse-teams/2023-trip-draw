@@ -13,14 +13,38 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.history.HistoryFragment">
+        tools:context=".ui.allTrips.AllTripsFragment">
 
-        <include
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_history"
-            layout="@layout/layout_logo_tool_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_post_detail_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/btn_post_viewer_back_description"
+                android:onClick="@{()->historyViewModel.backPage()}"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/tv_my_trip_history"
+                android:textAppearance="@style/subtitle_1" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_default"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintTop_toBottomOf="@id/tb_history" />
 
         <TextView
             android:id="@+id/tv_history_no_trip"
