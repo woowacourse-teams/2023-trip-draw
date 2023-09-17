@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setTripThumbnailImage="@{uiPreviewTrip.imageUrl}"
+            app:loadTripThumbnailImage="@{uiPreviewTrip.imageUrl}"
             tools:background="@drawable/img_default_trip_thumbnail" />
 
         <TextView

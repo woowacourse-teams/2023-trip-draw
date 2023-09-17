@@ -2,6 +2,7 @@ package com.teamtripdraw.android.ui.post.writing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
@@ -42,7 +43,8 @@ class PostWritingViewModel(
     private val _backPageEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
     val backPageEvent: LiveData<Event<Boolean>> = _backPageEvent
 
-    private val _writingCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    private val _writingCompletedEvent: MutableLiveData<Event<Boolean>> =
+        MutableLiveData(Event(false))
     val writingCompletedEvent: LiveData<Event<Boolean>> = _writingCompletedEvent
 
     private val _point: MutableLiveData<Point> = MutableLiveData()
@@ -52,7 +54,8 @@ class PostWritingViewModel(
     val address: LiveData<String> = _address
 
     private val _imageFile: MutableLiveData<File> = MutableLiveData()
-    val imageFile: LiveData<File> = _imageFile
+    val imageFile: LiveData<String> =
+        Transformations.map(_imageFile) { file -> file.toURI().toURL().toString() }
 
     private val _takePictureEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val takePictureEvent: LiveData<Boolean> = _takePictureEvent

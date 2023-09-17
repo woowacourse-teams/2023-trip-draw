@@ -132,7 +132,7 @@
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_post_detail_recorded_at"
-                    app:setImage="@{postDetailViewModel.postDetail.routeImageUrl}"
+                    app:loadPostImage="@{postDetailViewModel.postDetail.routeImageUrl}"
                     app:setImageVisibility="@{postDetailViewModel.postDetail.routeImageUrl}"
                     tools:background="@color/td_gray" />
 
@@ -158,7 +158,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_post_detail"
-                    app:setImage="@{postDetailViewModel.postDetail.postImageUrl}"
+                    app:loadPostImage="@{postDetailViewModel.postDetail.postImageUrl}"
                     app:setImageVisibility="@{postDetailViewModel.postDetail.postImageUrl}"
                     tools:background="@color/td_gray" />
 

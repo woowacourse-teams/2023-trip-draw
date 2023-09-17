@@ -31,8 +31,8 @@
             app:layout_constraintEnd_toStartOf="@id/tv_post_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_post_title"
+            app:loadThumbnailRoundImage="@{postItem.thumbnail}"
             app:setImageVisibility="@{postItem.thumbnail}"
-            app:setRoundImage="@{postItem.thumbnail}"
             tools:background="@drawable/shape_td_gray_fill_12_rect" />
 
         <TextView
