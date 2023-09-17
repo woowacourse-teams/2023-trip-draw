@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.teamtripdraw.android.TripDrawApplication
+import com.teamtripdraw.android.ui.allPosts.AllPostsViewModel
 import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialogViewModel
 import com.teamtripdraw.android.ui.history.HistoryViewModel
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel
@@ -63,6 +64,8 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                     )
                 isAssignableFrom(LoginViewModel::class.java) ->
                     LoginViewModel(repositoryContainer.authRepository)
+                isAssignableFrom(AllPostsViewModel::class.java) ->
+                    AllPostsViewModel() // todo repository 연결
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }
