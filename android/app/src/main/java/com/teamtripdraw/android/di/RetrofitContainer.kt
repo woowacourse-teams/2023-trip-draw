@@ -6,6 +6,7 @@ import com.teamtripdraw.android.BuildConfig
 import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.ResponseStateCallAdapterFactory
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawEnqueueActions
+import com.teamtripdraw.android.data.httpClient.service.TokenRefreshService
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -60,7 +61,13 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
         Retrofit.Builder()
             .baseUrl(BuildConfig.TRIP_DRAW_BASE_URL)
             .client(tripDrawOkHttpClient)
-            .addCallAdapterFactory(ResponseStateCallAdapterFactory(TripDrawEnqueueActions::class))
+            .addCallAdapterFactory(
+                ResponseStateCallAdapterFactory(
+                    TripDrawEnqueueActions::class,
+                    TokenRefreshService::class.java,
+                    userIdentifyInfoDataSource,
+                ),
+            )
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 

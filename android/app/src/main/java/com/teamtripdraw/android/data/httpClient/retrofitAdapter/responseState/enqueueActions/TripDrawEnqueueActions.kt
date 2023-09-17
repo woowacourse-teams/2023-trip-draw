@@ -82,6 +82,7 @@ class TripDrawEnqueueActions<T : Any>(
         callback: Callback<ResponseState<T>>,
     ) {
         userIdentifyInfoDataSource.setIdentifyInfo(tokenRefreshResponse.toData())
+        val clonedResponseStateCall = responseStateCall.clone() as ResponseStateCall<T>
     }
 
     private fun getTokenRefreshService(): TokenRefreshService =

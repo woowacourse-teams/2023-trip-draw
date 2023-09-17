@@ -1,6 +1,8 @@
 package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
 
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.GeneralEnqueueActions
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.responseStateCallExtraFeature.EnqueueSuspend
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.responseStateCallExtraFeature.EnqueueSuspendImpl
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -18,8 +20,7 @@ class ResponseStateCall<T : Any>(
     private val retrofit: Retrofit,
     private val enqueueActionsType: KClass<GeneralEnqueueActions<T>>,
     private val enqueueActionParameters: List<Any>,
-) :
-    Call<ResponseState<T>> {
+) : Call<ResponseState<T>>, EnqueueSuspend<T> by EnqueueSuspendImpl(call, responseType) {
 
     private val enqueueActions: GeneralEnqueueActions<T> = initEnqueueActions()
 
