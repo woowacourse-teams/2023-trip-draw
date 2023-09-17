@@ -21,6 +21,9 @@ class MyPageViewModel(
     private val _nickname: MutableLiveData<String> = MutableLiveData("")
     val nickname: LiveData<String> = _nickname
 
+    private val _openTripHistoryEvent: MutableLiveData<Boolean> = MutableLiveData()
+    val openTripHistoryEvent: LiveData<Boolean> = _openTripHistoryEvent
+
     private val _openOpenSourceLicenseEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val openOpenSourceLicenseEvent: LiveData<Boolean> = _openOpenSourceLicenseEvent
 
@@ -50,6 +53,10 @@ class MyPageViewModel(
                     }
             }
         }
+    }
+
+    fun openTripHistory() {
+        _openTripHistoryEvent.value = true
     }
 
     fun startLogoutEvent() {
