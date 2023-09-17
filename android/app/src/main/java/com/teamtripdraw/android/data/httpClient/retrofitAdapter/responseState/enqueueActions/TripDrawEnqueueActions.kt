@@ -17,9 +17,12 @@ import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.Headers
 import okhttp3.ResponseBody
 import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
+import timber.log.Timber
 
 class TripDrawEnqueueActions<T : Any>(
     responseStateCall: ResponseStateCall<T>,
@@ -49,8 +52,8 @@ class TripDrawEnqueueActions<T : Any>(
     ) {
         if (code == TOKEN_EXPIRED_CODE) {
             when (getTokenExpiryType(errorBody)) {
-                REFRESH_TOKEN -> refreshTokenExpiredAction()
                 ACCESS_TOKEN -> accessTokenExpiredAction(callback)
+                REFRESH_TOKEN -> refreshTokenExpiredAction()
             }
         } else {
             super.responseFailureAction(callback, code, errorBody)
@@ -68,21 +71,24 @@ class TripDrawEnqueueActions<T : Any>(
     private fun accessTokenExpiredAction(callback: Callback<ResponseState<T>>) {
         CoroutineScope(Dispatchers.IO).launch {
             runCatching { getTokenRefreshService().tokenRefresh(getTokenRefreshRequest()) }
-                .onSuccess {
-                    tokenRefreshSuccessAction(it, callback)
+                .onSuccess { response ->
+                    val body = response.body()
+                    val code = response.code()
+                    val errorBody = response.errorBody()
+
+                    if (response.isSuccessful) {
+                        tokenRefreshSuccessAction(
+                            body ?: throw IllegalStateException(TOKEN_REFRESH_API_RETURN_NULL_BODY),
+                            callback,
+                        )
+                    } else {
+                        tokenRefreshFailureAction(code, errorBody)
+                    }
                 }
                 .onFailure {
-                    logUtil.general.log(it, TOKEN_REFRESH_ERROR)
+                    logUtil.general.log(it, TOKEN_REFRESH_ERROR.format(it.message))
                 }
         }
-    }
-
-    private suspend fun tokenRefreshSuccessAction(
-        tokenRefreshResponse: TokenRefreshResponse,
-        callback: Callback<ResponseState<T>>,
-    ) {
-        userIdentifyInfoDataSource.setIdentifyInfo(tokenRefreshResponse.toData())
-        val clonedResponseStateCall = responseStateCall.clone() as ResponseStateCall<T>
     }
 
     private fun getTokenRefreshService(): TokenRefreshService =
@@ -91,12 +97,49 @@ class TripDrawEnqueueActions<T : Any>(
     private fun getTokenRefreshRequest(): TokenRefreshRequest =
         TokenRefreshRequest(userIdentifyInfoDataSource.getRefreshToken())
 
-    private fun refreshTokenExpiredAction() {}
+    private suspend fun tokenRefreshSuccessAction(
+        tokenRefreshResponse: TokenRefreshResponse,
+        callback: Callback<ResponseState<T>>,
+    ) {
+        userIdentifyInfoDataSource.setIdentifyInfo(tokenRefreshResponse.toData())
+        val clonedResponseStateCall = responseStateCall.clone() as ResponseStateCall<T>
+        clonedResponseStateCall.enqueueSuspend().process { body, headers ->
+            Result.success(Pair(body, headers))
+        }.onSuccess { responsePair ->
+            val body: T = responsePair.first
+            val headers: Headers = responsePair.second
+            callback.onResponse(
+                responseStateCall,
+                Response.success(ResponseState.Success(body, headers)),
+            )
+        }
+    }
+
+    private fun tokenRefreshFailureAction(code: Int, errorBody: ResponseBody?) {
+        if (code == TOKEN_EXPIRED_CODE) {
+            if (getTokenExpiryType(errorBody) == REFRESH_TOKEN) {
+                refreshTokenExpiredAction()
+            } else {
+                throw IllegalStateException(TOKEN_NOT_REFRESHED_ERROR)
+            }
+        } else {
+            logUtil.general.log(message = TOKEN_REFRESH_ERROR.format(errorBody))
+        }
+    }
+
+    private fun refreshTokenExpiredAction() {
+        Timber.tag("멧돼지").d("리프레쉬 토큰 관련 까지온거임")
+        // todo 로그인 액티비티로 보내버리는 로직
+    }
 
     companion object {
+        private const val TOKEN_EXPIRED_CODE = 401
         private const val EXPIRED_TOKEN_RESPONSE_HAS_NO_ERROR_BODY =
             "토큰 에러 관련 에러바디의 값이 null값입니다"
-        private const val TOKEN_EXPIRED_CODE = 401
-        private const val TOKEN_REFRESH_ERROR = "Token Refresh 과정에서 서버통신상의 문제가 생겼습니다."
+        private const val TOKEN_REFRESH_ERROR = "Token Refresh 과정에서 서버통신상의 문제가 생겼습니다. error: %s"
+        private const val TOKEN_REFRESH_API_RETURN_NULL_BODY =
+            "Token Refresh API의 결과값의 Body가 null 입니다."
+        private const val TOKEN_NOT_REFRESHED_ERROR =
+            "Token Refresh api가 호출되었지만 엑세스토큰이 refresh 되지않았습니다."
     }
 }
