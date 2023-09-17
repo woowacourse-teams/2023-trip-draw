@@ -678,7 +678,6 @@ class PostControllerTest extends ControllerTest {
         return postResponse;
     }
 
-    @Test
     PostResponse readPost(Long postId) {
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
