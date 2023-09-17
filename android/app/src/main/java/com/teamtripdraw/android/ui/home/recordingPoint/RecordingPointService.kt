@@ -16,9 +16,10 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.TripDrawApplication
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
+import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.point.PrePoint
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,18 +32,18 @@ class RecordingPointService : Service() {
     private var currentTripId by Delegates.notNull<Long>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val _updatedTripId = MutableLiveData<Long>(NULL_SUBSTITUTE_POINT_ID)
+    private val _updatedTripId = MutableLiveData<Long>(Point.NULL_SUBSTITUTE_ID)
     val updatedTripId: LiveData<Long> = _updatedTripId
 
     private fun recordPoint(locationResult: LocationResult) {
         CoroutineScope(Dispatchers.IO).launch {
             TripDrawApplication.repositoryContainer.pointRepository.createRecordingPoint(
                 getPrePoint(locationResult),
-                currentTripId
+                currentTripId,
             ).onSuccess {
                 _updatedTripId.postValue(it)
             }.onFailure {
-                // todo log전략 수립후 서버로 전송되는 로그 찍기
+                logUtil.general.log(it)
             }
         }
     }
@@ -51,7 +52,7 @@ class RecordingPointService : Service() {
         val prePoint: PrePoint = PrePoint(
             locationResult.locations.first().latitude,
             locationResult.locations.first().longitude,
-            LocalDateTime.now()
+            LocalDateTime.now(),
         )
         return prePoint
     }
@@ -66,7 +67,7 @@ class RecordingPointService : Service() {
     private fun initNotification(): Notification =
         NotificationCompat.Builder(
             this,
-            this.getString(R.string.recording_point_service_alarm_channel_id)
+            this.getString(R.string.recording_point_service_alarm_channel_id),
         )
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .setOngoing(true)
@@ -93,11 +94,11 @@ class RecordingPointService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        currentTripId = intent.getLongExtra(TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
-        if (currentTripId != NULL_SUBSTITUTE_TRIP_ID) {
+        currentTripId = intent.getLongExtra(TRIP_ID, Trip.NULL_SUBSTITUTE_ID)
+        if (currentTripId != Trip.NULL_SUBSTITUTE_ID) {
             getUpdateLocation(fusedLocationClient, this, this::recordPoint)
         } else {
-            // todo 로그전략 수립후 잘못된 tripID임을 명시하는 로그 작성 #134
+            logUtil.general.log(message = WRONG_TRIP_ID_ERROR)
         }
         return START_REDELIVER_INTENT
     }
@@ -107,13 +108,14 @@ class RecordingPointService : Service() {
     inner class RecordingPointBinder : Binder() {
         fun getUpdatedTripIdHolder(): LiveData<Long> = updatedTripId
         fun updatedTripIdHolderInitializeState() {
-            _updatedTripId.value = NULL_SUBSTITUTE_POINT_ID
+            _updatedTripId.value = Point.NULL_SUBSTITUTE_ID
         }
     }
 
     companion object {
         private const val TRIP_ID = "TRIP_ID"
         private const val NOTIFICATION_ID = 1001
+        private const val WRONG_TRIP_ID_ERROR = "RecrodingPointService로 Null 대응 tripId가 전달되었습니다."
 
         fun getTripIdIntent(intent: Intent, tripId: Long): Intent =
             intent.apply { putExtra(TRIP_ID, tripId) }

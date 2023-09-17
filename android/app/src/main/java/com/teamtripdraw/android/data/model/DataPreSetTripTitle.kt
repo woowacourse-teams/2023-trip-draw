@@ -4,5 +4,5 @@ import com.teamtripdraw.android.domain.model.trip.TripStatus
 
 data class DataPreSetTripTitle(
     val name: String,
-    val status: TripStatus
+    val status: TripStatus,
 )

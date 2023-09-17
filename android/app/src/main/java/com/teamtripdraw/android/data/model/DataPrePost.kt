@@ -5,5 +5,5 @@ data class DataPrePost(
     val pointId: Long,
     val title: String,
     val writing: String,
-    val address: String
+    val address: String,
 )

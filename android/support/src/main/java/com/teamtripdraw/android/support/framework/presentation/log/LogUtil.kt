@@ -9,7 +9,7 @@ interface LogUtil {
     val general: General
 
     interface General {
-        fun log(throwable: Throwable?, message: String? = null)
+        fun log(throwable: Throwable? = null, message: String? = null)
     }
 
     val httpClient: HttpClient

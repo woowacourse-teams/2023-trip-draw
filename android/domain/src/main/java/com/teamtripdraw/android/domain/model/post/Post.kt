@@ -14,6 +14,7 @@ data class Post(
 ) {
 
     companion object {
+        const val NULL_SUBSTITUTE_ID = -1L
 
         fun getPrePost(
             tripId: Long,

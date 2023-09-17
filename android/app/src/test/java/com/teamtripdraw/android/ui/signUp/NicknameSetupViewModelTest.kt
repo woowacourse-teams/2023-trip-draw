@@ -2,8 +2,8 @@ package com.teamtripdraw.android.ui.signUp
 
 import com.teamtripdraw.android.DefaultViewModelTest
 import com.teamtripdraw.android.domain.exception.DuplicateNicknameException
-import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.model.user.NicknameValidState
+import com.teamtripdraw.android.domain.repository.AuthRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.Point
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPoint
@@ -20,7 +20,7 @@ class MarkerSelectedViewModel(
 
     private var pointId by Delegates.notNull<Long>()
 
-    private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+    private var tripId: Long = Trip.NULL_SUBSTITUTE_ID
 
     private val _selectedPoint = MutableLiveData<Point>()
     val selectedUiPoint: LiveData<UiPoint> = Transformations.map(_selectedPoint) { point ->

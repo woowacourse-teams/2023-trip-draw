@@ -6,6 +6,5 @@ import com.teamtripdraw.android.data.model.DataUserInfo
 fun GetUserInfoResponse.toData(): DataUserInfo =
     DataUserInfo(
         memberId = memberId,
-        nickname = nickname
+        nickname = nickname,
     )
-

@@ -10,6 +10,6 @@ interface GetPointService {
     @GET("/points/{pointId}")
     suspend fun getPoint(
         @Path("pointId") pointId: Long,
-        @Query("tripId") tripId: Long
+        @Query("tripId") tripId: Long,
     ): ResponseState<GetPointResponse>
 }

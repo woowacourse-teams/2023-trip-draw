@@ -17,7 +17,7 @@ class LocalPreferenceContainer(context: Context) {
             "encryptedLoginInfoPreference",
             masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
         )
 
     val tripPreference: SharedPreferences =

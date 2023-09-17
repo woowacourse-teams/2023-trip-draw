@@ -8,5 +8,5 @@ fun DataPrePoint.toHttpRequest(tripId: Long): CreateRecordingPointRequest =
         tripId = tripId,
         latitude = latitude,
         longitude = longitude,
-        recordedAt = recordedAt
+        recordedAt = recordedAt,
     )

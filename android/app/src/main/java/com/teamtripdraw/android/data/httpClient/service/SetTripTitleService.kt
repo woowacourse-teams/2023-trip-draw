@@ -11,6 +11,6 @@ interface SetTripTitleService {
     @PATCH("/trips/{tripId}")
     suspend fun setTripTitle(
         @Path("tripId") tripId: Long,
-        @Body body: SetTripTitleRequest
+        @Body body: SetTripTitleRequest,
     ): ResponseState<Unit>
 }

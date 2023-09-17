@@ -9,6 +9,6 @@ import retrofit2.http.POST
 interface CreateRecordingPointService {
     @POST("/points")
     suspend fun createRecordingPoint(
-        @Body body: CreateRecordingPointRequest
+        @Body body: CreateRecordingPointRequest,
     ): ResponseState<CreateRecordingPointResponse>
 }

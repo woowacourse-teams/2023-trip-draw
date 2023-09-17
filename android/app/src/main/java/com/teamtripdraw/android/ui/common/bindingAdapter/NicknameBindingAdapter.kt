@@ -16,8 +16,11 @@ fun AppCompatButton.setDrawable(state: NicknameValidState) {
         NicknameValidState.EMPTY, NicknameValidState.EXCEED_LIMIT, NicknameValidState.CONTAIN_BLANK, NicknameValidState.DUPLICATE -> false
     }
     val btnBackground =
-        if (btnEnabled) R.drawable.shape_td_sub_blue_fill_12_rect
-        else R.drawable.shape_td_gray_fill_12_rect
+        if (btnEnabled) {
+            R.drawable.shape_td_sub_blue_fill_12_rect
+        } else {
+            R.drawable.shape_td_gray_fill_12_rect
+        }
 
     this.isEnabled = btnEnabled
     this.background = ResourcesCompat.getDrawable(resources, btnBackground, null)

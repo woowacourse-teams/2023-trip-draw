@@ -44,15 +44,21 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
         // given
         val posts = listOf(
             Post(
-                postId = 0, tripId = 0, title = "title", writing = "writing", address = "address",
+                postId = 0,
+                tripId = 0,
+                title = "title",
+                writing = "writing",
+                address = "address",
                 point = Point(
                     pointId = 0,
                     latitude = 0.0,
                     longitude = 0.0,
                     recordedAt = LocalDateTime.of(2023, 8, 2, 3, 27),
-                    hasPost = false
-                ), postImageUrl = null, routeImageUrl = null
-            )
+                    hasPost = false,
+                ),
+                postImageUrl = null,
+                routeImageUrl = null,
+            ),
         )
         val result: Result<List<Post>> = Result.success(posts)
         coEvery { postRepository.getAllPosts(any()) } returns result

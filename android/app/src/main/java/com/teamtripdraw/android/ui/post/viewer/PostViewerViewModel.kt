@@ -6,8 +6,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.TripDrawApplication
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPosts
@@ -18,7 +18,7 @@ class PostViewerViewModel(
     private val postRepository: PostRepository,
 ) : ViewModel() {
 
-    var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+    var tripId: Long = Trip.NULL_SUBSTITUTE_ID
         private set
 
     private val _posts: MutableLiveData<List<Post>> = MutableLiveData()

@@ -9,6 +9,6 @@ interface DeletePointService {
     @DELETE("/points/{pointId}")
     suspend fun deletePoint(
         @Path("pointId") pointId: Long,
-        @Query("tripId") tripId: Long
+        @Query("tripId") tripId: Long,
     ): ResponseState<Unit>
 }

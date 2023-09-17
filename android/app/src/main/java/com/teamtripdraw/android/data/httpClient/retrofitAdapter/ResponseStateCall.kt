@@ -24,13 +24,13 @@ class ResponseStateCall<T : Any>(private val call: Call<T>, private val response
                     if (body != null) {
                         callback.onResponse(
                             this@ResponseStateCall,
-                            Response.success(ResponseState.Success(body, headers))
+                            Response.success(ResponseState.Success(body, headers)),
                         )
                     } else {
                         if (responseType == Unit::class.java) {
                             callback.onResponse(
                                 this@ResponseStateCall,
-                                Response.success(ResponseState.Success(Unit as T, headers))
+                                Response.success(ResponseState.Success(Unit as T, headers)),
                             )
                         } else {
                             callback.onResponse(
@@ -38,17 +38,17 @@ class ResponseStateCall<T : Any>(private val call: Call<T>, private val response
                                 Response.success(
                                     ResponseState.UnknownError(
                                         IllegalArgumentException(
-                                            RETURN_TYPE_NOT_UNIT_ERROR
-                                        )
-                                    )
-                                )
+                                            RETURN_TYPE_NOT_UNIT_ERROR,
+                                        ),
+                                    ),
+                                ),
                             )
                         }
                     }
                 } else {
                     callback.onResponse(
                         this@ResponseStateCall,
-                        Response.success(ResponseState.Failure(code, errorBody))
+                        Response.success(ResponseState.Failure(code, errorBody)),
                     )
                 }
             }

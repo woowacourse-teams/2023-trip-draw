@@ -2,7 +2,7 @@ package com.teamtripdraw.android.data.dataSource.trip
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.Trip
 
 class LocalTripDataSourceImpl(private val tripPreference: SharedPreferences) :
     TripDataSource.Local {
@@ -11,7 +11,7 @@ class LocalTripDataSourceImpl(private val tripPreference: SharedPreferences) :
     }
 
     override fun getCurrentTripId(): Long =
-        tripPreference.getLong(CURRENT_TRIP_ID, NULL_SUBSTITUTE_TRIP_ID)
+        tripPreference.getLong(CURRENT_TRIP_ID, Trip.NULL_SUBSTITUTE_ID)
 
     override fun deleteCurrentTripId() {
         tripPreference.edit { remove(CURRENT_TRIP_ID) }

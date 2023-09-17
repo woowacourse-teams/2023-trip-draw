@@ -8,7 +8,7 @@ import com.teamtripdraw.android.ui.model.UiPostItem
 
 class HistoryDetailViewHolder(
     private val binding: ItemHistoryDetailPostsBinding,
-    viewModel: HistoryDetailViewModel
+    viewModel: HistoryDetailViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {

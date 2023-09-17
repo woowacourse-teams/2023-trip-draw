@@ -137,10 +137,24 @@
             android:id="@+id/iv_post_writing_image_thumbnail"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/et_writing"
             app:layout_constraintEnd_toEndOf="@+id/et_writing"
-            app:loadThumbnailRoundImage="@{postWritingViewModel.imageFile}"
-            app:setImageVisibility="@{postWritingViewModel.imageFile}" />
+            app:setPostWritingImage="@{postWritingViewModel.imageUri}"
+            app:setPostWritingImageVisibility="@{postWritingViewModel.hasImage}"
+            tools:src="@mipmap/ic_app_logo_round" />
+
+        <ImageView
+            android:id="@+id/btn_post_writing_image_delete"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:onClick="@{() -> postWritingViewModel.deleteImage()}"
+            android:src="@drawable/ic_image_delete"
+            app:layout_constraintBottom_toTopOf="@id/iv_post_writing_image_thumbnail"
+            app:layout_constraintEnd_toEndOf="@id/iv_post_writing_image_thumbnail"
+            app:layout_constraintStart_toEndOf="@id/iv_post_writing_image_thumbnail"
+            app:layout_constraintTop_toTopOf="@id/iv_post_writing_image_thumbnail"
+            app:setPostWritingImageVisibility="@{postWritingViewModel.hasImage}" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_content_file"
@@ -174,30 +188,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/btn_camera"
             app:layout_constraintStart_toEndOf="@+id/btn_camera"
             app:layout_constraintTop_toTopOf="@+id/btn_camera" />
-
-        <!--   todo 첫 release 버전에서 이용되지 않는 기능    -->
-        <ImageView
-            android:id="@+id/btn_mike"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginStart="18dp"
-            android:src="@drawable/ic_mike"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_find_image"
-            app:layout_constraintStart_toEndOf="@+id/btn_find_image"
-            app:layout_constraintTop_toTopOf="@+id/btn_find_image" />
-
-        <!--   todo 첫 release 버전에서 이용되지 않는 기능    -->
-        <ImageView
-            android:id="@+id/btn_video"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="18dp"
-            android:src="@drawable/ic_video"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_mike"
-            app:layout_constraintStart_toEndOf="@+id/btn_mike"
-            app:layout_constraintTop_toTopOf="@+id/btn_mike" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

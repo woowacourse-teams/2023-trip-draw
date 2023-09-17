@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
 class HistoryAdapter(
-    private val viewModel: HistoryViewModel
+    private val viewModel: HistoryViewModel,
 ) : ListAdapter<UiPreviewTrip, HistoryViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {

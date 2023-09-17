@@ -7,14 +7,16 @@ import android.os.Build
 fun Geocoder.fetchAddress(
     latitude: Double,
     longitude: Double,
-    event: (address: String) -> Unit
+    event: (address: String) -> Unit,
 ) {
     val ADDRESSES_RESULT_MAX_NUMBER = 1
     val defaultAddress = "x: $latitude, y: $longitude"
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 레벨 33 이상
         getFromLocation(
-            latitude, longitude, ADDRESSES_RESULT_MAX_NUMBER
+            latitude,
+            longitude,
+            ADDRESSES_RESULT_MAX_NUMBER,
         ) { addresses: List<Address> ->
             event(getAdministrativeAddress(addresses, defaultAddress))
         }
@@ -36,6 +38,9 @@ private fun getAdministrativeAddress(addresses: List<Address>?, defaultAddress: 
     addressParts.removeLast()
     val address = addressParts.joinToString(" ")
 
-    return if (addressParts.isNotEmpty()) address
-    else defaultAddress
+    return if (addressParts.isNotEmpty()) {
+        address
+    } else {
+        defaultAddress
+    }
 }
