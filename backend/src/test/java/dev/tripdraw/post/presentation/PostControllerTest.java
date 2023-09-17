@@ -14,7 +14,6 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.auth.application.JwtTokenProvider;
 import dev.tripdraw.common.dto.SearchPaging;
-import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
@@ -41,7 +40,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,9 +58,6 @@ class PostControllerTest extends ControllerTest {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-    @MockBean
-    private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
     private String huchuToken;
@@ -600,15 +595,10 @@ class PostControllerTest extends ControllerTest {
         PostCreateResponse seoulSeptember17hourPostResponse = createPost("서울특별시 송파구 잠실동", LocalDateTime.of(2023, 9, 18, 17, 24));
 
         PostSearchRequest request = new PostSearchRequest(
-                new PostSearchConditions(
-                        List.of(),
-                        List.of(),
-                        List.of(),
-                        List.of(17),
-                        List.of(),
-                        List.of(),
-                        "제주특별자치도 제주시 애월읍"
-                ),
+                PostSearchConditions.builder()
+                        .hours(List.of(17))
+                        .address("제주특별자치도 제주시 애월읍")
+                        .build(),
                 new SearchPaging(null, 10)
         );
 
