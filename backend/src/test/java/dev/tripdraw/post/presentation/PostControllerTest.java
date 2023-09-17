@@ -46,6 +46,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
 
@@ -674,8 +675,7 @@ class PostControllerTest extends ControllerTest {
                 .then().log().all()
                 .extract();
 
-        PostCreateResponse postResponse = createResponse.as(PostCreateResponse.class);
-        return postResponse;
+        return createResponse.as(PostCreateResponse.class);
     }
 
     PostResponse readPost(Long postId) {
