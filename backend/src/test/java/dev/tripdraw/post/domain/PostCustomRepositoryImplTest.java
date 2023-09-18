@@ -9,16 +9,15 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.dto.PostSearchConditions;
 import dev.tripdraw.post.dto.PostSearchPaging;
-import dev.tripdraw.post.query.PostCustomRepositoryImpl;
+import dev.tripdraw.post.query.PostCustomRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
-import dev.tripdraw.trip.domain.TripName;
 import dev.tripdraw.trip.domain.TripRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
@@ -26,12 +25,12 @@ import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DataJpaTest
+@SpringBootTest
 @Import({JpaConfig.class, QueryDslConfig.class})
 class PostCustomRepositoryImplTest {
 
     @Autowired
-    private PostCustomRepositoryImpl postCustomRepository;
+    private PostCustomRepository postCustomRepository;
 
     @Autowired
     private TripRepository tripRepository;
@@ -46,7 +45,8 @@ class PostCustomRepositoryImplTest {
     void 조건에_해당하는_감상을_조회한다() {
         // given
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        Trip trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member));
+        Trip trip = Trip.from(member);
+
         Point firstPoint = new Point(3.14, 5.25, LocalDateTime.of(2023, 5, 1, 17, 30));
         Point secondPoint = new Point(3.14, 5.25, LocalDateTime.of(2023, 5, 3, 18, 30));
         Point thirdPoint = new Point(3.14, 5.25, LocalDateTime.of(2023, 7, 1, 18, 30));
@@ -54,6 +54,8 @@ class PostCustomRepositoryImplTest {
         trip.add(firstPoint);
         trip.add(secondPoint);
         trip.add(thirdPoint);
+
+        tripRepository.save(trip);
 
         Post firstPost = new Post("제목", firstPoint, "위치", "오늘은 날씨가 좋네요.", member, trip.id());
         Post secondPost = new Post("제목", secondPoint, "위치", "오늘은 날씨가 좋네요.", member, trip.id());

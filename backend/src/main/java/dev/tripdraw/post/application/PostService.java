@@ -37,6 +37,7 @@ import java.util.List;
 @Service
 public class PostService {
 
+    private final PostQueryService postQueryService;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
@@ -128,7 +129,7 @@ public class PostService {
     }
 
     public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
-        List<Post> posts = postRepository.findAllByConditions(postSearchRequest.conditions(), postSearchRequest.paging());
+        List<Post> posts = postQueryService.findAllByConditions(postSearchRequest.conditions(), postSearchRequest.paging());
 
         List<PostSearchResponse> postSearchResponses = posts.stream()
                 .map(PostSearchResponse::from)
