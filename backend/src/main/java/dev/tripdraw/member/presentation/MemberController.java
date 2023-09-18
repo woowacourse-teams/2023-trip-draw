@@ -1,5 +1,7 @@
 package dev.tripdraw.member.presentation;
 
+import dev.tripdraw.common.auth.Auth;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.application.MemberService;
 import dev.tripdraw.member.dto.MemberSearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Member", description = "사용자 관련 API 명세")
@@ -26,9 +27,9 @@ public class MemberController {
             responseCode = "200",
             description = "사용자 조회 성공."
     )
-    @GetMapping
-    public ResponseEntity<MemberSearchResponse> findByCode(@RequestParam String code) {
-        MemberSearchResponse response = memberService.findByCode(code);
+    @GetMapping("/me")
+    public ResponseEntity<MemberSearchResponse> findByCode(@Auth LoginUser loginUser) {
+        MemberSearchResponse response = memberService.find(loginUser);
         return ResponseEntity.ok(response);
     }
 
@@ -37,9 +38,9 @@ public class MemberController {
             responseCode = "204",
             description = "사용자 삭제 성공."
     )
-    @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestParam String code) {
-        memberService.deleteByCode(code);
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> delete(@Auth LoginUser loginUser) {
+        memberService.delete(loginUser);
         return ResponseEntity.noContent().build();
     }
 }

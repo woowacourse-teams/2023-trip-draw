@@ -1,7 +1,7 @@
 package dev.tripdraw.common.config;
 
-import dev.tripdraw.auth.presentation.AuthArgumentResolver;
 import dev.tripdraw.auth.application.AuthExtractor;
+import dev.tripdraw.auth.presentation.AuthArgumentResolver;
 import dev.tripdraw.auth.presentation.AuthInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ public class AuthConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .excludePathPatterns("/members/**")
                 .excludePathPatterns("/swagger-ui/**")
                 .excludePathPatterns("/api-docs")
                 .excludePathPatterns("/v3/api-docs/**")
