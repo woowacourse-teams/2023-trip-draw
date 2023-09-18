@@ -1,6 +1,6 @@
 package dev.tripdraw.member.application;
 
-import dev.tripdraw.auth.application.JwtTokenProvider;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final ApplicationEventPublisher publisher;
 
     @Transactional(readOnly = true)
@@ -25,14 +24,13 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberSearchResponse findByCode(String code) {
-        Long memberId = Long.valueOf(jwtTokenProvider.extractAccessToken(code));
-        Member member = memberRepository.getById(memberId);
+    public MemberSearchResponse find(LoginUser loginUser) {
+        Member member = memberRepository.getById(loginUser.memberId());
         return MemberSearchResponse.from(member);
     }
 
-    public void deleteByCode(String code) {
-        Long memberId = Long.valueOf(jwtTokenProvider.extractAccessToken(code));
+    public void delete(LoginUser loginUser) {
+        Long memberId = loginUser.memberId();
         publisher.publishEvent(new MemberDeleteEvent(memberId));
         memberRepository.deleteById(memberId);
     }

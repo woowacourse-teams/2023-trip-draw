@@ -1,17 +1,14 @@
 package dev.tripdraw.member.application;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import dev.tripdraw.auth.application.JwtTokenProvider;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.dto.MemberSearchResponse;
-import dev.tripdraw.member.exception.MemberException;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.test.ServiceTest;
@@ -40,23 +37,17 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
     private TripRepository tripRepository;
 
     @Autowired
     private PostRepository postRepository;
 
     private Member member;
-    private String code;
     private Trip trip;
 
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        code = jwtTokenProvider.generateAccessToken(member.id().toString());
-
         trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member));
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
         trip.add(point);
@@ -71,9 +62,12 @@ class MemberServiceTest {
     }
 
     @Test
-    void code를_입력_받아_사용자를_조회한다() {
-        // given & when
-        MemberSearchResponse response = memberService.findByCode(code);
+    void 사용자를_조회한다() {
+        // given
+        LoginUser loginUser = new LoginUser(member.id());
+
+        // when
+        MemberSearchResponse response = memberService.find(loginUser);
 
         // expect
         assertThat(response).usingRecursiveComparison().isEqualTo(
@@ -82,33 +76,12 @@ class MemberServiceTest {
     }
 
     @Test
-    void code를_입력_받아_사용자를_조회할_때_이미_삭제된_사용자라면_예외를_발생시킨다() {
+    void 사용자를_삭제한다() {
         // given
-        Member member = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
-        String code = jwtTokenProvider.generateAccessToken(member.id().toString());
+        LoginUser loginUser = new LoginUser(member.id());
 
-        memberRepository.deleteById(member.id());
-
-        // expect
-        assertThatThrownBy(() -> memberService.findByCode(code))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
-    }
-
-    @Test
-    void code를_입력_받아_사용자를_조회할_때_존재하지_않는_사용자라면_예외를_발생시킨다() {
-        String nonExistentCode = jwtTokenProvider.generateAccessToken("-1");
-
-        // expect
-        assertThatThrownBy(() -> memberService.findByCode(nonExistentCode))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
-    }
-
-    @Test
-    void code를_입력_받아_사용자를_삭제한다() {
-        // given & when
-        memberService.deleteByCode(code);
+        // when
+        memberService.delete(loginUser);
 
         // then
         long publishedEvents = applicationEvents.stream(MemberDeleteEvent.class)
