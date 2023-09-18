@@ -6,6 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.dto.MemberSearchResponse;
 import dev.tripdraw.post.domain.Post;
@@ -19,12 +20,18 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
+@RecordApplicationEvents
 @ServiceTest
 class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private ApplicationEvents applicationEvents;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -37,7 +44,6 @@ class MemberServiceTest {
 
     private Member member;
     private Trip trip;
-    private Post post;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +51,7 @@ class MemberServiceTest {
         trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member));
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
         trip.add(point);
-        post = postRepository.save(new Post(
+        postRepository.save(new Post(
                 "제목",
                 point,
                 "위치",
@@ -78,10 +84,13 @@ class MemberServiceTest {
         memberService.delete(loginUser);
 
         // then
+        long publishedEvents = applicationEvents.stream(MemberDeleteEvent.class)
+                .filter(event -> event.memberId().equals(member.id()))
+                .count();
+
         assertSoftly(softly -> {
             softly.assertThat(memberRepository.findById(member.id())).isEmpty();
-            softly.assertThat(tripRepository.findById(trip.id())).isEmpty();
-            softly.assertThat(postRepository.findById(post.id())).isEmpty();
+            softly.assertThat(publishedEvents).isOne();
         });
     }
 }
