@@ -7,4 +7,6 @@ object LocalDateTimeFormatter {
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
     val displayDateTimeFormatter: DateTimeFormatter =
         DateTimeFormatter.ofPattern("yyyy.MM.dd | HH:mm")
+    val displayTripDateFormatter: DateTimeFormatter =
+        DateTimeFormatter.ofPattern("yyyy.MM.dd")
 }

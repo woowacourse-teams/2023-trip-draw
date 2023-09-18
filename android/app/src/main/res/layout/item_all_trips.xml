@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="allTripsViewModel"
+            type="com.teamtripdraw.android.ui.allTrips.AllTripsViewModel" />
+
+        <variable
+            name="tripItem"
+            type="com.teamtripdraw.android.ui.model.UiTripOfAll" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_default">
+
+        <ImageView
+            android:id="@+id/iv_item_all_trips_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadPostImage="@{tripItem.imageUrl}"
+            tools:background="@color/td_black" />
+
+        <TextView
+            android:id="@+id/tv_item_all_trips_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_default"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{tripItem.name}"
+            android:textAppearance="@style/title_2M"
+            app:layout_constraintEnd_toStartOf="@id/iv_item_all_trips_route"
+            app:layout_constraintStart_toStartOf="@id/iv_item_all_trips_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_all_trips_image"
+            tools:text="여수 여행" />
+
+        <TextView
+            android:id="@+id/tv_item_all_trips_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:text="@{@string/tv_item_all_trips_date(tripItem.startTime, tripItem.endTime)}"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_dark_gray"
+            app:layout_constraintBottom_toBottomOf="@id/iv_item_all_trips_route"
+            app:layout_constraintStart_toStartOf="@id/tv_item_all_trips_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_all_trips_name"
+            tools:text="2023.07.18 ~ 2023.08.18" />
+
+        <ImageView
+            android:id="@+id/iv_item_all_trips_route"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_item_all_trips_name"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_all_trips_image"
+            app:loadPostImage="@{tripItem.routeImageUrl}"
+            tools:background="@color/td_main_blue" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_item_all_trips"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
