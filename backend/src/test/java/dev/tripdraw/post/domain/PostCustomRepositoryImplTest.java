@@ -19,12 +19,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@Transactional
 @SpringBootTest
 @Import({JpaConfig.class, QueryDslConfig.class})
 class PostCustomRepositoryImplTest {
@@ -66,11 +69,11 @@ class PostCustomRepositoryImplTest {
         postRepository.save(thirdPost);
 
         PostSearchConditions firstConditions = PostSearchConditions.builder()
-                .months(List.of(5))
+                .months(Set.of(5))
                 .build();
 
         PostSearchConditions secondConditions = PostSearchConditions.builder()
-                .hours(List.of(18))
+                .hours(Set.of(18))
                 .build();
 
         PostSearchPaging paging = new PostSearchPaging(null, 10);
@@ -84,3 +87,4 @@ class PostCustomRepositoryImplTest {
         assertThat(secondPosts.stream().map(Post::id).toList()).containsExactly(thirdPost.id(), secondPost.id());
     }
 }
+
