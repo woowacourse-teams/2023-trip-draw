@@ -22,13 +22,13 @@ import okhttp3.ResponseBody
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import timber.log.Timber
 
 class TripDrawEnqueueActions<T : Any>(
     responseStateCall: ResponseStateCall<T>,
     retrofit: Retrofit,
     private val tokenRefreshServiceType: Class<TokenRefreshService>,
     private val userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
+    private val reLoginHandler: ReLoginHandler,
 ) : GeneralEnqueueActions<T>(responseStateCall, retrofit) {
     override fun responseFailureAction(
         callback: Callback<ResponseState<T>>,
@@ -128,8 +128,7 @@ class TripDrawEnqueueActions<T : Any>(
     }
 
     private fun refreshTokenExpiredAction() {
-        Timber.tag("멧돼지").d("리프레쉬 토큰 관련 까지온거임")
-        // todo 로그인 액티비티로 보내버리는 로직
+        reLoginHandler.reLogin()
     }
 
     companion object {

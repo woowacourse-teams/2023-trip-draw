@@ -3,6 +3,7 @@ package com.teamtripdraw.android.ui.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -141,6 +142,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, LoginActivity::class.java)
+        fun getIntent(context: Context, vararg flags: Int): Intent =
+            Intent(context, LoginActivity::class.java).apply {
+                val combinedFlags = flags.reduce { acc, flag -> acc or flag }
+                this.flags = combinedFlags
+            }
     }
 }

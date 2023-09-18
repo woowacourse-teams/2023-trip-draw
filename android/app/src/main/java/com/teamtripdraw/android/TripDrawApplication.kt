@@ -33,7 +33,10 @@ class TripDrawApplication : Application() {
         localPreferenceContainer = LocalPreferenceContainer(applicationContext)
         localDataSourceContainer = LocalDataSourceContainer(localPreferenceContainer)
         retrofitContainer =
-            RetrofitContainer(localDataSourceContainer.localUserIdentifyInfoDataSource)
+            RetrofitContainer(
+                localDataSourceContainer.localUserIdentifyInfoDataSource,
+                applicationContext,
+            )
         serviceContainer = ServiceContainer(retrofitContainer)
         remoteDataSourceContainer = RemoteDataSourceContainer(serviceContainer, retrofitContainer)
         repositoryContainer =

@@ -1,11 +1,14 @@
 package com.teamtripdraw.android.di
 
+import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.teamtripdraw.android.BuildConfig
 import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.ResponseStateCallAdapterFactory
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.ReLoginHandler
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawEnqueueActions
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawReLoginHandler
 import com.teamtripdraw.android.data.httpClient.service.TokenRefreshService
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
@@ -15,7 +18,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local) {
+class RetrofitContainer(
+    userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
+    context: Context,
+) {
     private val authorizationInterceptor: Interceptor =
         Interceptor { chain ->
             with(chain) {
@@ -57,6 +63,8 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
         .add(KotlinJsonAdapterFactory())
         .build()
 
+    val reLoginHandler: ReLoginHandler = TripDrawReLoginHandler(context, userIdentifyInfoDataSource)
+
     val tripDrawRetrofit: Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.TRIP_DRAW_BASE_URL)
@@ -66,6 +74,7 @@ class RetrofitContainer(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.L
                     TripDrawEnqueueActions::class,
                     TokenRefreshService::class.java,
                     userIdentifyInfoDataSource,
+                    reLoginHandler,
                 ),
             )
             .addConverterFactory(MoshiConverterFactory.create(moshi))
