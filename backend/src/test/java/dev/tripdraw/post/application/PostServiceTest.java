@@ -49,6 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -333,7 +334,7 @@ class PostServiceTest {
 
         PostSearchRequest postSearchRequestJuly = new PostSearchRequest(
                 PostSearchConditions.builder()
-                        .months(List.of(7))
+                        .months(Set.of(7))
                         .build(),
                 new PostSearchPaging(null, 10)
         );

@@ -2,16 +2,16 @@ package dev.tripdraw.post.dto;
 
 import lombok.Builder;
 
-import java.util.List;
+import java.util.Set;
 
 @Builder
 public record PostSearchConditions(
-        List<Integer> years,
-        List<Integer> months,
-        List<Integer> daysOfWeek,
-        List<Integer> hours,
-        List<Integer> ageRanges,
-        List<Integer> genders,
+        Set<Integer> years,
+        Set<Integer> months,
+        Set<Integer> daysOfWeek,
+        Set<Integer> hours,
+        Set<Integer> ageRanges,
+        Set<Integer> genders,
         String address
 ) {
 }

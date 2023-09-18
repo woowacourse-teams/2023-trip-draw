@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Repository
@@ -43,7 +44,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return post.id.lt(lastViewedId);
     }
 
-    private BooleanExpression yearIn(List<Integer> years) {
+    private BooleanExpression yearIn(Set<Integer> years) {
         if (years == null || years.isEmpty()) {
             return null;
         }
@@ -51,7 +52,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return post.point.recordedAt.year().in(years);
     }
 
-    private BooleanExpression monthIn(List<Integer> months) {
+    private BooleanExpression monthIn(Set<Integer> months) {
         if (months == null || months.isEmpty()) {
             return null;
         }
@@ -59,7 +60,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return post.point.recordedAt.month().in(months);
     }
 
-    private BooleanExpression dayOfWeekIn(List<Integer> daysOfWeek) {
+    private BooleanExpression dayOfWeekIn(Set<Integer> daysOfWeek) {
         if (daysOfWeek == null || daysOfWeek.isEmpty()) {
             return null;
         }
@@ -67,7 +68,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return post.point.recordedAt.dayOfWeek().in(daysOfWeek);
     }
 
-    private BooleanExpression hourIn(List<Integer> hours) {
+    private BooleanExpression hourIn(Set<Integer> hours) {
         if (hours == null || hours.isEmpty()) {
             return null;
         }

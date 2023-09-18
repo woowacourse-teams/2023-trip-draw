@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -602,7 +602,7 @@ class PostControllerTest extends ControllerTest {
 
         PostSearchRequest jeju17hourRequest = new PostSearchRequest(
                 PostSearchConditions.builder()
-                        .hours(List.of(17))
+                        .hours(Set.of(17))
                         .address("제주특별자치도 제주시 애월읍")
                         .build(),
                 new PostSearchPaging(null, 10)
@@ -610,7 +610,7 @@ class PostControllerTest extends ControllerTest {
 
         PostSearchRequest hour17Request = new PostSearchRequest(
                 PostSearchConditions.builder()
-                        .hours(List.of(17))
+                        .hours(Set.of(17))
                         .build(),
                 new PostSearchPaging(null, 10)
         );
