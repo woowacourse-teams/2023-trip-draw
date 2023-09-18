@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.tripdraw.common.config.JpaConfig;
 import dev.tripdraw.common.config.QueryDslConfig;
-import dev.tripdraw.common.domain.Paging;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
+import dev.tripdraw.post.domain.query.PostCustomRepositoryImpl;
+import dev.tripdraw.post.dto.query.PostSearchConditions;
+import dev.tripdraw.post.dto.query.PostSearchPaging;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripName;
@@ -61,15 +63,15 @@ class PostCustomRepositoryImplTest {
         postRepository.save(secondPost);
         postRepository.save(thirdPost);
 
-        SearchConditions firstConditions = SearchConditions.builder()
+        PostSearchConditions firstConditions = PostSearchConditions.builder()
                 .months(List.of(5))
                 .build();
 
-        SearchConditions secondConditions = SearchConditions.builder()
+        PostSearchConditions secondConditions = PostSearchConditions.builder()
                 .hours(List.of(18))
                 .build();
 
-        Paging paging = new Paging(null, 10);
+        PostSearchPaging paging = new PostSearchPaging(null, 10);
 
         // when
         List<Post> firstPosts = postCustomRepository.findAllByConditions(firstConditions, paging);

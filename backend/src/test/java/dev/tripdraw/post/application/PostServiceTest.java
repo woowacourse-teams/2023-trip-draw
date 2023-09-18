@@ -16,7 +16,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import dev.tripdraw.common.auth.LoginUser;
-import dev.tripdraw.common.dto.SearchPaging;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
@@ -26,12 +25,13 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
-import dev.tripdraw.post.dto.PostSearchConditions;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.post.dto.PostsSearchResponse;
+import dev.tripdraw.post.dto.query.PostSearchConditions;
+import dev.tripdraw.post.dto.query.PostSearchPaging;
 import dev.tripdraw.post.exception.PostException;
 import dev.tripdraw.test.ServiceTest;
 import dev.tripdraw.trip.domain.Point;
@@ -320,14 +320,14 @@ class PostServiceTest {
                 PostSearchConditions.builder()
                         .address("제주특별자치도 제주시 애월읍")
                         .build(),
-                new SearchPaging(null, 10)
+                new PostSearchPaging(null, 10)
         );
 
         PostSearchRequest postSearchRequestJuly = new PostSearchRequest(
                 PostSearchConditions.builder()
                         .months(List.of(7))
                         .build(),
-                new SearchPaging(null, 10)
+                new PostSearchPaging(null, 10)
         );
 
         // when

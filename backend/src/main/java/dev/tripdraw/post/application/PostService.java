@@ -5,14 +5,12 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
-import dev.tripdraw.common.domain.Paging;
 import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
-import dev.tripdraw.post.domain.SearchConditions;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
@@ -130,9 +128,7 @@ public class PostService {
     }
 
     public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
-        SearchConditions searchConditions = postSearchRequest.condition().toSearchConditions();
-        Paging paging = postSearchRequest.paging().toPaging();
-        List<Post> posts = postRepository.findAllByConditions(searchConditions, paging);
+        List<Post> posts = postRepository.findAllByConditions(postSearchRequest.conditions(), postSearchRequest.paging());
 
         List<PostSearchResponse> postSearchResponses = posts.stream()
                 .map(PostSearchResponse::from)

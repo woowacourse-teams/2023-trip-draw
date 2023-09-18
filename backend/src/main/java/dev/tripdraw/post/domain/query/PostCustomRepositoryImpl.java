@@ -1,10 +1,12 @@
-package dev.tripdraw.post.domain;
+package dev.tripdraw.post.domain.query;
 
 import static dev.tripdraw.post.domain.QPost.post;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import dev.tripdraw.common.domain.Paging;
+import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.dto.query.PostSearchConditions;
+import dev.tripdraw.post.dto.query.PostSearchPaging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +19,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Post> findAllByConditions(SearchConditions conditions, Paging paging) {
+    public List<Post> findAllByConditions(PostSearchConditions conditions, PostSearchPaging paging) {
         // TODO: 2023/09/16 연령대, 성별 추가
         return jpaQueryFactory.selectFrom(post)
                 .where(

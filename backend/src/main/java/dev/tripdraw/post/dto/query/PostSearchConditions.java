@@ -1,11 +1,11 @@
-package dev.tripdraw.post.domain;
+package dev.tripdraw.post.dto.query;
 
 import lombok.Builder;
 
 import java.util.List;
 
 @Builder
-public record SearchConditions(
+public record PostSearchConditions(
         List<Integer> years,
         List<Integer> months,
         List<Integer> daysOfWeek,

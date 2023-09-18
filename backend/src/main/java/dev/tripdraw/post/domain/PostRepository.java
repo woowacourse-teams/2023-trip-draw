@@ -2,6 +2,7 @@ package dev.tripdraw.post.domain;
 
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
 
+import dev.tripdraw.post.domain.query.PostCustomRepository;
 import dev.tripdraw.post.exception.PostException;
 import org.springframework.data.jpa.repository.JpaRepository;
 

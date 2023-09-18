@@ -1,6 +1,7 @@
 package dev.tripdraw.post.dto;
 
-import dev.tripdraw.common.dto.SearchPaging;
+import dev.tripdraw.post.dto.query.PostSearchConditions;
+import dev.tripdraw.post.dto.query.PostSearchPaging;
 
-public record PostSearchRequest(PostSearchConditions condition, SearchPaging paging) {
+public record PostSearchRequest(PostSearchConditions conditions, PostSearchPaging paging) {
 }

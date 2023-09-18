@@ -13,18 +13,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.auth.application.JwtTokenProvider;
-import dev.tripdraw.common.dto.SearchPaging;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
-import dev.tripdraw.post.dto.PostSearchConditions;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.post.dto.PostsSearchResponse;
+import dev.tripdraw.post.dto.query.PostSearchConditions;
+import dev.tripdraw.post.dto.query.PostSearchPaging;
 import dev.tripdraw.test.ControllerTest;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
@@ -417,7 +417,7 @@ class PostControllerTest extends ControllerTest {
     void 특정_여행에_대한_모든_감상을_조회한다() {
         // given
         createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
-        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
+        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 21, 24));
 
         // when
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
@@ -468,7 +468,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_수정한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 17, 20, 24));
 
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
@@ -598,7 +598,7 @@ class PostControllerTest extends ControllerTest {
                         .hours(List.of(17))
                         .address("제주특별자치도 제주시 애월읍")
                         .build(),
-                new SearchPaging(null, 10)
+                new PostSearchPaging(null, 10)
         );
 
         // when
