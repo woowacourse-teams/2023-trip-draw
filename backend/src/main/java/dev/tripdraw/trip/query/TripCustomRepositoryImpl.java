@@ -1,4 +1,4 @@
-package dev.tripdraw.trip.domain;
+package dev.tripdraw.trip.query;
 
 import static dev.tripdraw.post.domain.QPost.post;
 import static dev.tripdraw.trip.domain.QPoint.point;
@@ -6,7 +6,7 @@ import static dev.tripdraw.trip.domain.QTrip.trip;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import dev.tripdraw.common.domain.Paging;
+import dev.tripdraw.trip.domain.Trip;
 import io.micrometer.common.util.StringUtils;
 import java.util.List;
 import java.util.Set;
@@ -21,20 +21,20 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<Trip> findAllByConditions(SearchConditions searchConditions, Paging paging) {
+    public List<Trip> findAllByConditions(TripQueryConditions tripQueryConditions, TripPaging tripPaging) {
         return query
                 .selectFrom(trip)
                 .join(post).on(trip.id.eq(post.tripId))
                 .join(point).on(post.point.id.eq(point.id))
                 .where(
-                        tripIdLt(paging.lastViewedId()),
-                        yearIn(searchConditions.years()),
-                        monthIn(searchConditions.months()),
-                        dayOfWeekIn(searchConditions.daysOfWeek()),
-                        addressLike(searchConditions.address())
+                        tripIdLt(tripPaging.lastViewedId()),
+                        yearIn(tripQueryConditions.years()),
+                        monthIn(tripQueryConditions.months()),
+                        dayOfWeekIn(tripQueryConditions.daysOfWeek()),
+                        addressLike(tripQueryConditions.address())
                 )
                 .orderBy(trip.id.desc())
-                .limit(paging.limit().longValue() + 1L)
+                .limit(tripPaging.limit().longValue() + 1L)
                 .fetch();
     }
 

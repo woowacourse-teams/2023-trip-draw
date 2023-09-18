@@ -109,7 +109,7 @@ public class TripController {
             responseCode = "200",
             description = "나의 여행 전체 조회 성공."
     )
-    @GetMapping("/trips/mine")
+    @GetMapping("/trips/me")
     public ResponseEntity<TripsSearchResponseOfMember> readAllOf(@Auth LoginUser loginUser) {
         TripsSearchResponseOfMember response = tripService.readAllTripsOf(loginUser);
         return ResponseEntity.ok(response);
@@ -125,8 +125,8 @@ public class TripController {
             @Auth LoginUser loginUser,
             @RequestBody TripSearchRequest tripSearchRequest
     ) {
-        TripsSearchResponse tripsSearchResponse = tripService.readAllTrips(tripSearchRequest);
-        return ResponseEntity.ok(tripsSearchResponse);
+        TripsSearchResponse response = tripService.readAll(tripSearchRequest);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "여행 이름 수정 및 종료 API", description = "여행 이름을 수정하고, 여행을 종료합니다.")

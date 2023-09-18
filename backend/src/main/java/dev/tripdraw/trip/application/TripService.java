@@ -1,12 +1,10 @@
 package dev.tripdraw.trip.application;
 
 import dev.tripdraw.common.auth.LoginUser;
-import dev.tripdraw.common.domain.Paging;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
-import dev.tripdraw.trip.domain.SearchConditions;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
@@ -19,6 +17,8 @@ import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
+import dev.tripdraw.trip.query.TripPaging;
+import dev.tripdraw.trip.query.TripQueryConditions;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,9 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TripService {
 
+    private static final int FIRST_INDEX = 0;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
+    private final TripQueryService tripQueryService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public TripCreateResponse create(LoginUser loginUser) {
@@ -79,17 +81,14 @@ public class TripService {
     }
 
     @Transactional(readOnly = true)
-    public TripsSearchResponse readAllTrips(TripSearchRequest tripSearchRequest) {
-        SearchConditions searchConditions = tripSearchRequest.condition().toSearchConditions();
-        Paging paging = tripSearchRequest.paging().toPaging();
+    public TripsSearchResponse readAll(TripSearchRequest tripSearchRequest) {
+        TripQueryConditions tripQueryConditions = tripSearchRequest.toTripQueryConditions();
+        TripPaging tripPaging = tripSearchRequest.toTripPaging();
 
-        List<Trip> trips = tripRepository.findAllByConditions(
-                searchConditions,
-                paging
-        );
+        List<Trip> trips = tripQueryService.readAllByQueryConditions(tripQueryConditions, tripPaging);
 
-        if (paging.hasNextPage(trips.size())) {
-            return TripsSearchResponse.of(trips.subList(0, paging.limit()), true);
+        if (tripPaging.hasNextPage(trips.size())) {
+            return TripsSearchResponse.of(trips.subList(FIRST_INDEX, tripPaging.limit()), true);
         }
         return TripsSearchResponse.of(trips, false);
     }

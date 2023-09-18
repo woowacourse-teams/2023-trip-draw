@@ -4,6 +4,7 @@ import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.trip.exception.TripException;
+import dev.tripdraw.trip.query.TripQueryConditions;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -12,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class SearchConditionsTest {
+class TripQueryConditionsTest {
 
     @ParameterizedTest
     @ValueSource(ints = {2009, 2024})
@@ -21,7 +22,7 @@ class SearchConditionsTest {
         Set<Integer> years = of(year);
 
         // expect
-        assertThatThrownBy(() -> new SearchConditions(years, of(), of(), of(), of(), ""))
+        assertThatThrownBy(() -> new TripQueryConditions(years, of(), of(), of(), of(), ""))
                 .isInstanceOf(TripException.class)
                 .hasMessage("유효하지 않은 여행 조회 조건입니다.");
     }
@@ -33,7 +34,7 @@ class SearchConditionsTest {
         Set<Integer> months = of(month);
 
         // expect
-        assertThatThrownBy(() -> new SearchConditions(of(), months, of(), of(), of(), ""))
+        assertThatThrownBy(() -> new TripQueryConditions(of(), months, of(), of(), of(), ""))
                 .isInstanceOf(TripException.class)
                 .hasMessage("유효하지 않은 여행 조회 조건입니다.");
     }
@@ -45,7 +46,7 @@ class SearchConditionsTest {
         Set<Integer> daysOfWeek = of(dayOfWeek);
 
         // expect
-        assertThatThrownBy(() -> new SearchConditions(of(), of(), daysOfWeek, of(), of(), ""))
+        assertThatThrownBy(() -> new TripQueryConditions(of(), of(), daysOfWeek, of(), of(), ""))
                 .isInstanceOf(TripException.class)
                 .hasMessage("유효하지 않은 여행 조회 조건입니다.");
     }
@@ -57,7 +58,7 @@ class SearchConditionsTest {
         Set<Integer> ageRanges = of(ageRange);
 
         // expect
-        assertThatThrownBy(() -> new SearchConditions(of(), of(), of(), ageRanges, of(), ""))
+        assertThatThrownBy(() -> new TripQueryConditions(of(), of(), of(), ageRanges, of(), ""))
                 .isInstanceOf(TripException.class)
                 .hasMessage("유효하지 않은 여행 조회 조건입니다.");
     }
@@ -69,7 +70,7 @@ class SearchConditionsTest {
         Set<Integer> genders = of(gender);
 
         // expect
-        assertThatThrownBy(() -> new SearchConditions(genders, of(), of(), of(), of(), ""))
+        assertThatThrownBy(() -> new TripQueryConditions(genders, of(), of(), of(), of(), ""))
                 .isInstanceOf(TripException.class)
                 .hasMessage("유효하지 않은 여행 조회 조건입니다.");
     }

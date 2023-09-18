@@ -1,4 +1,4 @@
-package dev.tripdraw.trip.domain;
+package dev.tripdraw.trip.query;
 
 import static dev.tripdraw.trip.exception.TripExceptionType.INVALID_TRIP_SEARCH;
 
@@ -6,7 +6,7 @@ import dev.tripdraw.trip.exception.TripException;
 import java.util.HashSet;
 import java.util.Set;
 
-public record SearchConditions(
+public record TripQueryConditions(
         Set<Integer> years,
         Set<Integer> months,
         Set<Integer> daysOfWeek,
@@ -26,7 +26,7 @@ public record SearchConditions(
     private static final int GENDER_MINIMUM = 1;
     private static final int GENDER_MAXIMUM = 2;
 
-    public SearchConditions(
+    public TripQueryConditions(
             Set<Integer> years,
             Set<Integer> months,
             Set<Integer> daysOfWeek,

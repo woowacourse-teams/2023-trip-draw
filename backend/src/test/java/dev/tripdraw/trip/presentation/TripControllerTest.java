@@ -208,7 +208,7 @@ class TripControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .auth().preemptive().oauth2(huchuToken)
-                .when().get("/trips/mine")
+                .when().get("/trips/me")
                 .then().log().all()
                 .extract();
 
