@@ -56,6 +56,6 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
             return null;
         }
 
-        return address.eq(targetAddress);
+        return address.like(targetAddress + "%");
     }
 }
