@@ -1,4 +1,4 @@
-package dev.tripdraw.post.dto.query;
+package dev.tripdraw.post.dto;
 
 import lombok.Builder;
 

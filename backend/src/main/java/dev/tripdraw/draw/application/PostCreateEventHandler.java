@@ -7,10 +7,11 @@ import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import java.util.List;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
+
+import java.util.List;
 
 @Component
 public class PostCreateEventHandler {
@@ -33,7 +34,7 @@ public class PostCreateEventHandler {
     @TransactionalEventListener(phase = AFTER_COMMIT)
     public void handle(PostCreateEvent postCreateEvent) {
         Trip trip = tripRepository.getTripWithPoints(postCreateEvent.tripId());
-        Post post = postRepository.getById(postCreateEvent.postId());
+        Post post = postRepository.getByPostId(postCreateEvent.postId());
 
         String imageUrl = routeImageGenerator.generate(
                 trip.getLatitudes(),

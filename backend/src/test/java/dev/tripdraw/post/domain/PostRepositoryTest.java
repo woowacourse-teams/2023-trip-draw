@@ -84,7 +84,7 @@ class PostRepositoryTest {
         Post post = postRepository.save(new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, trip.id()));
 
         // when
-        Post foundPost = postRepository.getById(post.id());
+        Post foundPost = postRepository.getByPostId(post.id());
 
         // then
         assertThat(foundPost).isEqualTo(post);
@@ -96,7 +96,7 @@ class PostRepositoryTest {
         Long wrongId = Long.MIN_VALUE;
 
         // expect
-        assertThatThrownBy(() -> postRepository.getById(wrongId))
+        assertThatThrownBy(() -> postRepository.getByPostId(wrongId))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
     }

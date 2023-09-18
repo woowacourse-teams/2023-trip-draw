@@ -1,12 +1,12 @@
-package dev.tripdraw.post.domain.query;
+package dev.tripdraw.post.query;
 
 import static dev.tripdraw.post.domain.QPost.post;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.post.domain.Post;
-import dev.tripdraw.post.dto.query.PostSearchConditions;
-import dev.tripdraw.post.dto.query.PostSearchPaging;
+import dev.tripdraw.post.dto.PostSearchConditions;
+import dev.tripdraw.post.dto.PostSearchPaging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

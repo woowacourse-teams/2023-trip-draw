@@ -41,7 +41,7 @@ class PostCreateEventHandlerTest {
         PostCreateEvent postCreateEvent = new PostCreateEvent(1L, 1L);
         given(tripRepository.getTripWithPoints(postCreateEvent.tripId()))
                 .willReturn(여행());
-        given(postRepository.getById(postCreateEvent.postId()))
+        given(postRepository.getByPostId(postCreateEvent.postId()))
                 .willReturn(감상());
 
         // when

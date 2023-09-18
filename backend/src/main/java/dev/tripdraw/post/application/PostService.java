@@ -91,7 +91,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostResponse read(LoginUser loginUser, Long postId) {
-        Post post = postRepository.getById(postId);
+        Post post = postRepository.getByPostId(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
         return PostResponse.from(post);
@@ -109,7 +109,7 @@ public class PostService {
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
-        Post post = postRepository.getById(postId);
+        Post post = postRepository.getByPostId(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
         Trip trip = tripRepository.getById(post.tripId());
@@ -121,7 +121,7 @@ public class PostService {
     }
 
     public void delete(LoginUser loginUser, Long postId) {
-        Post post = postRepository.getById(postId);
+        Post post = postRepository.getByPostId(postId);
         Member member = memberRepository.getById(loginUser.memberId());
         post.validateAuthorization(member);
         postRepository.deleteById(postId);
