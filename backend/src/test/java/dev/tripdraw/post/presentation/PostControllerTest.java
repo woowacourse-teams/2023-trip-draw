@@ -468,7 +468,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_수정한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 17, 20, 24));
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
