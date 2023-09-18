@@ -19,12 +19,12 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchConditions;
+import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.post.dto.PostsSearchResponse;
-import dev.tripdraw.post.dto.query.PostSearchConditions;
-import dev.tripdraw.post.dto.query.PostSearchPaging;
 import dev.tripdraw.test.ControllerTest;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
@@ -593,7 +593,14 @@ class PostControllerTest extends ControllerTest {
         PostCreateResponse jejuSeptember17hourPostResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 9, 18, 17, 24));
         PostCreateResponse seoulSeptember17hourPostResponse = createPost("서울특별시 송파구 잠실동", LocalDateTime.of(2023, 9, 18, 17, 24));
 
-        PostSearchRequest request = new PostSearchRequest(
+        PostSearchRequest jejuRequest = new PostSearchRequest(
+                PostSearchConditions.builder()
+                        .address("제주특별자치도 제주시 애월읍")
+                        .build(),
+                new PostSearchPaging(null, 10)
+        );
+
+        PostSearchRequest jeju17hourRequest = new PostSearchRequest(
                 PostSearchConditions.builder()
                         .hours(List.of(17))
                         .address("제주특별자치도 제주시 애월읍")
@@ -601,21 +608,57 @@ class PostControllerTest extends ControllerTest {
                 new PostSearchPaging(null, 10)
         );
 
+        PostSearchRequest hour17Request = new PostSearchRequest(
+                PostSearchConditions.builder()
+                        .hours(List.of(17))
+                        .build(),
+                new PostSearchPaging(null, 10)
+        );
+
         // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
+        ExtractableResponse<Response> jejuResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(huchuToken)
-                .body(request)
+                .body(jejuRequest)
+                .when().get("/posts")
+                .then().log().all()
+                .statusCode(OK.value())
+                .extract();
+
+        ExtractableResponse<Response> jeju17hourResponse = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(huchuToken)
+                .body(jeju17hourRequest)
+                .when().get("/posts")
+                .then().log().all()
+                .statusCode(OK.value())
+                .extract();
+
+        ExtractableResponse<Response> hour17Response = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(huchuToken)
+                .body(hour17Request)
                 .when().get("/posts")
                 .then().log().all()
                 .statusCode(OK.value())
                 .extract();
 
         // then
-        PostsSearchResponse postsSearchResponse = response.as(PostsSearchResponse.class);
+        PostsSearchResponse jejuPostsSearchResponse = jejuResponse.as(PostsSearchResponse.class);
+        PostsSearchResponse jeju17hourPostsSearchResponse = jeju17hourResponse.as(PostsSearchResponse.class);
+        PostsSearchResponse hour17PostsSearchResponse = hour17Response.as(PostsSearchResponse.class);
 
-        assertThat(postsSearchResponse.posts().get(0).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
-        assertThat(postsSearchResponse.posts().get(1).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
+        assertThat(jejuPostsSearchResponse.posts().get(0).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
+        assertThat(jejuPostsSearchResponse.posts().get(1).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
+        assertThat(jejuPostsSearchResponse.posts().get(2).postId()).isEqualTo(jejuJuly20hourPostResponse.postId());
+
+
+        assertThat(jeju17hourPostsSearchResponse.posts().get(0).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
+        assertThat(jeju17hourPostsSearchResponse.posts().get(1).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
+
+        assertThat(hour17PostsSearchResponse.posts().get(0).postId()).isEqualTo(seoulSeptember17hourPostResponse.postId());
+        assertThat(hour17PostsSearchResponse.posts().get(1).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
+        assertThat(hour17PostsSearchResponse.posts().get(2).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
     }
 
     private PointResponse createPoint() {
