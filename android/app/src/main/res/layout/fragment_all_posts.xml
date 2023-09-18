@@ -40,6 +40,21 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <TextView
+            android:id="@+id/tv_all_posts_no_post"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/tv_all_posts_no_post"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_dark_gray"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_all_posts"
+            app:setMessageVisibility="@{allPostsViewModel.posts.empty}" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_all_posts"
             android:layout_width="0dp"
