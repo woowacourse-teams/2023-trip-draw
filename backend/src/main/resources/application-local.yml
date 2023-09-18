@@ -4,6 +4,13 @@ spring:
     username: sa
     password:
 
+  task:
+    execution:
+      pool:
+        core-size: 8
+        queue-capacity: 100
+        max-size: 16
+
   h2:
     console:
       enabled: true
