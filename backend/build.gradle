@@ -86,7 +86,7 @@ sourceSets {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += ["-s", querydslDir]
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
 }
 
 clean.doLast {
