@@ -1,12 +1,17 @@
-package com.teamtripdraw.android.data.httpClient.retrofitAdapter
+package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
 
+import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.GeneralEnqueueActions
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import kotlin.reflect.KClass
 
-class ResponseStateCallAdapterFactory : CallAdapter.Factory() {
+class ResponseStateCallAdapterFactory(
+    private val enqueueActionsType: KClass<out GeneralEnqueueActions<*>> = GeneralEnqueueActions::class,
+    private vararg val enqueueActionParameters: Any,
+) : CallAdapter.Factory() {
 
     override fun get(
         returnType: Type,
@@ -33,6 +38,14 @@ class ResponseStateCallAdapterFactory : CallAdapter.Factory() {
 
         val bodyType = getParameterUpperBound(0, responseType)
 
-        return ResponseStateCallAdapter<Any>(bodyType)
+        val enqueueActionParametersWithRetrofit: List<Any> =
+            enqueueActionParameters.toMutableList().apply { add(0, retrofit) }
+
+        return ResponseStateCallAdapter<Any>(
+            bodyType,
+            retrofit,
+            enqueueActionsType,
+            enqueueActionParametersWithRetrofit,
+        )
     }
 }

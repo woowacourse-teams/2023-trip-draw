@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.data.httpClient.retrofitAdapter
+package com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState
 
 import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import okhttp3.Headers

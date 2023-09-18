@@ -1,12 +1,10 @@
-package com.teamtripdraw.android.data.httpClient.dto.response
+package com.teamtripdraw.android.data.httpClient.dto.request
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class NicknameSetupResponse(
-    @Json(name = "accessToken")
-    val accessToken: String,
+data class TokenRefreshRequest(
     @Json(name = "refreshToken")
     val refreshToken: String,
 )

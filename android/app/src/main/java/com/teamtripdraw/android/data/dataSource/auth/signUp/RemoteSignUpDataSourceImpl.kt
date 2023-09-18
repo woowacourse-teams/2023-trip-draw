@@ -1,10 +1,12 @@
-package com.teamtripdraw.android.data.dataSource.signUp
+package com.teamtripdraw.android.data.dataSource.auth.signUp
 
-import com.teamtripdraw.android.data.httpClient.dto.failureResponse.NicknameSetupFailureResponse
+import com.teamtripdraw.android.data.httpClient.dto.failureResponse.GeneralFailureResponse
+import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.request.NicknameSetUpRequest
 import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.model.DataLoginInfo
+import com.teamtripdraw.android.data.model.DataUserIdentifyInfo
 import com.teamtripdraw.android.data.model.DataUserInfo
 import com.teamtripdraw.android.domain.exception.DuplicateNicknameException
 import com.teamtripdraw.android.domain.exception.InvalidNicknameException
@@ -21,10 +23,10 @@ class RemoteSignUpDataSourceImpl(
     override suspend fun setNickname(
         nickname: String,
         dataLoginInfo: DataLoginInfo,
-    ): Result<String> =
+    ): Result<DataUserIdentifyInfo> =
         nicknameSetupService.setNickname(getNicknameSetUpRequest(nickname, dataLoginInfo))
             .process(failureListener = this::setNicknameFailureListener) { body, headers ->
-                Result.success(body.accessToken)
+                Result.success(body.toData())
             }
 
     private fun getNicknameSetUpRequest(
@@ -40,7 +42,7 @@ class RemoteSignUpDataSourceImpl(
     private fun setNicknameFailureListener(code: Int, errorBody: ResponseBody?): Result<Nothing> {
         if (code == 409) {
             val message =
-                retrofit.getParsedErrorBody<NicknameSetupFailureResponse>(errorBody)?.message
+                retrofit.getParsedErrorBody<GeneralFailureResponse>(errorBody)?.message
             return Result.failure(
                 DuplicateNicknameException(
                     message ?: DEFAULT_DUPLICATE_NICKNAME_EXCEPTION_MESSAGE,
@@ -55,8 +57,8 @@ class RemoteSignUpDataSourceImpl(
         )
     }
 
-    override suspend fun getUserInfo(accessToken: String): Result<DataUserInfo> =
-        getUserInfoService.getUserInfo(accessToken).process { body, headers ->
+    override suspend fun getUserInfo(): Result<DataUserInfo> =
+        getUserInfoService.getUserInfo().process { body, headers ->
             Result.success(DataUserInfo(memberId = body.memberId, nickname = body.nickname))
         }
 
