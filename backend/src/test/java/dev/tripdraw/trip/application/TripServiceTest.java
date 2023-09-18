@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.common.auth.LoginUser;
-import dev.tripdraw.common.dto.SearchPaging;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -26,6 +25,7 @@ import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
 import dev.tripdraw.trip.dto.TripSearchConditions;
+import dev.tripdraw.trip.dto.TripSearchPaging;
 import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripSearchResponse;
 import dev.tripdraw.trip.dto.TripSearchResponseOfMember;
@@ -180,11 +180,11 @@ class TripServiceTest {
                 Set.of(),
                 ""
         );
-        SearchPaging searchPaging = new SearchPaging(null, 10);
-        TripSearchRequest tripSearchRequest = new TripSearchRequest(emptyConditions, searchPaging);
+        TripSearchPaging tripSearchPaging = new TripSearchPaging(null, 10);
+        TripSearchRequest tripSearchRequest = new TripSearchRequest(emptyConditions, tripSearchPaging);
 
         // when
-        TripsSearchResponse tripsSearchResponse = tripService.readAllTrips(tripSearchRequest);
+        TripsSearchResponse tripsSearchResponse = tripService.readAll(tripSearchRequest);
 
         // then
         assertThat(tripsSearchResponse).usingRecursiveComparison().isEqualTo(

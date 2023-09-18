@@ -1,8 +1,10 @@
 package dev.tripdraw.trip.dto;
 
-import dev.tripdraw.trip.domain.SearchConditions;
+import dev.tripdraw.trip.query.TripQueryConditions;
 import java.util.Set;
+import lombok.Builder;
 
+@Builder
 public record TripSearchConditions(
         Set<Integer> years,
         Set<Integer> months,
@@ -12,14 +14,7 @@ public record TripSearchConditions(
         String address
 ) {
 
-    public SearchConditions toSearchConditions() {
-        return new SearchConditions(
-                years,
-                months,
-                daysOfWeek,
-                ageRanges,
-                genders,
-                address
-        );
+    public TripQueryConditions toTripQueryConditions() {
+        return new TripQueryConditions(years(), months(), daysOfWeek(), ageRanges(), genders(), address());
     }
 }

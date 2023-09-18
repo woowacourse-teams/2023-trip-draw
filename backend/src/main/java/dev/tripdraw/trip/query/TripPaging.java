@@ -1,9 +1,9 @@
-package dev.tripdraw.common.domain;
+package dev.tripdraw.trip.query;
 
-public record Paging(Long lastViewedId, Integer limit) {
+public record TripPaging(Long lastViewedId, Integer limit) {
     private static final int LIMIT_MAXIMUM = 100;
 
-    public Paging(Long lastViewedId, Integer limit) {
+    public TripPaging(Long lastViewedId, Integer limit) {
         this.lastViewedId = lastViewedId;
         this.limit = ceil(limit);
     }
@@ -13,6 +13,6 @@ public record Paging(Long lastViewedId, Integer limit) {
     }
 
     public boolean hasNextPage(int size) {
-        return size > limit;
+        return limit < size;
     }
 }

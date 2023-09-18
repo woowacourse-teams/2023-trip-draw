@@ -1,9 +1,18 @@
 package dev.tripdraw.trip.dto;
 
-import dev.tripdraw.common.dto.SearchPaging;
+import dev.tripdraw.trip.query.TripPaging;
+import dev.tripdraw.trip.query.TripQueryConditions;
 
 public record TripSearchRequest(
         TripSearchConditions condition,
-        SearchPaging paging
+        TripSearchPaging paging
 ) {
+
+    public TripQueryConditions toTripQueryConditions() {
+        return condition.toTripQueryConditions();
+    }
+
+    public TripPaging toTripPaging() {
+        return paging.toTripPaging();
+    }
 }

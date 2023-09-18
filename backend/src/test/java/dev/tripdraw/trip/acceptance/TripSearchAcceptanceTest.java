@@ -20,12 +20,12 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import dev.tripdraw.auth.application.JwtTokenProvider;
-import dev.tripdraw.common.dto.SearchPaging;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.test.ControllerTest;
 import dev.tripdraw.trip.dto.TripSearchConditions;
+import dev.tripdraw.trip.dto.TripSearchPaging;
 import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
@@ -111,7 +111,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                 // given
                 var tripSearchRequest = new TripSearchRequest(
                         emptyTripSearchConditions(),
-                        new SearchPaging(null, limit)
+                        new TripSearchPaging(null, limit)
                 );
 
                 // when
@@ -138,7 +138,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                 // given
                 var tripSearchRequest = new TripSearchRequest(
                         emptyTripSearchConditions(),
-                        new SearchPaging(null, limit)
+                        new TripSearchPaging(null, limit)
                 );
 
                 // when
@@ -165,7 +165,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                 // given
                 var tripSearchRequest = new TripSearchRequest(
                         emptyTripSearchConditions(),
-                        new SearchPaging(null, limit)
+                        new TripSearchPaging(null, limit)
                 );
 
                 // when
@@ -192,7 +192,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                 // given
                 var tripSearchRequest = new TripSearchRequest(
                         emptyTripSearchConditions(),
-                        new SearchPaging(null, limit)
+                        new TripSearchPaging(null, limit)
                 );
 
                 // when
@@ -213,7 +213,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                 });
             }
         }
-        
+
         @Nested
         class 마지막으로_조회한_여행_ID를 {
 
@@ -224,7 +224,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                 // given
                 var tripSearchRequest = new TripSearchRequest(
                         emptyTripSearchConditions(),
-                        new SearchPaging(null, LIMIT)
+                        new TripSearchPaging(null, LIMIT)
                 );
 
                 // when
@@ -256,7 +256,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                 // given
                 var tripSearchRequest = new TripSearchRequest(
                         emptyTripSearchConditions(),
-                        new SearchPaging(lastViewedId, LIMIT)
+                        new TripSearchPaging(lastViewedId, LIMIT)
                 );
 
                 // when
@@ -287,7 +287,7 @@ public class TripSearchAcceptanceTest extends ControllerTest {
     @Nested
     class 감상이_있는_모든_여행을_조건에_따라_조회할_때 {
 
-        private final SearchPaging nullLastViewedIdAnd10Limit = new SearchPaging(null, 10);
+        private final TripSearchPaging nullLastViewedIdAnd10Limit = new TripSearchPaging(null, 10);
 
         @Test
         void 조건없이_조회할_수_있다() {

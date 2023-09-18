@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface TripRepository extends JpaRepository<Trip, Long>, TripCustomRepository {
+public interface TripRepository extends JpaRepository<Trip, Long> {
 
     List<Trip> findAllByMemberId(Long memberId);
 
