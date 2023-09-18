@@ -25,46 +25,46 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
                 .join(post).on(trip.id.eq(post.tripId))
                 .join(point).on(post.point.id.eq(point.id))
                 .where(
-                        tripsBeforeLastViewedId(paging.lastViewedId()),
-                        tripsRecordedAtYears(searchConditions.years()),
-                        tripsRecordedAtMonths(searchConditions.months()),
-                        tripsRecordedAtDaysOfWeek(searchConditions.daysOfWeek()),
-                        tripsAddressed(searchConditions.address())
+                        tripIdLt(paging.lastViewedId()),
+                        yearIn(searchConditions.years()),
+                        monthIn(searchConditions.months()),
+                        dayOfWeekIn(searchConditions.daysOfWeek()),
+                        addressLike(searchConditions.address())
                 )
                 .orderBy(trip.id.desc())
                 .limit(paging.limit() + 1)
                 .fetch();
     }
 
-    private BooleanExpression tripsBeforeLastViewedId(Long lastViewedId) {
+    private BooleanExpression tripIdLt(Long lastViewedId) {
         if (lastViewedId == null) {
             return null;
         }
         return trip.id.lt(lastViewedId);
     }
 
-    private BooleanExpression tripsRecordedAtYears(Set<Integer> years) {
+    private BooleanExpression yearIn(Set<Integer> years) {
         if (years.isEmpty()) {
             return null;
         }
         return point.recordedAt.year().in(years);
     }
 
-    private BooleanExpression tripsRecordedAtMonths(Set<Integer> months) {
+    private BooleanExpression monthIn(Set<Integer> months) {
         if (months.isEmpty()) {
             return null;
         }
         return point.recordedAt.month().in(months);
     }
 
-    private BooleanExpression tripsRecordedAtDaysOfWeek(Set<Integer> daysOfWeek) {
+    private BooleanExpression dayOfWeekIn(Set<Integer> daysOfWeek) {
         if (daysOfWeek.isEmpty()) {
             return null;
         }
         return point.recordedAt.dayOfWeek().in(daysOfWeek);
     }
 
-    private BooleanExpression tripsAddressed(String address) {
+    private BooleanExpression addressLike(String address) {
         if (address.isEmpty()) {
             return null;
         }
