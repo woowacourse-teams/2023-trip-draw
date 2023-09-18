@@ -3,8 +3,6 @@ package dev.tripdraw.post.domain;
 import static dev.tripdraw.post.domain.QPost.post;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.common.domain.Paging;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +21,19 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         // TODO: 2023/09/16 연령대, 성별 추가
         return jpaQueryFactory.selectFrom(post)
                 .where(
-                        ltLastViewedId(paging.lastViewedId()),
-                        contains(post.point.recordedAt.year(), conditions.years()),
-                        contains(post.point.recordedAt.month(), conditions.months()),
-                        contains(post.point.recordedAt.dayOfWeek(), conditions.daysOfWeek()),
-                        contains(post.point.recordedAt.hour(), conditions.hours()),
-                        eqAdress(post.address, conditions.address())
+                        postIdLt(paging.lastViewedId()),
+                        yearIn(conditions.years()),
+                        monthIn(conditions.months()),
+                        dayOfWeekIn(conditions.daysOfWeek()),
+                        hourIn(conditions.hours()),
+                        addressLike(conditions.address())
                 )
                 .limit(paging.limit())
                 .orderBy(post.id.desc())
                 .fetch();
     }
 
-    private BooleanExpression ltLastViewedId(Long lastViewedId) {
+    private BooleanExpression postIdLt(Long lastViewedId) {
         if (lastViewedId == null) {
             return null;
         }
@@ -43,19 +41,43 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return post.id.lt(lastViewedId);
     }
 
-    private BooleanExpression contains(NumberExpression<Integer> value, List<Integer> values) {
-        if (values == null || values.isEmpty()) {
+    private BooleanExpression yearIn(List<Integer> years) {
+        if (years == null || years.isEmpty()) {
             return null;
         }
 
-        return value.in(values);
+        return post.point.recordedAt.year().in(years);
     }
 
-    private BooleanExpression eqAdress(StringPath address, String targetAddress) {
-        if (targetAddress == null || targetAddress.isEmpty()) {
+    private BooleanExpression monthIn(List<Integer> months) {
+        if (months == null || months.isEmpty()) {
             return null;
         }
 
-        return address.like(targetAddress + "%");
+        return post.point.recordedAt.month().in(months);
+    }
+
+    private BooleanExpression dayOfWeekIn(List<Integer> daysOfWeek) {
+        if (daysOfWeek == null || daysOfWeek.isEmpty()) {
+            return null;
+        }
+
+        return post.point.recordedAt.dayOfWeek().in(daysOfWeek);
+    }
+
+    private BooleanExpression hourIn(List<Integer> hours) {
+        if (hours == null || hours.isEmpty()) {
+            return null;
+        }
+
+        return post.point.recordedAt.hour().in(hours);
+    }
+
+    private BooleanExpression addressLike(String address) {
+        if (address == null || address.isEmpty()) {
+            return null;
+        }
+
+        return post.address.like(address + "%");
     }
 }
