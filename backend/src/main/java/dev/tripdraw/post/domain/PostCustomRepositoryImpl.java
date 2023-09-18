@@ -28,7 +28,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         hourIn(conditions.hours()),
                         addressLike(conditions.address())
                 )
-                .limit(paging.limit())
+                .limit(paging.limit().longValue() + 1L)
                 .orderBy(post.id.desc())
                 .fetch();
     }
