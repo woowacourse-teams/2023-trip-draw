@@ -5,8 +5,6 @@ import retrofit2.http.DELETE
 import retrofit2.http.Query
 
 interface UnsubscribeService {
-    @DELETE("/members")
-    suspend fun unsubscribe(
-        @Query("code") accessToken: String,
-    ): ResponseState<Unit>
+    @DELETE("/members/me")
+    suspend fun unsubscribe(): ResponseState<Unit>
 }

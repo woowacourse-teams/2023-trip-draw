@@ -23,7 +23,7 @@ class AuthRepositoryImpl(
             .map {}
 
     override suspend fun getUserInfo(): Result<UserInfo> =
-        remoteSignUpDataSource.getUserInfo(localUserIdentifyInfoDataSource.getAccessToken()).map {
+        remoteSignUpDataSource.getUserInfo().map {
             it.toDomain()
         }
 
@@ -41,6 +41,6 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun unsubscribe(): Result<Unit> =
-        remoteUnsubscribeDataSource.unsubscribe(localUserIdentifyInfoDataSource.getAccessToken())
+        remoteUnsubscribeDataSource.unsubscribe()
             .onSuccess { localUserIdentifyInfoDataSource.deleteIdentifyInfo() }
 }

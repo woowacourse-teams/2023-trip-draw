@@ -57,8 +57,8 @@ class RemoteSignUpDataSourceImpl(
         )
     }
 
-    override suspend fun getUserInfo(accessToken: String): Result<DataUserInfo> =
-        getUserInfoService.getUserInfo(accessToken).process { body, headers ->
+    override suspend fun getUserInfo(): Result<DataUserInfo> =
+        getUserInfoService.getUserInfo().process { body, headers ->
             Result.success(DataUserInfo(memberId = body.memberId, nickname = body.nickname))
         }
 
