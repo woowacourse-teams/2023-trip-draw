@@ -2,6 +2,7 @@ package dev.tripdraw.member.presentation;
 
 import dev.tripdraw.common.auth.Auth;
 import dev.tripdraw.common.auth.LoginUser;
+import dev.tripdraw.common.swagger.SwaggerAuthorizationRequired;
 import dev.tripdraw.member.application.MemberService;
 import dev.tripdraw.member.dto.MemberSearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Member", description = "사용자 관련 API 명세")
 @RequiredArgsConstructor
+@SwaggerAuthorizationRequired
 @RequestMapping("/members")
 @RestController
 public class MemberController {
@@ -28,7 +30,7 @@ public class MemberController {
             description = "사용자 조회 성공."
     )
     @GetMapping("/me")
-    public ResponseEntity<MemberSearchResponse> findByCode(@Auth LoginUser loginUser) {
+    public ResponseEntity<MemberSearchResponse> find(@Auth LoginUser loginUser) {
         MemberSearchResponse response = memberService.find(loginUser);
         return ResponseEntity.ok(response);
     }
