@@ -1,5 +1,7 @@
 package dev.tripdraw.post.domain;
 
+import static dev.tripdraw.post.domain.QPost.post;
+
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.StringPath;
@@ -18,12 +20,10 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 
     @Override
     public List<Post> findAllByConditions(SearchConditions conditions, Paging paging) {
-        QPost post = QPost.post;
-
         // TODO: 2023/09/16 연령대, 성별 추가
         return jpaQueryFactory.selectFrom(post)
                 .where(
-                        ltLastViewedId(post, paging.lastViewedId()),
+                        ltLastViewedId(paging.lastViewedId()),
                         contains(post.point.recordedAt.year(), conditions.years()),
                         contains(post.point.recordedAt.month(), conditions.months()),
                         contains(post.point.recordedAt.dayOfWeek(), conditions.daysOfWeek()),
@@ -35,7 +35,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                 .fetch();
     }
 
-    private BooleanExpression ltLastViewedId(QPost post, Long lastViewedId) {
+    private BooleanExpression ltLastViewedId(Long lastViewedId) {
         if (lastViewedId == null) {
             return null;
         }
