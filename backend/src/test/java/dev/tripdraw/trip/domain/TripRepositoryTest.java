@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Import;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Import({JpaConfig.class, QueryDslConfig.class})
 @DataJpaTest
-@Import({JpaConfig.class, QueryDslConfig.class})
 class TripRepositoryTest {
 
     @Autowired
