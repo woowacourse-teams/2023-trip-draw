@@ -1,12 +1,14 @@
 package dev.tripdraw.trip.query;
 
 import dev.tripdraw.trip.exception.TripException;
+import lombok.Builder;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static dev.tripdraw.trip.exception.TripExceptionType.INVALID_TRIP_SEARCH;
 
+@Builder
 public record TripQueryConditions(
         Set<Integer> years,
         Set<Integer> months,
