@@ -8,6 +8,7 @@ import com.teamtripdraw.android.domain.model.point.Route
 import com.teamtripdraw.android.domain.model.trip.PreSetTripTitle
 import com.teamtripdraw.android.domain.model.trip.PreviewTrip
 import com.teamtripdraw.android.domain.model.trip.Trip
+import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.domain.repository.TripRepository
 
 class TripRepositoryImpl(
@@ -43,6 +44,29 @@ class TripRepositoryImpl(
 
     override suspend fun getMyTrips(): Result<List<PreviewTrip>> =
         remoteTripDataSource.getMyTrips().map { trips -> trips.map { it.toDomain() } }
+
+    override suspend fun getAllTrips(
+        address: String,
+        ageRanges: List<Int>,
+        daysOfWeek: List<Int>,
+        genders: List<Int>,
+        months: List<Int>,
+        years: List<Int>,
+        lastViewedId: Long?,
+        limit: Int,
+    ): Result<List<TripOfAll>> =
+        remoteTripDataSource.getAllTrips(
+            address = address,
+            ageRanges = ageRanges,
+            daysOfWeek = daysOfWeek,
+            genders = genders,
+            months = months,
+            years = years,
+            lastViewedId = lastViewedId,
+            limit = limit,
+        ).map { trip ->
+            trip.map { it.toDomain() }
+        }
 
     override suspend fun deleteTrip(tripId: Long): Result<Unit> =
         remoteTripDataSource.deleteTrip(tripId)
