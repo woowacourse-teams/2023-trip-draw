@@ -136,6 +136,10 @@ public class PostService {
                 .toList();
         boolean hasNextPage = (posts.size() == postSearchRequest.paging().limit() + 1);
 
+        if (hasNextPage) {
+            postSearchResponses = postSearchResponses.subList(0, postSearchRequest.paging().limit());
+        }
+
         return PostsSearchResponse.of(postSearchResponses, hasNextPage);
     }
 }
