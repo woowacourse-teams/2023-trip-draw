@@ -21,7 +21,7 @@ interface TripDataSource {
             dataPreSetTripTitle: DataPreSetTripTitle,
         ): Result<Unit>
 
-        suspend fun getAllTrips(): Result<List<DataPreviewTrip>>
+        suspend fun getMyTrips(): Result<List<DataPreviewTrip>>
         suspend fun deleteTrip(tripId: Long): Result<Unit>
     }
 }

@@ -6,13 +6,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class GetAllPostsRequest(
     @Json(name = "condition")
-    val condition: Condition,
+    val condition: PostCondition,
     @Json(name = "paging")
     val paging: Paging,
 )
 
 @JsonClass(generateAdapter = true)
-data class Condition(
+data class PostCondition(
     @Json(name = "address")
     val address: String,
     @Json(name = "ageRanges")

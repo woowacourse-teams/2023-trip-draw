@@ -30,7 +30,7 @@ class HistoryViewModel(
 
     fun fetchPreviewTrips() {
         viewModelScope.launch {
-            tripRepository.getAllTrips()
+            tripRepository.getMyTrips()
                 .onSuccess {
                     _previewTrips.value = it
                 }

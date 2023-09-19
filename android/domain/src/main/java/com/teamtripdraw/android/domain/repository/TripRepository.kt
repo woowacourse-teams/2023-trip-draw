@@ -12,6 +12,6 @@ interface TripRepository {
     suspend fun getCurrentTripRoute(tripId: Long): Result<Route>
     suspend fun getTrip(tripId: Long): Result<Trip>
     suspend fun setTripTitle(tripId: Long, preSetTripTitle: PreSetTripTitle): Result<Unit>
-    suspend fun getAllTrips(): Result<List<PreviewTrip>>
+    suspend fun getMyTrips(): Result<List<PreviewTrip>>
     suspend fun deleteTrip(tripId: Long): Result<Unit>
 }
