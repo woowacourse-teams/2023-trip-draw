@@ -5,6 +5,6 @@ import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.Re
 import retrofit2.http.GET
 
 interface GetAllTripsService {
-    @GET("/trips")
+    @GET("/trips/me")
     suspend fun getAllTrips(): ResponseState<GetAllTripsResponse>
 }

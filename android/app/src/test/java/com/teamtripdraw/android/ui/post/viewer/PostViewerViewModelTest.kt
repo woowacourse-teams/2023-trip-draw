@@ -61,7 +61,7 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
             ),
         )
         val result: Result<List<Post>> = Result.success(posts)
-        coEvery { postRepository.getAllPosts(any()) } returns result
+        coEvery { postRepository.getTripPosts(any()) } returns result
 
         // when
         sut.getPosts()
@@ -75,7 +75,7 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
     fun `감상 목록을 가져오는 것을 실패했을 경우 에러 유발 상태의 값을 변경한다`() {
         // given
         val result: Result<List<Post>> = Result.failure(IllegalStateException())
-        coEvery { postRepository.getAllPosts(any()) } returns result
+        coEvery { postRepository.getTripPosts(any()) } returns result
 
         // when
         sut.getPosts()

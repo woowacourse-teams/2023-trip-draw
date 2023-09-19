@@ -1,9 +1,9 @@
 package com.teamtripdraw.android.data.model.mapper
 
 import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostListResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetTripPostListResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetTripPostResponse
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPrePatchPost
@@ -26,7 +26,7 @@ fun GetPostPointResponse.toData(): DataPoint {
     )
 }
 
-fun GetPostResponse.toData(): DataPost {
+fun GetTripPostResponse.toData(): DataPost {
     return DataPost(
         postId = postId,
         tripId = tripId,
@@ -39,7 +39,7 @@ fun GetPostResponse.toData(): DataPost {
     )
 }
 
-fun GetPostListResponse.toData(): List<DataPost> =
+fun GetTripPostListResponse.toData(): List<DataPost> =
     this.posts.map { it.toData() }
 
 fun PrePost.toData(): DataPrePost {

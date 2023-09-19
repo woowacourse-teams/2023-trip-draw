@@ -4,7 +4,13 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GetPostResponse(
+data class GetTripPostListResponse(
+    @Json(name = "posts")
+    val posts: List<GetTripPostResponse>,
+)
+
+@JsonClass(generateAdapter = true)
+data class GetTripPostResponse(
     @Json(name = "address")
     val address: String,
     @Json(name = "pointResponse")

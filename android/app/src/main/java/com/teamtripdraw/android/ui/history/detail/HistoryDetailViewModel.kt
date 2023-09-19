@@ -54,7 +54,7 @@ class HistoryDetailViewModel(
 
     fun fetchPosts() {
         viewModelScope.launch {
-            postRepository.getAllPosts(tripId)
+            postRepository.getTripPosts(tripId)
                 .onSuccess { posts ->
                     _posts.value = posts.map { post -> post.toPresentation() }
                 }

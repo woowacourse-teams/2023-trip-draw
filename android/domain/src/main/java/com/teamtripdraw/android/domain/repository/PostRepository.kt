@@ -10,7 +10,7 @@ interface PostRepository {
 
     suspend fun getPost(postId: Long): Result<Post>
 
-    suspend fun getAllPosts(tripId: Long): Result<List<Post>>
+    suspend fun getTripPosts(tripId: Long): Result<List<Post>>
 
     suspend fun deletePost(postId: Long): Result<Unit>
 

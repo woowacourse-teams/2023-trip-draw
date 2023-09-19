@@ -18,7 +18,7 @@ interface PostDataSource {
 
         suspend fun getPost(postId: Long): Result<DataPost>
 
-        suspend fun getAllPosts(tripId: Long): Result<List<DataPost>>
+        suspend fun getTripPosts(tripId: Long): Result<List<DataPost>>
 
         suspend fun deletePost(postId: Long): Result<Unit>
 

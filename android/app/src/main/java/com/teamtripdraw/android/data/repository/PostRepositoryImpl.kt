@@ -25,8 +25,8 @@ class PostRepositoryImpl(
         return remotePostDataSource.getPost(postId).map { it.toDomain() }
     }
 
-    override suspend fun getAllPosts(tripId: Long): Result<List<Post>> {
-        return remotePostDataSource.getAllPosts(tripId)
+    override suspend fun getTripPosts(tripId: Long): Result<List<Post>> {
+        return remotePostDataSource.getTripPosts(tripId)
             .map { dataPosts -> dataPosts.map { it.toDomain() } }
     }
 
