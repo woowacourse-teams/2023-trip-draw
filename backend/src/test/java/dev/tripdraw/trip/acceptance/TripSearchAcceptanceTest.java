@@ -1,49 +1,33 @@
 package dev.tripdraw.trip.acceptance;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.test.fixture.TestFixture.서울_2022_1_2_일;
-import static dev.tripdraw.test.fixture.TestFixture.서울_2023_1_1_일;
-import static dev.tripdraw.test.fixture.TestFixture.양양_2021_3_2_화;
-import static dev.tripdraw.test.fixture.TestFixture.제주_2023_1_1_일;
-import static dev.tripdraw.test.fixture.TestFixture.제주_2023_2_1_수;
-import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.addressTripSearchConditions;
-import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.daysOfWeekTripSearchConditions;
-import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.emptyTripSearchConditions;
-import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.monthsTripSearchConditions;
-import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.yearsTripSearchConditions;
-import static dev.tripdraw.test.step.PostStep.createPostAtCurrentPoint;
-import static dev.tripdraw.test.step.TripStep.createTripAndGetResponse;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 import dev.tripdraw.auth.application.JwtTokenProvider;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.test.ControllerTest;
-import dev.tripdraw.trip.dto.TripSearchConditions;
-import dev.tripdraw.trip.dto.TripSearchPaging;
-import dev.tripdraw.trip.dto.TripSearchRequest;
-import dev.tripdraw.trip.dto.TripSearchResponse;
-import dev.tripdraw.trip.dto.TripsSearchResponse;
+import dev.tripdraw.trip.dto.*;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.List;
-import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.List;
+import java.util.Set;
+
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.TestFixture.*;
+import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.*;
+import static dev.tripdraw.test.step.PostStep.createPostAtCurrentPoint;
+import static dev.tripdraw.test.step.TripStep.createTripAndGetResponse;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -476,24 +460,6 @@ public class TripSearchAcceptanceTest extends ControllerTest {
                         리오_서울_2023_1_1_일
                 );
             });
-        }
-
-        @Test
-        void 조건이_유효하지_않을_경우_예외를_발생시킨다() {
-            // given
-            var tripSearchRequest = new TripSearchRequest(
-                    monthsTripSearchConditions(Set.of(Integer.MAX_VALUE)),
-                    nullLastViewedIdAnd10Limit
-            );
-
-            // expect
-            RestAssured.given().log().all()
-                    .auth().preemptive().oauth2(huchuToken)
-                    .contentType(APPLICATION_JSON_VALUE)
-                    .body(tripSearchRequest)
-                    .when().get("/trips")
-                    .then().log().all()
-                    .statusCode(BAD_REQUEST.value());
         }
 
         @Test

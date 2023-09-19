@@ -6,7 +6,6 @@ import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.*;
 import dev.tripdraw.trip.dto.*;
 import dev.tripdraw.trip.query.TripPaging;
-import dev.tripdraw.trip.query.TripQueryConditions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ import java.util.List;
 public class TripService {
 
     private static final int FIRST_INDEX = 0;
-    
+
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
@@ -72,10 +71,10 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripsSearchResponse readAll(TripSearchRequest tripSearchRequest) {
-        TripQueryConditions tripQueryConditions = tripSearchRequest.toTripQueryConditions();
+        TripSearchConditions condition = tripSearchRequest.condition();
         TripPaging tripPaging = tripSearchRequest.toTripPaging();
 
-        List<Trip> trips = tripQueryService.readAllByQueryConditions(tripQueryConditions, tripPaging);
+        List<Trip> trips = tripQueryService.readAllByQueryConditions(condition, tripPaging);
 
         if (tripPaging.hasNextPage(trips.size())) {
             return TripsSearchResponse.of(trips.subList(FIRST_INDEX, tripPaging.limit()), true);

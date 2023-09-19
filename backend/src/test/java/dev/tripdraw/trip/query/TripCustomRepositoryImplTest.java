@@ -1,14 +1,5 @@
 package dev.tripdraw.trip.query;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.test.fixture.TestFixture.위치정보;
-import static dev.tripdraw.test.fixture.TripQueryConditionsFixture.addressSearchConditions;
-import static dev.tripdraw.test.fixture.TripQueryConditionsFixture.daysOfWeekSearchConditions;
-import static dev.tripdraw.test.fixture.TripQueryConditionsFixture.emptySearchConditions;
-import static dev.tripdraw.test.fixture.TripQueryConditionsFixture.monthsSearchConditions;
-import static dev.tripdraw.test.fixture.TripQueryConditionsFixture.yearsSearchConditions;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
@@ -16,18 +7,21 @@ import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import java.util.List;
-import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import dev.tripdraw.trip.dto.TripSearchConditions;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
+
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.TestFixture.위치정보;
+import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -71,7 +65,7 @@ class TripCustomRepositoryImplTest {
                 TripPaging tripPaging = new TripPaging(null, limit);
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(emptySearchConditions(), tripPaging);
+                List<Trip> trips = tripCustomRepository.findAllByConditions(emptyTripSearchConditions(), tripPaging);
 
                 // then
                 assertThat(trips).hasSize(expectedSize);
@@ -86,7 +80,7 @@ class TripCustomRepositoryImplTest {
                 TripPaging tripPaging = new TripPaging(null, limit);
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(emptySearchConditions(), tripPaging);
+                List<Trip> trips = tripCustomRepository.findAllByConditions(emptyTripSearchConditions(), tripPaging);
 
                 // then
                 assertThat(trips).hasSize(expectedSize);
@@ -106,8 +100,10 @@ class TripCustomRepositoryImplTest {
                 Long lastViewedId = null;
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(emptySearchConditions(),
-                        new TripPaging(lastViewedId, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        emptyTripSearchConditions(),
+                        new TripPaging(lastViewedId, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(
@@ -127,8 +123,10 @@ class TripCustomRepositoryImplTest {
                 Long lastViewedId = jeju2023_2_1_Wed.id();
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(emptySearchConditions(),
-                        new TripPaging(lastViewedId, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        emptyTripSearchConditions(),
+                        new TripPaging(lastViewedId, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(seoul2023_1_1_Sun, jeju2023_1_1_Sun);
@@ -146,11 +144,13 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 Trip jeju2023_2_1_Wed = jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = yearsSearchConditions(Set.of(2023));
+                TripSearchConditions tripSearchConditions = yearsTripSearchConditions(Set.of(2023));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(jeju2023_2_1_Wed, seoul2023_1_1_Sun, jeju2023_1_1_Sun);
@@ -165,11 +165,13 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 Trip jeju2023_2_1_Wed = jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = yearsSearchConditions(Set.of(2023, 2021));
+                TripSearchConditions tripSearchConditions = yearsTripSearchConditions(Set.of(2023, 2021));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(
@@ -192,11 +194,13 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = monthsSearchConditions(Set.of(1));
+                TripSearchConditions tripSearchConditions = monthsTripSearchConditions(Set.of(1));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(seoul2023_1_1_Sun, jeju2023_1_1_Sun, seoul2022_1_2_Sun);
@@ -211,11 +215,13 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = monthsSearchConditions(Set.of(1, 3));
+                TripSearchConditions tripSearchConditions = monthsTripSearchConditions(Set.of(1, 3));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(
@@ -238,11 +244,13 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = daysOfWeekSearchConditions(Set.of(1));
+                TripSearchConditions tripSearchConditions = daysOfWeekTripSearchConditions(Set.of(1));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(seoul2023_1_1_Sun, jeju2023_1_1_Sun, seoul2022_1_2_Sun);
@@ -257,11 +265,13 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = daysOfWeekSearchConditions(Set.of(1, 3));
+                TripSearchConditions tripSearchConditions = daysOfWeekTripSearchConditions(Set.of(1, 3));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(
@@ -283,11 +293,13 @@ class TripCustomRepositoryImplTest {
                 Trip jejuIsland_jeju_aewol = jeju_2023_1_1_Sun();
                 Trip seoul_songpa_sincheon = seoul_2023_1_1_Sun();
 
-                TripQueryConditions tripQueryConditions = addressSearchConditions("서울특별시 송파구 신천동");
+                TripSearchConditions tripSearchConditions = addressTripSearchConditions("서울특별시 송파구 신천동");
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(seoul_songpa_sincheon);
@@ -300,11 +312,13 @@ class TripCustomRepositoryImplTest {
                 Trip jejuIsland_jeju_aewol = jeju_2023_1_1_Sun();
                 Trip seoul_songpa_sincheon = seoul_2023_1_1_Sun();
 
-                TripQueryConditions tripQueryConditions = addressSearchConditions("서울특별시 송파구");
+                TripSearchConditions tripSearchConditions = addressTripSearchConditions("서울특별시 송파구");
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(seoul_songpa_sincheon, seoul_songpa_Bangi);
@@ -317,11 +331,13 @@ class TripCustomRepositoryImplTest {
                 Trip jejuIsland_jeju_aewol = jeju_2023_1_1_Sun();
                 Trip seoul_songpa_sincheon = seoul_2023_1_1_Sun();
 
-                TripQueryConditions tripQueryConditions = addressSearchConditions("서울특별시");
+                TripSearchConditions tripSearchConditions = addressTripSearchConditions("서울특별시");
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(seoul_songpa_sincheon, seoul_songpa_Bangi);
@@ -340,18 +356,17 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = new TripQueryConditions(
-                        Set.of(2023),
-                        Set.of(1),
-                        Set.of(),
-                        Set.of(),
-                        Set.of(),
-                        "서울특별시"
-                );
+                TripSearchConditions tripSearchConditions = TripSearchConditions.builder()
+                        .years(Set.of(2023))
+                        .months(Set.of(1))
+                        .address("서울특별시")
+                        .build();
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(seoul2023_1_1_Sun);
@@ -366,11 +381,13 @@ class TripCustomRepositoryImplTest {
                 Trip seoul2023_1_1_Sun = seoul_2023_1_1_Sun();
                 Trip jeju_2023_2_1_Wed = jeju_2023_2_1_Wed();
 
-                TripQueryConditions tripQueryConditions = emptySearchConditions();
+                TripSearchConditions tripSearchConditions = emptyTripSearchConditions();
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions,
-                        new TripPaging(null, 10));
+                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                        tripSearchConditions,
+                        new TripPaging(null, 10)
+                );
 
                 // then
                 assertThat(trips).containsExactly(
@@ -388,10 +405,13 @@ class TripCustomRepositoryImplTest {
             // given
             emptyPostTrip();
 
-            TripQueryConditions tripQueryConditions = emptySearchConditions();
+            TripSearchConditions tripSearchConditions = emptyTripSearchConditions();
 
             // when
-            List<Trip> trips = tripCustomRepository.findAllByConditions(tripQueryConditions, new TripPaging(null, 10));
+            List<Trip> trips = tripCustomRepository.findAllByConditions(
+                    tripSearchConditions,
+                    new TripPaging(null, 10)
+            );
 
             // then
             assertThat(trips).isEmpty();
