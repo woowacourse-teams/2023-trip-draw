@@ -18,10 +18,7 @@ public class TripQueryService {
 
     @Transactional(readOnly = true)
     public List<Trip> readAllByQueryConditions(TripQueryConditions tripQueryConditions, TripPaging tripPaging) {
-        return tripCustomRepository.findAllByConditions(
-                tripQueryConditions,
-                tripPaging
-        );
+        return tripCustomRepository.findAllByConditions(tripQueryConditions, tripPaging);
     }
 }
 
