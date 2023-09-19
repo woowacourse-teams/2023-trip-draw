@@ -1,6 +1,7 @@
 package dev.tripdraw.post.presentation;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -19,8 +20,12 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchConditions;
+import dev.tripdraw.post.dto.PostSearchPaging;
+import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
+import dev.tripdraw.post.dto.PostsSearchResponse;
 import dev.tripdraw.test.ControllerTest;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
@@ -31,7 +36,6 @@ import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -39,6 +43,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
 
@@ -53,6 +61,7 @@ class PostControllerTest extends ControllerTest {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    // 이벤트를 통해 비동기로 경로 이미지를 생성하기 때문에, MockBean으로 둡니다.
     @MockBean
     private RouteImageGenerator routeImageGenerator;
 
@@ -74,7 +83,7 @@ class PostControllerTest extends ControllerTest {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -105,7 +114,7 @@ class PostControllerTest extends ControllerTest {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -128,7 +137,7 @@ class PostControllerTest extends ControllerTest {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 Long.MIN_VALUE,
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -151,7 +160,7 @@ class PostControllerTest extends ControllerTest {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -174,7 +183,7 @@ class PostControllerTest extends ControllerTest {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "a".repeat(101),
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
@@ -197,7 +206,7 @@ class PostControllerTest extends ControllerTest {
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 null,
                 2.2,
@@ -223,7 +232,7 @@ class PostControllerTest extends ControllerTest {
                 trip.id(),
                 pointResponse.pointId(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -254,7 +263,7 @@ class PostControllerTest extends ControllerTest {
                 trip.id(),
                 pointResponse.pointId(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -277,7 +286,7 @@ class PostControllerTest extends ControllerTest {
                 Long.MIN_VALUE,
                 pointResponse.pointId(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -298,7 +307,7 @@ class PostControllerTest extends ControllerTest {
                 trip.id(),
                 Long.MIN_VALUE,
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -344,7 +353,7 @@ class PostControllerTest extends ControllerTest {
                 trip.id(),
                 pointResponse.pointId(),
                 "a".repeat(101),
-                "제주특별자치도 제주시 애월읍 소길리",
+                "제주특별자치도 제주시 애월읍",
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
         );
 
@@ -361,7 +370,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 특정_감상을_조회한다() {
         // given
-        PostCreateResponse postResponse = createPost();
+        PostCreateResponse postResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
 
         // when
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
@@ -388,7 +397,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 특정_감상을_조회할_때_인증에_실패하면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
 
         // expect
         RestAssured.given().log().all()
@@ -413,8 +422,8 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 특정_여행에_대한_모든_감상을_조회한다() {
         // given
-        createPost();
-        createPost();
+        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
+        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 21, 24));
 
         // when
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
@@ -465,7 +474,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_수정한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
@@ -496,7 +505,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_수정할_때_인증에_실패하면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
 
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
                 "우도의 땅콩 아이스크림",
@@ -538,7 +547,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_삭제한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
 
         // expect1 : 삭제하면 204 NO_CONTENT 응답
         RestAssured.given().log().all()
@@ -560,7 +569,7 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_삭제할_때_인증에_실패하면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost();
+        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
 
         // expect
         RestAssured.given().log().all()
@@ -582,6 +591,82 @@ class PostControllerTest extends ControllerTest {
                 .statusCode(NOT_FOUND.value());
     }
 
+    @Test
+    void 다른_사용자들의_감상을_조회한다() {
+        // given
+        PostCreateResponse jejuJuly20hourPostResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
+        PostCreateResponse jejuAugust17hourPostResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 8, 18, 17, 24));
+        PostCreateResponse jejuSeptember17hourPostResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 9, 18, 17, 24));
+        PostCreateResponse seoulSeptember17hourPostResponse = createPost("서울특별시 송파구 잠실동", LocalDateTime.of(2023, 9, 18, 17, 24));
+
+        PostSearchRequest jejuRequest = new PostSearchRequest(
+                PostSearchConditions.builder()
+                        .address("제주특별자치도 제주시 애월읍")
+                        .build(),
+                new PostSearchPaging(null, 10)
+        );
+
+        PostSearchRequest jeju17hourRequest = new PostSearchRequest(
+                PostSearchConditions.builder()
+                        .hours(Set.of(17))
+                        .address("제주특별자치도 제주시 애월읍")
+                        .build(),
+                new PostSearchPaging(null, 10)
+        );
+
+        PostSearchRequest hour17Request = new PostSearchRequest(
+                PostSearchConditions.builder()
+                        .hours(Set.of(17))
+                        .build(),
+                new PostSearchPaging(null, 10)
+        );
+
+        // when
+        ExtractableResponse<Response> jejuResponse = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(huchuToken)
+                .body(jejuRequest)
+                .when().get("/posts")
+                .then().log().all()
+                .statusCode(OK.value())
+                .extract();
+
+        ExtractableResponse<Response> jeju17hourResponse = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(huchuToken)
+                .body(jeju17hourRequest)
+                .when().get("/posts")
+                .then().log().all()
+                .statusCode(OK.value())
+                .extract();
+
+        ExtractableResponse<Response> hour17Response = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(huchuToken)
+                .body(hour17Request)
+                .when().get("/posts")
+                .then().log().all()
+                .statusCode(OK.value())
+                .extract();
+
+        // then
+        PostsSearchResponse jejuPostsSearchResponse = jejuResponse.as(PostsSearchResponse.class);
+        PostsSearchResponse jeju17hourPostsSearchResponse = jeju17hourResponse.as(PostsSearchResponse.class);
+        PostsSearchResponse hour17PostsSearchResponse = hour17Response.as(PostsSearchResponse.class);
+
+        assertThat(jejuPostsSearchResponse.posts().get(0).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
+        assertThat(jejuPostsSearchResponse.posts().get(1).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
+        assertThat(jejuPostsSearchResponse.posts().get(2).postId()).isEqualTo(jejuJuly20hourPostResponse.postId());
+
+
+        assertThat(jeju17hourPostsSearchResponse.posts().get(0).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
+        assertThat(jeju17hourPostsSearchResponse.posts().get(1).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
+
+        assertThat(hour17PostsSearchResponse.posts().get(0).postId()).isEqualTo(seoulSeptember17hourPostResponse.postId());
+        assertThat(hour17PostsSearchResponse.posts().get(1).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
+        assertThat(hour17PostsSearchResponse.posts().get(2).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
+    }
+
     private PointResponse createPoint() {
         PointCreateRequest request = new PointCreateRequest(
                 trip.id(),
@@ -601,16 +686,16 @@ class PostControllerTest extends ControllerTest {
         return response.as(PointResponse.class);
     }
 
-    private PostCreateResponse createPost() {
+    private PostCreateResponse createPost(String address, LocalDateTime localDateTime) {
         // given
         PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
                 trip.id(),
                 "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍 소길리",
+                address,
                 "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
                 1.1,
                 2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
+                localDateTime
         );
 
         MultiPartSpecification multiPartSpecification = new MultiPartSpecBuilder(postAndPointCreateRequest)
@@ -628,11 +713,9 @@ class PostControllerTest extends ControllerTest {
                 .then().log().all()
                 .extract();
 
-        PostCreateResponse postResponse = createResponse.as(PostCreateResponse.class);
-        return postResponse;
+        return createResponse.as(PostCreateResponse.class);
     }
 
-    @Test
     PostResponse readPost(Long postId) {
         ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
