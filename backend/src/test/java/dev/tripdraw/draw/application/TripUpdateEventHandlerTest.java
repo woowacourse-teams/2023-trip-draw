@@ -1,13 +1,11 @@
 package dev.tripdraw.draw.application;
 
-import static dev.tripdraw.test.TestFixture.여행;
+import static dev.tripdraw.test.fixture.TestFixture.여행;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
-import dev.tripdraw.draw.application.RouteImageGenerator;
-import dev.tripdraw.draw.application.TripUpdateEventHandler;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
 import org.junit.jupiter.api.DisplayNameGeneration;

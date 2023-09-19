@@ -3,32 +3,27 @@ package dev.tripdraw.trip.application;
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.trip.domain.Point;
-import dev.tripdraw.trip.domain.PointRepository;
-import dev.tripdraw.trip.domain.Trip;
-import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.trip.domain.TripUpdateEvent;
-import dev.tripdraw.trip.dto.PointCreateRequest;
-import dev.tripdraw.trip.dto.PointCreateResponse;
-import dev.tripdraw.trip.dto.PointResponse;
-import dev.tripdraw.trip.dto.TripCreateResponse;
-import dev.tripdraw.trip.dto.TripResponse;
-import dev.tripdraw.trip.dto.TripUpdateRequest;
-import dev.tripdraw.trip.dto.TripsSearchResponse;
-import java.util.List;
+import dev.tripdraw.trip.domain.*;
+import dev.tripdraw.trip.dto.*;
+import dev.tripdraw.trip.query.TripPaging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class TripService {
 
+    private static final int FIRST_INDEX = 0;
+
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
+    private final TripQueryService tripQueryService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public TripCreateResponse create(LoginUser loginUser) {
@@ -68,10 +63,23 @@ public class TripService {
     }
 
     @Transactional(readOnly = true)
-    public TripsSearchResponse readAllTrips(LoginUser loginUser) {
+    public TripsSearchResponseOfMember readAllTripsOf(LoginUser loginUser) {
         Member member = memberRepository.getById(loginUser.memberId());
         List<Trip> trips = tripRepository.findAllByMemberId(member.id());
-        return TripsSearchResponse.from(trips);
+        return TripsSearchResponseOfMember.from(trips);
+    }
+
+    @Transactional(readOnly = true)
+    public TripsSearchResponse readAll(TripSearchRequest tripSearchRequest) {
+        TripSearchConditions condition = tripSearchRequest.condition();
+        TripPaging tripPaging = tripSearchRequest.toTripPaging();
+
+        List<Trip> trips = tripQueryService.readAllByQueryConditions(condition, tripPaging);
+
+        if (tripPaging.hasNextPage(trips.size())) {
+            return TripsSearchResponse.of(trips.subList(FIRST_INDEX, tripPaging.limit()), true);
+        }
+        return TripsSearchResponse.of(trips, false);
     }
 
     public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {

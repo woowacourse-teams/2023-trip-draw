@@ -11,6 +11,8 @@ import dev.tripdraw.common.config.QueryDslConfig;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.exception.TripException;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -19,13 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DataJpaTest
 @Import({JpaConfig.class, QueryDslConfig.class})
+@DataJpaTest
 class TripRepositoryTest {
 
     @Autowired
@@ -91,20 +90,6 @@ class TripRepositoryTest {
         // given
         Trip trip = new Trip(TripName.from("제주도 여행"), member);
         tripRepository.save(trip);
-
-        // when
-        tripRepository.deleteByMemberId(member.id());
-
-        // then
-        assertThat(tripRepository.findById(trip.id())).isEmpty();
-    }
-
-    @Test
-    void 회원_ID로_모든_여행을_삭제한다() {
-        // given
-        Trip trip = new Trip(TripName.from("제주도 여행"), member);
-        tripRepository.save(trip);
-        tripRepository.save(new Trip(TripName.from("제주도 여행"), member));
 
         // when
         tripRepository.deleteByMemberId(member.id());

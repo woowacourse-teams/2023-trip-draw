@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class TripSearchResponseTest {
+class TripSearchResponseOfMemberTest {
 
     @Test
     void 여행_이미지와_경로_이미지가_null이면_빈값으로_변환해_생성한다() {
@@ -23,11 +23,11 @@ class TripSearchResponseTest {
         Trip trip = new Trip(1L, tripName, member, ONGOING, null, null);
 
         // when
-        TripSearchResponse response = TripSearchResponse.from(trip);
+        TripSearchResponseOfMember response = TripSearchResponseOfMember.from(trip);
 
         // then
         assertThat(response).usingRecursiveComparison().isEqualTo(
-                TripSearchResponse.from(new Trip(1L, tripName, member, ONGOING, "", ""))
+                TripSearchResponseOfMember.from(new Trip(1L, tripName, member, ONGOING, "", ""))
         );
     }
 }
