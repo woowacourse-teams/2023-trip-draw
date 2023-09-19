@@ -13,6 +13,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.auth.application.JwtTokenProvider;
+import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
@@ -40,6 +41,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -58,6 +60,10 @@ class PostControllerTest extends ControllerTest {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    // 이벤트를 통해 비동기로 경로 이미지를 생성하기 때문에, MockBean으로 둡니다.
+    @MockBean
+    private RouteImageGenerator routeImageGenerator;
 
     private Trip trip;
     private String huchuToken;
