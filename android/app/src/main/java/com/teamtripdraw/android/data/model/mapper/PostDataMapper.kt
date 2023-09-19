@@ -6,11 +6,14 @@ import com.teamtripdraw.android.data.httpClient.dto.response.GetTripPostListResp
 import com.teamtripdraw.android.data.httpClient.dto.response.GetTripPostResponse
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
+import com.teamtripdraw.android.data.model.DataPostOfAll
 import com.teamtripdraw.android.data.model.DataPrePatchPost
 import com.teamtripdraw.android.data.model.DataPrePost
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
+import java.time.LocalDateTime
 
 fun AddPostResponse.toData(): Long {
     return postId
@@ -70,5 +73,18 @@ fun DataPost.toDomain(): Post {
         point = point.toDomain(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
+    )
+}
+
+fun DataPostOfAll.toDomain(): PostOfAll {
+    return PostOfAll(
+        postId = postId,
+        tripId = tripId,
+        title = title,
+        writing = writing,
+        address = address,
+        postImageUrl = postImageUrl,
+        routeImageUrl = routeImageUrl,
+        recordedAt = LocalDateTime.parse(recordedAt),
     )
 }

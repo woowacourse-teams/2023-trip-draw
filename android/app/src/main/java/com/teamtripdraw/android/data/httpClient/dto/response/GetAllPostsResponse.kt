@@ -16,7 +16,7 @@ data class Post(
     @Json(name = "address")
     val address: String,
     @Json(name = "postId")
-    val postId: Int,
+    val postId: Long,
     @Json(name = "postImageUrl")
     val postImageUrl: String,
     @Json(name = "recordedAt")
@@ -26,7 +26,7 @@ data class Post(
     @Json(name = "title")
     val title: String,
     @Json(name = "tripId")
-    val tripId: Int,
+    val tripId: Long,
     @Json(name = "writing")
     val writing: String,
 )

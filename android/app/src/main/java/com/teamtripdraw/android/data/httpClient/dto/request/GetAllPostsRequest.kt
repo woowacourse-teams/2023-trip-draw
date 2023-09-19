@@ -34,15 +34,15 @@ data class Condition(
 @JsonClass(generateAdapter = true)
 data class CurrentPosition(
     @Json(name = "latitude")
-    val latitude: Double,
+    val latitude: Double?,
     @Json(name = "longitude")
-    val longitude: Double,
+    val longitude: Double?,
 )
 
 @JsonClass(generateAdapter = true)
 data class Paging(
     @Json(name = "lastViewedId")
-    val lastViewedId: Int,
+    val lastViewedId: Long?,
     @Json(name = "limit")
     val limit: Int,
 )
