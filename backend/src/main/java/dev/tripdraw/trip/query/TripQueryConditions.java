@@ -1,10 +1,11 @@
 package dev.tripdraw.trip.query;
 
-import static dev.tripdraw.trip.exception.TripExceptionType.INVALID_TRIP_SEARCH;
-
 import dev.tripdraw.trip.exception.TripException;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import static dev.tripdraw.trip.exception.TripExceptionType.INVALID_TRIP_SEARCH;
 
 public record TripQueryConditions(
         Set<Integer> years,
@@ -34,7 +35,7 @@ public record TripQueryConditions(
             Set<Integer> genders,
             String address
     ) {
-//        validate(years, months, daysOfWeek, ageRanges, genders);
+        validate(years, months, daysOfWeek, ageRanges, genders);
         this.years = new HashSet<>(years);
         this.months = new HashSet<>(months);
         this.daysOfWeek = new HashSet<>(daysOfWeek);

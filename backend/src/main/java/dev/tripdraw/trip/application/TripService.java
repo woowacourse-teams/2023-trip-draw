@@ -3,27 +3,16 @@ package dev.tripdraw.trip.application;
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.trip.domain.Point;
-import dev.tripdraw.trip.domain.PointRepository;
-import dev.tripdraw.trip.domain.Trip;
-import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.trip.domain.TripUpdateEvent;
-import dev.tripdraw.trip.dto.PointCreateRequest;
-import dev.tripdraw.trip.dto.PointCreateResponse;
-import dev.tripdraw.trip.dto.PointResponse;
-import dev.tripdraw.trip.dto.TripCreateResponse;
-import dev.tripdraw.trip.dto.TripResponse;
-import dev.tripdraw.trip.dto.TripSearchRequest;
-import dev.tripdraw.trip.dto.TripUpdateRequest;
-import dev.tripdraw.trip.dto.TripsSearchResponse;
-import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
+import dev.tripdraw.trip.domain.*;
+import dev.tripdraw.trip.dto.*;
 import dev.tripdraw.trip.query.TripPaging;
 import dev.tripdraw.trip.query.TripQueryConditions;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -31,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TripService {
 
     private static final int FIRST_INDEX = 0;
+    
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
