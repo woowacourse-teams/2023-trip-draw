@@ -1,18 +1,20 @@
 package dev.tripdraw.trip.query;
 
-import static dev.tripdraw.post.domain.QPost.post;
-import static dev.tripdraw.trip.domain.QPoint.point;
-import static dev.tripdraw.trip.domain.QTrip.trip;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.dto.TripSearchConditions;
 import io.micrometer.common.util.StringUtils;
-import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Set;
+
+import static dev.tripdraw.post.domain.QPost.post;
+import static dev.tripdraw.trip.domain.QPoint.point;
+import static dev.tripdraw.trip.domain.QTrip.trip;
 
 @RequiredArgsConstructor
 @Repository
@@ -21,17 +23,17 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<Trip> findAllByConditions(TripQueryConditions tripQueryConditions, TripPaging tripPaging) {
+    public List<Trip> findAllByConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
         return query
                 .selectFrom(trip)
                 .join(post).on(trip.id.eq(post.tripId))
                 .join(point).on(post.point.id.eq(point.id))
                 .where(
                         tripIdLt(tripPaging.lastViewedId()),
-                        yearIn(tripQueryConditions.years()),
-                        monthIn(tripQueryConditions.months()),
-                        dayOfWeekIn(tripQueryConditions.daysOfWeek()),
-                        addressLike(tripQueryConditions.address())
+                        yearIn(tripSearchConditions.years()),
+                        monthIn(tripSearchConditions.months()),
+                        dayOfWeekIn(tripSearchConditions.daysOfWeek()),
+                        addressLike(tripSearchConditions.address())
                 )
                 .orderBy(trip.id.desc())
                 .limit(tripPaging.limit().longValue() + 1L)
