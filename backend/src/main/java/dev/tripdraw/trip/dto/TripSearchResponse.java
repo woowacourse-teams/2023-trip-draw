@@ -2,8 +2,8 @@ package dev.tripdraw.trip.dto;
 
 import dev.tripdraw.trip.domain.Trip;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public record TripSearchResponse(
         @Schema(description = "여행 Id", example = "1")
@@ -25,12 +25,14 @@ public record TripSearchResponse(
         LocalDateTime endTime
 ) {
 
+    private static final String EMPTY_IMAGE_URL = "";
+
     public static TripSearchResponse from(Trip trip) {
         return new TripSearchResponse(
                 trip.id(),
                 trip.nameValue(),
-                trip.imageUrl(),
-                trip.routeImageUrl(),
+                Objects.requireNonNullElse(trip.imageUrl(), EMPTY_IMAGE_URL),
+                Objects.requireNonNullElse(trip.routeImageUrl(), EMPTY_IMAGE_URL),
                 trip.createdAt(),
                 trip.updatedAt()
         );
