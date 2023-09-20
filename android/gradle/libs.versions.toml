@@ -195,7 +195,6 @@ androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mock
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
 naverMap = ["naverMap", "gmsPlayServicesLocation"]
-hilt = ["hilt", "hiltKapt"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradleplugin" }

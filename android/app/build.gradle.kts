@@ -152,9 +152,9 @@ sentry {
 }
 
 // Hilt Allow references to generated code
-kapt {
+ kapt {
     correctErrorTypes = true
-}
+ }
 
 dependencies {
     // 프로젝트내 의존성
@@ -202,5 +202,6 @@ dependencies {
     implementation(libs.timber)
 
     // hilt
-    implementation(libs.bundles.hilt)
+    implementation(libs.hilt)
+    kapt(libs.hiltKapt)
 }
