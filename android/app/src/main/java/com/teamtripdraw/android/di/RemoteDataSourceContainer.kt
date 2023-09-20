@@ -4,7 +4,8 @@ import com.teamtripdraw.android.data.dataSource.auth.login.LoginDataSource
 import com.teamtripdraw.android.data.dataSource.auth.login.RemoteLoginDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.auth.signUp.RemoteSignUpDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.auth.signUp.SignUpDataSource
-import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.UserIdentifyInfoDataSource
+import com.teamtripdraw.android.data.dataSource.geocoding.GeocodingDataSource
+import com.teamtripdraw.android.data.dataSource.geocoding.RemoteGeocodingDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.point.PointDataSource
 import com.teamtripdraw.android.data.dataSource.point.RemotePointDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.post.PostDataSource
@@ -50,5 +51,9 @@ class RemoteDataSourceContainer(
     val remoteLoginDataSource: LoginDataSource.Remote =
         RemoteLoginDataSourceImpl(
             serviceContainer.loginService,
+        )
+    val remoteGeocodingDataSource: GeocodingDataSource.Remote =
+        RemoteGeocodingDataSourceImpl(
+            serviceContainer.naverGeocodingService,
         )
 }

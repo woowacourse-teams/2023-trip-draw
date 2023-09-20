@@ -80,13 +80,29 @@ class RetrofitContainer(
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-//    val naverGeocoderRetrofit: Retrofit =
-//        Retrofit.Builder()
-//            .baseUrl("수달이 채워넣을 부분")
-//            .client(generalOKHttpClient)
-//            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
-//            .addConverterFactory(MoshiConverterFactory.create(moshi))
-//            .build()
+    private val naverReverseGeocodingInterceptor: Interceptor =
+        Interceptor { chain ->
+            with(chain) {
+                proceed(
+                    request()
+                        .newBuilder()
+                        .addHeader("X-NCP-APIGW-API-KEY-ID", BuildConfig.NAVER_MAP_CLIENT_ID_STRING)
+                        .addHeader("X-NCP-APIGW-API-KEY", BuildConfig.NAVER_MAP_CLIENT_SECRET_STRING)
+                        .build(),
+                )
+            }
+        }
+    private val naverGeocodingOkHttpClient: OkHttpClient =
+        generalOKHttpClient.newBuilder()
+            .addInterceptor(naverReverseGeocodingInterceptor)
+            .build()
+    val naverReverseGeocodingRetrofit: Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.NAVER_REVERS_GEOCODER_BASE_URL_STRING)
+            .client(naverGeocodingOkHttpClient)
+            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
 
     companion object {
         private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
