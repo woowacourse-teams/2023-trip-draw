@@ -24,8 +24,6 @@ import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
-import dev.tripdraw.trip.dto.TripSearchConditions;
-import dev.tripdraw.trip.dto.TripSearchPaging;
 import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripSearchResponse;
 import dev.tripdraw.trip.dto.TripSearchResponseOfMember;
@@ -36,7 +34,6 @@ import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,16 +169,9 @@ class TripServiceTest {
     @Test
     void 모든_회원의_감상이_있는_여행_전체를_조회한다() {
         // given
-        TripSearchConditions emptyConditions = new TripSearchConditions(
-                Set.of(),
-                Set.of(),
-                Set.of(),
-                Set.of(),
-                Set.of(),
-                ""
-        );
-        TripSearchPaging tripSearchPaging = new TripSearchPaging(null, 10);
-        TripSearchRequest tripSearchRequest = new TripSearchRequest(emptyConditions, tripSearchPaging);
+        TripSearchRequest tripSearchRequest = TripSearchRequest.builder()
+                .limit(10)
+                .build();
 
         // when
         TripsSearchResponse tripsSearchResponse = tripService.readAll(tripSearchRequest);
