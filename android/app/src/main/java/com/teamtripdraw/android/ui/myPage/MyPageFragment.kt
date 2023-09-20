@@ -11,18 +11,20 @@ import com.teamtripdraw.android.databinding.FragmentMyPageBinding
 import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.history.HistoryActivity
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.login.LoginActivity
 import com.teamtripdraw.android.ui.policy.OpenSourceLicenseActivity
 import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : Fragment() {
 
     private var _binding: FragmentMyPageBinding? = null
     private val binding: FragmentMyPageBinding get() = _binding!!
-    private val viewModel: MyPageViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: MyPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +41,12 @@ class MyPageFragment : Fragment() {
         return binding.root
     }
 
+    private fun initNickname() {
+        viewModel.fetchNickname()
+    }
+
     private fun initObserver() {
+        initOpenTripHistoryObserver()
         initOpenOpenSourceLicenseObserver()
         initOpenPrivacyPolicyObserver()
         initLogOutEventObserver()
@@ -47,8 +54,10 @@ class MyPageFragment : Fragment() {
         initUnsubscribeSuccessEventObserver()
     }
 
-    private fun initNickname() {
-        viewModel.fetchNickname()
+    private fun initOpenTripHistoryObserver() {
+        viewModel.openTripHistoryEvent.observe(viewLifecycleOwner) {
+            if (it) startActivity(HistoryActivity.getIntent(requireContext()))
+        }
     }
 
     private fun initOpenOpenSourceLicenseObserver() {

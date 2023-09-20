@@ -8,13 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.replace
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityMainBinding
-import com.teamtripdraw.android.ui.history.HistoryFragment
+import com.teamtripdraw.android.ui.allPosts.AllPostsFragment
+import com.teamtripdraw.android.ui.allTrips.AllTripsFragment
 import com.teamtripdraw.android.ui.home.HomeFragment
-import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.HISTORY
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.HOME
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.MY_PAGE
+import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.POSTS
+import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.TRIPS
 import com.teamtripdraw.android.ui.myPage.MyPageFragment
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -40,9 +45,14 @@ class MainActivity : AppCompatActivity() {
                         .replace<HomeFragment>(R.id.fcv_main).commit()
                     return@setOnItemSelectedListener true
                 }
-                HISTORY -> {
+                TRIPS -> {
                     supportFragmentManager.beginTransaction()
-                        .replace<HistoryFragment>(R.id.fcv_main).commit()
+                        .replace<AllTripsFragment>(R.id.fcv_main).commit()
+                    return@setOnItemSelectedListener true
+                }
+                POSTS -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace<AllPostsFragment>(R.id.fcv_main).commit()
                     return@setOnItemSelectedListener true
                 }
                 MY_PAGE -> {
@@ -56,7 +66,8 @@ class MainActivity : AppCompatActivity() {
 
     private enum class BottomNavigationMenuType(@IdRes private val resourceId: Int) {
         HOME(R.id.menu_bn_home),
-        HISTORY(R.id.menu_bn_history),
+        TRIPS(R.id.menu_bn_trips),
+        POSTS(R.id.menu_bn_posts),
         MY_PAGE(R.id.menu_bn_my_page),
         ;
 

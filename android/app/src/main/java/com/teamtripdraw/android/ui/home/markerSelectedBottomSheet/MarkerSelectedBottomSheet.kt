@@ -13,19 +13,20 @@ import com.teamtripdraw.android.databinding.BottomSheetMarkerSelectedBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
+@AndroidEntryPoint
 class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetMarkerSelectedBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MapBottomSheetViewModel
-    private val markerSelectedViewModel: MarkerSelectedViewModel by viewModels { tripDrawViewModelFactory }
+    private val markerSelectedViewModel: MarkerSelectedViewModel by viewModels()
 
     private lateinit var geocoder: Geocoder
 

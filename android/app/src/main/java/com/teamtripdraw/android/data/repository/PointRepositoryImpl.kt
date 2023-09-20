@@ -7,8 +7,9 @@ import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.domain.repository.PointRepository
+import javax.inject.Inject
 
-class PointRepositoryImpl(
+class PointRepositoryImpl @Inject constructor(
     private val pointDataSource: PointDataSource.Remote,
     private val tripDataSource: TripDataSource.Local,
 ) : PointRepository {

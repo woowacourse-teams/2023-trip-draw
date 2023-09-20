@@ -5,8 +5,9 @@ import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.service.LoginService
 import com.teamtripdraw.android.data.model.DataLoginInfo
 import com.teamtripdraw.android.data.model.DataUserIdentifyInfo
+import javax.inject.Inject
 
-class RemoteLoginDataSourceImpl(
+class RemoteLoginDataSourceImpl @Inject constructor(
     private val loginService: LoginService,
 ) : LoginDataSource.Remote {
     override suspend fun login(dataLoginInfo: DataLoginInfo): Result<DataUserIdentifyInfo> =

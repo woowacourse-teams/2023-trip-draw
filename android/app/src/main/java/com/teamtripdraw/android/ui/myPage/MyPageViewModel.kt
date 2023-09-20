@@ -9,9 +9,12 @@ import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyPageViewModel(
+@HiltViewModel
+class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val tripRepository: TripRepository,
 ) : ViewModel() {
@@ -20,6 +23,9 @@ class MyPageViewModel(
 
     private val _nickname: MutableLiveData<String> = MutableLiveData("")
     val nickname: LiveData<String> = _nickname
+
+    private val _openTripHistoryEvent: MutableLiveData<Boolean> = MutableLiveData()
+    val openTripHistoryEvent: LiveData<Boolean> = _openTripHistoryEvent
 
     private val _openOpenSourceLicenseEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val openOpenSourceLicenseEvent: LiveData<Boolean> = _openOpenSourceLicenseEvent
@@ -50,6 +56,10 @@ class MyPageViewModel(
                     }
             }
         }
+    }
+
+    fun openTripHistory() {
+        _openTripHistoryEvent.value = true
     }
 
     fun startLogoutEvent() {

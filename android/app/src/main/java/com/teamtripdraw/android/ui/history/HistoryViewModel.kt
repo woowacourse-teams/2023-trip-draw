@@ -12,9 +12,12 @@ import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.UiTripHistory
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HistoryViewModel(
+@HiltViewModel
+class HistoryViewModel @Inject constructor(
     private val tripRepository: TripRepository,
 ) : ViewModel() {
 
@@ -24,6 +27,9 @@ class HistoryViewModel(
 
     private val _previewTripOpenEvent = MutableLiveData<Event<UiPreviewTrip>>()
     val previewTripOpenEvent: LiveData<Event<UiPreviewTrip>> = _previewTripOpenEvent
+
+    private val _backPageEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val backPageEvent: LiveData<Event<Boolean>> = _backPageEvent
 
     fun fetchPreviewTrips() {
         viewModelScope.launch {
@@ -39,5 +45,9 @@ class HistoryViewModel(
 
     fun openHistoryDetail(previewTrip: UiPreviewTrip) {
         _previewTripOpenEvent.value = Event(previewTrip)
+    }
+
+    fun backPage() {
+        _backPageEvent.value = Event(true)
     }
 }

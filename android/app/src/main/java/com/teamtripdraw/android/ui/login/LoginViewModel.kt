@@ -9,9 +9,12 @@ import com.teamtripdraw.android.domain.model.auth.LoginInfo
 import com.teamtripdraw.android.domain.model.auth.LoginPlatform
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val _kakaoLoginEvent = MutableLiveData<Boolean>(false)

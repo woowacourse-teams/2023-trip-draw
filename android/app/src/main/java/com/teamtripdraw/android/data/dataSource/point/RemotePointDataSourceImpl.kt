@@ -7,8 +7,9 @@ import com.teamtripdraw.android.data.httpClient.service.DeletePointService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPrePoint
+import javax.inject.Inject
 
-class RemotePointDataSourceImpl(
+class RemotePointDataSourceImpl @Inject constructor(
     private val createRecordingPointService: CreateRecordingPointService,
     private val getPointService: GetPointService,
     private val deletePointService: DeletePointService,

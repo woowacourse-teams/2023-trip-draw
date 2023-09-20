@@ -58,7 +58,6 @@
             android:name="io.sentry.anr.timeout-interval-millis"
             android:value="20000" />
 
-
         <service
             android:name=".ui.home.recordingPoint.RecordingPointService"
             android:description="@string/recording_point_service_description"
@@ -142,6 +141,10 @@
                     android:scheme="kakao${NATIVE_APP_KEY}" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.history.HistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
