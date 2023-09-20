@@ -3,6 +3,10 @@ package dev.tripdraw.trip.presentation;
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.test.fixture.TestFixture.pointCreateRequest;
 import static dev.tripdraw.test.fixture.TestFixture.tripUpdateRequest;
+import static dev.tripdraw.test.fixture.TestFixture.서울_2022_1_2_일;
+import static dev.tripdraw.test.fixture.TestFixture.서울_2023_1_1_일;
+import static dev.tripdraw.test.fixture.TestFixture.제주_2023_1_1_일;
+import static dev.tripdraw.test.step.PostStep.createPostAtCurrentPoint;
 import static dev.tripdraw.test.step.TripStep.addPointAndGetResponse;
 import static dev.tripdraw.test.step.TripStep.createTripAndGetResponse;
 import static dev.tripdraw.test.step.TripStep.searchTripAndGetResponse;
@@ -25,14 +29,18 @@ import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
+import dev.tripdraw.trip.dto.TripSearchResponse;
 import dev.tripdraw.trip.dto.TripSearchResponseOfMember;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
+import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -56,13 +64,16 @@ class TripControllerTest extends ControllerTest {
     private RouteImageGenerator routeImageGenerator;
 
     private String huchuToken;
+    private String reoToken;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
 
         Member huchu = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        Member reo = memberRepository.save(new Member("리오", "kakaoId", KAKAO));
         huchuToken = jwtTokenProvider.generateAccessToken(huchu.id().toString());
+        reoToken = jwtTokenProvider.generateAccessToken(reo.id().toString());
     }
 
     @Test
@@ -313,5 +324,49 @@ class TripControllerTest extends ControllerTest {
                 .when().delete("/trips/{tripId}", tripId)
                 .then().log().all()
                 .statusCode(UNAUTHORIZED.value());
+    }
+
+    @Test
+    void 감상이_있는_모든_여행을_조건으로_조회할_수_있다() {
+        // given
+        Long 후추_서울_2022_1_2_일 = createTripAndGetResponse(huchuToken).tripId();
+        createPostAtCurrentPoint(서울_2022_1_2_일(후추_서울_2022_1_2_일), huchuToken);
+
+        Long 리오_제주_2023_1_1_일 = createTripAndGetResponse(reoToken).tripId();
+        createPostAtCurrentPoint(제주_2023_1_1_일(리오_제주_2023_1_1_일), reoToken);
+
+        Long 리오_서울_2023_1_1_일 = createTripAndGetResponse(reoToken).tripId();
+        createPostAtCurrentPoint(서울_2023_1_1_일(리오_서울_2023_1_1_일), reoToken);
+
+        Map<String, Object> params = Map.of(
+                "years", Set.of(2023, 2021),
+                "daysOfWeek", Set.of(1),
+                "address", "seoul",
+                "limit", 10
+        );
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().preemptive().oauth2(huchuToken)
+                .params(params)
+                .when().get("/trips")
+                .then().log().all()
+                .extract();
+
+        // then
+        TripsSearchResponse tripsSearchResponse = response.as(TripsSearchResponse.class);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(searchedTripIds(tripsSearchResponse)).containsExactly(
+                    리오_서울_2023_1_1_일
+            );
+        });
+    }
+
+    private List<Long> searchedTripIds(TripsSearchResponse tripsSearchResponse) {
+        return tripsSearchResponse.trips().stream()
+                .map(TripSearchResponse::tripId)
+                .toList();
     }
 }

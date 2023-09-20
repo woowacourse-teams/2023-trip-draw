@@ -15,6 +15,7 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
@@ -24,13 +25,12 @@ import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -129,15 +129,20 @@ public class PostService {
     }
 
     public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
-        List<Post> posts = postQueryService.findAllByConditions(postSearchRequest.conditions(), postSearchRequest.paging());
+        PostSearchPaging postSearchPaging = postSearchRequest.toPostSearchPaging();
+
+        List<Post> posts = postQueryService.findAllByConditions(
+                postSearchRequest.toPostSearchConditions(),
+                postSearchPaging
+        );
 
         List<PostSearchResponse> postSearchResponses = posts.stream()
                 .map(PostSearchResponse::from)
                 .toList();
-        boolean hasNextPage = (posts.size() == postSearchRequest.paging().limit() + 1);
+        boolean hasNextPage = (posts.size() == postSearchPaging.limit() + 1);
 
         if (hasNextPage) {
-            postSearchResponses = postSearchResponses.subList(0, postSearchRequest.paging().limit());
+            postSearchResponses = postSearchResponses.subList(0, postSearchPaging.limit());
         }
 
         return PostsSearchResponse.of(postSearchResponses, hasNextPage);

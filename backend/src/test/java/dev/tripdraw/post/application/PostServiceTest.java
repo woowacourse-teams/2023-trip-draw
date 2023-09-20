@@ -25,8 +25,6 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
-import dev.tripdraw.post.dto.PostSearchConditions;
-import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
@@ -39,6 +37,9 @@ import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.exception.TripException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -46,10 +47,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -325,27 +322,25 @@ class PostServiceTest {
         PostCreateResponse jejuJuly = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 12, 15, 30));
         PostCreateResponse seoulJuly = createPost("서울특별시 송파구 문정동", LocalDateTime.of(2023, 7, 12, 15, 30));
 
-        PostSearchRequest postSearchRequestJeju = new PostSearchRequest(
-                PostSearchConditions.builder()
-                        .address("제주특별자치도 제주시 애월읍")
-                        .build(),
-                new PostSearchPaging(null, 10)
-        );
+        PostSearchRequest postSearchRequestJeju = PostSearchRequest.builder()
+                .address("제주특별자치도 제주시 애월읍")
+                .limit(10)
+                .build();
 
-        PostSearchRequest postSearchRequestJuly = new PostSearchRequest(
-                PostSearchConditions.builder()
-                        .months(Set.of(7))
-                        .build(),
-                new PostSearchPaging(null, 10)
-        );
+        PostSearchRequest postSearchRequestJuly = PostSearchRequest.builder()
+                .months(Set.of(7))
+                .limit(10)
+                .build();
 
         // when
         PostsSearchResponse postsSearchJejuResponse = postService.readAll(postSearchRequestJeju);
         PostsSearchResponse postsSearchJulyResponse = postService.readAll(postSearchRequestJuly);
 
         // then
-        assertThat(postsSearchJejuResponse.posts().stream().map(PostSearchResponse::postId).toList()).containsExactly(jejuJuly.postId(), jejuMay.postId());
-        assertThat(postsSearchJulyResponse.posts().stream().map(PostSearchResponse::postId).toList()).containsExactly(seoulJuly.postId(), jejuJuly.postId());
+        assertThat(postsSearchJejuResponse.posts().stream().map(PostSearchResponse::postId).toList()).containsExactly(
+                jejuJuly.postId(), jejuMay.postId());
+        assertThat(postsSearchJulyResponse.posts().stream().map(PostSearchResponse::postId).toList()).containsExactly(
+                seoulJuly.postId(), jejuJuly.postId());
 
     }
 
