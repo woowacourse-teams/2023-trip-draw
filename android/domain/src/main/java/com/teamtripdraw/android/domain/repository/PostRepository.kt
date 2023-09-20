@@ -24,7 +24,7 @@ interface PostRepository {
         months: List<Int> = listOf(),
         years: List<Int> = listOf(),
         lastViewedId: Long? = null,
-        limit: Int = 20,
+        limit: Int = 10,
     ): Result<List<PostOfAll>>
 
     suspend fun deletePost(postId: Long): Result<Unit>

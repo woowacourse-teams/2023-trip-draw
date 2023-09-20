@@ -66,9 +66,9 @@ val tripDrawViewModelFactory: ViewModelProvider.Factory = object : ViewModelProv
                 isAssignableFrom(LoginViewModel::class.java) ->
                     LoginViewModel(repositoryContainer.authRepository)
                 isAssignableFrom(AllPostsViewModel::class.java) ->
-                    AllPostsViewModel() // todo repository 연결
+                    AllPostsViewModel(repositoryContainer.postRepository)
                 isAssignableFrom(AllTripsViewModel::class.java) ->
-                    AllTripsViewModel() // todo repository 연결
+                    AllTripsViewModel(repositoryContainer.tripRepository)
                 else ->
                     throw IllegalArgumentException(UNDEFINED_VIEW_MODEL_ERROR.format(modelClass.name))
             }
