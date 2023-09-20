@@ -17,7 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_default">
+        android:layout_marginBottom="@dimen/margin_default"
+        android:onClick="@{()->allTripsViewModel.openHistoryDetail(tripItem)}">
 
         <ImageView
             android:id="@+id/iv_item_all_trips_image"

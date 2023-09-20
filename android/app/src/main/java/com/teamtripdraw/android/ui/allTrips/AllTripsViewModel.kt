@@ -9,15 +9,21 @@ import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.ui.model.UiAllTrips
+import com.teamtripdraw.android.ui.model.UiPreviewTrip
+import com.teamtripdraw.android.ui.model.UiTripOfAll
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
 
 class AllTripsViewModel(
     private val tripRepository: TripRepository,
 ) : ViewModel() {
+
     private val _trips: MutableLiveData<List<TripOfAll>> = MutableLiveData()
     val trips: LiveData<UiAllTrips> =
         Transformations.map(_trips) { trip -> UiAllTrips(trip.map { it.toPresentation() }) }
+
+    private val _openHistoryDetailEvent = MutableLiveData<UiPreviewTrip>()
+    val openHistoryDetailEvent: LiveData<UiPreviewTrip> = _openHistoryDetailEvent
 
     fun fetchTrips() {
         viewModelScope.launch {
@@ -29,5 +35,15 @@ class AllTripsViewModel(
                     TripDrawApplication.logUtil.general.log(it)
                 }
         }
+    }
+
+    fun openHistoryDetail(trip: UiTripOfAll) {
+        val previewTrip = UiPreviewTrip(
+            id = trip.tripId,
+            name = trip.name,
+            imageUrl = trip.imageUrl,
+            routeImageUrl = trip.routeImageUrl,
+        )
+        _openHistoryDetailEvent.value = previewTrip
     }
 }

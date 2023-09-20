@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllTripsBinding
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
+import com.teamtripdraw.android.ui.model.UiPreviewTrip
 
 class AllTripsFragment : Fragment() {
 
@@ -26,7 +28,7 @@ class AllTripsFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         bindViewModel()
-        initTripsObserve()
+        initObserver()
         setAdapter()
 
         return binding.root
@@ -36,10 +38,25 @@ class AllTripsFragment : Fragment() {
         binding.allTripsViewModel = viewModel
     }
 
+    private fun initObserver() {
+        initTripsObserve()
+        initOpenPostDetailEventObserve()
+    }
+
     private fun initTripsObserve() {
         viewModel.trips.observe(viewLifecycleOwner) {
             adapter.submitList(it.tripItems)
         }
+    }
+
+    private fun initOpenPostDetailEventObserve() {
+        viewModel.openHistoryDetailEvent.observe(
+            viewLifecycleOwner,
+        ) { onTripClick(it) }
+    }
+
+    private fun onTripClick(trip: UiPreviewTrip) {
+        startActivity(HistoryDetailActivity.getIntent(requireContext(), trip))
     }
 
     private fun setAdapter() {
