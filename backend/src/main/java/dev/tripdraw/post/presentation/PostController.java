@@ -105,7 +105,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             @PathVariable Long postId
     ) {
-        PostResponse response = postService.read(loginUser, postId);
+        PostResponse response = postService.read(postId);
         return ResponseEntity.ok(response);
     }
 
@@ -119,7 +119,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             @PathVariable Long tripId
     ) {
-        PostsResponse response = postService.readAllByTripId(loginUser, tripId);
+        PostsResponse response = postService.readAllByTripId(tripId);
         return ResponseEntity.ok(response);
     }
 
