@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllPostsBinding
-import dagger.hilt.android.AndroidEntryPoint
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AllPostsFragment : Fragment() {

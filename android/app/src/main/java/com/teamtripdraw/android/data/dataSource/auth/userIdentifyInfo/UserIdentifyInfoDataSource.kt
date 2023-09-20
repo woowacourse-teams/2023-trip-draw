@@ -1,6 +1,5 @@
 package com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo
 
-import com.teamtripdraw.android.data.model.DataLoginInfo
 import com.teamtripdraw.android.data.model.DataUserIdentifyInfo
 
 interface UserIdentifyInfoDataSource {

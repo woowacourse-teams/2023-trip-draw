@@ -12,8 +12,8 @@ import com.teamtripdraw.android.ui.model.UiAllTrips
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.UiTripOfAll
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
-import kotlinx.coroutines.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
