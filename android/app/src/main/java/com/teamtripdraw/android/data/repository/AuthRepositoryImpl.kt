@@ -9,8 +9,9 @@ import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.auth.LoginInfo
 import com.teamtripdraw.android.domain.model.user.UserInfo
 import com.teamtripdraw.android.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val localUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
     private val remoteSignUpDataSource: SignUpDataSource.Remote,
     private val remoteLoginDataSource: LoginDataSource.Remote,
