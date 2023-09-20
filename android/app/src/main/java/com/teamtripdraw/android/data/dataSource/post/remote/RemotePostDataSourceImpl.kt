@@ -5,11 +5,7 @@ import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.CurrentPosition
-import com.teamtripdraw.android.data.httpClient.dto.request.GetAllPostsRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.Paging
 import com.teamtripdraw.android.data.httpClient.dto.request.PatchPostRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.PostCondition
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPostOfAll
@@ -67,23 +63,17 @@ class RemotePostDataSourceImpl(
         lastViewedId: Long?,
         limit: Int,
     ): Result<List<DataPostOfAll>> {
-        val condition = PostCondition(
-            address = address,
-            ageRanges = ageRanges,
-            currentPosition = CurrentPosition(
-                latitude = latitude,
-                longitude = longitude,
-            ),
-            daysOfWeek = daysOfWeek,
-            genders = genders,
-            hours = hours,
-            months = months,
+        return postService.getAllPosts(
             years = years,
-        )
-        val paging = Paging(lastViewedId, limit)
-        val getPostOfAll = GetAllPostsRequest(condition, paging)
-
-        return postService.getAllPosts(getPostOfAll).process { body, headers ->
+            months = months,
+            daysOfWeek = daysOfWeek,
+            hours = hours,
+            ageRanges = ageRanges,
+            genders = genders,
+            address = address,
+            lastViewedId = lastViewedId,
+            limit = limit,
+        ).process { body, headers ->
             Result.success(body).map { it.toData() }
         }
     }

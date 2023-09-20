@@ -2,9 +2,6 @@ package com.teamtripdraw.android.data.dataSource.trip
 
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.GetAllTripsRequest
-import com.teamtripdraw.android.data.httpClient.dto.request.Paging
-import com.teamtripdraw.android.data.httpClient.dto.request.TripCondition
 import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.DeleteTripService
 import com.teamtripdraw.android.data.httpClient.service.GetAllTripsService
@@ -57,17 +54,16 @@ class RemoteTripDataSourceImpl(
         lastViewedId: Long?,
         limit: Int,
     ): Result<List<DataTripOfAll>> {
-        val condition = TripCondition(
-            address = address,
-            ageRanges = ageRanges,
-            daysOfWeek = daysOfWeek,
-            genders = genders,
-            months = months,
+        return getAllTripsService.getAllTrips(
             years = years,
-        )
-        val paging = Paging(lastViewedId, limit)
-        val request = GetAllTripsRequest(condition, paging)
-        return getAllTripsService.getAllTrips(request).process { body, headers ->
+            months = months,
+            daysOfWeek = daysOfWeek,
+            ageRanges = ageRanges,
+            genders = genders,
+            address = address,
+            lastViewedId = lastViewedId,
+            limit = limit,
+        ).process { body, headers ->
             Result.success(body.toData())
         }
     }
