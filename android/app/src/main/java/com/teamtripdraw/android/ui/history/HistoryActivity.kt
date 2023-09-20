@@ -9,16 +9,17 @@ import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityMyHistoryBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HistoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyHistoryBinding
 
     private lateinit var historyAdapter: HistoryAdapter
-    private val viewModel: HistoryViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: HistoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

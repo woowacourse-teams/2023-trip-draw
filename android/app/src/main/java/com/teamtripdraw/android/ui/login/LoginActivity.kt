@@ -3,7 +3,6 @@ package com.teamtripdraw.android.ui.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -15,18 +14,19 @@ import com.teamtripdraw.android.domain.model.auth.LoginPlatform
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.loginManager.KakaoLoginManager
 import com.teamtripdraw.android.support.framework.presentation.loginManager.SocialLoginManager
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 import com.teamtripdraw.android.ui.policy.TermsOfServiceActivity
 import com.teamtripdraw.android.ui.signUp.NicknameSetupActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    private val loginViewModel: LoginViewModel by viewModels { tripDrawViewModelFactory }
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var kakaoLoginManager: SocialLoginManager
 

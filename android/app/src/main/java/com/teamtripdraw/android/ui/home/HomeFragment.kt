@@ -36,14 +36,15 @@ import com.teamtripdraw.android.support.framework.presentation.resolution.toPixe
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.dialog.SetTitleSituation.FINISHED
 import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialog
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
@@ -52,7 +53,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val homeViewModel: HomeViewModel by viewModels { tripDrawViewModelFactory }
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private var recordingPointServiceBindingState: Boolean = false
 

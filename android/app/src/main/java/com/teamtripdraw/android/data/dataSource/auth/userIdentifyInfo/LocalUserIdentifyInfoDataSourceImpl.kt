@@ -3,9 +3,10 @@ package com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.teamtripdraw.android.data.model.DataUserIdentifyInfo
+import com.teamtripdraw.android.di.qualifier.UserIdentifyInfoPreference
 import javax.inject.Inject
 
-class LocalUserIdentifyInfoDataSourceImpl @Inject constructor(private val userIdentifyInfoPreference: SharedPreferences) :
+class LocalUserIdentifyInfoDataSourceImpl @Inject constructor(@UserIdentifyInfoPreference private val userIdentifyInfoPreference: SharedPreferences) :
     UserIdentifyInfoDataSource.Local {
 
     override fun setIdentifyInfo(identifyInfo: DataUserIdentifyInfo) {

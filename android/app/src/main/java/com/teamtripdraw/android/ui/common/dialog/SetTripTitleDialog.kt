@@ -11,7 +11,6 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentTripTitleDialogBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
@@ -21,7 +20,7 @@ class SetTripTitleDialog : DialogFragment() {
 
     private var _binding: FragmentTripTitleDialogBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SetTripTitleDialogViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: SetTripTitleDialogViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
     private val historyDetailViewModel: HistoryDetailViewModel by activityViewModels()
 

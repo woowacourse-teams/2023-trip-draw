@@ -16,10 +16,13 @@ import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MapBottomSheetViewModel
 import com.teamtripdraw.android.ui.model.UiRoute
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val tripRepository: TripRepository,
     private val pointRepository: PointRepository,
 ) : ViewModel(), MapBottomSheetViewModel {

@@ -11,10 +11,13 @@ import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPoint
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class MarkerSelectedViewModel(
+@HiltViewModel
+class MarkerSelectedViewModel @Inject constructor(
     private val pointRepository: PointRepository,
 ) : ViewModel() {
 

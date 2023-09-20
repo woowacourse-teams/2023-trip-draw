@@ -11,14 +11,15 @@ import com.teamtripdraw.android.databinding.ActivityPostDetailBinding
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
 import com.teamtripdraw.android.ui.post.writing.WritingMode
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostDetailBinding
-    private val viewModel: PostDetailViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: PostDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -11,13 +11,14 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostViewerBinding
 import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostViewerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostViewerBinding
-    private val viewModel: PostViewerViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: PostViewerViewModel by viewModels()
     private lateinit var adapter: PostViewerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

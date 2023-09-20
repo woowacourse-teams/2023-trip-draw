@@ -17,4 +17,9 @@ annotation class TripDrawRetrofit
 @Qualifier
 annotation class NaverReverseGeocodingRetrofit
 
+@Qualifier
+annotation class UserIdentifyInfoPreference
+
+@Qualifier
+annotation class TripPreference
 
