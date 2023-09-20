@@ -13,11 +13,13 @@ import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.UiTripOfAll
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AllTripsViewModel(
+@HiltViewModel
+class AllTripsViewModel @Inject constructor(
     private val tripRepository: TripRepository,
 ) : ViewModel() {
-
     private val _trips: MutableLiveData<List<TripOfAll>> = MutableLiveData()
     val trips: LiveData<UiAllTrips> =
         Transformations.map(_trips) { trip -> UiAllTrips(trip.map { it.toPresentation() }) }

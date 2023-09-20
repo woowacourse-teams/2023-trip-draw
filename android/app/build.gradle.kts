@@ -19,6 +19,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     // Sentry
     id("io.sentry.android.gradle")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -150,6 +151,11 @@ sentry {
     includeDependenciesReport.set(true)
 }
 
+// Hilt Allow references to generated code
+ kapt {
+    correctErrorTypes = true
+ }
+
 dependencies {
     // 프로젝트내 의존성
     implementation(project(":domain"))
@@ -194,4 +200,8 @@ dependencies {
 
     // timber
     implementation(libs.timber)
+
+    // hilt
+    implementation(libs.hilt)
+    kapt(libs.hiltKapt)
 }

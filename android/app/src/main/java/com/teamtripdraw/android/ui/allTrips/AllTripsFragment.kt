@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllTripsBinding
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AllTripsFragment : Fragment() {
 
     private var _binding: FragmentAllTripsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: AllTripsAdapter
-    private val viewModel: AllTripsViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: AllTripsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -13,15 +13,16 @@ import com.teamtripdraw.android.support.framework.presentation.getParcelableExtr
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.dialog.SetTitleSituation
 import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialog
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HistoryDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHistoryDetailBinding
-    private val viewModel: HistoryDetailViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: HistoryDetailViewModel by viewModels()
     private lateinit var adapter: HistoryDetailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

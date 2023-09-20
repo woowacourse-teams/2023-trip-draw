@@ -21,13 +21,14 @@ import com.teamtripdraw.android.support.framework.presentation.extensions.toResi
 import com.teamtripdraw.android.support.framework.presentation.images.createImageUri
 import com.teamtripdraw.android.support.framework.presentation.permission.checkCameraPermission
 import com.teamtripdraw.android.support.framework.presentation.permission.requestCameraPermission
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
+@AndroidEntryPoint
 class PostWritingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostWritingBinding
-    private val viewModel: PostWritingViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: PostWritingViewModel by viewModels()
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

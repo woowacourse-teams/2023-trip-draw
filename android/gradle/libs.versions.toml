@@ -95,6 +95,9 @@ sentry = "6.28.0"
 # timber
 timber = "5.0.1"
 
+# hilt
+hilt = "2.44"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -181,6 +184,10 @@ sentry = { module = "io.sentry:sentry-android", version.ref = "sentry" }
 # timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+# hilt
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hiltKapt = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest", "coreTest"]
@@ -205,3 +212,5 @@ firebaseCrashlyticsPlugIn = { id = "com.google.firebase.crashlytics", version.re
 mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus" }
 # sentryPlugin
 sentryPlugin = { id = "io.sentry.android.gradle", version.ref = "sentryPlugin" }
+# hilt
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

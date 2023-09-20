@@ -10,8 +10,9 @@ import com.teamtripdraw.android.domain.model.trip.PreviewTrip
 import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.domain.repository.TripRepository
+import javax.inject.Inject
 
-class TripRepositoryImpl(
+class TripRepositoryImpl @Inject constructor(
     private val remoteTripDataSource: TripDataSource.Remote,
     private val localTripDataSource: TripDataSource.Local,
 ) :

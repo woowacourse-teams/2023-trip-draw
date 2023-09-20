@@ -12,9 +12,12 @@ import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPostItem
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HistoryDetailViewModel(
+@HiltViewModel
+class HistoryDetailViewModel @Inject constructor(
     private val tripRepository: TripRepository,
     private val postRepository: PostRepository,
 ) : ViewModel() {

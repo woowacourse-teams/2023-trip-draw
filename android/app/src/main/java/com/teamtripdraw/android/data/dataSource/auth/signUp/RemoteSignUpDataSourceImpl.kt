@@ -8,16 +8,18 @@ import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.model.DataLoginInfo
 import com.teamtripdraw.android.data.model.DataUserIdentifyInfo
 import com.teamtripdraw.android.data.model.DataUserInfo
+import com.teamtripdraw.android.di.qualifier.TripDrawRetrofit
 import com.teamtripdraw.android.domain.exception.DuplicateNicknameException
 import com.teamtripdraw.android.domain.exception.InvalidNicknameException
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
+import javax.inject.Inject
 
-class RemoteSignUpDataSourceImpl(
+class RemoteSignUpDataSourceImpl @Inject constructor(
     private val nicknameSetupService: NicknameSetupService,
     private val getUserInfoService: GetUserInfoService,
-    private val retrofit: Retrofit,
+    @TripDrawRetrofit private val retrofit: Retrofit,
 ) :
     SignUpDataSource.Remote {
     override suspend fun setNickname(

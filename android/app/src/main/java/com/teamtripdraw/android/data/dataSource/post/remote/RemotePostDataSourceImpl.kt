@@ -17,8 +17,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import javax.inject.Inject
 
-class RemotePostDataSourceImpl(
+class RemotePostDataSourceImpl @Inject constructor(
     private val moshi: Moshi,
     private val postService: PostService,
 ) : PostDataSource.Remote {

@@ -8,8 +8,9 @@ import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.repository.PostRepository
+import javax.inject.Inject
 
-class PostRepositoryImpl(
+class PostRepositoryImpl @Inject constructor(
     private val remotePostDataSource: PostDataSource.Remote,
 ) : PostRepository {
 

@@ -11,9 +11,12 @@ import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiAllPosts
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
-class AllPostsViewModel(
+@HiltViewModel
+class AllPostsViewModel @Inject constructor(
     private val postRepository: PostRepository,
 ) : ViewModel() {
 

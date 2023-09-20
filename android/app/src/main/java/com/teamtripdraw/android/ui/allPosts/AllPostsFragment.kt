@@ -7,17 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllPostsBinding
+import dagger.hilt.android.AndroidEntryPoint
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
 
+@AndroidEntryPoint
 class AllPostsFragment : Fragment() {
 
     private var _binding: FragmentAllPostsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: AllPostsAdapter
-    private val viewModel: AllPostsViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: AllPostsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

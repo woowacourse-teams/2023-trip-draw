@@ -3,7 +3,6 @@ package com.teamtripdraw.android.ui.post.writing
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.model.point.Point
@@ -16,10 +15,13 @@ import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
-class PostWritingViewModel(
+@HiltViewModel
+class PostWritingViewModel @Inject constructor(
     private val pointRepository: PointRepository,
     private val postRepository: PostRepository,
     private val tripRepository: TripRepository,

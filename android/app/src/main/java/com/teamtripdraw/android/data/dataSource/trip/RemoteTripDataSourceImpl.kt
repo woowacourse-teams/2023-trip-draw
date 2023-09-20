@@ -11,8 +11,9 @@ import com.teamtripdraw.android.data.model.DataPreSetTripTitle
 import com.teamtripdraw.android.data.model.DataPreviewTrip
 import com.teamtripdraw.android.data.model.DataTrip
 import com.teamtripdraw.android.data.model.DataTripOfAll
+import javax.inject.Inject
 
-class RemoteTripDataSourceImpl(
+class RemoteTripDataSourceImpl @Inject constructor(
     private val createTripService: CreateTripService,
     private val getTripInfoService: GetTripInfoService,
     private val setTripTitleService: SetTripTitleService,
