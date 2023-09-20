@@ -10,6 +10,14 @@ import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.en
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawEnqueueActions
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawReLoginHandler
 import com.teamtripdraw.android.data.httpClient.service.TokenRefreshService
+import com.teamtripdraw.android.di.qualifier.GeneralOKHttpClient
+import com.teamtripdraw.android.di.qualifier.TripDrawOkHttpClient
+import com.teamtripdraw.android.di.qualifier.TripDrawRetrofit
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -17,12 +25,16 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
-class RetrofitContainer(
-    userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
-    context: Context,
-) {
-    private val authorizationInterceptor: Interceptor =
+@Module
+@InstallIn(SingletonComponent::class)
+object RetrofitModule {
+    private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
+
+    @Provides
+    @TripDrawOkHttpClient
+    fun providesAuthorizationInterceptor(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local): Interceptor =
         Interceptor { chain ->
             with(chain) {
                 proceed(
@@ -37,14 +49,21 @@ class RetrofitContainer(
             }
         }
 
-    private val httpLoggingInterceptor: HttpLoggingInterceptor =
+    @Provides
+    fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.HEADERS }
 
-    private val generalOKHttpDispatcher = Dispatcher().apply {
+    @Provides
+    fun providesGeneralOKHttpDispatcher(): Dispatcher = Dispatcher().apply {
         maxRequestsPerHost = 10
     }
 
-    private val generalOKHttpClient: OkHttpClient =
+    @Provides
+    @GeneralOKHttpClient
+    fun providesGeneralOKHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        generalOKHttpDispatcher: Dispatcher,
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
@@ -54,18 +73,38 @@ class RetrofitContainer(
             .build()
 
     // newBuilder 사용시 OkHttp의 기존 설정을 그대로 가져갈 수 있음 -> ConnectionPool,Dispatcher 등등 공유
-    private val tripDrawOkHttpClient: OkHttpClient =
+    @Provides
+    @TripDrawOkHttpClient
+    fun providesTripDrawOkHttpClient(
+        @GeneralOKHttpClient generalOKHttpClient: OkHttpClient,
+        @TripDrawOkHttpClient authorizationInterceptor: Interceptor,
+    ): OkHttpClient =
         generalOKHttpClient.newBuilder()
             .addInterceptor(authorizationInterceptor)
             .build()
 
-    val moshi: Moshi = Moshi.Builder()
+    @Provides
+    fun providesMoshi(): Moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    val reLoginHandler: ReLoginHandler = TripDrawReLoginHandler(context, userIdentifyInfoDataSource)
+    @Provides
+    @Singleton
+    fun providesReLoginHandler(
+        @ApplicationContext context: Context,
+        userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
+    ): ReLoginHandler =
+        TripDrawReLoginHandler(context, userIdentifyInfoDataSource)
 
-    val tripDrawRetrofit: Retrofit =
+    @Provides
+    @Singleton
+    @TripDrawRetrofit
+    fun providesTripDrawRetrofit(
+        @TripDrawOkHttpClient tripDrawOkHttpClient: OkHttpClient,
+        userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
+        reLoginHandler: ReLoginHandler,
+        moshi: Moshi,
+    ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.TRIP_DRAW_BASE_URL)
             .client(tripDrawOkHttpClient)
@@ -87,8 +126,4 @@ class RetrofitContainer(
 //            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
 //            .addConverterFactory(MoshiConverterFactory.create(moshi))
 //            .build()
-
-    companion object {
-        private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
-    }
 }
