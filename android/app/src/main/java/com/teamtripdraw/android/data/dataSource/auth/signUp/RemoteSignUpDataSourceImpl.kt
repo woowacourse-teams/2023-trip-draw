@@ -13,8 +13,9 @@ import com.teamtripdraw.android.domain.exception.InvalidNicknameException
 import com.teamtripdraw.android.support.framework.data.getParsedErrorBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
+import javax.inject.Inject
 
-class RemoteSignUpDataSourceImpl(
+class RemoteSignUpDataSourceImpl @Inject constructor(
     private val nicknameSetupService: NicknameSetupService,
     private val getUserInfoService: GetUserInfoService,
     private val retrofit: Retrofit,
