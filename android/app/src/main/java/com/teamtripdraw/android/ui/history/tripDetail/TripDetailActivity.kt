@@ -17,18 +17,19 @@ import com.teamtripdraw.android.support.framework.presentation.event.EventObserv
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
     private var fabState: Boolean = false
 
     private lateinit var binding: ActivityTripDetailBinding
-    private val viewModel: TripDetailViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: TripDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

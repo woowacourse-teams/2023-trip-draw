@@ -16,7 +16,10 @@ import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.MY
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.POSTS
 import com.teamtripdraw.android.ui.main.MainActivity.BottomNavigationMenuType.TRIPS
 import com.teamtripdraw.android.ui.myPage.MyPageFragment
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

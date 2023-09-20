@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.ui.model.UiAllTrips
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class AllTripsViewModel : ViewModel() {
+@HiltViewModel
+class AllTripsViewModel @Inject constructor() : ViewModel() {
     private val _trips: MutableLiveData<List<TripOfAll>> = MutableLiveData()
     val trips: LiveData<UiAllTrips> =
         Transformations.map(_trips) { trip -> UiAllTrips(trip.map { it.toPresentation() }) }

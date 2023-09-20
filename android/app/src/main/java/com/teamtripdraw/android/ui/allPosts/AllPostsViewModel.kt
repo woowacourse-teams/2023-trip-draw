@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.ui.model.UiAllPosts
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class AllPostsViewModel : ViewModel() {
+@HiltViewModel
+class AllPostsViewModel @Inject constructor() : ViewModel() {
 
     private val _posts: MutableLiveData<List<PostOfAll>> = MutableLiveData()
     val posts: LiveData<UiAllPosts> =

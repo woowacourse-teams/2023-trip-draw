@@ -15,19 +15,25 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.teamtripdraw.android.R
-import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.point.PrePoint
 import com.teamtripdraw.android.domain.model.trip.Trip
+import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
+@AndroidEntryPoint
 class RecordingPointService : Service() {
+
+    @Inject
+    lateinit var pointRepository: PointRepository
 
     private var currentTripId by Delegates.notNull<Long>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -37,7 +43,7 @@ class RecordingPointService : Service() {
 
     private fun recordPoint(locationResult: LocationResult) {
         CoroutineScope(Dispatchers.IO).launch {
-            TripDrawApplication.repositoryContainer.pointRepository.createRecordingPoint(
+            pointRepository.createRecordingPoint(
                 getPrePoint(locationResult),
                 currentTripId,
             ).onSuccess {
