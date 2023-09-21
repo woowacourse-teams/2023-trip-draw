@@ -18,11 +18,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
 
   flyway:
-    enabled: true
-    locations: classpath:db/migration/{vendor}
+    enabled: false
 
 logging:
   level:
