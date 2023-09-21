@@ -28,5 +28,6 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
 
-    List<Long> findAllTripIdsByMemberId(Long memberId);
+    @Query("SELECT t.id FROM Trip t WHERE t.member.id = :memberId")
+    List<Long> findAllTripIdsByMemberId(@Param(value = "memberId") Long memberId);
 }
