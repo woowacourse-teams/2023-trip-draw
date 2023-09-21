@@ -27,4 +27,6 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
         return findTripWithPoints(tripId)
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
+
+    List<Long> findAllTripIdsByMemberId(Long memberId);
 }

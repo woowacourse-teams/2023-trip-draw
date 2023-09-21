@@ -4,6 +4,7 @@ import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import dev.tripdraw.common.config.JpaConfig;
@@ -12,6 +13,7 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -37,19 +39,22 @@ class PointRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private Trip trip;
+    private Trip huchuTrip;
+    private Trip herbTrip;
 
     @BeforeEach
     void setUp() {
-        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(Trip.of(member.id(), member.nickname()));
+        Member huchu = memberRepository.save(new Member("후추", "kakaoId", KAKAO));
+        Member herb = memberRepository.save(new Member("허브", "kakaoId", KAKAO));
+        huchuTrip = tripRepository.save(Trip.of(huchu.id(), huchu.nickname()));
+        herbTrip = tripRepository.save(Trip.of(herb.id(), herb.nickname()));
     }
 
     @Test
     void 위치정보_ID로_위치정보를_조회한다() {
         // given
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
-        point.setTrip(trip);
+        point.setTrip(huchuTrip);
         pointRepository.save(point);
 
         // when
@@ -68,5 +73,37 @@ class PointRepositoryTest {
         assertThatThrownBy(() -> pointRepository.getById(wrongId))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_NOT_FOUND.message());
+    }
+
+    @Test
+    void 여행_ID_목록으로_위치정보를_삭제한다() {
+        // given
+        Point huchuFirstPoint = new Point(3.14, 5.25, LocalDateTime.now());
+        huchuFirstPoint.setTrip(huchuTrip);
+        Point huchuSecondPoint = new Point(3.14, 5.25, LocalDateTime.now());
+        huchuSecondPoint.setTrip(huchuTrip);
+
+        Point herbFirstPoint = new Point(3.14, 5.25, LocalDateTime.now());
+        herbFirstPoint.setTrip(herbTrip);
+        Point herbSecondPoint = new Point(3.14, 5.25, LocalDateTime.now());
+        herbSecondPoint.setTrip(herbTrip);
+
+        pointRepository.save(huchuFirstPoint);
+        pointRepository.save(huchuSecondPoint);
+        pointRepository.save(herbFirstPoint);
+        pointRepository.save(herbSecondPoint);
+
+        List<Long> tripIds = List.of(huchuTrip.id(), herbTrip.id());
+
+        // when
+        pointRepository.deleteByTripIds(tripIds);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(pointRepository.existsById(huchuFirstPoint.id())).isFalse();
+            softly.assertThat(pointRepository.existsById(huchuSecondPoint.id())).isFalse();
+            softly.assertThat(pointRepository.existsById(herbFirstPoint.id())).isFalse();
+            softly.assertThat(pointRepository.existsById(herbSecondPoint.id())).isFalse();
+        });
     }
 }
