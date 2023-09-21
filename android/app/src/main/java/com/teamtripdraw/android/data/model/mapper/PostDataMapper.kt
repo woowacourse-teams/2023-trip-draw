@@ -1,46 +1,14 @@
 package com.teamtripdraw.android.data.model.mapper
 
-import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostListResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
-import com.teamtripdraw.android.data.httpClient.dto.response.GetPostResponse
-import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPost
+import com.teamtripdraw.android.data.model.DataPostOfAll
 import com.teamtripdraw.android.data.model.DataPrePatchPost
 import com.teamtripdraw.android.data.model.DataPrePost
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
-
-fun AddPostResponse.toData(): Long {
-    return postId
-}
-
-fun GetPostPointResponse.toData(): DataPoint {
-    return DataPoint(
-        pointId = pointId,
-        latitude = latitude,
-        longitude = longitude,
-        hasPost = hasPost,
-        recordedAt = recordedAt,
-    )
-}
-
-fun GetPostResponse.toData(): DataPost {
-    return DataPost(
-        postId = postId,
-        tripId = tripId,
-        title = title,
-        writing = writing,
-        address = address,
-        point = point.toData(),
-        postImageUrl = postImageUrl,
-        routeImageUrl = routeImageUrl,
-    )
-}
-
-fun GetPostListResponse.toData(): List<DataPost> =
-    this.posts.map { it.toData() }
+import java.time.LocalDateTime
 
 fun PrePost.toData(): DataPrePost {
     return DataPrePost(
@@ -70,5 +38,18 @@ fun DataPost.toDomain(): Post {
         point = point.toDomain(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
+    )
+}
+
+fun DataPostOfAll.toDomain(): PostOfAll {
+    return PostOfAll(
+        postId = postId,
+        tripId = tripId,
+        title = title,
+        writing = writing,
+        address = address,
+        postImageUrl = postImageUrl,
+        routeImageUrl = routeImageUrl,
+        recordedAt = LocalDateTime.parse(recordedAt),
     )
 }

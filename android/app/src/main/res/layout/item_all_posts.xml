@@ -17,7 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_default">
+        android:layout_marginBottom="@dimen/margin_default"
+        android:onClick="@{()->allPostsViewModel.openPostDetail(postItem.postId)}">
 
         <ImageView
             android:id="@+id/iv_item_all_posts_image"
@@ -42,8 +43,8 @@
             android:maxLines="1"
             android:text="@{postItem.title}"
             android:textAppearance="@style/title_2M"
-            app:layout_constraintEnd_toEndOf="@id/iv_item_all_posts_image"
-            app:layout_constraintStart_toStartOf="@id/iv_item_all_posts_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_item_all_posts_image"
             tools:text="여수 여행" />
 

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllPostsBinding
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
+import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,7 +29,7 @@ class AllPostsFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         bindViewModel()
-        initPostsObserve()
+        initObserver()
         setAdapter()
 
         return binding.root
@@ -37,10 +39,26 @@ class AllPostsFragment : Fragment() {
         binding.allPostsViewModel = viewModel
     }
 
+    private fun initObserver() {
+        initPostsObserve()
+        initOpenPostDetailEventObserve()
+    }
+
     private fun initPostsObserve() {
         viewModel.posts.observe(viewLifecycleOwner) {
             adapter.submitList(it.postItems)
         }
+    }
+
+    private fun initOpenPostDetailEventObserve() {
+        viewModel.openPostDetailEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@AllPostsFragment::onPostClick),
+        )
+    }
+
+    private fun onPostClick(postId: Long) {
+        startActivity(PostDetailActivity.getIntent(requireContext(), postId))
     }
 
     private fun setAdapter() {

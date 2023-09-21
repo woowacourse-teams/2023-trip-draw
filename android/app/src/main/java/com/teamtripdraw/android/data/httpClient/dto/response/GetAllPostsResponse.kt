@@ -4,15 +4,23 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GetPostResponse(
+data class GetAllPostsResponse(
+    @Json(name = "hasNextPage")
+    val hasNextPage: Boolean,
+    @Json(name = "posts")
+    val posts: List<Post>,
+)
+
+@JsonClass(generateAdapter = true)
+data class Post(
     @Json(name = "address")
     val address: String,
-    @Json(name = "pointResponse")
-    val point: GetPostPointResponse,
     @Json(name = "postId")
     val postId: Long,
     @Json(name = "postImageUrl")
     val postImageUrl: String,
+    @Json(name = "recordedAt")
+    val recordedAt: String,
     @Json(name = "routeImageUrl")
     val routeImageUrl: String,
     @Json(name = "title")
