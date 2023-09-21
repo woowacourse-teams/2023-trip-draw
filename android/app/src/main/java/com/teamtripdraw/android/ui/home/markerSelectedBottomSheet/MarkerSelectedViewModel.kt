@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.trip.Trip
+import com.teamtripdraw.android.domain.repository.GeocodingRepository
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPoint
@@ -19,6 +20,7 @@ import kotlin.properties.Delegates
 @HiltViewModel
 class MarkerSelectedViewModel @Inject constructor(
     private val pointRepository: PointRepository,
+    private val geocodingRepository: GeocodingRepository,
 ) : ViewModel() {
 
     private var pointId by Delegates.notNull<Long>()
@@ -49,12 +51,11 @@ class MarkerSelectedViewModel @Inject constructor(
 
     fun getPointInfo() {
         viewModelScope.launch {
-            pointRepository.getPoint(pointId, tripId).onSuccess { _selectedPoint.value = it }
+            pointRepository.getPoint(pointId, tripId).onSuccess {
+                _selectedPoint.value = it
+                fetchAddress()
+            }
         }
-    }
-
-    fun updateAddress(address: String) {
-        _address.postValue(address)
     }
 
     fun openPostWriting() {
@@ -67,6 +68,15 @@ class MarkerSelectedViewModel @Inject constructor(
                 _deletePointEvent.value = Event(true)
             }.onFailure {
                 // todo log전략 수립후 서버로 전송되는 로그 찍기
+            }
+        }
+    }
+
+    private fun fetchAddress() {
+        _selectedPoint.value?.let { point ->
+            viewModelScope.launch {
+                geocodingRepository.getAddress(point.latitude, point.longitude)
+                    .onSuccess { _address.value = it }
             }
         }
     }

@@ -11,6 +11,7 @@ import com.teamtripdraw.android.domain.model.post.PostWritingValidState
 import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.model.trip.Trip
+import com.teamtripdraw.android.domain.repository.GeocodingRepository
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
@@ -25,6 +26,7 @@ class PostWritingViewModel @Inject constructor(
     private val pointRepository: PointRepository,
     private val postRepository: PostRepository,
     private val tripRepository: TripRepository,
+    private val geocodingRepository: GeocodingRepository,
 ) : ViewModel() {
 
     val MAX_INPUT_TITLE_LENGTH = PostWritingValidState.MAX_TITLE_LENGTH
@@ -72,10 +74,6 @@ class PostWritingViewModel @Inject constructor(
 
     private val _selectPhotoEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val selectPhotoEvent: LiveData<Boolean> = _selectPhotoEvent
-
-    fun updateAddress(address: String) {
-        _address.postValue(address)
-    }
 
     fun updateImage(file: File) {
         imageFile.value = file
@@ -159,6 +157,7 @@ class PostWritingViewModel @Inject constructor(
             pointRepository.getPoint(pointId = pointId, tripId = tripId)
                 .onSuccess {
                     _point.value = it
+                    fetchAddress()
                 }
         }
     }
@@ -172,6 +171,15 @@ class PostWritingViewModel @Inject constructor(
                     writing.value = it.writing
                     _imageUri.value = it.postImageUrl
                 }
+        }
+    }
+
+    private fun fetchAddress() {
+        _point.value?.let { point ->
+            viewModelScope.launch {
+                geocodingRepository.getAddress(point.latitude, point.longitude)
+                    .onSuccess { _address.value = it }
+            }
         }
     }
 }
