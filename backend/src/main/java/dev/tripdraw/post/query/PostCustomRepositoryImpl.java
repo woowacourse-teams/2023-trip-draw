@@ -24,7 +24,6 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         // TODO: 2023/09/16 연령대, 성별 추가
         return jpaQueryFactory.selectFrom(post)
                 .leftJoin(post.point).fetchJoin()
-                .leftJoin(post.point.trip).fetchJoin()
                 .where(
                         postIdLt(paging.lastViewedId()),
                         yearIn(conditions.years()),
