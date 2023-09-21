@@ -2,9 +2,14 @@ package com.teamtripdraw.android.data.httpClient.dto.mapper
 
 import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.PatchPostRequest
+import com.teamtripdraw.android.data.httpClient.dto.response.AddPostResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetAllPostsResponse
 import com.teamtripdraw.android.data.httpClient.dto.response.GetPointResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetPostPointResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetTripPostListResponse
+import com.teamtripdraw.android.data.httpClient.dto.response.GetTripPostResponse
 import com.teamtripdraw.android.data.model.DataPoint
+import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPostOfAll
 import com.teamtripdraw.android.data.model.DataPrePatchPost
 import com.teamtripdraw.android.data.model.DataPrePost
@@ -35,6 +40,36 @@ fun GetPointResponse.toData(): DataPoint {
         recordedAt = recordedAt,
     )
 }
+
+fun AddPostResponse.toData(): Long {
+    return postId
+}
+
+fun GetPostPointResponse.toData(): DataPoint {
+    return DataPoint(
+        pointId = pointId,
+        latitude = latitude,
+        longitude = longitude,
+        hasPost = hasPost,
+        recordedAt = recordedAt,
+    )
+}
+
+fun GetTripPostResponse.toData(): DataPost {
+    return DataPost(
+        postId = postId,
+        tripId = tripId,
+        title = title,
+        writing = writing,
+        address = address,
+        point = point.toData(),
+        postImageUrl = postImageUrl,
+        routeImageUrl = routeImageUrl,
+    )
+}
+
+fun GetTripPostListResponse.toData(): List<DataPost> =
+    this.posts.map { it.toData() }
 
 fun GetAllPostsResponse.toData(): List<DataPostOfAll> {
     val posts = this.posts.map {
