@@ -23,6 +23,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     public List<Post> findAllByConditions(PostSearchConditions conditions, PostSearchPaging paging) {
         // TODO: 2023/09/16 연령대, 성별 추가
         return jpaQueryFactory.selectFrom(post)
+                .leftJoin(post.point).fetchJoin()
                 .where(
                         postIdLt(paging.lastViewedId()),
                         yearIn(conditions.years()),

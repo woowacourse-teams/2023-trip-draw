@@ -1,6 +1,7 @@
 package dev.tripdraw.trip.domain;
 
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_ALREADY_HAS_POST;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -12,10 +13,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 @Accessors(fluent = true)
 @Getter
@@ -41,7 +43,7 @@ public class Point extends BaseEntity {
     private LocalDateTime recordedAt;
 
     @JoinColumn(name = "trip_id")
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private Trip trip;
 
     public Point(Double latitude, Double longitude, LocalDateTime recordedAt) {
