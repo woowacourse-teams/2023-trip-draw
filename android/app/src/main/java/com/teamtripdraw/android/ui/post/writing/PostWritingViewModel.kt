@@ -157,7 +157,9 @@ class PostWritingViewModel @Inject constructor(
     private fun fetchPoint() {
         viewModelScope.launch {
             pointRepository.getPoint(pointId = pointId, tripId = tripId)
-                .onSuccess { _point.value = it }
+                .onSuccess {
+                    _point.value = it
+                }
         }
     }
 

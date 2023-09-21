@@ -9,10 +9,12 @@ import com.teamtripdraw.android.data.httpClient.service.GetPointService
 import com.teamtripdraw.android.data.httpClient.service.GetTripInfoService
 import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
 import com.teamtripdraw.android.data.httpClient.service.LoginService
+import com.teamtripdraw.android.data.httpClient.service.NaverGeocodingService
 import com.teamtripdraw.android.data.httpClient.service.NicknameSetupService
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
 import com.teamtripdraw.android.data.httpClient.service.UnsubscribeService
+import com.teamtripdraw.android.di.qualifier.NaverReverseGeocodingRetrofit
 import com.teamtripdraw.android.di.qualifier.TripDrawRetrofit
 import dagger.Module
 import dagger.Provides
@@ -88,4 +90,9 @@ object ServiceModule {
     @Singleton
     fun providesUnsubscribeService(@TripDrawRetrofit retrofit: Retrofit): UnsubscribeService =
         retrofit.create(UnsubscribeService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesNaverReverseGeocodingService(@NaverReverseGeocodingRetrofit retrofit: Retrofit): NaverGeocodingService =
+        retrofit.create(NaverGeocodingService::class.java)
 }

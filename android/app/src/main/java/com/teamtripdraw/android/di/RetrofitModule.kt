@@ -11,6 +11,8 @@ import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.en
 import com.teamtripdraw.android.data.httpClient.retrofitAdapter.responseState.enqueueActions.TripDrawReLoginHandler
 import com.teamtripdraw.android.data.httpClient.service.TokenRefreshService
 import com.teamtripdraw.android.di.qualifier.GeneralOKHttpClient
+import com.teamtripdraw.android.di.qualifier.NaverReverseGeocodingOkHttpClient
+import com.teamtripdraw.android.di.qualifier.NaverReverseGeocodingRetrofit
 import com.teamtripdraw.android.di.qualifier.TripDrawOkHttpClient
 import com.teamtripdraw.android.di.qualifier.TripDrawRetrofit
 import dagger.Module
@@ -119,11 +121,41 @@ object RetrofitModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-//    val naverGeocoderRetrofit: Retrofit =
-//        Retrofit.Builder()
-//            .baseUrl("수달이 채워넣을 부분")
-//            .client(generalOKHttpClient)
-//            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
-//            .addConverterFactory(MoshiConverterFactory.create(moshi))
-//            .build()
+    @Provides
+    @NaverReverseGeocodingOkHttpClient
+    fun naverGeocodingOkHttpClient(
+        @GeneralOKHttpClient generalOKHttpClient: OkHttpClient,
+        @NaverReverseGeocodingOkHttpClient naverReverseGeocodingInterceptor: Interceptor,
+    ): OkHttpClient =
+        generalOKHttpClient.newBuilder()
+            .addInterceptor(naverReverseGeocodingInterceptor)
+            .build()
+
+    @Provides
+    @Singleton
+    @NaverReverseGeocodingRetrofit
+    fun providesNaverReverseGeocodingRetrofit(
+        @NaverReverseGeocodingOkHttpClient naverReverseGeocodingOkHttpClient: OkHttpClient,
+        moshi: Moshi,
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.NAVER_REVERS_GEOCODER_BASE_URL_STRING)
+            .client(naverReverseGeocodingOkHttpClient)
+            .addCallAdapterFactory(ResponseStateCallAdapterFactory())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+    @Provides
+    @NaverReverseGeocodingOkHttpClient
+    fun providesNaverReverseGeocodingInterceptor(): Interceptor = Interceptor { chain ->
+        with(chain) {
+            proceed(
+                request()
+                    .newBuilder()
+                    .addHeader("X-NCP-APIGW-API-KEY-ID", BuildConfig.NAVER_MAP_CLIENT_ID_STRING)
+                    .addHeader("X-NCP-APIGW-API-KEY", BuildConfig.NAVER_MAP_CLIENT_SECRET_STRING)
+                    .build(),
+            )
+        }
+    }
 }

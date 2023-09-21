@@ -3,8 +3,9 @@ package com.teamtripdraw.android.data.dataSource.geocoding
 import com.teamtripdraw.android.data.httpClient.service.NaverGeocodingService
 import com.teamtripdraw.android.data.model.DataReverseGeocoding
 import com.teamtripdraw.android.data.model.mapper.toData
+import javax.inject.Inject
 
-class RemoteGeocodingDataSourceImpl(
+class RemoteGeocodingDataSourceImpl @Inject constructor(
     private val remoteGeocodingService: NaverGeocodingService,
 ) : GeocodingDataSource.Remote {
 

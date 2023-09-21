@@ -2,8 +2,9 @@ package com.teamtripdraw.android.data.repository
 
 import com.teamtripdraw.android.data.dataSource.geocoding.GeocodingDataSource
 import com.teamtripdraw.android.domain.repository.GeocodingRepository
+import javax.inject.Inject
 
-class GeocodingRepositoryImpl(
+class GeocodingRepositoryImpl @Inject constructor(
     private val remoteGeocodingDataSource: GeocodingDataSource.Remote,
 ) : GeocodingRepository {
 
