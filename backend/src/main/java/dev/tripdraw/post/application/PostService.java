@@ -1,5 +1,6 @@
 package dev.tripdraw.post.application;
 
+import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
@@ -25,12 +26,14 @@ import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import java.util.List;
+import dev.tripdraw.trip.exception.TripException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -91,18 +94,16 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse read(LoginUser loginUser, Long postId) {
+    public PostResponse read(Long postId) {
         Post post = postRepository.getByPostId(postId);
-        Member member = memberRepository.getById(loginUser.memberId());
-        post.validateAuthorization(member);
         return PostResponse.from(post);
     }
 
     @Transactional(readOnly = true)
-    public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
-        Member member = memberRepository.getById(loginUser.memberId());
-        Trip trip = tripRepository.getById(tripId);
-        trip.validateAuthorization(member);
+    public PostsResponse readAllByTripId(Long tripId) {
+        if (!tripRepository.existsById(tripId)) {
+            throw new TripException(TRIP_NOT_FOUND);
+        }
 
         return postRepository.findAllByTripId(tripId).stream()
                 .sorted(comparing(Post::pointRecordedAt).reversed())
@@ -128,6 +129,7 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
+    @Transactional(readOnly = true)
     public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
         PostSearchPaging postSearchPaging = postSearchRequest.toPostSearchPaging();
 

@@ -4,7 +4,6 @@ import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.post.exception.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
-import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,9 +36,6 @@ import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.exception.TripException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -47,6 +43,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -224,7 +224,7 @@ class PostServiceTest {
         PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         // when
-        PostResponse postResponse = postService.read(loginUser, postCreateResponse.postId());
+        PostResponse postResponse = postService.read(postCreateResponse.postId());
 
         // then
         assertSoftly(softly -> {
@@ -237,34 +237,9 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
         // expect
-        assertThatThrownBy(() -> postService.read(loginUser, Long.MIN_VALUE))
+        assertThatThrownBy(() -> postService.read(Long.MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
-    }
-
-    @Test
-    void 특정_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
-        // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
-        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
-
-        // expect
-        Long postId = postCreateResponse.postId();
-        assertThatThrownBy(() -> postService.read(wrongUser, postId))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
-    }
-
-    @Test
-    void 특정_감상을_조회할_때_로그인_한_사용자가_감상의_작성자가_아니면_예외가_발생한다() {
-        // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
-
-        // expect
-        Long postId = postCreateResponse.postId();
-        assertThatThrownBy(() -> postService.read(otherUser, postId))
-                .isInstanceOf(PostException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
 
     @Test
@@ -274,7 +249,7 @@ class PostServiceTest {
         createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
 
         // when
-        PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
+        PostsResponse postsResponse = postService.readAllByTripId(trip.id());
 
         // then
         List<PostResponse> posts = postsResponse.posts();
@@ -287,32 +262,11 @@ class PostServiceTest {
     }
 
     @Test
-    void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
-        // given
-        LoginUser wrongUser = new LoginUser(Long.MIN_VALUE);
-
-        // expect
-        Long tripId = trip.id();
-        assertThatThrownBy(() -> postService.readAllByTripId(wrongUser, tripId))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
-    }
-
-    @Test
     void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_여행_ID이면_예외가_발생한다() {
         // expect
-        assertThatThrownBy(() -> postService.readAllByTripId(loginUser, Long.MIN_VALUE))
+        assertThatThrownBy(() -> postService.readAllByTripId(Long.MIN_VALUE))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.message());
-    }
-
-    @Test
-    void 특정_여행의_모든_감상을_조회할_때_로그인_한_사용자가_여행의_주인이_아니면_예외가_발생한다() {
-        // expect
-        Long tripId = trip.id();
-        assertThatThrownBy(() -> postService.readAllByTripId(otherUser, tripId))
-                .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test
@@ -357,7 +311,7 @@ class PostServiceTest {
         postService.update(loginUser, postCreateResponse.postId(), postUpdateRequest, null);
 
         // then
-        PostResponse postResponseBeforeUpdate = postService.read(loginUser, postCreateResponse.postId());
+        PostResponse postResponseBeforeUpdate = postService.read(postCreateResponse.postId());
 
         assertSoftly(softly -> {
             softly.assertThat(postResponseBeforeUpdate.postId()).isEqualTo(postCreateResponse.postId());
@@ -422,7 +376,7 @@ class PostServiceTest {
         Long postId = postCreateResponse.postId();
         assertDoesNotThrow(() -> postService.delete(loginUser, postId));
 
-        assertThatThrownBy(() -> postService.read(loginUser, postId))
+        assertThatThrownBy(() -> postService.read(postId))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
     }
