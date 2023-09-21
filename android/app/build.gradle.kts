@@ -43,6 +43,25 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+
+        buildConfigField(
+            "String",
+            "NAVER_REVERS_GEOCODER_BASE_URL_STRING",
+            localProperties.getProperty("NAVER_REVERS_GEOCODER_BASE_URL_STRING"),
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_MAP_CLIENT_SECRET_STRING",
+            localProperties.getProperty("NAVER_MAP_CLIENT_SECRET_STRING"),
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_MAP_CLIENT_ID_STRING",
+            localProperties.getProperty("NAVER_MAP_CLIENT_ID_STRING"),
+        )
+
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",

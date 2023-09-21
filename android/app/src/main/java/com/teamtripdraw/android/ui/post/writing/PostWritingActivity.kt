@@ -2,7 +2,6 @@ package com.teamtripdraw.android.ui.post.writing
 
 import android.content.Context
 import android.content.Intent
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -16,13 +15,11 @@ import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
-import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.support.framework.presentation.extensions.toResizedImageFile
 import com.teamtripdraw.android.support.framework.presentation.images.createImageUri
 import com.teamtripdraw.android.support.framework.presentation.permission.checkCameraPermission
 import com.teamtripdraw.android.support.framework.presentation.permission.requestCameraPermission
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint
 class PostWritingActivity : AppCompatActivity() {
@@ -87,7 +84,6 @@ class PostWritingActivity : AppCompatActivity() {
     private fun initObserve() {
         initBackPageObserve()
         initWritingCompletedObserve()
-        initPointObserve()
         initTakePictureObserve()
         initSelectPhotoObserve()
     }
@@ -104,13 +100,6 @@ class PostWritingActivity : AppCompatActivity() {
             this,
             EventObserver { if (it) finish() },
         )
-    }
-
-    private fun initPointObserve() {
-        viewModel.point.observe(this) { point ->
-            val geocoder = Geocoder(this, Locale.KOREAN)
-            geocoder.fetchAddress(point.latitude, point.longitude, viewModel::updateAddress)
-        }
     }
 
     private fun initTakePictureObserve() {
