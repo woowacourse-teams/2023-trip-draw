@@ -23,8 +23,8 @@ public class RouteImageGenerator {
             List<Double> pointedLongitudes
     ) {
         RouteImageDrawer routeImageDrawer = RouteImageDrawer.from(IMAGE_SIZE);
-        Coordinates coordinates = Coordinates.of(latitudes, longitudes);
-        Coordinates pointedCoordinates = Coordinates.of(pointedLatitudes, pointedLongitudes);
+        Coordinates coordinates = Coordinates.of(longitudes, latitudes);
+        Coordinates pointedCoordinates = Coordinates.of(pointedLongitudes, pointedLatitudes);
 
         drawImage(coordinates, routeImageDrawer, pointedCoordinates);
 
