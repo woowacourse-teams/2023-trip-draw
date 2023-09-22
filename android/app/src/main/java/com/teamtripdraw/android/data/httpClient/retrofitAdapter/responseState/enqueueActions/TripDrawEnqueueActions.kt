@@ -36,7 +36,7 @@ class TripDrawEnqueueActions<T : Any>(
         errorBody: ResponseBody?,
     ) {
         when (ServerType.getByBaseUrl(retrofit.baseUrl().toString())) {
-            NAVER_GEO_CODER -> {
+            NAVER_REVERSE_GEOCODER -> {
                 super.responseFailureAction(callback, code, errorBody)
             }
             TRIP_DRAW -> {
