@@ -99,7 +99,7 @@ class TripRepositoryTest {
         tripRepository.deleteByMemberId(member.id());
 
         // then
-        assertThat(tripRepository.findById(trip.id())).isEmpty();
+        assertThat(tripRepository.existsById(trip.id())).isFalse();
     }
 
     @Test
