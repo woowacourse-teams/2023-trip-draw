@@ -50,7 +50,7 @@ class MemberServiceTest {
         member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member.id()));
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
-        trip.add(point);
+        point.setTrip(trip);
         postRepository.save(new Post(
                 "제목",
                 point,
