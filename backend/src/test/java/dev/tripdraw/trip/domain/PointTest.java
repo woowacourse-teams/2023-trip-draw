@@ -46,7 +46,7 @@ class PointTest {
         // given
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
         Member member = new Member("통후추", "kakaoId", KAKAO);
-        Trip trip = Trip.from(member);
+        Trip trip = Trip.of(member.id(), member.nickname());
 
         // when
         point.setTrip(trip);

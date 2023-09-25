@@ -1,9 +1,9 @@
 package dev.tripdraw.post.application;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.post.exception.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
+import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +19,6 @@ import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.member.exception.MemberException;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
@@ -36,6 +35,9 @@ import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.exception.TripException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -43,10 +45,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -80,7 +78,7 @@ class PostServiceTest {
     void setUp() {
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         Member otherMember = memberRepository.save(new Member("순후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(Trip.from(member));
+        trip = tripRepository.save(Trip.of(member.id(), member.nickname()));
         point = new Point(1.1, 2.1, LocalDateTime.now());
         point.setTrip(trip);
         pointRepository.save(point);
@@ -124,8 +122,8 @@ class PostServiceTest {
 
         // expect
         assertThatThrownBy(() -> postService.addAtCurrentPoint(wrongUser, postAndPointCreateRequest, null))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test
@@ -180,8 +178,8 @@ class PostServiceTest {
 
         // expect
         assertThatThrownBy(() -> postService.addAtExistingLocation(wrongUser, postRequest, null))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test
@@ -347,8 +345,8 @@ class PostServiceTest {
         // expect
         Long postId = postCreateResponse.postId();
         assertThatThrownBy(() -> postService.update(wrongUser, postId, postUpdateRequest, null))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
+                .isInstanceOf(PostException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
 
     @Test
@@ -398,8 +396,8 @@ class PostServiceTest {
         // expect
         Long postId = postCreateResponse.postId();
         assertThatThrownBy(() -> postService.delete(wrongUser, postId))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
+                .isInstanceOf(PostException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
 
     @Test

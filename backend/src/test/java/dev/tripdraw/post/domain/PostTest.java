@@ -26,7 +26,7 @@ class PostTest {
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // expect
         assertThat(post.pointRecordedAt()).isEqualTo(recordedAt);
@@ -37,11 +37,11 @@ class PostTest {
         // given
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
-        Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Member member = new Member(1L, "통후추", "kakaoId", KAKAO);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // expect
-        assertThatNoException().isThrownBy(() -> post.validateAuthorization(member));
+        assertThatNoException().isThrownBy(() -> post.validateAuthorization(member.id()));
     }
 
     @Test
@@ -49,11 +49,11 @@ class PostTest {
         // given
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
-        Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Member member = new Member(1L, "통후추", "kakaoId", KAKAO);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // expect
-        assertThatThrownBy(() -> post.validateAuthorization(new Member("순후추", "kakaoId", KAKAO)))
+        assertThatThrownBy(() -> post.validateAuthorization(new Member(2L, "순후추", "kakaoId", KAKAO).id()))
                 .isInstanceOf(PostException.class)
                 .hasMessage(NOT_AUTHORIZED_TO_POST.message());
     }
@@ -66,7 +66,7 @@ class PostTest {
         Member member = new Member("통후추", "kakaoId", KAKAO);
 
         // when
-        new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // then
         assertThat(point.hasPost()).isTrue();
@@ -81,7 +81,7 @@ class PostTest {
         Member member = new Member("통후추", "kakaoId", KAKAO);
 
         // expect
-        assertThatThrownBy(() -> new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L))
+        assertThatThrownBy(() -> new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L))
                 .isInstanceOf(TripException.class)
                 .hasMessage(POINT_ALREADY_HAS_POST.message());
     }
@@ -92,7 +92,7 @@ class PostTest {
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // when
         post.changeTitle("바뀐 제목");
@@ -107,7 +107,7 @@ class PostTest {
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // when
         post.changeWriting("내일은 바람이 많네요.");
@@ -122,7 +122,7 @@ class PostTest {
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // when
         post.changePostImageUrl("/통후추셀카.jpg");
@@ -137,7 +137,7 @@ class PostTest {
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
 
         // when
         post.changeRouteImageUrl("/통후추여행경로.png");
@@ -152,7 +152,7 @@ class PostTest {
         LocalDateTime recordedAt = LocalDateTime.now();
         Point point = new Point(3.14, 5.25, recordedAt);
         Member member = new Member("통후추", "kakaoId", KAKAO);
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, 1L);
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), 1L);
         post.changePostImageUrl("example.url");
 
         // when

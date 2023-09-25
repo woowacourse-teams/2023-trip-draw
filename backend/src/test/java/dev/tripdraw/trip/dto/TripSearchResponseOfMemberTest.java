@@ -20,14 +20,14 @@ class TripSearchResponseOfMemberTest {
         // given
         Member member = new Member("통후추", "kakaoId", KAKAO);
         TripName tripName = TripName.from("통후추의 여행");
-        Trip trip = new Trip(1L, tripName, member, ONGOING, null, null);
+        Trip trip = new Trip(1L, tripName, member.id(), ONGOING, null, null);
 
         // when
         TripSearchResponseOfMember response = TripSearchResponseOfMember.from(trip);
 
         // then
         assertThat(response).usingRecursiveComparison().isEqualTo(
-                TripSearchResponseOfMember.from(new Trip(1L, tripName, member, ONGOING, "", ""))
+                TripSearchResponseOfMember.from(new Trip(1L, tripName, member.id(), ONGOING, "", ""))
         );
     }
 }

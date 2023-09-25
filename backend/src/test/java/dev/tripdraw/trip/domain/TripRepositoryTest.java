@@ -46,7 +46,7 @@ class TripRepositoryTest {
     @Test
     void 회원_ID로_여행_목록을_조회한다() {
         // given
-        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        Trip trip = new Trip(TripName.from("제주도 여행"), member.id());
         tripRepository.save(trip);
 
         // when
@@ -71,7 +71,7 @@ class TripRepositoryTest {
     @Test
     void 여행_ID를_입력받아_여행_목록과_위치_정보까지_조회한다() {
         // given
-        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        Trip trip = new Trip(TripName.from("제주도 여행"), member.id());
         Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
         Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
         trip.add(point1);
@@ -91,7 +91,7 @@ class TripRepositoryTest {
     @Test
     void 회원_ID로_여행을_삭제한다() {
         // given
-        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        Trip trip = new Trip(TripName.from("제주도 여행"), member.id());
         tripRepository.save(trip);
 
         // when
@@ -104,7 +104,7 @@ class TripRepositoryTest {
     @Test
     void 여행_ID로_여행을_조회한다() {
         // given
-        Trip trip = tripRepository.save(new Trip(TripName.from("제주도 여행"), member));
+        Trip trip = tripRepository.save(new Trip(TripName.from("제주도 여행"), member.id()));
 
         // when
         Trip foundTrip = tripRepository.getById(trip.id());

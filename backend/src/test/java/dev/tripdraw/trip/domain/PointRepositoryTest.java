@@ -42,7 +42,7 @@ class PointRepositoryTest {
     @BeforeEach
     void setUp() {
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(Trip.from(member));
+        trip = tripRepository.save(Trip.of(member.id(), member.nickname()));
     }
 
     @Test

@@ -49,7 +49,7 @@ class PostRepositoryTest {
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member));
+        trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member.id()));
         point = new Point(3.14, 5.25, LocalDateTime.now());
         trip.add(point);
     }
@@ -57,7 +57,7 @@ class PostRepositoryTest {
     @Test
     void 여행_ID로_감상_목록을_조회한다() {
         // given
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, trip.id());
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), trip.id());
         postRepository.save(post);
 
         // when
@@ -70,7 +70,7 @@ class PostRepositoryTest {
     @Test
     void 회원_ID로_감상을_삭제한다() {
         // given
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, trip.id());
+        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), trip.id());
         postRepository.save(post);
 
         // when
@@ -83,7 +83,7 @@ class PostRepositoryTest {
     @Test
     void 감상_ID로_감상을_조회한다() {
         // given
-        Post post = postRepository.save(new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member, trip.id()));
+        Post post = postRepository.save(new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), trip.id()));
 
         // when
         Post foundPost = postRepository.getByPostId(post.id());
