@@ -15,7 +15,9 @@ import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SetTripTitleDialog : DialogFragment() {
 
     private var _binding: FragmentTripTitleDialogBinding? = null
