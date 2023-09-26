@@ -17,9 +17,12 @@ import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.mapper.toDomain
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import com.teamtripdraw.android.ui.model.mapper.toPreviewPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SetTripTitleDialogViewModel(
+@HiltViewModel
+class SetTripTitleDialogViewModel @Inject constructor(
     private val repository: TripRepository,
 ) : ViewModel() {
 
