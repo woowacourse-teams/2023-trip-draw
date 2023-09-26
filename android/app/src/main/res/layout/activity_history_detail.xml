@@ -112,14 +112,6 @@
                         android:onClick="@{()->historyDetailViewModel.openEditTitle()}"
                         android:src="@drawable/ic_edit" />
 
-                    <ImageView
-                        android:id="@+id/btn_history_detail_share"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="@dimen/margin_default"
-                        android:src="@drawable/ic_share" />
-
                 </com.google.android.material.appbar.MaterialToolbar>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
