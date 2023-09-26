@@ -74,18 +74,6 @@ class MemberRepositoryTest {
     }
 
     @Test
-    void 회원_ID로_회원_닉네임을_조회한다() {
-        // given
-        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-
-        // when
-        String nickname = memberRepository.findNicknameById(member.id()).get();
-
-        // then
-        assertThat(nickname).isEqualTo("통후추");
-    }
-
-    @Test
     void 회원_ID로_회원_닉네임을_얻는다() {
         // given
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
@@ -95,16 +83,5 @@ class MemberRepositoryTest {
 
         // then
         assertThat(nickname).isEqualTo("통후추");
-    }
-
-    @Test
-    void 회원_ID로_회원_닉네임을_얻을_때_닉네임이_존재하지_않는_경우_예외를_던진다() {
-        // given
-        Member member = memberRepository.save(new Member(null, "kakaoId", KAKAO));
-
-        // expect
-        assertThatThrownBy(() -> memberRepository.getNicknameById(member.id()))
-                .isInstanceOf(MemberException.class)
-                .hasMessage("가입이 완료되지 않은 회원이 존재합니다.");
     }
 }

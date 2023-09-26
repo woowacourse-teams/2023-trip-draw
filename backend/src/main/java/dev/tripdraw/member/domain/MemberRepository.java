@@ -1,7 +1,6 @@
 package dev.tripdraw.member.domain;
 
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
-import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_REGISTERED;
 
 import dev.tripdraw.common.auth.OauthType;
 import dev.tripdraw.member.exception.MemberException;
@@ -17,15 +16,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByNickname(String nickname);
 
     @Query("SELECT m.nickname FROM Member m WHERE m.id = :id")
-    Optional<String> findNicknameById(@Param("id") Long id);
+    String getNicknameById(@Param("id") Long id);
 
     default Member getById(Long id) {
         return findById(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-    }
-
-    default String getNicknameById(Long id) {
-        return findNicknameById(id)
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_REGISTERED));
     }
 }
