@@ -40,12 +40,6 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:dividerColor="@color/td_gray"
-            app:layout_constraintTop_toBottomOf="@id/tb_history" />
-
         <TextView
             android:id="@+id/tv_history_no_trip"
             android:layout_width="0dp"
