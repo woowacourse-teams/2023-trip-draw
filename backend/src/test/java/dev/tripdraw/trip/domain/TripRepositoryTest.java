@@ -14,6 +14,7 @@ import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.exception.TripException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -98,7 +99,7 @@ class TripRepositoryTest {
         tripRepository.deleteByMemberId(member.id());
 
         // then
-        assertThat(tripRepository.findById(trip.id())).isEmpty();
+        assertThat(tripRepository.existsById(trip.id())).isFalse();
     }
 
     @Test
@@ -122,5 +123,19 @@ class TripRepositoryTest {
         assertThatThrownBy(() -> tripRepository.getById(wrongId))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.message());
+    }
+
+    @Test
+    void 회원_ID를_갖는_모든_여행_ID를_조회한다() {
+        // given
+        List<Long> tripIds = IntStream.range(0, 5)
+                .mapToObj(value -> tripRepository.save(Trip.from(member)).id())
+                .toList();
+
+        // when
+        List<Long> foundIds = tripRepository.findAllTripIdsByMemberId(member.id());
+
+        // then
+        assertThat(foundIds).isEqualTo(tripIds);
     }
 }
