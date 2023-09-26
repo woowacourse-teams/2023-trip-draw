@@ -56,14 +56,6 @@
                 android:textColor="@color/td_black"
                 tools:text="여행 제목" />
 
-            <ImageView
-                android:id="@+id/btn_trip_detail_share"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/margin_default"
-                android:src="@drawable/ic_share" />
-
         </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.fragment.app.FragmentContainerView
