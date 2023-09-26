@@ -23,6 +23,22 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
 
     @Override
     public List<Trip> findAllByConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
+        if (tripSearchConditions.hasAllConditions()) {
+            return findByAllConditions(tripSearchConditions, tripPaging);
+        }
+
+        if (tripSearchConditions.hasAddressCondition()) {
+            return findByAddressCondition(tripSearchConditions, tripPaging);
+        }
+
+        if (tripSearchConditions.hasTimeConditions()) {
+            return findByTimeConditions(tripSearchConditions, tripPaging);
+        }
+
+        return findWithoutCondition(tripPaging);
+    }
+
+    private List<Trip> findByAllConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
         return query
                 .selectFrom(trip)
                 .distinct()
@@ -73,5 +89,44 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
             return null;
         }
         return post.address.like(address + "%");
+    }
+
+    private List<Trip> findByAddressCondition(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
+        return query
+                .selectFrom(trip)
+                .distinct()
+                .join(post).on(trip.id.eq(post.point.trip.id))
+                .where(
+                        addressLike(tripSearchConditions.address())
+                )
+                .orderBy(trip.id.desc())
+                .limit(tripPaging.limit().longValue() + 1L)
+                .fetch();
+    }
+
+    private List<Trip> findByTimeConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
+        return query
+                .selectFrom(trip)
+                .distinct()
+                .join(point).on(point.trip.id.eq(trip.id))
+                .where(
+                        tripIdLt(tripPaging.lastViewedId()),
+                        yearIn(tripSearchConditions.years()),
+                        monthIn(tripSearchConditions.months()),
+                        dayOfWeekIn(tripSearchConditions.daysOfWeek())
+                )
+                .orderBy(trip.id.desc())
+                .limit(tripPaging.limit().longValue() + 1L)
+                .fetch();
+    }
+
+    private List<Trip> findWithoutCondition(TripPaging tripPaging) {
+        return query
+                .selectFrom(trip)
+                .distinct()
+                .where(tripIdLt(tripPaging.lastViewedId()))
+                .orderBy(trip.id.desc())
+                .limit(tripPaging.limit().longValue() + 1L)
+                .fetch();
     }
 }
