@@ -1,8 +1,8 @@
 package dev.tripdraw.auth.application;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.member.exception.MemberExceptionType.DUPLICATE_NICKNAME;
 import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
+import static dev.tripdraw.test.fixture.AuthFixture.OAuth_정보;
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -12,7 +12,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import dev.tripdraw.auth.dto.OauthInfo;
 import dev.tripdraw.common.auth.OauthType;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -37,8 +36,6 @@ class AuthServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
-    private final OauthInfo oauthInfo = new OauthInfo("id", KAKAO);
-
     @Test
     void 신규_회원이_로그인하면_회원을_저장_후_빈_회원을_반환한다() {
         // given
@@ -46,7 +43,7 @@ class AuthServiceTest {
                 .willReturn(Optional.empty());
 
         // when
-        Optional<Member> member = authService.login(oauthInfo);
+        Optional<Member> member = authService.login(OAuth_정보());
 
         // then
         assertSoftly(softly -> {
@@ -58,12 +55,11 @@ class AuthServiceTest {
     @Test
     void 기존의_회원이_로그인하면_회원_정보를_반환한다() {
         // given
-        Member 사용자 = 사용자();
         given(memberRepository.findByOauthIdAndOauthType(any(String.class), any(OauthType.class)))
-                .willReturn(Optional.of(사용자));
+                .willReturn(Optional.of(사용자()));
 
         // when
-        Optional<Member> member = authService.login(oauthInfo);
+        Optional<Member> member = authService.login(OAuth_정보());
 
         // then
         assertThat(member).isPresent();
@@ -76,7 +72,7 @@ class AuthServiceTest {
                 .willReturn(Optional.of(사용자()));
 
         // when
-        Optional<Member> member = authService.register(oauthInfo, "통후추");
+        Optional<Member> member = authService.register(OAuth_정보(), "통후추");
 
         // then
         assertThat(member).isPresent();
@@ -89,7 +85,7 @@ class AuthServiceTest {
                 .willReturn(Optional.empty());
 
         // expect
-        assertThatThrownBy(() -> authService.register(oauthInfo, "통후추"))
+        assertThatThrownBy(() -> authService.register(OAuth_정보(), "통후추"))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.message());
     }
@@ -101,7 +97,7 @@ class AuthServiceTest {
                 .willReturn(true);
 
         // expect
-        assertThatThrownBy(() -> authService.register(oauthInfo, "통후추"))
+        assertThatThrownBy(() -> authService.register(OAuth_정보(), "통후추"))
                 .isInstanceOf(MemberException.class)
                 .hasMessage(DUPLICATE_NICKNAME.message());
     }
