@@ -1,13 +1,14 @@
 package dev.tripdraw.post.domain;
 
-import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
-
 import dev.tripdraw.post.exception.PostException;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
@@ -20,6 +21,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     }
 
     @Modifying
-    @Query("DELETE FROM Post p WHERE p.member.id = :memberId")
+    @Query("DELETE FROM Post p WHERE p.memberId = :memberId")
     void deleteByMemberId(@Param(value = "memberId") Long memberId);
 }
