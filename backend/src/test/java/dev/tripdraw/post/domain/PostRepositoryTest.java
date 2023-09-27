@@ -71,6 +71,7 @@ class PostRepositoryTest {
     void 회원_ID로_감상을_삭제한다() {
         // given
         Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), trip.id());
+
         Long postId = postRepository.save(post).id();
 
         // when

@@ -46,6 +46,7 @@ class PointRepositoryTest {
     void setUp() {
         Member huchu = memberRepository.save(new Member("후추", "kakaoId", KAKAO));
         Member herb = memberRepository.save(new Member("허브", "kakaoId", KAKAO));
+
         huchuTrip = tripRepository.save(Trip.of(huchu.id(), huchu.nickname()));
         herbTrip = tripRepository.save(Trip.of(herb.id(), herb.nickname()));
     }
