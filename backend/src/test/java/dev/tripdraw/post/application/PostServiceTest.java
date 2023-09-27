@@ -1,7 +1,7 @@
 package dev.tripdraw.post.application;
 
-import static dev.tripdraw.post.application.PostServiceTest.PostDtoFixture.감상_생성_요청;
-import static dev.tripdraw.post.application.PostServiceTest.PostDtoFixture.현재_위치_감상_생성_요청;
+import static dev.tripdraw.post.application.PostServiceTest.PostRequestFixture.감상_생성_요청;
+import static dev.tripdraw.post.application.PostServiceTest.PostRequestFixture.현재_위치_감상_생성_요청;
 import static dev.tripdraw.post.exception.PostExceptionType.NOT_AUTHORIZED_TO_POST;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
 import static dev.tripdraw.test.fixture.MemberFixture.다른_사용자;
@@ -385,7 +385,7 @@ class PostServiceTest {
         assertThat(trip.imageUrl()).isEqualTo("hello.png");
     }
 
-    static class PostDtoFixture {
+    static class PostRequestFixture {
         public static PostAndPointCreateRequest 현재_위치_감상_생성_요청(Long tripId) {
             return new PostAndPointCreateRequest(
                     tripId,
