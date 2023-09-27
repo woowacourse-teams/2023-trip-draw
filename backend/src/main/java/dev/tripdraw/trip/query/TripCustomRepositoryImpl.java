@@ -1,19 +1,21 @@
 package dev.tripdraw.trip.query;
 
-import static dev.tripdraw.post.domain.QPost.post;
-import static dev.tripdraw.trip.domain.QPoint.point;
-import static dev.tripdraw.trip.domain.QTrip.trip;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.dto.TripSearchConditions;
 import io.micrometer.common.util.StringUtils;
-import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Set;
+
+import static dev.tripdraw.post.domain.QPost.post;
+import static dev.tripdraw.trip.domain.QPoint.point;
+import static dev.tripdraw.trip.domain.QTrip.trip;
 
 @RequiredArgsConstructor
 @Repository
@@ -94,39 +96,73 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
     private List<Trip> findByAddressCondition(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
         return query
                 .selectFrom(trip)
-                .distinct()
-                .join(post).on(trip.id.eq(post.point.trip.id))
                 .where(
-                        addressLike(tripSearchConditions.address())
+                        tripIdLt(tripPaging.lastViewedId()),
+                        tripIdInMetAddressCondition(tripSearchConditions)
                 )
                 .orderBy(trip.id.desc())
                 .limit(tripPaging.limit().longValue() + 1L)
                 .fetch();
+    }
+
+    private BooleanExpression tripIdInMetAddressCondition(TripSearchConditions tripSearchConditions) {
+        return trip.id.in(
+                JPAExpressions.selectDistinct(point.trip.id)
+                        .from(post)
+                        .join(point).on(post.point.id.eq(point.id))
+                        .where(
+                                addressLike(tripSearchConditions.address())
+                        )
+        );
     }
 
     private List<Trip> findByTimeConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
         return query
                 .selectFrom(trip)
-                .distinct()
-                .join(point).on(point.trip.id.eq(trip.id))
                 .where(
                         tripIdLt(tripPaging.lastViewedId()),
-                        yearIn(tripSearchConditions.years()),
-                        monthIn(tripSearchConditions.months()),
-                        dayOfWeekIn(tripSearchConditions.daysOfWeek())
+                        tripIdInMetTimeConditions(tripSearchConditions)
                 )
                 .orderBy(trip.id.desc())
                 .limit(tripPaging.limit().longValue() + 1L)
                 .fetch();
     }
 
+    private BooleanExpression tripIdInMetTimeConditions(TripSearchConditions tripSearchConditions) {
+        return trip.id.in(
+                JPAExpressions.selectDistinct(point.trip.id)
+                        .from(point)
+                        .where(
+                                yearIn(tripSearchConditions.years()),
+                                monthIn(tripSearchConditions.months()),
+                                dayOfWeekIn(tripSearchConditions.daysOfWeek()),
+                                hasPost()
+                        )
+        );
+    }
+
+    private BooleanExpression hasPost() {
+        return point.hasPost.isTrue();
+    }
+
     private List<Trip> findWithoutCondition(TripPaging tripPaging) {
         return query
                 .selectFrom(trip)
-                .distinct()
-                .where(tripIdLt(tripPaging.lastViewedId()))
+                .where(
+                        tripIdLt(tripPaging.lastViewedId()),
+                        tripIdInHasPost()
+                )
                 .orderBy(trip.id.desc())
                 .limit(tripPaging.limit().longValue() + 1L)
                 .fetch();
+    }
+
+    private BooleanExpression tripIdInHasPost() {
+        return trip.id.in(
+                JPAExpressions.selectDistinct(point.trip.id)
+                        .from(post)
+                        .join(point).on(post.point.id.eq(point.id))
+                        .where(hasPost())
+        );
     }
 }

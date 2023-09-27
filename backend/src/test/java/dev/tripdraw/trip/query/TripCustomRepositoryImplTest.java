@@ -406,6 +406,8 @@ class TripCustomRepositoryImplTest {
             emptyPostTrip();
 
             TripSearchConditions tripSearchConditions = emptyTripSearchConditions();
+//            TripSearchConditions tripSearchConditions = addressTripSearchConditions("서울특별시");
+//            TripSearchConditions tripSearchConditions = daysOfWeekTripSearchConditions(Set.of(2));
 
             // when
             List<Trip> trips = tripCustomRepository.findAllByConditions(
