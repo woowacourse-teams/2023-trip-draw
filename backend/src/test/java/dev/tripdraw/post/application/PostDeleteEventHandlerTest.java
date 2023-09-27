@@ -1,7 +1,7 @@
 package dev.tripdraw.post.application;
 
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
+import static org.mockito.BDDMockito.times;
 
 import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.post.domain.PostRepository;
