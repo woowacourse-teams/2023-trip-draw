@@ -137,7 +137,11 @@ class MyPageFragment : Fragment() {
     }
 
     private fun navigateToLoginActivity() {
-        val intent = LoginActivity.getIntent(requireContext())
+        val intent = LoginActivity.getIntent(
+            requireContext(),
+            Intent.FLAG_ACTIVITY_CLEAR_TASK,
+            Intent.FLAG_ACTIVITY_NEW_TASK,
+        )
         startActivity(intent)
         requireActivity().finish()
     }

@@ -144,8 +144,10 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         fun getIntent(context: Context, vararg flags: Int): Intent =
             Intent(context, LoginActivity::class.java).apply {
-                val combinedFlags = flags.reduce { acc, flag -> acc or flag }
-                this.flags = combinedFlags
+                if (flags.isNotEmpty()) {
+                    val combinedFlags = flags.reduce { acc, flag -> acc or flag }
+                    this.flags = combinedFlags
+                }
             }
     }
 }
