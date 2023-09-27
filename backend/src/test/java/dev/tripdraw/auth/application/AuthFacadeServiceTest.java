@@ -1,6 +1,8 @@
 package dev.tripdraw.auth.application;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.MemberFixture.OAUTH_아이디;
+import static dev.tripdraw.test.fixture.MemberFixture.닉네임이_없는_사용자;
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
@@ -54,7 +56,7 @@ class AuthFacadeServiceTest {
     void 가입된_회원이_카카오_소셜_로그인하면_토큰이_포함된_응답을_반환한다() {
         // given
         memberRepository.save(사용자());
-        OauthRequest oauthRequest = new OauthRequest(KAKAO, "oauth.kakao.token");
+        OauthRequest oauthRequest = new OauthRequest(KAKAO, OAUTH_아이디);
 
         // when
         OauthResponse response = authFacadeService.login(oauthRequest);
@@ -69,7 +71,7 @@ class AuthFacadeServiceTest {
     @Test
     void 신규_회원이_로그인하면_회원을_저장하고_빈_토큰이_포함된_응답을_반환한다() {
         // given
-        OauthRequest oauthRequest = new OauthRequest(KAKAO, "oauth.kakao.token");
+        OauthRequest oauthRequest = new OauthRequest(KAKAO, OAUTH_아이디);
 
         // when
         OauthResponse response = authFacadeService.login(oauthRequest);
@@ -84,8 +86,8 @@ class AuthFacadeServiceTest {
     @Test
     void 신규_회원의_닉네임을_등록하면_토큰이_포함된_응답을_반환한다() {
         // given
-        memberRepository.save(사용자());
-        RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, "oauth.kakao.token");
+        memberRepository.save(닉네임이_없는_사용자());
+        RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, OAUTH_아이디);
 
         // when
         OauthResponse response = authFacadeService.register(registerRequest);
