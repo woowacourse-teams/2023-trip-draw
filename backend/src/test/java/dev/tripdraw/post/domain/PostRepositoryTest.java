@@ -1,7 +1,10 @@
 package dev.tripdraw.post.domain;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
+import static dev.tripdraw.test.fixture.MemberFixture.사용자;
+import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
+import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
+import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -12,10 +15,9 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.exception.PostException;
 import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
-import dev.tripdraw.trip.domain.TripName;
 import dev.tripdraw.trip.domain.TripRepository;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -37,10 +39,13 @@ class PostRepositoryTest {
     private PostRepository postRepository;
 
     @Autowired
-    private TripRepository tripRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private PointRepository pointRepository;
+
+    @Autowired
+    private TripRepository tripRepository;
 
     private Member member;
     private Trip trip;
@@ -48,43 +53,39 @@ class PostRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member.id()));
-        point = new Point(3.14, 5.25, LocalDateTime.now());
-        trip.add(point);
+        member = memberRepository.save(사용자());
+        trip = tripRepository.save(새로운_여행(member));
+        point = pointRepository.save(새로운_위치정보(trip));
     }
 
     @Test
     void 여행_ID로_감상_목록을_조회한다() {
         // given
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), trip.id());
-        postRepository.save(post);
+        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
 
         // when
         List<Post> posts = postRepository.findAllByTripId(trip.id());
 
         // then
-        assertThat(posts).usingRecursiveComparison().isEqualTo(List.of(post));
+        assertThat(posts).containsExactly(post);
     }
 
     @Test
     void 회원_ID로_감상을_삭제한다() {
         // given
-        Post post = new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), trip.id());
-
-        Long postId = postRepository.save(post).id();
+        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
 
         // when
         postRepository.deleteByMemberId(member.id());
 
         // then
-        assertThat(postRepository.existsById(postId)).isFalse();
+        assertThat(postRepository.existsById(post.id())).isFalse();
     }
 
     @Test
     void 감상_ID로_감상을_조회한다() {
         // given
-        Post post = postRepository.save(new Post("제목", point, "위치", "오늘은 날씨가 좋네요.", member.id(), trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
 
         // when
         Post foundPost = postRepository.getByPostId(post.id());
@@ -96,10 +97,10 @@ class PostRepositoryTest {
     @Test
     void 감상_ID로_감상을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
         // given
-        Long wrongId = Long.MIN_VALUE;
+        Long invalidPostId = Long.MIN_VALUE;
 
         // expect
-        assertThatThrownBy(() -> postRepository.getByPostId(wrongId))
+        assertThatThrownBy(() -> postRepository.getByPostId(invalidPostId))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
     }
