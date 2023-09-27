@@ -1,7 +1,10 @@
 package dev.tripdraw.trip.query;
 
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.dto.TripSearchConditions;
@@ -116,7 +119,7 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
         );
     }
 
-    private List<Trip> findByTimeConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
+    private List<Trip> findByTimeConditions1(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
         return query
                 .selectFrom(trip)
                 .where(
@@ -125,6 +128,52 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
                 )
                 .orderBy(trip.id.desc())
                 .limit(tripPaging.limit().longValue() + 1L)
+                .fetch();
+    }
+
+    private List<Trip> findByTimeConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
+//        select * from (
+//                select distinct p1_0.trip_id
+//                from
+//                point p1_0
+//                where
+//                month(p1_0.recorded_at)=10
+//                and p1_0.has_post=true
+//                order by p1_0.trip_id desc
+//                limit 10) as tmp
+
+//        Expression<Long> tmp = ExpressionUtils.as(JPAExpressions.selectDistinct(point.trip.id)
+//                .from(point)
+//                .where(
+//                        yearIn(tripSearchConditions.years()),
+//                        monthIn(tripSearchConditions.months()),
+//                        dayOfWeekIn(tripSearchConditions.daysOfWeek()),
+//                        hasPost()
+//                )
+//                .orderBy(point.trip.id.desc())
+//                .limit(tripPaging.limit().longValue() + 1L), "tmp");
+
+
+        JPQLQuery<Long> limit = JPAExpressions.selectDistinct(point.trip.id)
+                .from(point)
+                .where(
+                        yearIn(tripSearchConditions.years()),
+                        monthIn(tripSearchConditions.months()),
+                        dayOfWeekIn(tripSearchConditions.daysOfWeek()),
+                        hasPost()
+                )
+                .orderBy(point.trip.id.desc())
+                .limit(tripPaging.limit().longValue() + 1L);
+
+        Expression<Long> tmp = ExpressionUtils.as(limit, "tmp");
+
+        return query
+                .selectFrom(trip)
+                .where(
+                        tripIdLt(tripPaging.lastViewedId()),
+                        trip.id.in()
+                )
+//                .orderBy(trip.id.desc())
                 .fetch();
     }
 
