@@ -4,6 +4,13 @@ spring:
     username: sa
     password:
 
+  task:
+    execution:
+      pool:
+        core-size: 8
+        queue-capacity: 100
+        max-size: 16
+
   h2:
     console:
       enabled: true
@@ -18,11 +25,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
 
   flyway:
-    enabled: true
-    locations: classpath:db/migration/{vendor}
+    enabled: false
 
 logging:
   level:
@@ -51,17 +57,12 @@ trip:
   route:
 
 jwt:
-  secret-key: ItIsALocalKeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee2222222222222222222222222222222222eeeeeeeeeeyXD
-  expiration-time: 172800000  # 48시간 millisecond
-
-management:
-  endpoint:
-    health:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: prometheus
+  access:
+    secret-key: ACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKEN
+    expiration-time: 1800000  # 30 minutes
+  refresh:
+    secret-key: REFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFR
+    expiration-time: 1209600000  # 14 days
 
 oauth:
   kakao:
