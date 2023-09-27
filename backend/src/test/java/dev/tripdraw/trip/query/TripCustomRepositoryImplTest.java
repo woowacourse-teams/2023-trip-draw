@@ -1,7 +1,7 @@
 package dev.tripdraw.trip.query;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.test.fixture.TestFixture.위치정보;
+import static dev.tripdraw.test.fixture.PointFixture.위치정보;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.addressTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.daysOfWeekTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.emptyTripSearchConditions;

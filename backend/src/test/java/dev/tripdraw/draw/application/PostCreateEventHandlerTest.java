@@ -1,7 +1,7 @@
 package dev.tripdraw.draw.application;
 
-import static dev.tripdraw.test.fixture.TestFixture.감상;
-import static dev.tripdraw.test.fixture.TestFixture.여행;
+import static dev.tripdraw.test.fixture.PostFixture.감상;
+import static dev.tripdraw.test.fixture.TripFixture.여행;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;

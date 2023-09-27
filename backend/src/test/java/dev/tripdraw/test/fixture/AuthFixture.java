@@ -4,8 +4,7 @@ import dev.tripdraw.auth.config.AccessTokenConfig;
 import dev.tripdraw.auth.config.RefreshTokenConfig;
 
 public class AuthFixture {
-
-    public static final String 유효하지_않은_토큰 = "Invalid.Token.XD";
+    
     private static final long INVALID_TOKEN_EXPIRE_TIME = -180000L;
     private static final String ACCESS_TOKEN_KEY =
             "ACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKEN";
