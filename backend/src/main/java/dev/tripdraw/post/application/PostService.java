@@ -7,8 +7,6 @@ import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
-import dev.tripdraw.member.domain.Member;
-import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
@@ -27,13 +25,12 @@ import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.exception.TripException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -44,7 +41,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
-    private final MemberRepository memberRepository;
     private final FileUploader fileUploader;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -53,12 +49,13 @@ public class PostService {
             PostAndPointCreateRequest postAndPointCreateRequest,
             MultipartFile file
     ) {
-        Member member = memberRepository.getById(loginUser.memberId());
+        Long memberId = loginUser.memberId();
+
         Trip trip = tripRepository.getById(postAndPointCreateRequest.tripId());
-        trip.validateAuthorization(member);
+        trip.validateAuthorization(memberId);
         Point point = pointRepository.save(postAndPointCreateRequest.toPoint(trip));
 
-        Post post = postAndPointCreateRequest.toPost(member, point);
+        Post post = postAndPointCreateRequest.toPost(memberId, point);
         uploadImage(file, post, trip);
         Post savedPost = postRepository.save(post);
 
@@ -80,12 +77,13 @@ public class PostService {
             PostRequest postRequest,
             MultipartFile file
     ) {
-        Member member = memberRepository.getById(loginUser.memberId());
+        Long memberId = loginUser.memberId();
+
         Trip trip = tripRepository.getById(postRequest.tripId());
-        trip.validateAuthorization(member);
+        trip.validateAuthorization(memberId);
         Point point = pointRepository.getById(postRequest.pointId());
 
-        Post post = postRequest.toPost(member, point);
+        Post post = postRequest.toPost(memberId, point);
         uploadImage(file, post, trip);
         Post savedPost = postRepository.save(post);
 
@@ -111,11 +109,12 @@ public class PostService {
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
+        Long memberId = loginUser.memberId();
+
         Post post = postRepository.getByPostId(postId);
-        Member member = memberRepository.getById(loginUser.memberId());
-        post.validateAuthorization(member);
+        post.validateAuthorization(memberId);
         Trip trip = tripRepository.getById(post.tripId());
-        trip.validateAuthorization(member);
+        trip.validateAuthorization(memberId);
 
         post.changeTitle(postUpdateRequest.title());
         post.changeWriting(postUpdateRequest.writing());
@@ -124,8 +123,7 @@ public class PostService {
 
     public void delete(LoginUser loginUser, Long postId) {
         Post post = postRepository.getByPostId(postId);
-        Member member = memberRepository.getById(loginUser.memberId());
-        post.validateAuthorization(member);
+        post.validateAuthorization(loginUser.memberId());
         postRepository.deleteById(postId);
     }
 

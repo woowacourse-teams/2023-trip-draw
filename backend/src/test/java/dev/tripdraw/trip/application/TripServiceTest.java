@@ -1,8 +1,8 @@
 package dev.tripdraw.trip.application;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
+import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -12,7 +12,6 @@ import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.member.exception.MemberException;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.test.ServiceTest;
@@ -63,12 +62,12 @@ class TripServiceTest {
     @BeforeEach
     void setUp() {
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        Trip trip = Trip.from(member);
+        Trip trip = Trip.of(member.id(), member.nickname());
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
         trip.add(point);
         this.trip = tripRepository.save(trip);
         loginUser = new LoginUser(member.id());
-        postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member, trip.id()));
+        postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member.id(), trip.id()));
     }
 
     @Test
@@ -144,8 +143,8 @@ class TripServiceTest {
 
         // expect
         assertThatThrownBy(() -> tripService.deletePoint(otherUser, response.pointId(), trip.id()))
-                .isInstanceOf(MemberException.class)
-                .hasMessage(MEMBER_NOT_FOUND.message());
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test

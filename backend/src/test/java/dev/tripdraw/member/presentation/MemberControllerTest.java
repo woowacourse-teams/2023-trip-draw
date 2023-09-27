@@ -82,7 +82,7 @@ class MemberControllerTest extends ControllerTest {
         Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
         String huchuToken = jwtTokenProvider.generateAccessToken(member.id().toString());
 
-        Trip trip = new Trip(TripName.from("통후추의 여행"), member);
+        Trip trip = new Trip(TripName.from("통후추의 여행"), member.id());
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
         trip.add(point);
         tripRepository.save(trip);
@@ -91,7 +91,7 @@ class MemberControllerTest extends ControllerTest {
                 point,
                 "위치",
                 "오늘은 날씨가 좋네요.",
-                member,
+                member.id(),
                 trip.id()
         ));
 

@@ -48,7 +48,7 @@ class MemberServiceTest {
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member));
+        trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member.id()));
         Point point = new Point(3.14, 5.25, LocalDateTime.now());
         point.setTrip(trip);
         postRepository.save(new Post(
@@ -56,7 +56,7 @@ class MemberServiceTest {
                 point,
                 "위치",
                 "오늘은 날씨가 좋네요.",
-                member,
+                member.id(),
                 trip.id()
         ));
     }

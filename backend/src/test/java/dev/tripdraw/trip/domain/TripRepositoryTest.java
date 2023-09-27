@@ -1,12 +1,5 @@
 package dev.tripdraw.trip.domain;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
-
 import dev.tripdraw.common.config.JpaConfig;
 import dev.tripdraw.common.config.QueryDslConfig;
 import dev.tripdraw.member.domain.Member;
@@ -23,6 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.IntStream;
+
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -47,7 +51,7 @@ class TripRepositoryTest {
     @Test
     void 회원_ID로_여행_목록을_조회한다() {
         // given
-        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        Trip trip = new Trip(TripName.from("제주도 여행"), member.id());
         tripRepository.save(trip);
 
         // when
@@ -72,7 +76,7 @@ class TripRepositoryTest {
     @Test
     void 여행_ID를_입력받아_여행_목록과_위치_정보까지_조회한다() {
         // given
-        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        Trip trip = new Trip(TripName.from("제주도 여행"), member.id());
         Point point1 = new Point(1.1, 2.2, LocalDateTime.now());
         Point point2 = new Point(3.3, 4.4, LocalDateTime.now());
         trip.add(point1);
@@ -92,7 +96,7 @@ class TripRepositoryTest {
     @Test
     void 회원_ID로_여행을_삭제한다() {
         // given
-        Trip trip = new Trip(TripName.from("제주도 여행"), member);
+        Trip trip = new Trip(TripName.from("제주도 여행"), member.id());
         tripRepository.save(trip);
 
         // when
@@ -105,7 +109,7 @@ class TripRepositoryTest {
     @Test
     void 여행_ID로_여행을_조회한다() {
         // given
-        Trip trip = tripRepository.save(new Trip(TripName.from("제주도 여행"), member));
+        Trip trip = tripRepository.save(new Trip(TripName.from("제주도 여행"), member.id()));
 
         // when
         Trip foundTrip = tripRepository.getById(trip.id());
@@ -129,7 +133,7 @@ class TripRepositoryTest {
     void 회원_ID를_갖는_모든_여행_ID를_조회한다() {
         // given
         List<Long> tripIds = IntStream.range(0, 5)
-                .mapToObj(value -> tripRepository.save(Trip.from(member)).id())
+                .mapToObj(value -> tripRepository.save(Trip.of(member.id(), member.nickname())).id())
                 .toList();
 
         // when

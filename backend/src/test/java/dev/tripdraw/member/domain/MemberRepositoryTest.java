@@ -72,4 +72,16 @@ class MemberRepositoryTest {
                 .isInstanceOf(MemberException.class)
                 .hasMessage(MEMBER_NOT_FOUND.message());
     }
+
+    @Test
+    void 회원_ID로_회원_닉네임을_얻는다() {
+        // given
+        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+
+        // when
+        String nickname = memberRepository.getNicknameById(member.id());
+
+        // then
+        assertThat(nickname).isEqualTo("통후추");
+    }
 }

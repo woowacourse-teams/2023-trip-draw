@@ -3,7 +3,6 @@ package dev.tripdraw.post.dto;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
@@ -53,7 +52,7 @@ public record PostAndPointCreateRequest(
         return new Point(latitude, longitude, recordedAt, trip);
     }
 
-    public Post toPost(Member member, Point point) {
-        return new Post(title, point, address, writing, member, tripId);
+    public Post toPost(Long memberId, Point point) {
+        return new Post(title, point, address, writing, memberId, tripId);
     }
 }

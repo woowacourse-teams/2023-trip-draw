@@ -3,20 +3,16 @@ package dev.tripdraw.trip.domain;
 import static dev.tripdraw.trip.domain.TripStatus.ONGOING;
 import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_INVALID_STATUS;
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 import dev.tripdraw.common.entity.BaseEntity;
-import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.trip.exception.TripException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,9 +34,7 @@ public class Trip extends BaseEntity {
     @Embedded
     private TripName name;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private Long memberId;
 
     @Embedded
     private Route route = new Route();
@@ -52,22 +46,22 @@ public class Trip extends BaseEntity {
 
     private String routeImageUrl;
 
-    public Trip(TripName name, Member member) {
-        this(null, name, member, ONGOING, EMPTY_IMAGE_URL, EMPTY_IMAGE_URL);
+    public Trip(TripName name, Long memberId) {
+        this(null, name, memberId, ONGOING, EMPTY_IMAGE_URL, EMPTY_IMAGE_URL);
     }
 
-    public Trip(Long id, TripName name, Member member, TripStatus status, String imageUrl, String routeImageUrl) {
+    public Trip(Long id, TripName name, Long memberId, TripStatus status, String imageUrl, String routeImageUrl) {
         this.id = id;
         this.name = name;
-        this.member = member;
+        this.memberId = memberId;
         this.status = status;
         this.imageUrl = imageUrl;
         this.routeImageUrl = routeImageUrl;
     }
 
-    public static Trip from(Member member) {
-        TripName tripName = TripName.from(member.nickname());
-        return new Trip(tripName, member);
+    public static Trip of(Long memberId, String nickname) {
+        TripName tripName = TripName.from(nickname);
+        return new Trip(tripName, memberId);
     }
 
     public void add(Point point) {
@@ -81,8 +75,8 @@ public class Trip extends BaseEntity {
         return route.contains(point);
     }
 
-    public void validateAuthorization(Member member) {
-        if (!this.member.equals(member)) {
+    public void validateAuthorization(Long memberId) {
+        if (!this.memberId.equals(memberId)) {
             throw new TripException(NOT_AUTHORIZED_TO_TRIP);
         }
     }

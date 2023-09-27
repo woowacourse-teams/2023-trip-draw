@@ -46,8 +46,9 @@ class PointRepositoryTest {
     void setUp() {
         Member huchu = memberRepository.save(new Member("후추", "kakaoId", KAKAO));
         Member herb = memberRepository.save(new Member("허브", "kakaoId", KAKAO));
-        huchuTrip = tripRepository.save(Trip.from(huchu));
-        herbTrip = tripRepository.save(Trip.from(herb));
+
+        huchuTrip = tripRepository.save(Trip.of(huchu.id(), huchu.nickname()));
+        herbTrip = tripRepository.save(Trip.of(herb.id(), herb.nickname()));
     }
 
     @Test
@@ -97,7 +98,7 @@ class PointRepositoryTest {
 
         // when
         pointRepository.deleteByTripIds(tripIds);
-        
+
         // then
         assertSoftly(softly -> {
             softly.assertThat(pointRepository.existsById(huchuFirstPoint.id())).isFalse();

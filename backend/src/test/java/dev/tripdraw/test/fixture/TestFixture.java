@@ -30,11 +30,11 @@ public class TestFixture {
     }
 
     public static Trip 여행() {
-        return new Trip(1L, TripName.from("통후추"), 사용자(), TripStatus.ONGOING, "", "");
+        return new Trip(1L, TripName.from("통후추"), 사용자().id(), TripStatus.ONGOING, "", "");
     }
 
     public static Post 감상() {
-        return new Post("감상 제목", 위치정보(), "주소", "감상", 사용자(), 1L);
+        return new Post("감상 제목", 위치정보(), "주소", "감상", 사용자().id(), 1L);
     }
 
     public static PointCreateRequest pointCreateRequest(Long tripId) {
