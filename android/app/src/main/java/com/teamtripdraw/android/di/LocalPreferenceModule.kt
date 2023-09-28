@@ -18,6 +18,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object LocalPreferenceModule {
     private const val TRIP_PREFERENCE_FILE_NAME = "TRIP_PREFERENCE"
+    private const val USER_IDENTIFY_INFO_PREFERENCE_FILE_NAME = "encryptedLoginInfoPreference"
 
     @Provides
     @Singleton
@@ -28,7 +29,7 @@ object LocalPreferenceModule {
             .build()
         return EncryptedSharedPreferences.create(
             context,
-            "encryptedLoginInfoPreference",
+            USER_IDENTIFY_INFO_PREFERENCE_FILE_NAME,
             masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
