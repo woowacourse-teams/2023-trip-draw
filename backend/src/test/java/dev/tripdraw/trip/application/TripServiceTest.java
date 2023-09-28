@@ -151,7 +151,8 @@ class TripServiceTest {
         TripsSearchResponseOfMember tripsSearchResponseOfMember = tripService.readAllTripsOf(loginUser);
 
         // then
-        assertThat(tripsSearchResponseOfMember).usingRecursiveComparison()
+        assertThat(tripsSearchResponseOfMember)
+                .usingRecursiveComparison()
                 .isEqualTo(TripsSearchResponseOfMember.from(List.of(trip)));
     }
 
@@ -166,7 +167,8 @@ class TripServiceTest {
         TripsSearchResponse tripsSearchResponse = tripService.readAll(request);
 
         // then
-        assertThat(tripsSearchResponse).usingRecursiveComparison()
+        assertThat(tripsSearchResponse)
+                .usingRecursiveComparison()
                 .ignoringFieldsOfTypes(LocalDateTime.class)
                 .isEqualTo(TripsSearchResponse.of(List.of(trip), false));
     }
@@ -193,7 +195,9 @@ class TripServiceTest {
         PointResponse pointResponse = tripService.readPointByTripAndPointId(loginUser, trip.id(), point.id());
 
         // then
-        assertThat(pointResponse).usingRecursiveComparison().isEqualTo(PointResponse.from(point));
+        assertThat(pointResponse)
+                .usingRecursiveComparison()
+                .isEqualTo(PointResponse.from(point));
     }
 
     static class PostRequestFixture {

@@ -56,9 +56,9 @@ class MemberControllerTest extends ControllerTest {
 
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
-            softly.assertThat(memberSearchResponse).usingRecursiveComparison().isEqualTo(
-                    new MemberSearchResponse(member.id(), member.nickname())
-            );
+            softly.assertThat(memberSearchResponse)
+                    .usingRecursiveComparison()
+                    .isEqualTo(new MemberSearchResponse(member.id(), member.nickname()));
         });
     }
 

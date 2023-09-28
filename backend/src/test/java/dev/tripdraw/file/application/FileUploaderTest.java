@@ -7,8 +7,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.doThrow;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.when;
 
 import dev.tripdraw.file.exception.FileIOException;
@@ -65,7 +65,9 @@ class FileUploaderTest {
         fileUploader.upload(multipartFile);
 
         // then
-        verify(multipartFile, times(1)).transferTo(any(File.class));
+        then(multipartFile)
+                .should(times(1))
+                .transferTo(any(File.class));
     }
 
     @Test

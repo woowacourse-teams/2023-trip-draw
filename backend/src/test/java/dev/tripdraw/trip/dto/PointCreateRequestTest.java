@@ -22,6 +22,8 @@ class PointCreateRequestTest {
         Point point = request.toPoint();
 
         // then
-        assertThat(point).usingRecursiveComparison().isEqualTo(new Point(1.1, 2.2, recordedAt));
+        assertThat(point)
+                .usingRecursiveComparison()
+                .isEqualTo(new Point(1.1, 2.2, recordedAt));
     }
 }

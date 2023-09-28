@@ -45,9 +45,9 @@ class MemberServiceTest {
         MemberSearchResponse response = memberService.find(loginUser);
 
         // then
-        assertThat(response).usingRecursiveComparison().isEqualTo(
-                new MemberSearchResponse(member.id(), "통후추")
-        );
+        assertThat(response)
+                .usingRecursiveComparison()
+                .isEqualTo(new MemberSearchResponse(member.id(), "통후추"));
     }
 
     @Test

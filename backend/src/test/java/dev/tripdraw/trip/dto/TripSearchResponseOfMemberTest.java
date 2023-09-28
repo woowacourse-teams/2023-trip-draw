@@ -26,8 +26,8 @@ class TripSearchResponseOfMemberTest {
         TripSearchResponseOfMember response = TripSearchResponseOfMember.from(trip);
 
         // then
-        assertThat(response).usingRecursiveComparison().isEqualTo(
-                TripSearchResponseOfMember.from(new Trip(1L, tripName, member.id(), ONGOING, "", ""))
-        );
+        assertThat(response)
+                .usingRecursiveComparison()
+                .isEqualTo(TripSearchResponseOfMember.from(new Trip(1L, tripName, member.id(), ONGOING, "", "")));
     }
 }

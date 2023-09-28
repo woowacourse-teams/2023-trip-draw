@@ -1,27 +1,10 @@
 package dev.tripdraw.test.fixture;
 
-import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
-
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
-import dev.tripdraw.trip.dto.PointCreateRequest;
-import dev.tripdraw.trip.dto.TripUpdateRequest;
 import java.time.LocalDateTime;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class TestFixture {
-
-    public static PointCreateRequest pointCreateRequest(Long tripId) {
-        return new PointCreateRequest(
-                tripId,
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
-    }
-
-    public static TripUpdateRequest tripUpdateRequest() {
-        return new TripUpdateRequest("제주도 여행", FINISHED);
-    }
 
     public static PostAndPointCreateRequest 제주_2023_2_1_수(Long tripId) {
         return new PostAndPointCreateRequest(

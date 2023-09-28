@@ -3,6 +3,7 @@ package dev.tripdraw.draw.domain;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
 
@@ -49,7 +50,9 @@ public class RouteImageDrawerTest {
         routeImageDrawer.drawLine(positions);
 
         // then
-        verify(graphics2D, times(positions.size() - 1)).draw(any(Line2D.Double.class));
+        then(graphics2D)
+                .should(times(positions.size() - 1))
+                .draw(any(Line2D.Double.class));
     }
 
     @Test
@@ -65,7 +68,9 @@ public class RouteImageDrawerTest {
         routeImageDrawer.drawPoint(positions);
 
         // then
-        verify(graphics2D, times(positions.size())).draw(any(Line2D.Double.class));
+        then(graphics2D)
+                .should(times(positions.size()))
+                .draw(any(Line2D.Double.class));
     }
 
     @Test
@@ -79,5 +84,8 @@ public class RouteImageDrawerTest {
 
         // then
         verify(graphics2D, times(1)).dispose();
+        then(graphics2D)
+                .should(times(1))
+                .dispose();
     }
 }

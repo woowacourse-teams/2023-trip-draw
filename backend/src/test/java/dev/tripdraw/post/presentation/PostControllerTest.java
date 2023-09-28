@@ -271,7 +271,8 @@ class PostControllerTest extends ControllerTest {
 
         // then
         PostResponse postResponse = response.as(PostResponse.class);
-        assertThat(postResponse).usingRecursiveComparison()
+        assertThat(postResponse)
+                .usingRecursiveComparison()
                 .ignoringFieldsOfTypes(LocalDateTime.class)
                 .isEqualTo(PostResponse.from(post));
     }
@@ -311,7 +312,8 @@ class PostControllerTest extends ControllerTest {
 
         // then
         PostsResponse postsResponse = findResponse.as(PostsResponse.class);
-        assertThat(postsResponse.posts()).usingRecursiveComparison()
+        assertThat(postsResponse.posts())
+                .usingRecursiveComparison()
                 .ignoringFieldsOfTypes(LocalDateTime.class)
                 .isEqualTo(List.of(PostResponse.from(post2), PostResponse.from(post1)));
     }
@@ -444,7 +446,8 @@ class PostControllerTest extends ControllerTest {
 
         // then
         PostsSearchResponse response = jejuResponse.as(PostsSearchResponse.class);
-        assertThat(response.posts()).usingRecursiveComparison()
+        assertThat(response.posts())
+                .usingRecursiveComparison()
                 .ignoringFieldsOfTypes(LocalDateTime.class)
                 .isEqualTo(List.of(PostResponse.from(jejuAugustPost), PostResponse.from(jejuJulyPost)));
     }

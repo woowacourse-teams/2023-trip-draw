@@ -1,9 +1,9 @@
 package dev.tripdraw.draw.application;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -35,6 +35,8 @@ class RouteImageGeneratorTest {
         routeImageGenerator.generate(latitudes, longitudes, xPoints, yPoints);
 
         // then
-        verify(routeImageUploader, times(1)).upload(any(BufferedImage.class));
+        then(routeImageUploader)
+                .should(times(1))
+                .upload(any(BufferedImage.class));
     }
 }
