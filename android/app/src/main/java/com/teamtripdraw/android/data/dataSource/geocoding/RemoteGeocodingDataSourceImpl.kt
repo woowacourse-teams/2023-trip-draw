@@ -13,11 +13,14 @@ class RemoteGeocodingDataSourceImpl @Inject constructor(
         latitude: Double,
         longitude: Double,
     ): Result<DataReverseGeocoding> {
-        val coordsFormat = "%s,%s"
         return remoteGeocodingService.getReverseGeocoding(
-            coords = coordsFormat.format(longitude, latitude),
+            coords = COORDS_FORMAT.format(longitude, latitude),
         ).process { body, headers ->
             Result.success(body.toData())
         }
+    }
+
+    companion object {
+        private val COORDS_FORMAT = "%s,%s"
     }
 }
