@@ -43,7 +43,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-
         buildConfigField(
             "String",
             "NAVER_REVERS_GEOCODER_BASE_URL",
@@ -171,9 +170,9 @@ sentry {
 }
 
 // Hilt Allow references to generated code
- kapt {
+kapt {
     correctErrorTypes = true
- }
+}
 
 dependencies {
     // 프로젝트내 의존성
