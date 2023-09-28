@@ -6,10 +6,10 @@ import com.teamtripdraw.android.data.model.DataReverseGeocoding
 fun GetReverseGeocodingResponse.toData(): DataReverseGeocoding {
     if (this.results.isEmpty()) return DataReverseGeocoding("", "", "")
 
-    val region = this.results[0].region
+    val region = this.results.first().region
     return DataReverseGeocoding(
-        area1 = region.area1.name,
-        area2 = region.area2.name,
-        area3 = region.area3.name,
+        SiDo = region.area1.name,
+        SiGunGu = region.area2.name,
+        EupMyeonDong = region.area3.name,
     )
 }

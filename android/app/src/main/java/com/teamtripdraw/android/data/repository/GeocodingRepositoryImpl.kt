@@ -11,9 +11,9 @@ class GeocodingRepositoryImpl @Inject constructor(
     override suspend fun getAddress(latitude: Double, longitude: Double): Result<String> {
         return remoteGeocodingDataSource.getReverseGeocoding(latitude, longitude).map {
             val result = java.lang.StringBuilder("")
-            if (it.area1.isNotBlank()) result.append("${it.area1} ")
-            if (it.area2.isNotBlank()) result.append("${it.area2} ")
-            if (it.area3.isNotBlank()) result.append(it.area3)
+            if (it.SiDo.isNotBlank()) result.append("${it.SiDo} ")
+            if (it.SiGunGu.isNotBlank()) result.append("${it.SiGunGu} ")
+            if (it.EupMyeonDong.isNotBlank()) result.append(it.EupMyeonDong)
 
             result.toString()
         }
