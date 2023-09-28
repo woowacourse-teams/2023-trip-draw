@@ -139,7 +139,7 @@ object RetrofitModule {
         moshi: Moshi,
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BuildConfig.NAVER_REVERS_GEOCODER_BASE_URL_STRING)
+            .baseUrl(BuildConfig.NAVER_REVERS_GEOCODER_BASE_URL)
             .client(naverReverseGeocodingOkHttpClient)
             .addCallAdapterFactory(ResponseStateCallAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -152,8 +152,8 @@ object RetrofitModule {
             proceed(
                 request()
                     .newBuilder()
-                    .addHeader("X-NCP-APIGW-API-KEY-ID", BuildConfig.NAVER_MAP_CLIENT_ID_STRING)
-                    .addHeader("X-NCP-APIGW-API-KEY", BuildConfig.NAVER_MAP_CLIENT_SECRET_STRING)
+                    .addHeader("X-NCP-APIGW-API-KEY-ID", BuildConfig.NAVER_MAP_CLIENT_ID)
+                    .addHeader("X-NCP-APIGW-API-KEY", BuildConfig.NAVER_MAP_CLIENT_SECRET)
                     .build(),
             )
         }
