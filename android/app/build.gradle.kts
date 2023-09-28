@@ -46,20 +46,20 @@ android {
 
         buildConfigField(
             "String",
-            "NAVER_REVERS_GEOCODER_BASE_URL_STRING",
-            localProperties.getProperty("NAVER_REVERS_GEOCODER_BASE_URL_STRING"),
+            "NAVER_REVERS_GEOCODER_BASE_URL",
+            localProperties.getProperty("NAVER_REVERS_GEOCODER_BASE_URL"),
         )
 
         buildConfigField(
             "String",
-            "NAVER_MAP_CLIENT_SECRET_STRING",
-            localProperties.getProperty("NAVER_MAP_CLIENT_SECRET_STRING"),
+            "NAVER_MAP_CLIENT_SECRET",
+            localProperties.getProperty("NAVER_MAP_CLIENT_SECRET"),
         )
 
         buildConfigField(
             "String",
-            "NAVER_MAP_CLIENT_ID_STRING",
-            localProperties.getProperty("NAVER_MAP_CLIENT_ID_STRING"),
+            "NAVER_MAP_CLIENT_ID",
+            localProperties.getProperty("NAVER_MAP_CLIENT_ID"),
         )
 
         buildConfigField(
@@ -77,8 +77,8 @@ android {
         manifestPlaceholders["NATIVE_APP_KEY"] =
             localProperties.getProperty("KAKAO_NATIVE_APP_KEY_NO_QUOTES")
 
-        manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
-            localProperties.getProperty("NAVER_MAP_CLIENT_ID")
+        manifestPlaceholders["NAVER_MAP_CLIENT_ID_NO_QUOTES"] =
+            localProperties.getProperty("NAVER_MAP_CLIENT_ID_NO_QUOTES")
 
         manifestPlaceholders["SENTRY_DSN"] =
             sentryProperties.getProperty("SENTRY_DSN")

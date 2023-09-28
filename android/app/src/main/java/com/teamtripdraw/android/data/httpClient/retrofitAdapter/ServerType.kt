@@ -4,7 +4,7 @@ import com.teamtripdraw.android.BuildConfig
 
 enum class ServerType(private val baseURl: String) {
     TRIP_DRAW(BuildConfig.TRIP_DRAW_BASE_URL),
-    NAVER_REVERSE_GEOCODER(BuildConfig.NAVER_REVERS_GEOCODER_BASE_URL_STRING),
+    NAVER_REVERSE_GEOCODER(BuildConfig.NAVER_REVERS_GEOCODER_BASE_URL),
     ;
 
     companion object {
