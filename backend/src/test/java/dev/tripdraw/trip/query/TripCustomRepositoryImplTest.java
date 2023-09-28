@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.query;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.addressTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.daysOfWeekTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.emptyTripSearchConditions;
@@ -52,7 +52,7 @@ class TripCustomRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        member = memberRepository.save(사용자());
     }
 
     @Nested
