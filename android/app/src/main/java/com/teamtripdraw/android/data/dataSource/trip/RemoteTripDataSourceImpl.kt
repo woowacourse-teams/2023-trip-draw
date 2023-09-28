@@ -10,8 +10,10 @@ import com.teamtripdraw.android.data.httpClient.service.SetTripTitleService
 import com.teamtripdraw.android.data.model.DataPreSetTripTitle
 import com.teamtripdraw.android.data.model.DataPreviewTrip
 import com.teamtripdraw.android.data.model.DataTrip
+import com.teamtripdraw.android.data.model.DataTripOfAll
+import javax.inject.Inject
 
-class RemoteTripDataSourceImpl(
+class RemoteTripDataSourceImpl @Inject constructor(
     private val createTripService: CreateTripService,
     private val getTripInfoService: GetTripInfoService,
     private val setTripTitleService: SetTripTitleService,
@@ -38,10 +40,34 @@ class RemoteTripDataSourceImpl(
                 Result.success(body)
             }
 
-    override suspend fun getAllTrips(): Result<List<DataPreviewTrip>> =
-        getAllTripsService.getAllTrips().process { body, _ ->
+    override suspend fun getMyTrips(): Result<List<DataPreviewTrip>> =
+        getAllTripsService.getMyTrips().process { body, _ ->
             Result.success(body.toData())
         }
+
+    override suspend fun getAllTrips(
+        address: String,
+        ageRanges: List<Int>,
+        daysOfWeek: List<Int>,
+        genders: List<Int>,
+        months: List<Int>,
+        years: List<Int>,
+        lastViewedId: Long?,
+        limit: Int,
+    ): Result<List<DataTripOfAll>> {
+        return getAllTripsService.getAllTrips(
+            years = years,
+            months = months,
+            daysOfWeek = daysOfWeek,
+            ageRanges = ageRanges,
+            genders = genders,
+            address = address,
+            lastViewedId = lastViewedId,
+            limit = limit,
+        ).process { body, headers ->
+            Result.success(body.toData())
+        }
+    }
 
     override suspend fun deleteTrip(tripId: Long): Result<Unit> =
         deleteTripService.deleteTrip(tripId).process { body, _ ->

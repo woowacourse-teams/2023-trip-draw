@@ -5,12 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.BuildConfig
+import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyPageViewModel(
+@HiltViewModel
+class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val tripRepository: TripRepository,
 ) : ViewModel() {
@@ -19,6 +23,9 @@ class MyPageViewModel(
 
     private val _nickname: MutableLiveData<String> = MutableLiveData("")
     val nickname: LiveData<String> = _nickname
+
+    private val _openTripHistoryEvent: MutableLiveData<Boolean> = MutableLiveData()
+    val openTripHistoryEvent: LiveData<Boolean> = _openTripHistoryEvent
 
     private val _openOpenSourceLicenseEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val openOpenSourceLicenseEvent: LiveData<Boolean> = _openOpenSourceLicenseEvent
@@ -45,10 +52,14 @@ class MyPageViewModel(
                         _nickname.value = it.nickname
                     }
                     .onFailure {
-                        // todo 로그전략 수립후 로그 찍기
+                        logUtil.general.log(it)
                     }
             }
         }
+    }
+
+    fun openTripHistory() {
+        _openTripHistoryEvent.value = true
     }
 
     fun startLogoutEvent() {
@@ -84,7 +95,7 @@ class MyPageViewModel(
                     _unsubscribeSuccessEvent.value = Event(true)
                 }
                 .onFailure {
-                    // todo 로그전략 수립후 로그 찍기
+                    logUtil.general.log(it)
                 }
         }
     }

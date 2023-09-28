@@ -23,8 +23,8 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentHomeBinding
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.point.Point
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.Locations.getUpdateLocation
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.naverMap.LOCATION_PERMISSION_REQUEST_CODE
@@ -36,14 +36,15 @@ import com.teamtripdraw.android.support.framework.presentation.resolution.toPixe
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
 import com.teamtripdraw.android.ui.common.dialog.SetTitleSituation.FINISHED
 import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialog
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
@@ -52,7 +53,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val homeViewModel: HomeViewModel by viewModels { tripDrawViewModelFactory }
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private var recordingPointServiceBindingState: Boolean = false
 
@@ -106,7 +107,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.homeViewModel = homeViewModel
         binding.fabState = fabState
-        if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID) bindRecordingPointService()
+        if (homeViewModel.tripId != Trip.NULL_SUBSTITUTE_ID) bindRecordingPointService()
         return binding.root
     }
 
@@ -244,7 +245,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun observeUpdateTripId() {
         updatedTripId.observe(viewLifecycleOwner) {
             // map 좌표 최신화 방법 #193 참고
-            if (it != NULL_SUBSTITUTE_POINT_ID) homeViewModel.updateTripInfo()
+            if (it != Point.NULL_SUBSTITUTE_ID) homeViewModel.updateTripInfo()
         }
     }
 
@@ -269,7 +270,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (homeViewModel.tripId != NULL_SUBSTITUTE_TRIP_ID && recordingPointServiceBindingState) {
+        if (homeViewModel.tripId != Trip.NULL_SUBSTITUTE_ID && recordingPointServiceBindingState) {
             unbindRecordingPointService()
         }
         _binding = null

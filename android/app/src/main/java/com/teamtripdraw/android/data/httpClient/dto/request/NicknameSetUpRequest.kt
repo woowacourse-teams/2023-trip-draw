@@ -10,5 +10,5 @@ data class NicknameSetUpRequest(
     @Json(name = "oauthToken")
     val oauthToken: String,
     @Json(name = "oauthType")
-    val oauthType: String
+    val oauthType: String,
 )

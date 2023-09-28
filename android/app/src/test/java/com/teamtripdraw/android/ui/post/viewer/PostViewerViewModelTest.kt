@@ -44,18 +44,24 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
         // given
         val posts = listOf(
             Post(
-                postId = 0, tripId = 0, title = "title", writing = "writing", address = "address",
+                postId = 0,
+                tripId = 0,
+                title = "title",
+                writing = "writing",
+                address = "address",
                 point = Point(
                     pointId = 0,
                     latitude = 0.0,
                     longitude = 0.0,
                     recordedAt = LocalDateTime.of(2023, 8, 2, 3, 27),
-                    hasPost = false
-                ), postImageUrl = null, routeImageUrl = null
-            )
+                    hasPost = false,
+                ),
+                postImageUrl = null,
+                routeImageUrl = null,
+            ),
         )
         val result: Result<List<Post>> = Result.success(posts)
-        coEvery { postRepository.getAllPosts(any()) } returns result
+        coEvery { postRepository.getTripPosts(any()) } returns result
 
         // when
         sut.getPosts()
@@ -69,7 +75,7 @@ class PostViewerViewModelTest : DefaultViewModelTest() {
     fun `감상 목록을 가져오는 것을 실패했을 경우 에러 유발 상태의 값을 변경한다`() {
         // given
         val result: Result<List<Post>> = Result.failure(IllegalStateException())
-        coEvery { postRepository.getAllPosts(any()) } returns result
+        coEvery { postRepository.getTripPosts(any()) } returns result
 
         // when
         sut.getPosts()

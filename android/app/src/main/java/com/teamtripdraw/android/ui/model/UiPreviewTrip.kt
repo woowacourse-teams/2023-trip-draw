@@ -8,5 +8,5 @@ data class UiPreviewTrip(
     val id: Long,
     val name: String,
     val imageUrl: String,
-    val routeImageUrl: String
+    val routeImageUrl: String,
 ) : Parcelable

@@ -1,18 +1,20 @@
 package com.teamtripdraw.android.data.repository
 
-import com.teamtripdraw.android.data.dataSource.signUp.SignUpDataSource
+import com.teamtripdraw.android.data.dataSource.auth.login.LoginDataSource
+import com.teamtripdraw.android.data.dataSource.auth.signUp.SignUpDataSource
+import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.dataSource.unsubscribe.UnsubscribeDataSource
-import com.teamtripdraw.android.data.dataSource.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.auth.LoginInfo
 import com.teamtripdraw.android.domain.model.user.UserInfo
 import com.teamtripdraw.android.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val localUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local,
     private val remoteSignUpDataSource: SignUpDataSource.Remote,
-    private val remoteUserIdentifyInfoDataSource: UserIdentifyInfoDataSource.Remote,
+    private val remoteLoginDataSource: LoginDataSource.Remote,
     private val remoteUnsubscribeDataSource: UnsubscribeDataSource.Remote,
 ) :
     AuthRepository {
@@ -22,24 +24,24 @@ class AuthRepositoryImpl(
             .map {}
 
     override suspend fun getUserInfo(): Result<UserInfo> =
-        remoteSignUpDataSource.getUserInfo(localUserIdentifyInfoDataSource.getIdentifyInfo()).map {
+        remoteSignUpDataSource.getUserInfo().map {
             it.toDomain()
         }
 
     override suspend fun login(loginInfo: LoginInfo): Result<Boolean> =
-        remoteUserIdentifyInfoDataSource.issueUserIdentifyInfo(loginInfo.toData())
+        remoteLoginDataSource.login(loginInfo.toData())
             .onSuccess {
                 if (it.isNotBlank()) localUserIdentifyInfoDataSource.setIdentifyInfo(it)
             }.map { it.isNotBlank() }
 
     override fun getAutoLoginState(): Boolean =
-        localUserIdentifyInfoDataSource.getIdentifyInfo().isNotBlank()
+        localUserIdentifyInfoDataSource.getAccessToken().isNotBlank()
 
     override fun logout() {
         localUserIdentifyInfoDataSource.deleteIdentifyInfo()
     }
 
     override suspend fun unsubscribe(): Result<Unit> =
-        remoteUnsubscribeDataSource.unsubscribe(localUserIdentifyInfoDataSource.getIdentifyInfo())
+        remoteUnsubscribeDataSource.unsubscribe()
             .onSuccess { localUserIdentifyInfoDataSource.deleteIdentifyInfo() }
 }

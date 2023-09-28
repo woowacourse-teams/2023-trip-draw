@@ -7,16 +7,17 @@ import com.teamtripdraw.android.data.httpClient.service.DeletePointService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
 import com.teamtripdraw.android.data.model.DataPoint
 import com.teamtripdraw.android.data.model.DataPrePoint
+import javax.inject.Inject
 
-class RemotePointDataSourceImpl(
+class RemotePointDataSourceImpl @Inject constructor(
     private val createRecordingPointService: CreateRecordingPointService,
     private val getPointService: GetPointService,
-    private val deletePointService: DeletePointService
+    private val deletePointService: DeletePointService,
 ) : PointDataSource.Remote {
 
     override suspend fun createRecordingPoint(
         dataPrePoint: DataPrePoint,
-        tripId: Long
+        tripId: Long,
     ): Result<Long> =
         createRecordingPointService.createRecordingPoint(dataPrePoint.toHttpRequest(tripId))
             .process { body, headers -> Result.success(body.pointId) }

@@ -1,6 +1,5 @@
 package com.teamtripdraw.android.ui.common.bindingAdapter
 
-import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -8,19 +7,13 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.teamtripdraw.android.R
-import java.io.File
 
-@BindingAdapter("app:setImageWithVisibility")
-fun ImageView.setImageWithVisibility(imgUrl: String?) {
-    if (imgUrl == null) {
-        this.visibility = View.GONE
-        return
-    }
-    this.visibility = View.VISIBLE
+@BindingAdapter("app:loadPostImage")
+fun ImageView.loadPostImage(imgUrl: String?) {
     Glide.with(this.context)
         .load(imgUrl)
         .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.img_default_image)
         .into(this)
 }
 
@@ -37,32 +30,22 @@ fun ImageView.clickToShowImageViewer(imgUrl: String?) {
     }
 }
 
-@BindingAdapter("app:setRoundImageWithVisibility")
-fun ImageView.setRoundImageWithVisibility(imgUrl: String?) {
-    if (imgUrl == null) {
-        this.visibility = View.GONE
-        return
-    }
-    this.visibility = View.VISIBLE
+@BindingAdapter("app:loadThumbnailRoundImage")
+fun ImageView.loadThumbnailRoundImage(imgUrl: String?) {
     Glide.with(this.context)
         .load(imgUrl)
         .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.img_default_image)
         .transform(CenterCrop(), RoundedCorners(20))
         .into(this)
 }
 
-@BindingAdapter("app:setRoundImageWithVisibility")
-fun ImageView.setRoundImageWithVisibility(imgFile: File?) {
-    if (imgFile == null) {
-        this.visibility = View.GONE
-        return
-    }
-    this.visibility = View.VISIBLE
+@BindingAdapter("app:loadTripThumbnailImage")
+fun ImageView.loadTripThumbnailImage(imgUrl: String) {
     Glide.with(this.context)
-        .load(imgFile)
+        .load(imgUrl)
         .placeholder(R.drawable.shape_td_gray_fill_0_rect)
-        .error(R.drawable.shape_td_gray_fill_0_rect)
+        .error(R.drawable.img_default_trip_thumbnail)
         .transform(CenterCrop(), RoundedCorners(20))
         .into(this)
 }

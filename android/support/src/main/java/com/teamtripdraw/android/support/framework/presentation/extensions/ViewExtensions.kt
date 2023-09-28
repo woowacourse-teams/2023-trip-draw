@@ -4,7 +4,7 @@ import android.view.View
 
 inline fun View.setThrottleFirstOnClickListener(
     delay: Long = 500L,
-    crossinline block: (View) -> Unit
+    crossinline block: (View) -> Unit,
 ) {
     var previousClickedTime = 0L
     setOnClickListener { view ->

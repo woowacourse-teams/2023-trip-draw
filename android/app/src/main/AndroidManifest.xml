@@ -29,7 +29,34 @@
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="${NAVER_MAP_CLIENT_ID}" />
+            android:value="${NAVER_MAP_CLIENT_ID_NO_QUOTES}" />
+
+        <!-- Sentry 관련 세팅 -->
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="${SENTRY_DSN}" />
+        <meta-data
+            android:name="io.sentry.traces.user-interaction.enable"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.attach-screenshot"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.attach-view-hierarchy"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.traces.sample-rate"
+            android:value="1.0" />
+        <meta-data
+            android:name="io.sentry.traces.profiling.sample-rate"
+            android:value="1.0" />
+        <!-- ANR 리포팅 비활성화 설정 -->
+        <meta-data
+            android:name="io.sentry.anr.enable"
+            android:value="false" />
+        <meta-data
+            android:name="io.sentry.anr.timeout-interval-millis"
+            android:value="20000" />
 
         <service
             android:name=".ui.home.recordingPoint.RecordingPointService"
@@ -114,6 +141,10 @@
                     android:scheme="kakao${NATIVE_APP_KEY}" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.history.HistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

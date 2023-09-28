@@ -25,27 +25,15 @@
 
         <ImageView
             android:id="@+id/iv_history_image"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/tv_history_title"
             app:layout_constraintDimensionRatio="5:4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setRoundImageWithVisibility="@{uiPreviewTrip.imageUrl}"
-            tools:background="@drawable/ic_launcher_background" />
-
-        <ImageView
-            android:id="@+id/iv_history_route"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="@id/iv_history_image"
-            app:layout_constraintDimensionRatio="5:4"
-            app:layout_constraintEnd_toEndOf="@id/iv_history_image"
-            app:layout_constraintStart_toStartOf="@id/iv_history_image"
-            app:layout_constraintTop_toTopOf="@id/iv_history_image"
-            app:setRoundImageWithVisibility="@{uiPreviewTrip.routeImageUrl}" />
+            app:loadTripThumbnailImage="@{uiPreviewTrip.imageUrl}"
+            tools:background="@drawable/img_default_trip_thumbnail" />
 
         <TextView
             android:id="@+id/tv_history_title"

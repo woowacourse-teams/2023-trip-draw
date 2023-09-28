@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.trip.PreSetTripTitle
 import com.teamtripdraw.android.domain.model.trip.PreviewTrip
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.model.trip.TripStatus
 import com.teamtripdraw.android.domain.model.trip.TripTitleValidState
 import com.teamtripdraw.android.domain.repository.TripRepository
@@ -16,15 +17,18 @@ import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.mapper.toDomain
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import com.teamtripdraw.android.ui.model.mapper.toPreviewPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SetTripTitleDialogViewModel(
+@HiltViewModel
+class SetTripTitleDialogViewModel @Inject constructor(
     private val repository: TripRepository,
 ) : ViewModel() {
 
     val MAX_INPUT_TITLE_LENGTH = TripTitleValidState.MAX_TITLE_LENGTH + 1
 
-    var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
+    var tripId: Long = Trip.NULL_SUBSTITUTE_ID
         private set
 
     val tripTitle: MutableLiveData<String> = MutableLiveData("")
@@ -60,6 +64,7 @@ class SetTripTitleDialogViewModel(
                 _titleSetupCompletedEvent.value = Event(true)
             }.onFailure {
                 // todo 오류 처리
+                TripDrawApplication.logUtil.general.log(it)
             }
         }
     }

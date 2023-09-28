@@ -4,16 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.TripDrawApplication
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPostItem
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HistoryDetailViewModel(
+@HiltViewModel
+class HistoryDetailViewModel @Inject constructor(
     private val tripRepository: TripRepository,
     private val postRepository: PostRepository,
 ) : ViewModel() {
@@ -21,7 +25,7 @@ class HistoryDetailViewModel(
     private val _previewTrip: MutableLiveData<UiPreviewTrip> = MutableLiveData()
     val previewTrip: LiveData<UiPreviewTrip> = _previewTrip
 
-    val tripId get() = previewTrip.value?.id ?: NULL_SUBSTITUTE_TRIP_ID
+    val tripId get() = previewTrip.value?.id ?: Trip.NULL_SUBSTITUTE_ID
 
     private val _posts: MutableLiveData<List<UiPostItem>> = MutableLiveData()
     val post: LiveData<List<UiPostItem>> = _posts
@@ -53,11 +57,13 @@ class HistoryDetailViewModel(
 
     fun fetchPosts() {
         viewModelScope.launch {
-            postRepository.getAllPosts(tripId)
+            postRepository.getTripPosts(tripId)
                 .onSuccess { posts ->
                     _posts.value = posts.map { post -> post.toPresentation() }
                 }
-                .onFailure {}
+                .onFailure {
+                    TripDrawApplication.logUtil.general.log(it)
+                }
         }
     }
 

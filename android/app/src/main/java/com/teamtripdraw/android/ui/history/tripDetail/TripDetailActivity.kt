@@ -12,23 +12,24 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.OverlayImage
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityTripDetailBinding
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.naverMap.initUserInterface
 import com.teamtripdraw.android.support.framework.presentation.resolution.toPixel
 import com.teamtripdraw.android.ui.common.animation.ObjectAnimators
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.BottomSheetClickSituation
 import com.teamtripdraw.android.ui.home.markerSelectedBottomSheet.MarkerSelectedBottomSheet
 import com.teamtripdraw.android.ui.post.viewer.PostViewerActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
     private var fabState: Boolean = false
 
     private lateinit var binding: ActivityTripDetailBinding
-    private val viewModel: TripDetailViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: TripDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +48,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initTripInfo() {
-        val tripId = intent.getLongExtra(TRIP_ID_KEY, NULL_SUBSTITUTE_TRIP_ID)
+        val tripId = intent.getLongExtra(TRIP_ID_KEY, Trip.NULL_SUBSTITUTE_ID)
         viewModel.updateTripId(tripId)
         viewModel.updateTripInfo()
     }

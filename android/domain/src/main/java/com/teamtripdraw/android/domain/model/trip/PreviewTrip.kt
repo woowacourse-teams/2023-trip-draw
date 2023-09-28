@@ -4,5 +4,5 @@ data class PreviewTrip(
     val id: Long,
     val name: String,
     val imageUrl: String,
-    val routeImageUrl: String
+    val routeImageUrl: String,
 )

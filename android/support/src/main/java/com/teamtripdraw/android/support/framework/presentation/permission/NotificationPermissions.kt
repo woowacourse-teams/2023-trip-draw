@@ -13,7 +13,7 @@ private const val POST_NOTIFICATION = Manifest.permission.POST_NOTIFICATIONS
 
 fun checkNotificationPermission(
     context: Context,
-    activityResultLauncher: ActivityResultLauncher<String>
+    activityResultLauncher: ActivityResultLauncher<String>,
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         val notificationState =
@@ -25,7 +25,7 @@ fun checkNotificationPermission(
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 private fun processNotificationPermission(
     notificationState: Boolean,
-    activityResultLauncher: ActivityResultLauncher<String>
+    activityResultLauncher: ActivityResultLauncher<String>,
 ) {
     if (!notificationState) {
         activityResultLauncher.launch(POST_NOTIFICATION)

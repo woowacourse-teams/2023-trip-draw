@@ -86,6 +86,18 @@ kakaoUser = "2.15.0"
 # splashScreen
 splashScreen = "1.0.0-alpha01"
 
+# sentryPlugin
+sentryPlugin = "3.12.0"
+
+# sentry
+sentry = "6.28.0"
+
+# timber
+timber = "5.0.1"
+
+# hilt
+hilt = "2.44"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -166,6 +178,16 @@ kakaoUser = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 # splashScreen
 splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 
+# sentry
+sentry = { module = "io.sentry:sentry-android", version.ref = "sentry" }
+
+# timber
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+# hilt
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hiltKapt = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest", "coreTest"]
@@ -186,6 +208,9 @@ jlleitschuh = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "jlleitschuh
 fireBasePlugIn = { id = "com.google.gms.google-services", version.ref = "fireBasePlugIn" }
 # firebaseCrashlytics
 firebaseCrashlyticsPlugIn = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugIn" }
-
 # use junit5 for test
 mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus" }
+# sentryPlugin
+sentryPlugin = { id = "io.sentry.android.gradle", version.ref = "sentryPlugin" }
+# hilt
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

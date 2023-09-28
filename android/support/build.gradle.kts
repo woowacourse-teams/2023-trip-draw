@@ -18,10 +18,14 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            buildConfigField("Boolean", "IS_RELEASE", "true")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
+        }
+        getByName("debug") {
+            buildConfigField("Boolean", "IS_RELEASE", "false")
         }
     }
     compileOptions {
@@ -57,4 +61,15 @@ dependencies {
 
     // kakaoLogin
     implementation(libs.kakaoUser)
+
+    // sentry
+    implementation(libs.sentry)
+
+    // timber
+    implementation(libs.timber)
+
+    // FireBase
+    releaseImplementation(platform(libs.fireBaseBom))
+    // FirebaseCrashlytics
+    releaseImplementation(libs.fireBaseCrashlyticsKtx)
 }
