@@ -7,7 +7,6 @@ import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -102,12 +101,14 @@ class PostControllerTest extends ControllerTest {
                 .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
-                .statusCode(CREATED.value())
                 .extract();
 
         // then
         PostCreateResponse postCreateResponse = response.as(PostCreateResponse.class);
-        assertThat(postCreateResponse.postId()).isNotNull();
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
+            softly.assertThat(postCreateResponse.postId()).isNotNull();
+        });
     }
 
     @Test
@@ -183,12 +184,14 @@ class PostControllerTest extends ControllerTest {
                 .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
-                .statusCode(CREATED.value())
                 .extract();
 
         // then
         PostCreateResponse postCreateResponse = response.as(PostCreateResponse.class);
-        assertThat(postCreateResponse.postId()).isNotNull();
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
+            softly.assertThat(postCreateResponse.postId()).isNotNull();
+        });
     }
 
     @Test
@@ -266,15 +269,17 @@ class PostControllerTest extends ControllerTest {
                 .auth().preemptive().oauth2(accessToken)
                 .when().get("/posts/{postId}", post.id())
                 .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
         PostResponse postResponse = response.as(PostResponse.class);
-        assertThat(postResponse)
-                .usingRecursiveComparison()
-                .ignoringFieldsOfTypes(LocalDateTime.class)
-                .isEqualTo(PostResponse.from(post));
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postResponse)
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(PostResponse.from(post));
+        });
     }
 
     private void updateHasPost(final List<Point> points) {
@@ -302,20 +307,22 @@ class PostControllerTest extends ControllerTest {
         updateHasPost(List.of(point1, point2));
 
         // when
-        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(accessToken)
                 .when().get("/trips/{tripId}/posts", trip.id())
                 .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
-        PostsResponse postsResponse = findResponse.as(PostsResponse.class);
-        assertThat(postsResponse.posts())
-                .usingRecursiveComparison()
-                .ignoringFieldsOfTypes(LocalDateTime.class)
-                .isEqualTo(List.of(PostResponse.from(post2), PostResponse.from(post1)));
+        PostsResponse postsResponse = response.as(PostsResponse.class);
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postsResponse.posts())
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(List.of(PostResponse.from(post2), PostResponse.from(post1)));
+        });
     }
 
     @Test
@@ -336,17 +343,18 @@ class PostControllerTest extends ControllerTest {
         PostUpdateRequest request = new PostUpdateRequest("우도의 땅콩 아이스크림", "수정한 내용입니다.");
 
         // when
-        RestAssured.given().log().all()
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
                 .auth().preemptive().oauth2(accessToken)
                 .multiPart(멀티파트_요청(request))
                 .when().patch("/posts/{postId}", post.id())
                 .then().log().all()
-                .statusCode(NO_CONTENT.value());
+                .extract();
 
         // then
         Post updatedPost = postRepository.getByPostId(post.id());
         assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(updatedPost.title()).isEqualTo("우도의 땅콩 아이스크림");
             softly.assertThat(updatedPost.writing()).isEqualTo("수정한 내용입니다.");
         });
@@ -436,20 +444,22 @@ class PostControllerTest extends ControllerTest {
         Map<String, Object> params = Map.of("address", "제주특별자치도 제주시 애월읍", "limit", 10);
 
         // when
-        ExtractableResponse<Response> jejuResponse = RestAssured.given().log().all()
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .auth().preemptive().oauth2(accessToken)
                 .params(params)
                 .when().get("/posts")
                 .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
-        PostsSearchResponse response = jejuResponse.as(PostsSearchResponse.class);
-        assertThat(response.posts())
-                .usingRecursiveComparison()
-                .ignoringFieldsOfTypes(LocalDateTime.class)
-                .isEqualTo(List.of(PostResponse.from(jejuAugustPost), PostResponse.from(jejuJulyPost)));
+        PostsSearchResponse postsSearchResponse = response.as(PostsSearchResponse.class);
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postsSearchResponse.posts())
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(List.of(PostResponse.from(jejuAugustPost), PostResponse.from(jejuJulyPost)));
+        });
     }
 
     static class PostRequestFixture {

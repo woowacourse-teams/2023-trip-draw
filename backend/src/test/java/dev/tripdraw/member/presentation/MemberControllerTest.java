@@ -53,7 +53,6 @@ class MemberControllerTest extends ControllerTest {
 
         // then
         MemberSearchResponse memberSearchResponse = response.as(MemberSearchResponse.class);
-
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
             softly.assertThat(memberSearchResponse)

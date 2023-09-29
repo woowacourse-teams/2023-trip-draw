@@ -10,7 +10,6 @@ import static dev.tripdraw.test.step.PostStep.createPostAtCurrentPoint;
 import static dev.tripdraw.test.step.TripStep.createTripAndGetResponse;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
 import static dev.tripdraw.trip.presentation.TripControllerTest.PostRequestFixture.위치정보_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -93,12 +92,14 @@ class TripControllerTest extends ControllerTest {
                 .auth().preemptive().oauth2(huchuToken)
                 .when().post("/trips")
                 .then().log().all()
-                .statusCode(CREATED.value())
                 .extract();
 
         // then
         TripCreateResponse tripCreateResponse = response.as(TripCreateResponse.class);
-        assertThat(tripCreateResponse.tripId()).isNotNull();
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
+            softly.assertThat(tripCreateResponse.tripId()).isNotNull();
+        });
     }
 
     @Test
@@ -113,12 +114,14 @@ class TripControllerTest extends ControllerTest {
                 .body(request)
                 .when().post("/points")
                 .then().log().all()
-                .statusCode(CREATED.value())
                 .extract();
 
         // then
         PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
-        assertThat(pointCreateResponse.pointId()).isNotNull();
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
+            softly.assertThat(pointCreateResponse.pointId()).isNotNull();
+        });
     }
 
     @Test
@@ -143,12 +146,14 @@ class TripControllerTest extends ControllerTest {
                 .auth().preemptive().oauth2(huchuToken)
                 .when().get("/trips/{tripId}", huchuTrip.id())
                 .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
         TripResponse tripResponse = response.as(TripResponse.class);
-        assertThat(tripResponse).isEqualTo(TripResponse.from(huchuTrip));
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(tripResponse).isEqualTo(TripResponse.from(huchuTrip));
+        });
     }
 
     @Test
@@ -188,14 +193,16 @@ class TripControllerTest extends ControllerTest {
                 .auth().preemptive().oauth2(huchuToken)
                 .when().get("/trips/me")
                 .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
         TripsSearchResponseOfMember tripsSearchResponseOfMember = response.as(TripsSearchResponseOfMember.class);
-        assertThat(tripsSearchResponseOfMember)
-                .usingRecursiveComparison()
-                .isEqualTo(TripsSearchResponseOfMember.from(List.of(huchuTrip)));
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(tripsSearchResponseOfMember)
+                    .usingRecursiveComparison()
+                    .isEqualTo(TripsSearchResponseOfMember.from(List.of(huchuTrip)));
+        });
     }
 
     @Test
@@ -204,17 +211,18 @@ class TripControllerTest extends ControllerTest {
         TripUpdateRequest tripUpdateRequest = new TripUpdateRequest("제주도 여행", FINISHED);
 
         // when
-        RestAssured.given().log().all()
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(huchuToken)
                 .body(tripUpdateRequest)
                 .when().patch("/trips/{tripId}", huchuTrip.id())
                 .then().log().all()
-                .statusCode(NO_CONTENT.value());
+                .extract();
 
         // then
         Trip trip = tripRepository.getById(huchuTrip.id());
         assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(trip.status()).isEqualTo(FINISHED);
         });
@@ -231,14 +239,16 @@ class TripControllerTest extends ControllerTest {
                 .param("tripId", huchuTrip.id())
                 .when().get("/points/{pointId}", point.id())
                 .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
         PointResponse pointResponse = response.as(PointResponse.class);
-        assertThat(pointResponse).usingRecursiveComparison()
-                .ignoringFieldsOfTypes(LocalDateTime.class)
-                .isEqualTo(PointResponse.from(point));
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(pointResponse).usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(PointResponse.from(point));
+        });
     }
 
     @Test
@@ -286,14 +296,16 @@ class TripControllerTest extends ControllerTest {
                 .params(params)
                 .when().get("/trips")
                 .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
         TripsSearchResponse tripsSearchResponse = response.as(TripsSearchResponse.class);
-        assertThat(tripsSearchResponse.trips())
-                .extracting(TripSearchResponse::tripId)
-                .containsExactly(리오_서울_2023_1_1_일);
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(tripsSearchResponse.trips())
+                    .extracting(TripSearchResponse::tripId)
+                    .containsExactly(리오_서울_2023_1_1_일);
+        });
     }
 
     static class PostRequestFixture {

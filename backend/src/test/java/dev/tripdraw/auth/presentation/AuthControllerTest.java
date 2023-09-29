@@ -207,7 +207,6 @@ class AuthControllerTest extends ControllerTest {
 
             // then
             OauthResponse oauthResponse = response.as(OauthResponse.class);
-
             assertSoftly(softly -> {
                 softly.assertThat(response.statusCode()).isEqualTo(OK.value());
                 softly.assertThat(oauthResponse.accessToken()).isNotEmpty();
@@ -227,6 +226,7 @@ class AuthControllerTest extends ControllerTest {
             refreshTokenRepository.save(new RefreshToken(member.id(), expiredToken));
             TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(expiredToken);
 
+            // expect
             RestAssured.given().log().all()
                     .contentType(APPLICATION_JSON_VALUE)
                     .body(tokenRefreshRequest)
