@@ -61,7 +61,8 @@
         <service
             android:name=".ui.home.recordingPoint.RecordingPointService"
             android:description="@string/recording_point_service_description"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="location"/>
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"
