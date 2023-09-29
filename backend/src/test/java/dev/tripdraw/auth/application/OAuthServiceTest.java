@@ -1,8 +1,10 @@
 package dev.tripdraw.auth.application;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.AuthFixture.OAUTH_TOKEN;
+import static dev.tripdraw.test.fixture.MemberFixture.OAUTH_아이디;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 import dev.tripdraw.auth.dto.OauthInfo;
 import dev.tripdraw.auth.oauth.OauthClientProvider;
@@ -29,20 +31,16 @@ class OAuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(oauthClientProvider.provide(KAKAO)).thenReturn(new TestKakaoApiClient());
+        given(oauthClientProvider.provide(KAKAO)).willReturn(new TestKakaoApiClient());
     }
 
     @Test
     void Oauth_공통_정보를_반환한다() {
-        // given
-        String oauthToken = "oauth.kakao.token";
+        // expect
+        OauthInfo oauthInfo = oAuthService.request(KAKAO, OAUTH_TOKEN);
 
-        // when
-        OauthInfo oauthInfo = oAuthService.request(KAKAO, oauthToken);
-
-        // then
         assertSoftly(softly -> {
-            softly.assertThat(oauthInfo.oauthId()).isEqualTo("kakaoId");
+            softly.assertThat(oauthInfo.oauthId()).isEqualTo(OAUTH_아이디);
             softly.assertThat(oauthInfo.oauthType()).isEqualTo(KAKAO);
         });
     }

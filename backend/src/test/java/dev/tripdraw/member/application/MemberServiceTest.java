@@ -1,6 +1,6 @@
 package dev.tripdraw.member.application;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -9,22 +9,21 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.dto.MemberSearchResponse;
-import dev.tripdraw.post.domain.Post;
-import dev.tripdraw.post.domain.PostRepository;
-import dev.tripdraw.test.ServiceTest;
-import dev.tripdraw.trip.domain.Point;
-import dev.tripdraw.trip.domain.Trip;
-import dev.tripdraw.trip.domain.TripName;
-import dev.tripdraw.trip.domain.TripRepository;
-import java.time.LocalDateTime;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 @RecordApplicationEvents
-@ServiceTest
+@SuppressWarnings("NonAsciiCharacters")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@Transactional
+@SpringBootTest
 class MemberServiceTest {
 
     @Autowired
@@ -36,29 +35,11 @@ class MemberServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private TripRepository tripRepository;
-
-    @Autowired
-    private PostRepository postRepository;
-
     private Member member;
-    private Trip trip;
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(new Trip(TripName.from("통후추의 여행"), member.id()));
-        Point point = new Point(3.14, 5.25, LocalDateTime.now());
-        point.setTrip(trip);
-        postRepository.save(new Post(
-                "제목",
-                point,
-                "위치",
-                "오늘은 날씨가 좋네요.",
-                member.id(),
-                trip.id()
-        ));
+        member = memberRepository.save(사용자());
     }
 
     @Test
@@ -69,10 +50,10 @@ class MemberServiceTest {
         // when
         MemberSearchResponse response = memberService.find(loginUser);
 
-        // expect
-        assertThat(response).usingRecursiveComparison().isEqualTo(
-                new MemberSearchResponse(member.id(), "통후추")
-        );
+        // then
+        assertThat(response)
+                .usingRecursiveComparison()
+                .isEqualTo(new MemberSearchResponse(member.id(), "통후추"));
     }
 
     @Test

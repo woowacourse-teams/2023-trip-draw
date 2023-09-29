@@ -1,11 +1,15 @@
 package dev.tripdraw.test.fixture;
 
+import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.MemberFixture.OAUTH_아이디;
+
 import dev.tripdraw.auth.config.AccessTokenConfig;
 import dev.tripdraw.auth.config.RefreshTokenConfig;
+import dev.tripdraw.auth.dto.OauthInfo;
 
 public class AuthFixture {
 
-    public static final String 유효하지_않은_토큰 = "Invalid.Token.XD";
+    public static final String OAUTH_TOKEN = "KAKAO.OAUTH.TOKEN";
     private static final long INVALID_TOKEN_EXPIRE_TIME = -180000L;
     private static final String ACCESS_TOKEN_KEY =
             "ACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKEN";
@@ -28,5 +32,9 @@ public class AuthFixture {
 
     public static RefreshTokenConfig 만료된_토큰_생성용_REFRESH_TOKEN_설정() {
         return new RefreshTokenConfig(REFRESH_TOKEN_KEY, INVALID_TOKEN_EXPIRE_TIME);
+    }
+
+    public static OauthInfo OAuth_정보() {
+        return new OauthInfo(OAUTH_아이디, KAKAO);
     }
 }

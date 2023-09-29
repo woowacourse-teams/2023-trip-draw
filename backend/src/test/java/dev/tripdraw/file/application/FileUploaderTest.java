@@ -4,10 +4,12 @@ import static dev.tripdraw.file.domain.FileType.IMAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.doThrow;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.when;
 
 import dev.tripdraw.file.exception.FileIOException;
 import java.io.File;
@@ -19,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,9 +44,9 @@ class FileUploaderTest {
         UUID randomUUID = UUID.randomUUID();
         String baseUrl = "https://example.com/files/";
         String expectedFileUrl = baseUrl + randomUUID + ".jpg";
-        MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
-        when(multipartFile.getContentType()).thenReturn(IMAGE.contentType());
-        when(fileUrlMaker.make(any())).thenReturn(expectedFileUrl);
+        MultipartFile multipartFile = mock(MultipartFile.class);
+        given(multipartFile.getContentType()).willReturn(IMAGE.contentType());
+        given(fileUrlMaker.make(any())).willReturn(expectedFileUrl);
 
         // when
         String url = fileUploader.upload(multipartFile);
@@ -57,20 +58,22 @@ class FileUploaderTest {
     @Test
     void 파일을_업로드_한다() throws IOException {
         // given
-        MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
-        when(multipartFile.getContentType()).thenReturn(IMAGE.contentType());
+        MultipartFile multipartFile = mock(MultipartFile.class);
+        given(multipartFile.getContentType()).willReturn(IMAGE.contentType());
 
         // when
         fileUploader.upload(multipartFile);
 
         // then
-        verify(multipartFile, times(1)).transferTo(any(File.class));
+        then(multipartFile)
+                .should(times(1))
+                .transferTo(any(File.class));
     }
 
     @Test
     void 파일_저장에_실패할시_예외를_발생시킨다() throws IOException {
         // given
-        MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
+        MultipartFile multipartFile = mock(MultipartFile.class);
         when(multipartFile.getContentType()).thenReturn(IMAGE.contentType());
         doThrow(new IOException()).when(multipartFile).transferTo(any(File.class));
 

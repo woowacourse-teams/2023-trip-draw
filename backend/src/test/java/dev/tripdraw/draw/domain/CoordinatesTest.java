@@ -5,9 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import dev.tripdraw.draw.domain.Coordinates;
-import dev.tripdraw.draw.domain.Position;
-import dev.tripdraw.draw.domain.Positions;
 import dev.tripdraw.draw.exception.DrawException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;

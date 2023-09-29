@@ -1,11 +1,11 @@
 package dev.tripdraw.draw.application;
 
-import static dev.tripdraw.test.fixture.TestFixture.감상;
-import static dev.tripdraw.test.fixture.TestFixture.여행;
+import static dev.tripdraw.test.fixture.PostFixture.감상;
+import static dev.tripdraw.test.fixture.TripFixture.여행;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.timeout;
+import static org.mockito.BDDMockito.timeout;
 
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
@@ -43,10 +43,8 @@ class PostCreateEventHandlerIntegrationTest {
     void 감상생성_이벤트를_발생시키면_이미지를_생성_요청을_한다() {
         // given
         PostCreateEvent postCreateEvent = new PostCreateEvent(1L, 1L);
-        given(tripRepository.getTripWithPoints(postCreateEvent.tripId()))
-                .willReturn(여행());
-        given(postRepository.getByPostId(postCreateEvent.postId()))
-                .willReturn(감상());
+        given(tripRepository.getTripWithPoints(postCreateEvent.tripId())).willReturn(여행());
+        given(postRepository.getByPostId(postCreateEvent.postId())).willReturn(감상());
 
         // when
         transactionTemplate.executeWithoutResult(action -> applicationEventPublisher.publishEvent(postCreateEvent));

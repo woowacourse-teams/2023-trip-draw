@@ -1,7 +1,6 @@
 package dev.tripdraw.trip.query;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static dev.tripdraw.test.fixture.TestFixture.위치정보;
+import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.addressTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.daysOfWeekTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.emptyTripSearchConditions;
@@ -13,6 +12,7 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
+import dev.tripdraw.test.fixture.PointFixture;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
@@ -52,7 +52,7 @@ class TripCustomRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+        member = memberRepository.save(사용자());
     }
 
     @Nested
@@ -426,7 +426,7 @@ class TripCustomRepositoryImplTest {
 
         private Trip jeju_2023_2_1_Wed() {
             Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = 위치정보(2023, 2, 1, 1, 1);
+            Point point = PointFixture.새로운_위치정보(2023, 2, 1, 1, 1);
             trip.add(point);
             tripRepository.save(trip);
             postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member.id(), trip.id()));
@@ -435,7 +435,7 @@ class TripCustomRepositoryImplTest {
 
         private Trip seoul_2023_1_1_Sun() {
             Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = 위치정보(2023, 1, 1, 10, 1);
+            Point point = PointFixture.새로운_위치정보(2023, 1, 1, 10, 1);
             trip.add(point);
             tripRepository.save(trip);
             postRepository.save(new Post("", point, "서울특별시 송파구 신천동", "", member.id(), trip.id()));
@@ -444,7 +444,7 @@ class TripCustomRepositoryImplTest {
 
         private Trip jeju_2023_1_1_Sun() {
             Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = 위치정보(2023, 1, 1, 1, 1);
+            Point point = PointFixture.새로운_위치정보(2023, 1, 1, 1, 1);
             trip.add(point);
             tripRepository.save(trip);
             postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member.id(), trip.id()));
@@ -453,7 +453,7 @@ class TripCustomRepositoryImplTest {
 
         private Trip seoul_2022_1_2_Sun() {
             Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = 위치정보(2022, 1, 2, 1, 1);
+            Point point = PointFixture.새로운_위치정보(2022, 1, 2, 1, 1);
             trip.add(point);
             tripRepository.save(trip);
             postRepository.save(new Post("", point, "서울특별시 송파구 방이동", "", member.id(), trip.id()));
@@ -462,7 +462,7 @@ class TripCustomRepositoryImplTest {
 
         private Trip yangyang_2021_3_2_Tue() {
             Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = 위치정보(2021, 3, 2, 1, 1);
+            Point point = PointFixture.새로운_위치정보(2021, 3, 2, 1, 1);
             trip.add(point);
             tripRepository.save(trip);
             postRepository.save(new Post("", point, "강원도 양양군", "", member.id(), trip.id()));
@@ -471,7 +471,7 @@ class TripCustomRepositoryImplTest {
 
         private Trip emptyPostTrip() {
             Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = 위치정보(2021, 3, 2, 1, 1);
+            Point point = PointFixture.새로운_위치정보(2021, 3, 2, 1, 1);
             trip.add(point);
             tripRepository.save(trip);
             return trip;
