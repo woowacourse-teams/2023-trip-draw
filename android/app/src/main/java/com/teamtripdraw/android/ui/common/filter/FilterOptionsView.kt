@@ -20,16 +20,25 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
     private val binding: ViewFilterOptionsBinding =
         ViewFilterOptionsBinding.inflate(LayoutInflater.from(context), this, true)
 
+    init {
+        attr?.let {
+            val filterOptionsTitle =
+                context.obtainStyledAttributes(it, R.styleable.FilterOptionsView)
+
+            when (filterOptionsTitle.getInt(R.styleable.FilterOptionsView_filterOptionsTitle, 1)) {
+                TEXT_APPEARANCE_TITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.subtitle_1)
+                TEXT_APPEARANCE_SUBTITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.body_1)
+            }
+            filterOptionsTitle.recycle()
+        }
+    }
+
     fun setupOptions(options: List<FilterOption>) {
         createOptionChips(options)
     }
 
-    fun setTitle(title: String, type: Int) {
+    fun setTitle(title: String) {
         binding.tvFilterOptionsTitle.text = title
-        when (type) {
-            TEXT_APPEARANCE_TITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.subtitle_1)
-            TEXT_APPEARANCE_SUBTITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.body_1)
-        }
     }
 
     private fun createOptionChips(options: List<FilterOption>) {
@@ -60,11 +69,12 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
     fun getCheckedChipIds(): List<Int> = binding.chipGroupFilterOptions.checkedChipIds
 
     companion object {
-        const val TEXT_APPEARANCE_TITLE = 1
-        const val TEXT_APPEARANCE_SUBTITLE = 2
+        private const val TEXT_APPEARANCE_TITLE = 1
+        private const val TEXT_APPEARANCE_SUBTITLE = 2
     }
 
     // 3. 뷰모델에 착착착하고 만들어지기 -> builder패턴
     // 4. 리팩
     // 5. 여행이냐 감상이냐에 따라 화면 바뀌기
+    // 6. 현재 위치 on이면 주소검색 버튼 비활성화
 }

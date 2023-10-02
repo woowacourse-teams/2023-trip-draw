@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="filterSelectionViewModel"
+            type="com.teamtripdraw.android.ui.common.filter.FilterSelectionViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,32 +132,41 @@
                     android:id="@+id/filter_options_year"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:filterOptionsTitle="subtitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_filter_date_title" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_date_title"
+                    app:setupFilterOptionTitle="@{@string/tv_filter_option_year}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.years}" />
 
                 <com.teamtripdraw.android.ui.common.filter.FilterOptionsView
                     android:id="@+id/filter_options_month"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:filterOptionsTitle="subtitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/filter_options_year" />
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_year"
+                    app:setupFilterOptionTitle="@{@string/tv_filter_option_month}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.months}" />
 
                 <com.teamtripdraw.android.ui.common.filter.FilterOptionsView
                     android:id="@+id/filter_options_day_of_week"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:filterOptionsTitle="subtitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/filter_options_month" />
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_month"
+                    app:setupFilterOptionTitle="@{@string/tv_filter_option_day_of_week}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.dayOfWeek}" />
 
                 <TextView
                     android:id="@+id/tv_filter_hour_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_default"
-                    android:text="Time"
+                    android:text="시간대"
                     android:textAppearance="@style/subtitle_2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/filter_options_day_of_week" />
@@ -164,7 +177,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toStartOf="@id/tv_filter_options_hour_divider"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_filter_hour_title" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_hour_title"
+                    app:setupFilterOptionHour="@{filterSelectionViewModel.hour}" />
 
                 <TextView
                     android:id="@+id/tv_filter_options_hour_from"
@@ -195,7 +209,9 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_filter_options_hour_divider"
-                    app:layout_constraintTop_toTopOf="@id/filter_options_hour_from" />
+                    app:layout_constraintTop_toTopOf="@id/filter_options_hour_from"
+                    app:setupFilterOptionHour="@{filterSelectionViewModel.hour}"
+                    app:setupFilterOptionInitHour="@{filterSelectionViewModel.hour}" />
 
                 <TextView
                     android:id="@+id/tv_filter_options_hour_to"
@@ -223,9 +239,12 @@
                     android:id="@+id/filter_options_age_range"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:filterOptionsTitle="title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider_date" />
+                    app:layout_constraintTop_toBottomOf="@id/divider_date"
+                    app:setupFilterOptionTitle="@{@string/tv_filter_option_age_range}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.ageRange}" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/divider_age_range"
@@ -233,6 +252,7 @@
                     android:layout_height="4dp"
                     android:layout_marginTop="@dimen/margin_default"
                     android:background="@color/td_light_gray"
+                    app:filterOptionsTitle="title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/filter_options_age_range" />
@@ -243,7 +263,9 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider_age_range" />
+                    app:layout_constraintTop_toBottomOf="@id/divider_age_range"
+                    app:setupFilterOptionTitle="@{@string/tv_filter_option_gender}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.gender}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
