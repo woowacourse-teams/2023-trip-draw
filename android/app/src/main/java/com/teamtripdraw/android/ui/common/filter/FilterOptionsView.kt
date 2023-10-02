@@ -1,0 +1,70 @@
+package com.teamtripdraw.android.ui.common.filter
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.teamtripdraw.android.R
+import com.teamtripdraw.android.databinding.ViewFilterOptionsBinding
+import com.teamtripdraw.android.domain.model.filterOption.FilterOption
+import com.teamtripdraw.android.ui.model.mapper.toText
+
+class FilterOptionsView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null) :
+    ConstraintLayout(context, attr) {
+
+    private val chips: MutableList<Chip> = mutableListOf()
+    private val binding: ViewFilterOptionsBinding =
+        ViewFilterOptionsBinding.inflate(LayoutInflater.from(context), this, true)
+
+    fun setupOptions(options: List<FilterOption>) {
+        createOptionChips(options)
+    }
+
+    fun setTitle(title: String, type: Int) {
+        binding.tvFilterOptionsTitle.text = title
+        when (type) {
+            TEXT_APPEARANCE_TITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.subtitle_1)
+            TEXT_APPEARANCE_SUBTITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.body_1)
+        }
+    }
+
+    private fun createOptionChips(options: List<FilterOption>) {
+        options.forEach {
+            val chip = Chip(context)
+            chips.add(chip)
+            chip.id = it.id
+            chip.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            )
+
+            val chipDrawable = ChipDrawable.createFromAttributes(
+                context,
+                null,
+                0,
+                R.style.filterChip,
+            )
+            chip.setChipDrawable(chipDrawable)
+            chip.setTextAppearance(R.style.chipTextAppearance)
+
+            chip.isCheckable = true
+            chip.text = it.toText()
+            binding.chipGroupFilterOptions.addView(chip)
+        }
+    }
+
+    fun getCheckedChipIds(): List<Int> = binding.chipGroupFilterOptions.checkedChipIds
+
+    companion object {
+        const val TEXT_APPEARANCE_TITLE = 1
+        const val TEXT_APPEARANCE_SUBTITLE = 2
+    }
+
+    // 3. 뷰모델에 착착착하고 만들어지기 -> builder패턴
+    // 4. 리팩
+    // 5. 여행이냐 감상이냐에 따라 화면 바뀌기
+}
