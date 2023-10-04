@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.common.filter
+package com.teamtripdraw.android.ui.filter
 
 import android.content.Context
 import android.util.AttributeSet

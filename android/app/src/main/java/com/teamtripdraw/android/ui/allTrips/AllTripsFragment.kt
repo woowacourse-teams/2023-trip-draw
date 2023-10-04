@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllTripsBinding
+import com.teamtripdraw.android.ui.filter.FilterSelectionActivity
+import com.teamtripdraw.android.ui.filter.FilterType
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +44,7 @@ class AllTripsFragment : Fragment() {
     private fun initObserver() {
         initTripsObserve()
         initOpenPostDetailEventObserve()
+        initOpenFilterSelectionEventObserve()
     }
 
     private fun initTripsObserve() {
@@ -58,6 +61,21 @@ class AllTripsFragment : Fragment() {
 
     private fun onTripClick(trip: UiPreviewTrip) {
         startActivity(HistoryDetailActivity.getIntent(requireContext(), trip))
+    }
+
+    private fun initOpenFilterSelectionEventObserve() {
+        viewModel.openFilterSelectionEvent.observe(
+            viewLifecycleOwner,
+            this::onFilterSelectionClick,
+        )
+    }
+
+    private fun onFilterSelectionClick(isClicked: Boolean) {
+        if (isClicked) {
+            val intent =
+                FilterSelectionActivity.getIntent(requireContext(), FilterType.TRIP)
+            startActivity(intent)
+        }
     }
 
     private fun setAdapter() {

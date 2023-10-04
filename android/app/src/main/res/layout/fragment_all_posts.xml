@@ -36,6 +36,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_default"
+                android:onClick="@{()->allPostsViewModel.openFilterSelection()}"
                 android:src="@drawable/ic_search" />
 
         </com.google.android.material.appbar.MaterialToolbar>

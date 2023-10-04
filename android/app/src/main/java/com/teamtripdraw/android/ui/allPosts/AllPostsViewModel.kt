@@ -27,6 +27,9 @@ class AllPostsViewModel @Inject constructor(
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
 
+    private val _openFilterSelectionEvent = MutableLiveData<Boolean>()
+    val openFilterSelectionEvent: LiveData<Boolean> = _openFilterSelectionEvent
+
     fun fetchPosts() {
         viewModelScope.launch {
             postRepository.getAllPosts()
@@ -41,5 +44,9 @@ class AllPostsViewModel @Inject constructor(
 
     fun openPostDetail(id: Long) {
         _openPostDetailEvent.value = Event(id)
+    }
+
+    fun openFilterSelection() {
+        _openFilterSelectionEvent.value = true
     }
 }

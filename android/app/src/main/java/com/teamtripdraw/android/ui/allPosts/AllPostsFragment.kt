@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllPostsBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
+import com.teamtripdraw.android.ui.filter.FilterSelectionActivity
+import com.teamtripdraw.android.ui.filter.FilterType
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,6 +44,7 @@ class AllPostsFragment : Fragment() {
     private fun initObserver() {
         initPostsObserve()
         initOpenPostDetailEventObserve()
+        initOpenFilterSelectionEventObserve()
     }
 
     private fun initPostsObserve() {
@@ -59,6 +62,21 @@ class AllPostsFragment : Fragment() {
 
     private fun onPostClick(postId: Long) {
         startActivity(PostDetailActivity.getIntent(requireContext(), postId))
+    }
+
+    private fun initOpenFilterSelectionEventObserve() {
+        viewModel.openFilterSelectionEvent.observe(
+            viewLifecycleOwner,
+            this::onFilterSelectionClick,
+        )
+    }
+
+    private fun onFilterSelectionClick(isClicked: Boolean) {
+        if (isClicked) {
+            val intent =
+                FilterSelectionActivity.getIntent(requireContext(), FilterType.POST)
+            startActivity(intent)
+        }
     }
 
     private fun setAdapter() {

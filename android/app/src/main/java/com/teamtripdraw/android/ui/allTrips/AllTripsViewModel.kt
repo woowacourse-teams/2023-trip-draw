@@ -27,6 +27,9 @@ class AllTripsViewModel @Inject constructor(
     private val _openHistoryDetailEvent = MutableLiveData<UiPreviewTrip>()
     val openHistoryDetailEvent: LiveData<UiPreviewTrip> = _openHistoryDetailEvent
 
+    private val _openFilterSelectionEvent = MutableLiveData<Boolean>()
+    val openFilterSelectionEvent: LiveData<Boolean> = _openFilterSelectionEvent
+
     fun fetchTrips() {
         viewModelScope.launch {
             tripRepository.getAllTrips()
@@ -47,5 +50,9 @@ class AllTripsViewModel @Inject constructor(
             routeImageUrl = trip.routeImageUrl,
         )
         _openHistoryDetailEvent.value = previewTrip
+    }
+
+    fun openFilterSelection() {
+        _openFilterSelectionEvent.value = true
     }
 }

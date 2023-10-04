@@ -7,14 +7,14 @@
 
         <variable
             name="filterSelectionViewModel"
-            type="com.teamtripdraw.android.ui.common.filter.FilterSelectionViewModel" />
+            type="com.teamtripdraw.android.ui.filter.FilterSelectionViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.common.filter.FilterSelectionActivity">
+        tools:context=".ui.filter.FilterSelectionActivity">
 
         <ImageView
             android:id="@+id/btn_filter_back"
@@ -79,7 +79,8 @@
                     app:layout_constraintEnd_toStartOf="@id/tbtn_filter_current_position"
                     app:layout_constraintHorizontal_weight="5"
                     app:layout_constraintStart_toEndOf="@id/tv_filter_address_title"
-                    app:layout_constraintTop_toTopOf="@id/tv_filter_address_title" />
+                    app:layout_constraintTop_toTopOf="@id/tv_filter_address_title"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/tbtn_filter_current_position"
@@ -92,6 +93,7 @@
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@id/tv_filter_current_position_title"
                     app:layout_constraintTop_toTopOf="@id/tv_filter_current_position_title"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
                     app:thumbTint="@color/td_sub_blue"
                     app:trackTint="@color/td_gray" />
 
@@ -128,7 +130,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_address" />
 
-                <com.teamtripdraw.android.ui.common.filter.FilterOptionsView
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
                     android:id="@+id/filter_options_year"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -139,7 +141,7 @@
                     app:setupFilterOptionTitle="@{@string/tv_filter_option_year}"
                     app:setupFilterOptions="@{filterSelectionViewModel.years}" />
 
-                <com.teamtripdraw.android.ui.common.filter.FilterOptionsView
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
                     android:id="@+id/filter_options_month"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -150,7 +152,7 @@
                     app:setupFilterOptionTitle="@{@string/tv_filter_option_month}"
                     app:setupFilterOptions="@{filterSelectionViewModel.months}" />
 
-                <com.teamtripdraw.android.ui.common.filter.FilterOptionsView
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
                     android:id="@+id/filter_options_day_of_week"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -169,7 +171,8 @@
                     android:text="시간대"
                     android:textAppearance="@style/subtitle_2"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/filter_options_day_of_week" />
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_day_of_week"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
 
                 <NumberPicker
                     android:id="@+id/filter_options_hour_from"
@@ -178,6 +181,7 @@
                     app:layout_constraintEnd_toStartOf="@id/tv_filter_options_hour_divider"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_filter_hour_title"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
                     app:setupFilterOptionHour="@{filterSelectionViewModel.hour}" />
 
                 <TextView
@@ -190,7 +194,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/filter_options_hour_from"
                     app:layout_constraintEnd_toEndOf="@+id/filter_options_hour_from"
                     app:layout_constraintStart_toEndOf="@id/filter_options_hour_from"
-                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from" />
+                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
 
                 <TextView
                     android:id="@+id/tv_filter_options_hour_divider"
@@ -201,7 +206,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/filter_options_hour_from"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from" />
+                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
 
                 <NumberPicker
                     android:id="@+id/filter_options_hour_to"
@@ -210,6 +216,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_filter_options_hour_divider"
                     app:layout_constraintTop_toTopOf="@id/filter_options_hour_from"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
                     app:setupFilterOptionHour="@{filterSelectionViewModel.hour}"
                     app:setupFilterOptionInitHour="@{filterSelectionViewModel.hour}" />
 
@@ -223,7 +230,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/filter_options_hour_from"
                     app:layout_constraintEnd_toEndOf="@+id/filter_options_hour_to"
                     app:layout_constraintStart_toEndOf="@id/filter_options_hour_to"
-                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from" />
+                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/divider_date"
@@ -235,7 +243,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/filter_options_hour_to" />
 
-                <com.teamtripdraw.android.ui.common.filter.FilterOptionsView
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
                     android:id="@+id/filter_options_age_range"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -257,7 +265,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/filter_options_age_range" />
 
-                <com.teamtripdraw.android.ui.common.filter.FilterOptionsView
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
                     android:id="@+id/filter_options_gender"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
