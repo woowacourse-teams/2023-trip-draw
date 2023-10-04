@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: backend-dev-cd
 
     steps:
       - name: 배포 스크립트 실행

@@ -4,6 +4,13 @@ spring:
     username: sa
     password:
 
+  task:
+    execution:
+      pool:
+        core-size: 8
+        queue-capacity: 100
+        max-size: 16
+
   h2:
     console:
       enabled: true
@@ -18,10 +25,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
 
   flyway:
-    enabled: true
+    enabled: false
 
 logging:
   level:
@@ -48,3 +55,15 @@ trip:
   base:
   post:
   route:
+
+jwt:
+  access:
+    secret-key: ACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKEN
+    expiration-time: 1800000  # 30 minutes
+  refresh:
+    secret-key: REFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFRESHTOKENREFR
+    expiration-time: 1209600000  # 14 days
+
+oauth:
+  kakao:
+    info-url: https://kapi.kakao.com/v2/user/me
