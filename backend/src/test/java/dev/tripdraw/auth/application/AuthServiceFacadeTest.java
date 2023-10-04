@@ -30,10 +30,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Transactional
 @SpringBootTest
-class AuthFacadeServiceTest {
+class AuthServiceFacadeTest {
 
     @Autowired
-    private AuthFacadeService authFacadeService;
+    private AuthServiceFacade authServiceFacade;
 
     @MockBean
     private OauthClientProvider oauthClientProvider;
@@ -59,7 +59,7 @@ class AuthFacadeServiceTest {
         OauthRequest oauthRequest = new OauthRequest(KAKAO, OAUTH_아이디);
 
         // when
-        OauthResponse response = authFacadeService.login(oauthRequest);
+        OauthResponse response = authServiceFacade.login(oauthRequest);
 
         // then
         assertSoftly(softly -> {
@@ -74,7 +74,7 @@ class AuthFacadeServiceTest {
         OauthRequest oauthRequest = new OauthRequest(KAKAO, OAUTH_아이디);
 
         // when
-        OauthResponse response = authFacadeService.login(oauthRequest);
+        OauthResponse response = authServiceFacade.login(oauthRequest);
 
         // then
         assertSoftly(softly -> {
@@ -90,7 +90,7 @@ class AuthFacadeServiceTest {
         RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, OAUTH_아이디);
 
         // when
-        OauthResponse response = authFacadeService.register(registerRequest);
+        OauthResponse response = authServiceFacade.register(registerRequest);
 
         // then
         assertSoftly(softly -> {
@@ -108,7 +108,7 @@ class AuthFacadeServiceTest {
         TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(refreshToken);
 
         // when
-        OauthResponse response = authFacadeService.refresh(tokenRefreshRequest);
+        OauthResponse response = authServiceFacade.refresh(tokenRefreshRequest);
 
         // then
         assertSoftly(softly -> {

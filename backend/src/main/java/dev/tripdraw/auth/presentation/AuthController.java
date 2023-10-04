@@ -1,6 +1,6 @@
 package dev.tripdraw.auth.presentation;
 
-import dev.tripdraw.auth.application.AuthFacadeService;
+import dev.tripdraw.auth.application.AuthServiceFacade;
 import dev.tripdraw.auth.dto.OauthRequest;
 import dev.tripdraw.auth.dto.OauthResponse;
 import dev.tripdraw.auth.dto.RegisterRequest;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-    private final AuthFacadeService authFacadeService;
+    private final AuthServiceFacade authServiceFacade;
 
     @Operation(summary = "소셜 로그인 API", description = "소셜 로그인을 합니다.")
     @ApiResponse(
@@ -29,7 +29,7 @@ public class AuthController {
     )
     @PostMapping("/oauth/login")
     public ResponseEntity<OauthResponse> login(@RequestBody OauthRequest oauthRequest) {
-        OauthResponse oauthResponse = authFacadeService.login(oauthRequest);
+        OauthResponse oauthResponse = authServiceFacade.login(oauthRequest);
         return ResponseEntity.ok(oauthResponse);
     }
 
@@ -40,7 +40,7 @@ public class AuthController {
     )
     @PostMapping("/oauth/register")
     public ResponseEntity<OauthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        OauthResponse oauthResponse = authFacadeService.register(registerRequest);
+        OauthResponse oauthResponse = authServiceFacade.register(registerRequest);
         return ResponseEntity.ok(oauthResponse);
     }
 
@@ -51,7 +51,7 @@ public class AuthController {
     )
     @PostMapping("/oauth/refresh")
     public ResponseEntity<OauthResponse> refresh(@Valid @RequestBody TokenRefreshRequest tokenRefreshRequest) {
-        OauthResponse oauthResponse = authFacadeService.refresh(tokenRefreshRequest);
+        OauthResponse oauthResponse = authServiceFacade.refresh(tokenRefreshRequest);
         return ResponseEntity.ok(oauthResponse);
     }
 }
