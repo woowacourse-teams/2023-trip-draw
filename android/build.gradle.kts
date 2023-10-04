@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.jlleitschuh) apply false
     alias(libs.plugins.fireBasePlugIn) apply false
     alias(libs.plugins.firebaseCrashlyticsPlugIn) apply false
+    alias(libs.plugins.sentryPlugin) apply false
+    alias(libs.plugins.hilt) apply false
 }
 
 allprojects {

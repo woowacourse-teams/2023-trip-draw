@@ -10,14 +10,15 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityNicknameSetupBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
 import com.teamtripdraw.android.ui.model.UiLoginInfo
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NicknameSetupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNicknameSetupBinding
-    private val viewModel: NicknameSetupViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: NicknameSetupViewModel by viewModels()
 
     private lateinit var uiLoginInfo: UiLoginInfo
 

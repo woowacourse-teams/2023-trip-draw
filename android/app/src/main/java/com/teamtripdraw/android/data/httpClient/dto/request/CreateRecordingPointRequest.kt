@@ -12,5 +12,5 @@ data class CreateRecordingPointRequest(
     @Json(name = "longitude")
     val longitude: Double,
     @Json(name = "recordedAt")
-    val recordedAt: String
+    val recordedAt: String,
 )

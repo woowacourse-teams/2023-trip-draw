@@ -14,5 +14,5 @@ data class AddPostRequest(
     @Json(name = "address")
     val address: String,
     @Json(name = "writing")
-    val writing: String
+    val writing: String,
 )

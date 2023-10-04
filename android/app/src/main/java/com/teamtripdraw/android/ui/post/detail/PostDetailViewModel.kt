@@ -4,18 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
+import com.teamtripdraw.android.TripDrawApplication
+import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiPostDetail
 import com.teamtripdraw.android.ui.model.mapper.toDetailPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PostDetailViewModel(
+@HiltViewModel
+class PostDetailViewModel @Inject constructor(
     private val repository: PostRepository,
 ) : ViewModel() {
 
-    var postId: Long = NULL_SUBSTITUTE_POST_ID
+    var postId: Long = Post.NULL_SUBSTITUTE_ID
         private set
 
     private val _postDetail: MutableLiveData<UiPostDetail> = MutableLiveData()
@@ -42,6 +46,7 @@ class PostDetailViewModel(
                 }
                 .onFailure {
                     // todo 오류 처리
+                    TripDrawApplication.logUtil.general.log(it)
                 }
         }
     }
@@ -58,6 +63,7 @@ class PostDetailViewModel(
                 }
                 .onFailure {
                     // todo 오류 처리
+                    TripDrawApplication.logUtil.general.log(it)
                 }
         }
     }

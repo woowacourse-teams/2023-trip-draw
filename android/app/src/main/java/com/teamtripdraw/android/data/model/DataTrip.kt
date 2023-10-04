@@ -5,6 +5,6 @@ data class DataTrip(
     val name: String,
     val route: List<DataPoint>,
     val status: String,
-    val imageUrl: String?,
-    val routeImageUrl: String?
+    val imageUrl: String,
+    val routeImageUrl: String,
 )

@@ -4,7 +4,7 @@ import com.naver.maps.geometry.LatLng
 
 data class UiRoute(
     val value: List<UiPoint>,
-    val enablePolyLine: Boolean
+    val enablePolyLine: Boolean,
 ) {
     fun getLatLngs(): List<LatLng> =
         value.map {
@@ -16,7 +16,7 @@ data class UiRoute(
             UiMarkerInfo(
                 it.pointId,
                 LatLng(it.latitude, it.longitude),
-                it.hasPost
+                it.hasPost,
             )
         }
 }

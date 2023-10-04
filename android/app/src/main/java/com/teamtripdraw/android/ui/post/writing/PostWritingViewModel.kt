@@ -1,35 +1,40 @@
 package com.teamtripdraw.android.ui.post.writing
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POINT_ID
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_POST_ID
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
 import com.teamtripdraw.android.domain.model.point.Point
+import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
 import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
+import com.teamtripdraw.android.domain.model.trip.Trip
+import com.teamtripdraw.android.domain.repository.GeocodingRepository
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
-class PostWritingViewModel(
+@HiltViewModel
+class PostWritingViewModel @Inject constructor(
     private val pointRepository: PointRepository,
     private val postRepository: PostRepository,
     private val tripRepository: TripRepository,
+    private val geocodingRepository: GeocodingRepository,
 ) : ViewModel() {
 
     val MAX_INPUT_TITLE_LENGTH = PostWritingValidState.MAX_TITLE_LENGTH
     val MAX_INPUT_WRITING_LENGTH = PostWritingValidState.MAX_WRITING_LENGTH
 
-    private var tripId: Long = NULL_SUBSTITUTE_TRIP_ID
-    private var pointId: Long = NULL_SUBSTITUTE_POINT_ID
-    private var postId: Long = NULL_SUBSTITUTE_POST_ID
+    private var tripId: Long = Trip.NULL_SUBSTITUTE_ID
+    private var pointId: Long = Point.NULL_SUBSTITUTE_ID
+    private var postId: Long = Post.NULL_SUBSTITUTE_ID
     private lateinit var writingMode: WritingMode
 
     val title: MutableLiveData<String> = MutableLiveData("")
@@ -42,7 +47,8 @@ class PostWritingViewModel(
     private val _backPageEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
     val backPageEvent: LiveData<Event<Boolean>> = _backPageEvent
 
-    private val _writingCompletedEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    private val _writingCompletedEvent: MutableLiveData<Event<Boolean>> =
+        MutableLiveData(Event(false))
     val writingCompletedEvent: LiveData<Event<Boolean>> = _writingCompletedEvent
 
     private val _point: MutableLiveData<Point> = MutableLiveData()
@@ -51,8 +57,17 @@ class PostWritingViewModel(
     private val _address: MutableLiveData<String> = MutableLiveData("")
     val address: LiveData<String> = _address
 
-    private val _imageFile: MutableLiveData<File> = MutableLiveData()
-    val imageFile: LiveData<File> = _imageFile
+    // 기기에서 선택된 이미지가 저장되며, 서버에 이미지 저장을 요청할 때 이용됩니다.
+    private var imageFile: MutableLiveData<File?> = MutableLiveData()
+
+    // 기기에서 선택된 이미지 파일의 uri 또는 서버로부터 받아온 image uri가 저장됩니다. view에 표시될 때 이용됩니다.
+    private val _imageUri: MutableLiveData<String?> = MutableLiveData(null)
+    val imageUri: LiveData<String?> = _imageUri
+
+    val hasImage: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>().apply {
+        this.addSource(imageUri) { value -> this.setValue(value?.isNotBlank()) }
+        this.addSource(imageFile) { value -> this.setValue(value != null) }
+    }
 
     private val _takePictureEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val takePictureEvent: LiveData<Boolean> = _takePictureEvent
@@ -60,12 +75,14 @@ class PostWritingViewModel(
     private val _selectPhotoEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val selectPhotoEvent: LiveData<Boolean> = _selectPhotoEvent
 
-    fun updateAddress(address: String) {
-        _address.postValue(address)
+    fun updateImage(file: File) {
+        imageFile.value = file
+        _imageUri.value = file.toURI().toString()
     }
 
-    fun updateImage(file: File) {
-        _imageFile.value = file
+    fun deleteImage() {
+        imageFile.value = null
+        _imageUri.value = null
     }
 
     fun backPage() {
@@ -114,7 +131,7 @@ class PostWritingViewModel(
                         title = title.value ?: "",
                         writing = writing.value ?: "",
                         address = address.value ?: "",
-                        imageFile = _imageFile.value,
+                        imageFile = imageFile.value,
                     )
                     postRepository.addPost(prePost).onSuccess {
                         _writingCompletedEvent.value = Event(true)
@@ -125,7 +142,7 @@ class PostWritingViewModel(
                         postId = postId,
                         title = title.value ?: "",
                         writing = writing.value ?: "",
-                        imageFile = _imageFile.value,
+                        imageFile = imageFile.value,
                     )
                     postRepository.patchPost(prePatchPost).onSuccess {
                         _writingCompletedEvent.value = Event(true)
@@ -138,7 +155,10 @@ class PostWritingViewModel(
     private fun fetchPoint() {
         viewModelScope.launch {
             pointRepository.getPoint(pointId = pointId, tripId = tripId)
-                .onSuccess { _point.value = it }
+                .onSuccess {
+                    _point.value = it
+                    fetchAddress()
+                }
         }
     }
 
@@ -149,8 +169,17 @@ class PostWritingViewModel(
                     _address.value = it.address
                     title.value = it.title
                     writing.value = it.writing
-                    // todo http url을 파일로 변환해 가지고 있도록 하는 작업
+                    _imageUri.value = it.postImageUrl
                 }
+        }
+    }
+
+    private fun fetchAddress() {
+        _point.value?.let { point ->
+            viewModelScope.launch {
+                geocodingRepository.getAddress(point.latitude, point.longitude)
+                    .onSuccess { _address.value = it }
+            }
         }
     }
 }

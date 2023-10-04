@@ -14,18 +14,19 @@ import com.teamtripdraw.android.domain.model.auth.LoginPlatform
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.loginManager.KakaoLoginManager
 import com.teamtripdraw.android.support.framework.presentation.loginManager.SocialLoginManager
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.main.MainActivity
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 import com.teamtripdraw.android.ui.policy.TermsOfServiceActivity
 import com.teamtripdraw.android.ui.signUp.NicknameSetupActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    private val loginViewModel: LoginViewModel by viewModels { tripDrawViewModelFactory }
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var kakaoLoginManager: SocialLoginManager
 
@@ -141,6 +142,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, LoginActivity::class.java)
+        fun getIntent(context: Context, vararg flags: Int): Intent =
+            Intent(context, LoginActivity::class.java).apply {
+                if (flags.isNotEmpty()) {
+                    val combinedFlags = flags.reduce { acc, flag -> acc or flag }
+                    this.flags = combinedFlags
+                }
+            }
     }
 }

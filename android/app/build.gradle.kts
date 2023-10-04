@@ -1,9 +1,12 @@
+import io.sentry.android.gradle.extensions.InstrumentationFeature
 import java.util.Properties
 
 val localProperties = Properties()
 localProperties.load(project.rootProject.file("local.properties").inputStream())
 val keystoreProperties = Properties()
 keystoreProperties.load(project.rootProject.file("keystore.properties").inputStream())
+val sentryProperties = Properties()
+sentryProperties.load(project.rootProject.file("sentry.properties").inputStream())
 
 plugins {
     id("com.android.application")
@@ -14,6 +17,9 @@ plugins {
     id("com.google.gms.google-services")
     // FireBaseCrashlytics
     id("com.google.firebase.crashlytics")
+    // Sentry
+    id("io.sentry.android.gradle")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -39,6 +45,24 @@ android {
 
         buildConfigField(
             "String",
+            "NAVER_REVERS_GEOCODER_BASE_URL",
+            localProperties.getProperty("NAVER_REVERS_GEOCODER_BASE_URL"),
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_MAP_CLIENT_SECRET",
+            localProperties.getProperty("NAVER_MAP_CLIENT_SECRET"),
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_MAP_CLIENT_ID",
+            localProperties.getProperty("NAVER_MAP_CLIENT_ID"),
+        )
+
+        buildConfigField(
+            "String",
             "KAKAO_NATIVE_APP_KEY",
             localProperties.getProperty("KAKAO_NATIVE_APP_KEY"),
         )
@@ -52,8 +76,11 @@ android {
         manifestPlaceholders["NATIVE_APP_KEY"] =
             localProperties.getProperty("KAKAO_NATIVE_APP_KEY_NO_QUOTES")
 
-        manifestPlaceholders["NAVER_MAP_CLIENT_ID"] =
-            localProperties.getProperty("NAVER_MAP_CLIENT_ID")
+        manifestPlaceholders["NAVER_MAP_CLIENT_ID_NO_QUOTES"] =
+            localProperties.getProperty("NAVER_MAP_CLIENT_ID_NO_QUOTES")
+
+        manifestPlaceholders["SENTRY_DSN"] =
+            sentryProperties.getProperty("SENTRY_DSN")
     }
 
     buildTypes {
@@ -115,6 +142,38 @@ android {
     }
 }
 
+// sentry 난독화 설정
+sentry {
+    includeProguardMapping.set(true)
+    autoUploadProguardMapping.set(true)
+    experimentalGuardsquareSupport.set(false)
+    uploadNativeSymbols.set(false)
+    autoUploadNativeSymbols.set(true)
+    includeNativeSources.set(false)
+    includeSourceContext.set(false)
+    tracingInstrumentation {
+        enabled.set(true)
+        features.set(
+            setOf(
+                InstrumentationFeature.DATABASE,
+                InstrumentationFeature.FILE_IO,
+                InstrumentationFeature.OKHTTP,
+                InstrumentationFeature.COMPOSE,
+            ),
+        )
+    }
+    autoInstallation {
+        enabled.set(true)
+        sentryVersion.set("6.28.0")
+    }
+    includeDependenciesReport.set(true)
+}
+
+// Hilt Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     // 프로젝트내 의존성
     implementation(project(":domain"))
@@ -156,4 +215,11 @@ dependencies {
 
     // splashScreen
     implementation(libs.splashScreen)
+
+    // timber
+    implementation(libs.timber)
+
+    // hilt
+    implementation(libs.hilt)
+    kapt(libs.hiltKapt)
 }

@@ -32,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/td_white"
-            android:padding="16dp"
+            android:padding="@dimen/margin_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_my_page">
@@ -67,15 +67,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_nickname" />
 
+        <View
+            android:id="@+id/btn_my_trip_history"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/td_white"
+            android:onClick="@{() -> myPageViewModel.openTripHistory()}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_my_trip_history"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_my_trip_history" />
+
+        <ImageView
+            android:id="@+id/ic_my_trip_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:src="@drawable/ic_my_trip_history"
+            app:layout_constraintBottom_toBottomOf="@id/tv_my_trip_history"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_my_trip_history" />
+
+        <TextView
+            android:id="@+id/tv_my_trip_history"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="@dimen/margin_default"
+            android:paddingVertical="@dimen/margin_default"
+            android:text="@string/tv_my_trip_history"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ic_my_trip_history"
+            app:layout_constraintTop_toBottomOf="@id/divider_nickname_layout" />
+
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_open_source_license"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/margin_default"
             app:dividerColor="@color/td_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_nickname" />
+            app:layout_constraintTop_toBottomOf="@id/tv_my_trip_history" />
 
         <TextView
             android:id="@+id/btn_open_source_license"
@@ -83,8 +118,8 @@
             android:layout_height="wrap_content"
             android:background="@color/td_white"
             android:onClick="@{() -> myPageViewModel.openOpenSourceLicense()}"
-            android:padding="16dp"
-            android:text="오픈소스 라이선스"
+            android:padding="@dimen/margin_default"
+            android:text="@string/btn_open_source_license"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +141,7 @@
             android:layout_height="wrap_content"
             android:background="@color/td_white"
             android:onClick="@{() -> myPageViewModel.openPrivacyPolicy()}"
-            android:padding="16dp"
+            android:padding="@dimen/margin_default"
             android:text="@string/btn_privacy_policy"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_black"
@@ -128,7 +163,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/td_white"
-            android:padding="16dp"
+            android:padding="@dimen/margin_default"
             android:text="@string/btn_version_info"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_black"
@@ -140,7 +175,7 @@
             android:id="@+id/tv_version_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/margin_default"
             android:text="@{myPageViewModel.VERSION_NAME}"
             android:textAppearance="@style/body2"
             android:textColor="@color/td_dark_gray"
@@ -164,7 +199,7 @@
             android:layout_height="wrap_content"
             android:background="@color/td_white"
             android:onClick="@{() -> myPageViewModel.startLogoutEvent()}"
-            android:padding="16dp"
+            android:padding="@dimen/margin_default"
             android:text="@string/btn_logout"
             android:textAppearance="@style/subtitle_1"
             android:textColor="@color/td_black"
@@ -186,8 +221,8 @@
             android:id="@+id/btn_account_deletion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
             android:onClick="@{() -> myPageViewModel.startUnsubscribeEvent()}"
             android:text="@string/btn_account_deletion"
             android:textColor="@color/td_dark_gray"

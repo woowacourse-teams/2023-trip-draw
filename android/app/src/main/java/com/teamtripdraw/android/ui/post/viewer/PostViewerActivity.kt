@@ -3,22 +3,22 @@ package com.teamtripdraw.android.ui.post.viewer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostViewerBinding
-import com.teamtripdraw.android.domain.constants.NULL_SUBSTITUTE_TRIP_ID
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostViewerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostViewerBinding
-    private val viewModel: PostViewerViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: PostViewerViewModel by viewModels()
     private lateinit var adapter: PostViewerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class PostViewerActivity : AppCompatActivity() {
     }
 
     private fun initTripId() {
-        val tripId = intent.getLongExtra(TRIP_ID_KEY, NULL_SUBSTITUTE_TRIP_ID)
+        val tripId = intent.getLongExtra(TRIP_ID_KEY, Trip.NULL_SUBSTITUTE_ID)
         viewModel.updateTripId(tripId)
     }
 
@@ -76,7 +76,6 @@ class PostViewerActivity : AppCompatActivity() {
 
     private fun onErrorOccurred(isErrorOccurred: Boolean) {
         if (isErrorOccurred) {
-            Log.e("POST_VIEWER_ERROR", POST_VIEWER_ERROR)
             Snackbar.make(
                 binding.root,
                 R.string.post_viewer_error_description,
@@ -102,7 +101,6 @@ class PostViewerActivity : AppCompatActivity() {
     private fun fetchPosts() = viewModel.fetchPosts()
 
     companion object {
-        private const val POST_VIEWER_ERROR = "감상 목록을 불러오는데 오류가 발생했습니다."
         private const val TRIP_ID_KEY = "TRIP_ID_KEY"
 
         fun getIntent(context: Context, tripId: Long): Intent {

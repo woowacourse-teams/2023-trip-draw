@@ -10,30 +10,30 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityHistoryDetailBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
-import com.teamtripdraw.android.ui.common.bindingAdapter.setImage
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.common.dialog.SetTitleSituation
 import com.teamtripdraw.android.ui.common.dialog.SetTripTitleDialog
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HistoryDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHistoryDetailBinding
-    private val viewModel: HistoryDetailViewModel by viewModels { tripDrawViewModelFactory }
+    private val viewModel: HistoryDetailViewModel by viewModels()
     private lateinit var adapter: HistoryDetailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_history_detail)
         binding.lifecycleOwner = this
+        binding.historyDetailViewModel = viewModel
 
         getIntentData()
         setAdapter()
         setClickBack()
-        setClickListener()
         initObserve()
     }
 
@@ -52,22 +52,8 @@ class HistoryDetailActivity : AppCompatActivity() {
         binding.onBackClick = { finish() }
     }
 
-    private fun setClickListener() {
-        // dataBinding이 안되는 문제 : 이슈 #243 참고
-        binding.btnHistoryDetailDelete.setOnClickListener {
-            viewModel.openDeleteDialog()
-        }
-        binding.ivHistoryDetailImage.setOnClickListener {
-            viewModel.openTripDetail()
-        }
-        binding.btnHistoryDetailEdit.setOnClickListener {
-            viewModel.openEditTitle()
-        }
-    }
-
     private fun initObserve() {
         initPostObserve()
-        initTripObserve()
         initTripDetailEventObserve()
         initPostDetailEventObserve()
         initDeleteDialogEventObserve()
@@ -78,16 +64,6 @@ class HistoryDetailActivity : AppCompatActivity() {
     private fun initPostObserve() {
         viewModel.post.observe(this) {
             adapter.submitList(it)
-        }
-    }
-
-    private fun initTripObserve() {
-        // LiveData의 변화를 감지하지 못하는 문제 : 이슈 #212 참고
-        viewModel.previewTrip.observe(this) {
-            binding.ivHistoryDetailImage.setImage(it.imageUrl)
-            binding.ivHistoryDetailRoute.setImage(it.routeImageUrl)
-            binding.tbHistoryDetail.title = it.name
-            binding.invalidateAll() // DataBinding 오류 : 이슈 #262 참고
         }
     }
 

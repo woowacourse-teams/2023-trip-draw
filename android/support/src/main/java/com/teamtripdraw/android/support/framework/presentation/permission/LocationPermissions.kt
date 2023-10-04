@@ -14,7 +14,7 @@ private const val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
 
 fun checkForeGroundPermission(
     context: Context,
-    activityResultLauncher: ActivityResultLauncher<Array<String>>
+    activityResultLauncher: ActivityResultLauncher<Array<String>>,
 ) {
     val coarseLocationState =
         ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PERMISSION_GRANTED
@@ -23,14 +23,14 @@ fun checkForeGroundPermission(
     processLocationPermission(
         coarseLocationState,
         fineLocationState,
-        activityResultLauncher
+        activityResultLauncher,
     )
 }
 
 private fun processLocationPermission(
     coarseLocationState: Boolean,
     fineLocationState: Boolean,
-    activityResultLauncher: ActivityResultLauncher<Array<String>>
+    activityResultLauncher: ActivityResultLauncher<Array<String>>,
 ) {
     when (LocationPermissionState.get(coarseLocationState, fineLocationState)) {
         NO_PERMISSION -> {

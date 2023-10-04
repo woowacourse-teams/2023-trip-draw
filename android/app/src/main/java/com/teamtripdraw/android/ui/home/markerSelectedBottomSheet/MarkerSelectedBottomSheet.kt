@@ -1,6 +1,5 @@
 package com.teamtripdraw.android.ui.home.markerSelectedBottomSheet
 
-import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,30 +10,26 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.BottomSheetMarkerSelectedBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
-import com.teamtripdraw.android.support.framework.presentation.extensions.fetchAddress
 import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
-import com.teamtripdraw.android.ui.common.tripDrawViewModelFactory
 import com.teamtripdraw.android.ui.history.tripDetail.TripDetailViewModel
 import com.teamtripdraw.android.ui.home.HomeViewModel
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
-import java.util.Locale
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetMarkerSelectedBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MapBottomSheetViewModel
-    private val markerSelectedViewModel: MarkerSelectedViewModel by viewModels { tripDrawViewModelFactory }
-
-    private lateinit var geocoder: Geocoder
+    private val markerSelectedViewModel: MarkerSelectedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()
         updateMarkerSelectedStateToOpen()
         initMarkerSelectedViewModelData()
-        initGeocoder()
     }
 
     private fun initViewModel() {
@@ -68,10 +63,6 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 
     private fun initTripId(): Long? = arguments?.getLong(TRIP_ID)
 
-    private fun initGeocoder() {
-        geocoder = Geocoder(requireContext(), Locale.KOREAN)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -87,17 +78,8 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getAddress()
         initPostWritingEventObserver()
         initDeletePointEventObserver()
-    }
-
-    private fun getAddress() {
-        markerSelectedViewModel.selectedUiPoint.observe(viewLifecycleOwner) { uiPoint ->
-            geocoder.fetchAddress(uiPoint.latitude, uiPoint.longitude) { address ->
-                markerSelectedViewModel.updateAddress(address)
-            }
-        }
     }
 
     private fun initPostWritingEventObserver() {

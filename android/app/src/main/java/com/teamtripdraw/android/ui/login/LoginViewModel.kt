@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication.DependencyContainer.logUtil
 import com.teamtripdraw.android.domain.model.auth.LoginInfo
 import com.teamtripdraw.android.domain.model.auth.LoginPlatform
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val _kakaoLoginEvent = MutableLiveData<Boolean>(false)
@@ -68,7 +72,7 @@ class LoginViewModel(
                         _newUserEvent.value = Event(loginInfo)
                     }
                 }.onFailure {
-                    // todo 로그전략 수립후 로그 찍어주기
+                    logUtil.general.log(it)
                 }
         }
     }
@@ -79,7 +83,7 @@ class LoginViewModel(
                 .onSuccess {
                     _nicknameExistsEvent.value = Event(it.nickname.isNotBlank())
                 }.onFailure {
-                    // todo 로그전략 수립후 로그 작성
+                    logUtil.general.log(it)
                 }
         }
     }

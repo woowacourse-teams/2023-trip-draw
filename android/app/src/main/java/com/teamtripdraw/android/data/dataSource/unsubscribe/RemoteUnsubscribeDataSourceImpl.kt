@@ -1,10 +1,11 @@
 package com.teamtripdraw.android.data.dataSource.unsubscribe
 
 import com.teamtripdraw.android.data.httpClient.service.UnsubscribeService
+import javax.inject.Inject
 
-class RemoteUnsubscribeDataSourceImpl(
+class RemoteUnsubscribeDataSourceImpl @Inject constructor(
     private val unsubscribeService: UnsubscribeService,
 ) : UnsubscribeDataSource.Remote {
-    override suspend fun unsubscribe(accessToken: String): Result<Unit> =
-        unsubscribeService.unsubscribe(accessToken).process { _, _ -> Result.success(Unit) }
+    override suspend fun unsubscribe(): Result<Unit> =
+        unsubscribeService.unsubscribe().process { _, _ -> Result.success(Unit) }
 }

@@ -27,7 +27,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setRoundImageWithVisibility="@{postItem.thumbnail}"
+            app:loadThumbnailRoundImage="@{postItem.thumbnail}"
+            app:setImageVisibility="@{postItem.thumbnail}"
             tools:background="@drawable/shape_td_gray_fill_12_rect" />
 
         <TextView

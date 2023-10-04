@@ -8,5 +8,5 @@ data class PrePost(
     val title: String,
     val writing: String,
     val address: String,
-    val imageFile: File? = null
+    val imageFile: File? = null,
 )

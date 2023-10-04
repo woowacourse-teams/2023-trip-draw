@@ -18,22 +18,22 @@ object Locations {
     fun getUpdateLocation(
         fusedLocationClient: FusedLocationProviderClient,
         context: Context,
-        locationListener: (LocationResult) -> Unit
+        locationListener: (LocationResult) -> Unit,
     ) {
         if (ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
         fusedLocationClient.requestLocationUpdates(
             getLocationRequest(),
             locationCallback(fusedLocationClient, locationListener),
-            Looper.getMainLooper()
+            Looper.getMainLooper(),
         )
     }
 
@@ -46,7 +46,7 @@ object Locations {
 
     private fun locationCallback(
         fusedLocationClient: FusedLocationProviderClient,
-        locationListener: (LocationResult) -> Unit
+        locationListener: (LocationResult) -> Unit,
     ) =
         object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -57,7 +57,7 @@ object Locations {
 
     private fun finishUpdateLocation(
         fusedLocationClient: FusedLocationProviderClient,
-        locationCallback: LocationCallback
+        locationCallback: LocationCallback,
     ) {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }

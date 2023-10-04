@@ -11,7 +11,7 @@ fun PrePoint.toData(): DataPrePoint =
     DataPrePoint(
         latitude = latitude,
         longitude = longitude,
-        recordedAt = recordedAt.format(isoRemoveNanoSecondFormatter)
+        recordedAt = recordedAt.format(isoRemoveNanoSecondFormatter),
     )
 
 fun DataPoint.toDomain(): Point =
@@ -20,5 +20,5 @@ fun DataPoint.toDomain(): Point =
         latitude = latitude,
         longitude = longitude,
         hasPost = hasPost,
-        recordedAt = LocalDateTime.parse(recordedAt)
+        recordedAt = LocalDateTime.parse(recordedAt),
     )
