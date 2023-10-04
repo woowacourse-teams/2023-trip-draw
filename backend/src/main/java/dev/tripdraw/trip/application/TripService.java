@@ -2,15 +2,10 @@ package dev.tripdraw.trip.application;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.MemberRepository;
-import dev.tripdraw.trip.domain.Point;
-import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripDeleteEvent;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
-import dev.tripdraw.trip.dto.PointCreateRequest;
-import dev.tripdraw.trip.dto.PointCreateResponse;
-import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
 import dev.tripdraw.trip.dto.TripSearchConditions;
@@ -34,7 +29,6 @@ public class TripService {
     private static final int FIRST_INDEX = 0;
 
     private final TripRepository tripRepository;
-    private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
     private final TripQueryService tripQueryService;
     private final ApplicationEventPublisher publisher;
@@ -45,25 +39,6 @@ public class TripService {
         Trip trip = Trip.of(memberId, memberRepository.getNicknameById(memberId));
         Trip savedTrip = tripRepository.save(trip);
         return TripCreateResponse.from(savedTrip);
-    }
-
-    public PointCreateResponse addPoint(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
-        Trip trip = tripRepository.getById(pointCreateRequest.tripId());
-        trip.validateAuthorization(loginUser.memberId());
-
-        Point point = pointCreateRequest.toPoint();
-        point.setTrip(trip);
-        pointRepository.save(point);
-
-        return PointCreateResponse.from(point);
-    }
-
-    public void deletePoint(LoginUser loginUser, Long pointId, Long tripId) {
-        Trip trip = tripRepository.getById(tripId);
-        trip.validateAuthorization(loginUser.memberId());
-
-        Point point = pointRepository.getById(pointId);
-        pointRepository.delete(point);
     }
 
     @Transactional(readOnly = true)
@@ -100,15 +75,6 @@ public class TripService {
         trip.changeStatus(tripUpdateRequest.status());
 
         publisher.publishEvent(new TripUpdateEvent(trip.id()));
-    }
-
-    @Transactional(readOnly = true)
-    public PointResponse readPointByTripAndPointId(LoginUser loginUser, Long tripId, Long pointId) {
-        Trip trip = tripRepository.getById(tripId);
-        trip.validateAuthorization(loginUser.memberId());
-
-        Point point = pointRepository.getById(pointId);
-        return PointResponse.from(point);
     }
 
     public void delete(LoginUser loginUser, Long tripId) {

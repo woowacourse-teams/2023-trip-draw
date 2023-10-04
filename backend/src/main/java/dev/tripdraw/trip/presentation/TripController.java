@@ -24,11 +24,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Trip", description = "여행 관련 API 명세")
 @SwaggerAuthorizationRequired
 @RequiredArgsConstructor
+@RequestMapping("/trips")
 @RestController
 public class TripController {
 
@@ -39,7 +41,7 @@ public class TripController {
             responseCode = "201",
             description = "여행 생성 성공."
     )
-    @PostMapping("/trips")
+    @PostMapping
     public ResponseEntity<TripCreateResponse> create(@Auth LoginUser loginUser) {
         TripCreateResponse response = tripService.create(loginUser);
         return ResponseEntity.status(CREATED).body(response);
@@ -50,7 +52,7 @@ public class TripController {
             responseCode = "200",
             description = "나의 여행 조회 성공."
     )
-    @GetMapping("/trips/{tripId}")
+    @GetMapping("/{tripId}")
     public ResponseEntity<TripResponse> readById(@Auth LoginUser loginUser, @PathVariable Long tripId) {
         TripResponse response = tripService.readTripById(loginUser, tripId);
         return ResponseEntity.ok(response);
@@ -61,7 +63,7 @@ public class TripController {
             responseCode = "200",
             description = "나의 여행 전체 조회 성공."
     )
-    @GetMapping("/trips/me")
+    @GetMapping("/me")
     public ResponseEntity<TripsSearchResponseOfMember> readAllOf(@Auth LoginUser loginUser) {
         TripsSearchResponseOfMember response = tripService.readAllTripsOf(loginUser);
         return ResponseEntity.ok(response);
@@ -72,7 +74,7 @@ public class TripController {
             responseCode = "200",
             description = "모든 회원 여행 전체 조회 성공."
     )
-    @GetMapping("/trips")
+    @GetMapping
     public ResponseEntity<TripsSearchResponse> readAll(TripSearchRequest tripSearchRequest) {
         TripsSearchResponse response = tripService.readAll(tripSearchRequest);
         return ResponseEntity.ok(response);
@@ -83,7 +85,7 @@ public class TripController {
             responseCode = "204",
             description = "여행 이름 수정 및 종료 성공"
     )
-    @PatchMapping("/trips/{tripId}")
+    @PatchMapping("/{tripId}")
     public ResponseEntity<Void> update(
             @Auth LoginUser loginUser,
             @PathVariable Long tripId,
@@ -98,7 +100,7 @@ public class TripController {
             responseCode = "204",
             description = "여행 삭제 성공."
     )
-    @DeleteMapping("/trips/{tripId}")
+    @DeleteMapping("/{tripId}")
     public ResponseEntity<Void> delete(
             @Auth LoginUser loginUser,
             @PathVariable Long tripId
