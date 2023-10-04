@@ -1,7 +1,6 @@
 package dev.tripdraw.trip.presentation;
 
 import static dev.tripdraw.test.fixture.MemberFixture.새로운_사용자;
-import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.TestFixture.서울_2022_1_2_일;
 import static dev.tripdraw.test.fixture.TestFixture.서울_2023_1_1_일;
 import static dev.tripdraw.test.fixture.TestFixture.제주_2023_1_1_일;
@@ -9,7 +8,6 @@ import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static dev.tripdraw.test.step.PostStep.createPostAtCurrentPoint;
 import static dev.tripdraw.test.step.TripStep.createTripAndGetResponse;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
-import static dev.tripdraw.trip.presentation.TripControllerTest.PostRequestFixture.위치정보_생성_요청;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -22,13 +20,9 @@ import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.test.ControllerTest;
-import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.trip.dto.PointCreateRequest;
-import dev.tripdraw.trip.dto.PointCreateResponse;
-import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
 import dev.tripdraw.trip.dto.TripSearchResponse;
@@ -38,7 +32,6 @@ import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,43 +96,6 @@ class TripControllerTest extends ControllerTest {
     }
 
     @Test
-    void 여행에_위치_정보를_추가한다() {
-        // given
-        PointCreateRequest request = 위치정보_생성_요청(huchuTrip.id());
-
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .body(request)
-                .when().post("/points")
-                .then().log().all()
-                .extract();
-
-        // then
-        PointCreateResponse pointCreateResponse = response.as(PointCreateResponse.class);
-        assertSoftly(softly -> {
-            softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
-            softly.assertThat(pointCreateResponse.pointId()).isNotNull();
-        });
-    }
-
-    @Test
-    void 위치_정보_추가_시_인증에_실패하면_예외를_발생시킨다() {
-        // given
-        PointCreateRequest request = 위치정보_생성_요청(huchuTrip.id());
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(reoToken)
-                .body(request)
-                .when().post("/points")
-                .then().log().all()
-                .statusCode(FORBIDDEN.value());
-    }
-
-    @Test
     void 여행을_ID로_조회한다() {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -154,36 +110,6 @@ class TripControllerTest extends ControllerTest {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
             softly.assertThat(tripResponse).isEqualTo(TripResponse.from(huchuTrip));
         });
-    }
-
-    @Test
-    void 특정_위치정보를_삭제한다() {
-        // given
-        Point point = pointRepository.save(새로운_위치정보(huchuTrip));
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .param("tripId", huchuTrip.id())
-                .when().delete("/points/{pointId}", point.id())
-                .then().log().all()
-                .statusCode(NO_CONTENT.value());
-    }
-
-    @Test
-    void 특정_위치정보_삭제시_인증에_실패하면_예외를_발생시킨다() {
-        // given
-        Point point = pointRepository.save(새로운_위치정보(huchuTrip));
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(reoToken)
-                .param("tripId", huchuTrip.id())
-                .when().delete("/points/{pointId}", point.id())
-                .then().log().all()
-                .statusCode(FORBIDDEN.value());
     }
 
     @Test
@@ -225,29 +151,6 @@ class TripControllerTest extends ControllerTest {
             softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(trip.status()).isEqualTo(FINISHED);
-        });
-    }
-
-    @Test
-    void 위치_정보를_조회한다() {
-        // given
-        Point point = pointRepository.save(새로운_위치정보(huchuTrip));
-
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(huchuToken)
-                .param("tripId", huchuTrip.id())
-                .when().get("/points/{pointId}", point.id())
-                .then().log().all()
-                .extract();
-
-        // then
-        PointResponse pointResponse = response.as(PointResponse.class);
-        assertSoftly(softly -> {
-            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
-            softly.assertThat(pointResponse).usingRecursiveComparison()
-                    .ignoringFieldsOfTypes(LocalDateTime.class)
-                    .isEqualTo(PointResponse.from(point));
         });
     }
 
@@ -306,11 +209,5 @@ class TripControllerTest extends ControllerTest {
                     .extracting(TripSearchResponse::tripId)
                     .containsExactly(리오_서울_2023_1_1_일);
         });
-    }
-
-    static class PostRequestFixture {
-        public static PointCreateRequest 위치정보_생성_요청(Long tripId) {
-            return new PointCreateRequest(tripId, 1.1, 2.2, LocalDateTime.now());
-        }
     }
 }
