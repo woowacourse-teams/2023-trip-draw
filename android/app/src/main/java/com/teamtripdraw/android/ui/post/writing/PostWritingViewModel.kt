@@ -99,19 +99,17 @@ class PostWritingViewModel @Inject constructor(
         _selectPhotoEvent.value = false
     }
 
-    fun initWritingMode(writingMode: WritingMode, id: Long) {
+    fun initPostMetaData(tripId: Long, pointId: Long, writingMode: WritingMode = WritingMode.NEW) {
         this.writingMode = writingMode
-        when (writingMode) {
-            WritingMode.NEW -> {
-                pointId = id
-                tripId = tripRepository.getCurrentTripId()
-                fetchPoint()
-            }
-            WritingMode.EDIT -> {
-                postId = id
-                fetchPost()
-            }
-        }
+        this.tripId = tripId
+        this.pointId = pointId
+        fetchPoint()
+    }
+
+    fun initPostMetaData(postId: Long, writingMode: WritingMode = WritingMode.EDIT) {
+        this.writingMode = writingMode
+        this.postId = postId
+        fetchPost()
     }
 
     fun textChangedEvent() {
