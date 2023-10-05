@@ -20,22 +20,22 @@ object Locations {
         context: Context,
         locationListener: (LocationResult) -> Unit,
     ) {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
+        if (checkLocationPermission(context)) return
         fusedLocationClient.requestLocationUpdates(
             getLocationRequest(),
             locationCallback(fusedLocationClient, locationListener),
             Looper.getMainLooper(),
         )
     }
+
+    private fun checkLocationPermission(context: Context) =
+        ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        ) != PackageManager.PERMISSION_GRANTED
 
     private fun getLocationRequest() =
         LocationRequest.create().apply {
