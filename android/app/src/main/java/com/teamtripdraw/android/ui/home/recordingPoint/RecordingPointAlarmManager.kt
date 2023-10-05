@@ -42,6 +42,6 @@ class RecordingPointAlarmManager(private val context: Context) {
 
     companion object {
         private const val RECORD_REQUEST_CODE = 1000
-        private val RECORD_INTERVAL_TIME = TimeUnit.MINUTES.toMillis(10)
+        private val RECORD_INTERVAL_TIME = TimeUnit.MINUTES.toMillis(5)
     }
 }
