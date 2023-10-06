@@ -27,6 +27,18 @@ class FilterSelectionActivity : AppCompatActivity() {
 
         viewModel.setupFilterType(initFilterType())
         initObserver()
+
+        binding.btnRefreshFilter.setOnClickListener {
+            binding.apply {
+                filterOptionsYear.clearCheck()
+                filterOptionsMonth.clearCheck()
+                filterOptionsDayOfWeek.clearCheck()
+                filterOptionsHourFrom.value = filterOptionsHourFrom.minValue
+                filterOptionsHourTo.value = filterOptionsHourFrom.maxValue
+                filterOptionsAgeRange.clearCheck()
+                filterOptionsGender.clearCheck()
+            }
+        }
     }
 
     private fun initFilterType(): FilterType =

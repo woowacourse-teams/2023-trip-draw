@@ -68,13 +68,10 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
 
     fun getCheckedChipIds(): List<Int> = binding.chipGroupFilterOptions.checkedChipIds
 
+    fun clearCheck() = binding.chipGroupFilterOptions.clearCheck()
+
     companion object {
         private const val TEXT_APPEARANCE_TITLE = 1
         private const val TEXT_APPEARANCE_SUBTITLE = 2
     }
-
-    // 3. 뷰모델에 착착착하고 만들어지기 -> builder패턴
-    // 4. 리팩
-    // 5. 여행이냐 감상이냐에 따라 화면 바뀌기
-    // 6. 현재 위치 on이면 주소검색 버튼 비활성화
 }
