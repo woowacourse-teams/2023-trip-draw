@@ -285,6 +285,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_default"
             android:background="@drawable/shape_td_main_blue_fill_12_rect"
+            android:onClick="@{()->filterSelectionViewModel.openSearchResult()}"
             android:text="검색"
             android:textAppearance="@style/title_2M"
             android:textColor="@color/td_white"

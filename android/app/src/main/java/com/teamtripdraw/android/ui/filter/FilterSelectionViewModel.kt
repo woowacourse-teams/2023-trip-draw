@@ -22,7 +22,14 @@ class FilterSelectionViewModel : ViewModel() {
     val ageRange = OptionAgeRange.values().toList()
     val gender = OptionGender.values().toList()
 
+    private val _openSearchResultEvent = MutableLiveData<Boolean>()
+    val openSearchResultEvent: LiveData<Boolean> = _openSearchResultEvent
+
     fun setupFilterType(type: FilterType) {
         _filterType.value = type
+    }
+
+    fun openSearchResult() {
+        _openSearchResultEvent.value = true
     }
 }

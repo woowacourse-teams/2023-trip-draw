@@ -1,5 +1,6 @@
 package com.teamtripdraw.android.ui.filter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,26 +25,60 @@ class FilterSelectionActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.filterSelectionViewModel = viewModel
 
-        binding.btnFilterSearch.setOnClickListener {
-            val years = binding.filterOptionsYear.getCheckedChipIds()
-            val months = binding.filterOptionsMonth.getCheckedChipIds()
-            val dayOfWeeks = binding.filterOptionsDayOfWeek.getCheckedChipIds()
-
-            val hour = OptionHour.getSelectedHourIds(
-                fromValue = binding.filterOptionsHourFrom.value,
-                toValue = binding.filterOptionsHourTo.value,
-            )
-            val ageRange = binding.filterOptionsAgeRange.getCheckedChipIds()
-            val gender = binding.filterOptionsGender.getCheckedChipIds()
-        }
         viewModel.setupFilterType(initFilterType())
+        initObserver()
     }
 
     private fun initFilterType(): FilterType =
         intent.getParcelableExtraCompat(FILTER_TYPE_ID) ?: throw IllegalStateException()
 
+    private fun initObserver() {
+        initOpenSearchResultEventObserve()
+    }
+
+    private fun initOpenSearchResultEventObserve() {
+        viewModel.openSearchResultEvent.observe(
+            this,
+            this::onPostClick,
+        )
+    }
+
+    private fun onPostClick(isClicked: Boolean) {
+        if (isClicked) {
+            val resultIntent = Intent()
+            resultIntent.putExtra(SELECTED_OPTIONS_INTENT_KEY, getSelectedOptions())
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+        }
+    }
+
+    private fun getSelectedOptions(): SelectedOptions {
+        val selectedOptions = SelectedOptionsBuilder()
+        binding.apply {
+            selectedOptions.setYears(filterOptionsYear.getCheckedChipIds())
+                .setMonths(filterOptionsMonth.getCheckedChipIds())
+                .setDaysOfWeek(filterOptionsDayOfWeek.getCheckedChipIds())
+                .setAgeRanges(filterOptionsAgeRange.getCheckedChipIds())
+                .setGenders(filterOptionsGender.getCheckedChipIds())
+                .setAddress("임시 주소입니다")
+                .setHours(getHour())
+        }
+        return selectedOptions.build()
+    }
+
+    private fun getHour(): List<Int>? =
+        if (viewModel.filterType.value == FilterType.POST) {
+            OptionHour.getSelectedHourIds(
+                fromValue = binding.filterOptionsHourFrom.value,
+                toValue = binding.filterOptionsHourTo.value,
+            )
+        } else {
+            null
+        }
+
     companion object {
         private const val FILTER_TYPE_ID = "FILTER_TYPE_ID"
+        const val SELECTED_OPTIONS_INTENT_KEY = "SELECTED_OPTIONS_INTENT_KEY"
 
         fun getIntent(context: Context, type: FilterType): Intent {
             val intent = Intent(context, FilterSelectionActivity::class.java)

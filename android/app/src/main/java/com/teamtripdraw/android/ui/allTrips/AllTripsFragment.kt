@@ -1,14 +1,20 @@
 package com.teamtripdraw.android.ui.allTrips
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teamtripdraw.android.databinding.FragmentAllTripsBinding
+import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.filter.FilterSelectionActivity
+import com.teamtripdraw.android.ui.filter.FilterSelectionActivity.Companion.SELECTED_OPTIONS_INTENT_KEY
 import com.teamtripdraw.android.ui.filter.FilterType
+import com.teamtripdraw.android.ui.filter.SelectedOptions
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +27,16 @@ class AllTripsFragment : Fragment() {
 
     private lateinit var adapter: AllTripsAdapter
     private val viewModel: AllTripsViewModel by viewModels()
+
+    private val getFilterOptionsResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != RESULT_OK) return@registerForActivityResult
+            val intent: Intent = result.data!!
+            val selectedOptions =
+                intent.getParcelableExtraCompat<SelectedOptions>(SELECTED_OPTIONS_INTENT_KEY)
+                    ?: throw java.lang.IllegalStateException()
+            viewModel.updateSelectedOptions(selectedOptions)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +90,7 @@ class AllTripsFragment : Fragment() {
         if (isClicked) {
             val intent =
                 FilterSelectionActivity.getIntent(requireContext(), FilterType.TRIP)
-            startActivity(intent)
+            getFilterOptionsResult.launch(intent)
         }
     }
 

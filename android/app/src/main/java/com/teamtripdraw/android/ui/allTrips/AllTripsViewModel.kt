@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.domain.repository.TripRepository
+import com.teamtripdraw.android.ui.filter.SelectedOptions
 import com.teamtripdraw.android.ui.model.UiAllTrips
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.UiTripOfAll
@@ -23,6 +24,8 @@ class AllTripsViewModel @Inject constructor(
     private val _trips: MutableLiveData<List<TripOfAll>> = MutableLiveData()
     val trips: LiveData<UiAllTrips> =
         Transformations.map(_trips) { trip -> UiAllTrips(trip.map { it.toPresentation() }) }
+
+    private lateinit var selectedOptions: SelectedOptions
 
     private val _openHistoryDetailEvent = MutableLiveData<UiPreviewTrip>()
     val openHistoryDetailEvent: LiveData<UiPreviewTrip> = _openHistoryDetailEvent
@@ -40,6 +43,10 @@ class AllTripsViewModel @Inject constructor(
                     TripDrawApplication.logUtil.general.log(it)
                 }
         }
+    }
+
+    fun updateSelectedOptions(options: SelectedOptions) {
+        selectedOptions = options
     }
 
     fun openHistoryDetail(trip: UiTripOfAll) {

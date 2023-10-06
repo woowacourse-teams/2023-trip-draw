@@ -9,6 +9,7 @@ import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import com.teamtripdraw.android.ui.filter.SelectedOptions
 import com.teamtripdraw.android.ui.model.UiAllPosts
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,8 @@ class AllPostsViewModel @Inject constructor(
     private val _posts: MutableLiveData<List<PostOfAll>> = MutableLiveData()
     val posts: LiveData<UiAllPosts> =
         Transformations.map(_posts) { post -> UiAllPosts(post.map { it.toPresentation() }) }
+
+    private lateinit var selectedOptions: SelectedOptions
 
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
@@ -40,6 +43,10 @@ class AllPostsViewModel @Inject constructor(
                     TripDrawApplication.logUtil.general.log(it)
                 }
         }
+    }
+
+    fun updateSelectedOptions(options: SelectedOptions) {
+        selectedOptions = options
     }
 
     fun openPostDetail(id: Long) {
