@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.times;
 
 import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.post.domain.PostRepository;
+import dev.tripdraw.trip.domain.TripDeleteEvent;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -36,5 +37,19 @@ class PostDeleteEventHandlerTest {
         then(postRepository)
                 .should(times(1))
                 .deleteByMemberId(1L);
+    }
+
+    @Test
+    void 여행_삭제_이벤트를_받아_회원의_감상을_삭제한다() {
+        // given
+        TripDeleteEvent tripDeleteEvent = new TripDeleteEvent(1L);
+
+        // when
+        postDeleteEventHandler.deletePostByTripId(tripDeleteEvent);
+
+        // then
+        then(postRepository)
+                .should(times(1))
+                .deleteByTripId(1L);
     }
 }

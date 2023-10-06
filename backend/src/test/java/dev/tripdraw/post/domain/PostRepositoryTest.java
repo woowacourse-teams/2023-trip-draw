@@ -18,7 +18,6 @@ import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -27,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -103,5 +104,17 @@ class PostRepositoryTest {
         assertThatThrownBy(() -> postRepository.getByPostId(invalidPostId))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
+    }
+
+    @Test
+    void 여행_ID로_감상을_삭제한다() {
+        // given
+        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+
+        // when
+        postRepository.deleteByTripId(trip.id());
+
+        // then
+        assertThat(postRepository.existsById(post.id())).isFalse();
     }
 }
