@@ -3,12 +3,11 @@ package dev.tripdraw.post.domain;
 import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
 
 import dev.tripdraw.post.exception.PostException;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
