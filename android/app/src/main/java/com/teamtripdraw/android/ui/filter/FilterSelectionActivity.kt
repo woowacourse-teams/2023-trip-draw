@@ -10,52 +10,61 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityFilterSelectionBinding
+import com.teamtripdraw.android.domain.model.filterOption.OptionAgeRange
+import com.teamtripdraw.android.domain.model.filterOption.OptionDayOfWeek
+import com.teamtripdraw.android.domain.model.filterOption.OptionGender
 import com.teamtripdraw.android.domain.model.filterOption.OptionHour
+import com.teamtripdraw.android.domain.model.filterOption.OptionMonth
+import com.teamtripdraw.android.domain.model.filterOption.OptionYear
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
+import kotlin.reflect.typeOf
 
 class FilterSelectionActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityFilterSelectionBinding
     private val viewModel: FilterSelectionViewModel by viewModels()
+    private lateinit var filterViews: List<FilterView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_filter_selection)
-        binding.lifecycleOwner = this
-        binding.filterSelectionViewModel = viewModel
+        bindViewModel()
 
         viewModel.setupFilterType(initFilterType())
+        filterViews = setupFilterViews()
         initObserver()
+    }
 
-        binding.btnRefreshFilter.setOnClickListener {
-            binding.apply {
-                filterOptionsYear.clearCheck()
-                filterOptionsMonth.clearCheck()
-                filterOptionsDayOfWeek.clearCheck()
-                filterOptionsHourFrom.value = filterOptionsHourFrom.minValue
-                filterOptionsHourTo.value = filterOptionsHourFrom.maxValue
-                filterOptionsAgeRange.clearCheck()
-                filterOptionsGender.clearCheck()
-            }
-        }
+    private fun bindViewModel() {
+        binding.lifecycleOwner = this
+        binding.filterSelectionViewModel = viewModel
     }
 
     private fun initFilterType(): FilterType =
         intent.getParcelableExtraCompat(FILTER_TYPE_ID) ?: throw IllegalStateException()
 
+    private fun setupFilterViews() = listOf(
+        FilterView(typeOf<OptionYear>(), binding.filterOptionsYear),
+        FilterView(typeOf<OptionMonth>(), binding.filterOptionsMonth),
+        FilterView(typeOf<OptionDayOfWeek>(), binding.filterOptionsDayOfWeek),
+        FilterView(typeOf<OptionAgeRange>(), binding.filterOptionsAgeRange),
+        FilterView(typeOf<OptionGender>(), binding.filterOptionsGender),
+    )
+
     private fun initObserver() {
         initOpenSearchResultEventObserve()
+        initRefreshEventObserve()
     }
 
     private fun initOpenSearchResultEventObserve() {
         viewModel.openSearchResultEvent.observe(
             this,
-            this::onPostClick,
+            this::onSearchClick,
         )
     }
 
-    private fun onPostClick(isClicked: Boolean) {
+    private fun onSearchClick(isClicked: Boolean) {
         if (isClicked) {
             val resultIntent = Intent()
             resultIntent.putExtra(SELECTED_OPTIONS_INTENT_KEY, getSelectedOptions())
@@ -64,17 +73,27 @@ class FilterSelectionActivity : AppCompatActivity() {
         }
     }
 
+    private fun initRefreshEventObserve() {
+        viewModel.refreshEvent.observe(
+            this,
+            this::onRefreshClick,
+        )
+    }
+
+    private fun onRefreshClick(isClicked: Boolean) {
+        if (isClicked) {
+            filterViews.forEach { it.view.clearCheck() }
+            binding.filterOptionsHourFrom.value = binding.filterOptionsHourFrom.minValue
+            binding.filterOptionsHourTo.value = binding.filterOptionsHourFrom.maxValue
+        }
+    }
+
     private fun getSelectedOptions(): SelectedOptions {
         val selectedOptions = SelectedOptionsBuilder()
-        binding.apply {
-            selectedOptions.setYears(filterOptionsYear.getCheckedChipIds())
-                .setMonths(filterOptionsMonth.getCheckedChipIds())
-                .setDaysOfWeek(filterOptionsDayOfWeek.getCheckedChipIds())
-                .setAgeRanges(filterOptionsAgeRange.getCheckedChipIds())
-                .setGenders(filterOptionsGender.getCheckedChipIds())
-                .setAddress("임시 주소입니다")
-                .setHours(getHour())
+        filterViews.forEach {
+            selectedOptions.setSelectedOptions(it, it.view.getCheckedChipIds())
         }
+        selectedOptions.setAddress("임시 주소입니다").setHours(getHour())
         return selectedOptions.build()
     }
 

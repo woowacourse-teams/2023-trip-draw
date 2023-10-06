@@ -25,11 +25,18 @@ class FilterSelectionViewModel : ViewModel() {
     private val _openSearchResultEvent = MutableLiveData<Boolean>()
     val openSearchResultEvent: LiveData<Boolean> = _openSearchResultEvent
 
+    private val _refreshEvent = MutableLiveData<Boolean>()
+    val refreshEvent: LiveData<Boolean> = _refreshEvent
+
     fun setupFilterType(type: FilterType) {
         _filterType.value = type
     }
 
     fun openSearchResult() {
         _openSearchResultEvent.value = true
+    }
+
+    fun refresh() {
+        _refreshEvent.value = true
     }
 }

@@ -1,6 +1,7 @@
 package com.teamtripdraw.android.ui.filter
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,46 +25,50 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
         attr?.let {
             val filterOptionsTitle =
                 context.obtainStyledAttributes(it, R.styleable.FilterOptionsView)
-
-            when (filterOptionsTitle.getInt(R.styleable.FilterOptionsView_filterOptionsTitle, 1)) {
-                TEXT_APPEARANCE_TITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.subtitle_1)
-                TEXT_APPEARANCE_SUBTITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.body_1)
-            }
+            setTitleAppearance(filterOptionsTitle)
             filterOptionsTitle.recycle()
         }
     }
 
+    private fun setTitleAppearance(filterOptionsTitle: TypedArray) {
+        when (filterOptionsTitle.getInt(R.styleable.FilterOptionsView_filterOptionsTitle, 1)) {
+            TEXT_APPEARANCE_TITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.subtitle_1)
+            TEXT_APPEARANCE_SUBTITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.body_1)
+        }
+    }
+
     fun setupOptions(options: List<FilterOption>) {
-        createOptionChips(options)
+        options.forEach { option -> createOptionChip(option) }
     }
 
-    fun setTitle(title: String) {
-        binding.tvFilterOptionsTitle.text = title
+    private fun createOptionChip(option: FilterOption) {
+        val chip = Chip(context)
+        chip.id = option.id
+        chip.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
+        settingChipStyle(chip)
+        chip.isCheckable = true
+        chip.text = option.toText()
+        chips.add(chip)
+        binding.chipGroupFilterOptions.addView(chip)
     }
 
-    private fun createOptionChips(options: List<FilterOption>) {
-        options.forEach {
-            val chip = Chip(context)
-            chips.add(chip)
-            chip.id = it.id
-            chip.layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-
-            val chipDrawable = ChipDrawable.createFromAttributes(
+    private fun settingChipStyle(chip: Chip) {
+        chip.setChipDrawable(
+            ChipDrawable.createFromAttributes(
                 context,
                 null,
                 0,
                 R.style.filterChip,
-            )
-            chip.setChipDrawable(chipDrawable)
-            chip.setTextAppearance(R.style.chipTextAppearance)
+            ),
+        )
+        chip.setTextAppearance(R.style.chipTextAppearance)
+    }
 
-            chip.isCheckable = true
-            chip.text = it.toText()
-            binding.chipGroupFilterOptions.addView(chip)
-        }
+    fun setTitle(title: String) {
+        binding.tvFilterOptionsTitle.text = title
     }
 
     fun getCheckedChipIds(): List<Int> = binding.chipGroupFilterOptions.checkedChipIds
