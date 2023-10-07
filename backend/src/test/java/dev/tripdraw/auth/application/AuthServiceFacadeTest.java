@@ -55,8 +55,9 @@ class AuthServiceFacadeTest {
     @Test
     void 가입된_회원이_카카오_소셜_로그인하면_토큰이_포함된_응답을_반환한다() {
         // given
-        memberRepository.save(사용자());
-        OauthRequest oauthRequest = new OauthRequest(KAKAO, OAUTH_아이디);
+        Member member = 사용자();
+        memberRepository.save(member);
+        OauthRequest oauthRequest = new OauthRequest(KAKAO, member.oauthId());
 
         // when
         OauthResponse response = authServiceFacade.login(oauthRequest);
@@ -86,7 +87,7 @@ class AuthServiceFacadeTest {
     @Test
     void 신규_회원의_닉네임을_등록하면_토큰이_포함된_응답을_반환한다() {
         // given
-        memberRepository.save(닉네임이_없는_사용자());
+        memberRepository.save(닉네임이_없는_사용자(OAUTH_아이디));
         RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, OAUTH_아이디);
 
         // when
