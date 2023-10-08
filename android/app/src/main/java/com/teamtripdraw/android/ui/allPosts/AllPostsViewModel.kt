@@ -25,7 +25,7 @@ class AllPostsViewModel @Inject constructor(
     val posts: LiveData<UiAllPosts> =
         Transformations.map(_posts) { post -> UiAllPosts(post.map { it.toPresentation() }) }
 
-    private lateinit var selectedOptions: SelectedOptions
+    var selectedOptions: SelectedOptions? = null
 
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent

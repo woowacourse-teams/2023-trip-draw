@@ -45,6 +45,7 @@ class FilterSelectionActivity : AppCompatActivity() {
 
         viewModel.setupFilterType(initFilterType())
         filterViews = setupFilterViews()
+        setupWithSelectedOptions()
         initObserver()
     }
 
@@ -55,6 +56,13 @@ class FilterSelectionActivity : AppCompatActivity() {
 
     private fun initFilterType(): FilterType =
         intent.getParcelableExtraCompat(FILTER_TYPE_ID) ?: throw IllegalStateException()
+
+    private fun setupWithSelectedOptions() {
+        val history =
+            intent.getParcelableExtraCompat<SelectedOptions>(SELECTED_OPTIONS_HISTORY_KEY) ?: return
+        binding.selectedOptions = history
+        viewModel.setAddress(history.address)
+    }
 
     private fun setupFilterViews() = listOf(
         FilterView(typeOf<OptionYear>(), binding.filterOptionsYear),
@@ -145,11 +153,17 @@ class FilterSelectionActivity : AppCompatActivity() {
 
     companion object {
         private const val FILTER_TYPE_ID = "FILTER_TYPE_ID"
+        private const val SELECTED_OPTIONS_HISTORY_KEY = "SELECTED_OPTIONS_HISTORY_KEY"
         const val SELECTED_OPTIONS_INTENT_KEY = "SELECTED_OPTIONS_INTENT_KEY"
 
-        fun getIntent(context: Context, type: FilterType): Intent {
+        fun getIntent(
+            context: Context,
+            type: FilterType,
+            selectedOptions: SelectedOptions?,
+        ): Intent {
             val intent = Intent(context, FilterSelectionActivity::class.java)
             intent.putExtra(FILTER_TYPE_ID, type as Parcelable)
+            intent.putExtra(SELECTED_OPTIONS_HISTORY_KEY, selectedOptions)
             return intent
         }
     }

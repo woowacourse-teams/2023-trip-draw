@@ -90,7 +90,11 @@ class AllPostsFragment : Fragment() {
     private fun onFilterSelectionClick(isClicked: Boolean) {
         if (isClicked) {
             val intent =
-                FilterSelectionActivity.getIntent(requireContext(), FilterType.POST)
+                FilterSelectionActivity.getIntent(
+                    requireContext(),
+                    FilterType.POST,
+                    viewModel.selectedOptions,
+                )
             getFilterOptionsResult.launch(intent)
         }
     }

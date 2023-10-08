@@ -89,7 +89,11 @@ class AllTripsFragment : Fragment() {
     private fun onFilterSelectionClick(isClicked: Boolean) {
         if (isClicked) {
             val intent =
-                FilterSelectionActivity.getIntent(requireContext(), FilterType.TRIP)
+                FilterSelectionActivity.getIntent(
+                    requireContext(),
+                    FilterType.TRIP,
+                    viewModel.selectedOptions,
+                )
             getFilterOptionsResult.launch(intent)
         }
     }

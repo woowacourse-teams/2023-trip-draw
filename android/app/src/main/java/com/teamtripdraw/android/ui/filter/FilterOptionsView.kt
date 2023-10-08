@@ -37,8 +37,9 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
         }
     }
 
-    fun setupOptions(options: List<FilterOption>) {
+    fun setupOptions(options: List<FilterOption>, selectedOptions: List<Int>?) {
         options.forEach { option -> createOptionChip(option) }
+        if (selectedOptions != null) checkSelectedOptions(selectedOptions)
     }
 
     private fun createOptionChip(option: FilterOption) {
@@ -65,6 +66,12 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
             ),
         )
         chip.setTextAppearance(R.style.chipTextAppearance)
+    }
+
+    private fun checkSelectedOptions(selectedOptions: List<Int>) {
+        chips.forEach {
+            if (selectedOptions.contains(it.id)) it.isChecked = true
+        }
     }
 
     fun setTitle(title: String) {

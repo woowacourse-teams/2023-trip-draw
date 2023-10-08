@@ -25,7 +25,7 @@ class AllTripsViewModel @Inject constructor(
     val trips: LiveData<UiAllTrips> =
         Transformations.map(_trips) { trip -> UiAllTrips(trip.map { it.toPresentation() }) }
 
-    private lateinit var selectedOptions: SelectedOptions
+    var selectedOptions: SelectedOptions? = null
 
     private val _openHistoryDetailEvent = MutableLiveData<UiPreviewTrip>()
     val openHistoryDetailEvent: LiveData<UiPreviewTrip> = _openHistoryDetailEvent

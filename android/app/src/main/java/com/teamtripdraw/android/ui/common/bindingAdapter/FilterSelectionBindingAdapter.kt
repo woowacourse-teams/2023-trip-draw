@@ -8,10 +8,14 @@ import com.teamtripdraw.android.domain.model.filterOption.FilterOption
 import com.teamtripdraw.android.ui.filter.FilterOptionsView
 import com.teamtripdraw.android.ui.filter.FilterType
 
-@BindingAdapter("app:setupFilterOptionTitle", "app:setupFilterOptions")
-fun FilterOptionsView.setupFilterOption(title: String, options: List<FilterOption>) {
+@BindingAdapter("app:setupFilterOptionTitle", "app:setupFilterOptions", "app:setupSelectedOptions")
+fun FilterOptionsView.setupFilterOption(
+    title: String,
+    options: List<FilterOption>,
+    selectedOptions: List<Int>? = null,
+) {
     setTitle(title)
-    setupOptions(options)
+    setupOptions(options, selectedOptions)
 }
 
 @BindingAdapter("app:setupFilterOptionHour")
@@ -20,9 +24,18 @@ fun NumberPicker.setupFilterOptionHour(options: List<FilterOption>) {
     maxValue = options.last().value as Int
 }
 
-@BindingAdapter("app:setupFilterOptionInitHour")
-fun NumberPicker.setupFilterOptionInitHour(options: List<FilterOption>) {
-    value = options.last().value as Int
+@BindingAdapter("app:setupFilterOptionHourFrom")
+fun NumberPicker.setupFilterOptionHourFrom(selectedOptions: List<Int>?) {
+    if (selectedOptions == null) return
+    value = selectedOptions.first()
+}
+
+@BindingAdapter("app:setupFilterOptionHourTo")
+fun NumberPicker.setupFilterOptionHourTo(selectedOptions: List<Int>?) {
+    value = maxValue
+
+    if (selectedOptions == null) return
+    value = selectedOptions.last()
 }
 
 @BindingAdapter("app:setVisibilityIfTrip")
