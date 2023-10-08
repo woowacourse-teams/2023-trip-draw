@@ -1,7 +1,5 @@
 package dev.tripdraw.common.config;
 
-import static org.springframework.util.unit.DataUnit.MEGABYTES;
-
 import jakarta.servlet.MultipartConfigElement;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +19,8 @@ public class MultipartConfig {
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory multipartConfigFactory = new MultipartConfigFactory();
-        multipartConfigFactory.setMaxRequestSize(DataSize.of(20, MEGABYTES));
-        multipartConfigFactory.setMaxFileSize(DataSize.of(20, MEGABYTES));
+        multipartConfigFactory.setMaxRequestSize(DataSize.ofMegabytes(20));
+        multipartConfigFactory.setMaxFileSize(DataSize.ofMegabytes(20));
 
         return multipartConfigFactory.createMultipartConfig();
     }
