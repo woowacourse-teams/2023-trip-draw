@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="addressSelectionViewModel"
+            type="com.teamtripdraw.android.ui.filter.address.AddressSelectionViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.AddressSelectionActivity">
+
+        <TextView
+            android:id="@+id/tv_address_selection_si_do"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@color/td_light_gray"
+            android:gravity="center"
+            android:text="@string/tv_address_selection_si_do"
+            android:textAppearance="@style/title_3B"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toTopOf="@id/lv_address_selection_si_do"
+            app:layout_constraintEnd_toStartOf="@id/divider_address_selection_si_do_si_gun_gu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ListView
+            android:id="@+id/lv_address_selection_si_do"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/divider_address_selection_si_do_si_gun_gu"
+            app:layout_constraintEnd_toStartOf="@+id/divider_address_selection_si_do_si_gun_gu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_address_selection_si_do"
+            tools:listitem="@layout/item_filter_option_address" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_address_selection_si_do_si_gun_gu"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="136dp"
+            android:layout_marginBottom="16dp"
+            app:dividerColor="@color/td_light_gray"
+            app:layout_constraintBottom_toTopOf="@+id/btn_selecting_complete"
+            app:layout_constraintEnd_toStartOf="@+id/tv_address_selection_si_gun_gu"
+            app:layout_constraintStart_toStartOf="@+id/tv_address_selection_si_do"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_address_selection_si_gun_gu"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@color/td_light_gray"
+            android:gravity="center"
+            android:text="@string/tv_address_selection_si_gun_gu"
+            android:textAppearance="@style/title_3B"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toTopOf="@id/lv_address_selection_si_gun_gu"
+            app:layout_constraintEnd_toStartOf="@+id/tv_address_selection_eup_myeon_dong"
+            app:layout_constraintStart_toEndOf="@+id/divider_address_selection_si_do_si_gun_gu"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_address_selection_si_gun_gu_eup_myeon_dong"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            app:dividerColor="@color/td_light_gray"
+            app:layout_constraintBottom_toTopOf="@+id/btn_selecting_complete"
+            app:layout_constraintEnd_toStartOf="@+id/tv_address_selection_eup_myeon_dong"
+            app:layout_constraintStart_toEndOf="@+id/tv_address_selection_si_gun_gu"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ListView
+            android:id="@+id/lv_address_selection_si_gun_gu"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/divider_address_selection_si_do_si_gun_gu"
+            app:layout_constraintEnd_toStartOf="@+id/divider_address_selection_si_gun_gu_eup_myeon_dong"
+            app:layout_constraintStart_toEndOf="@+id/divider_address_selection_si_do_si_gun_gu"
+            app:layout_constraintTop_toBottomOf="@+id/tv_address_selection_si_gun_gu"
+            tools:listitem="@layout/item_filter_option_address" />
+
+        <TextView
+            android:id="@+id/tv_address_selection_eup_myeon_dong"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@color/td_light_gray"
+            android:gravity="center"
+            android:text="@string/tv_address_selection_eup_myeon_dong"
+            android:textAppearance="@style/title_3B"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toTopOf="@id/lv_address_selection_eup_myeon_dong"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_address_selection_si_gun_gu"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ListView
+            android:id="@+id/lv_address_selection_eup_myeon_dong"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/divider_address_selection_si_gun_gu_eup_myeon_dong"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/divider_address_selection_si_gun_gu_eup_myeon_dong"
+            app:layout_constraintTop_toBottomOf="@+id/tv_address_selection_eup_myeon_dong"
+            tools:listitem="@layout/item_filter_option_address" />
+
+        <TextView
+            android:id="@+id/btn_selecting_complete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/shape_td_main_blue_line_12_rect"
+            android:gravity="center"
+            android:onClick="@{() -> addressSelectionViewModel.completeSelecting()}"
+            android:padding="8dp"
+            android:text="@string/btn_selecting_complete"
+            android:textAppearance="@style/title_3M"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
