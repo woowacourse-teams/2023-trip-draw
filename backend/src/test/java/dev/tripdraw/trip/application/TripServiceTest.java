@@ -1,11 +1,15 @@
 package dev.tripdraw.trip.application;
 
+import static dev.tripdraw.test.fixture.MemberFixture.다른_사용자;
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
+import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
+import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.common.auth.LoginUser;
@@ -23,6 +27,7 @@ import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
+import dev.tripdraw.trip.exception.TripException;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -132,5 +137,50 @@ class TripServiceTest {
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(trip.status()).isEqualTo(FINISHED);
         });
+    }
+
+    @Test
+    void 여행을_삭제한다() {
+        // when
+        tripService.delete(loginUser, trip.id());
+
+        // then
+        assertThatThrownBy(() -> tripService.readTripById(loginUser, trip.id()))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.message());
+    }
+
+    @Test
+    void 여행을_삭제할_때_존재하지_않는_여행_ID이면_예외를_발생시킨다() {
+        // given
+        Long invalidTripId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> tripService.delete(loginUser, invalidTripId))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.message());
+    }
+
+    @Test
+    void 여행을_삭제할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
+        // given
+        LoginUser invalidUser = new LoginUser(Long.MIN_VALUE);
+
+        // expect
+        assertThatThrownBy(() -> tripService.delete(invalidUser, trip.id()))
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
+    }
+
+    @Test
+    void 여행을_삭제할_때_로그인_한_사용자가_여행의_소유자가_아니면_예외가_발생한다() {
+        // given
+        Member otherMember = memberRepository.save(다른_사용자());
+        LoginUser otherUser = new LoginUser(otherMember.id());
+
+        // expect
+        assertThatThrownBy(() -> tripService.delete(otherUser, trip.id()))
+                .isInstanceOf(TripException.class)
+                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 }

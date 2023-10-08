@@ -3,6 +3,7 @@ package dev.tripdraw.trip.application;
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripDeleteEvent;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
 import dev.tripdraw.trip.dto.TripCreateResponse;
@@ -13,11 +14,12 @@ import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
 import dev.tripdraw.trip.query.TripPaging;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -29,7 +31,7 @@ public class TripService {
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
     private final TripQueryService tripQueryService;
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher publisher;
 
     public TripCreateResponse create(LoginUser loginUser) {
         Long memberId = loginUser.memberId();
@@ -72,13 +74,13 @@ public class TripService {
         trip.changeName(tripUpdateRequest.name());
         trip.changeStatus(tripUpdateRequest.status());
 
-        applicationEventPublisher.publishEvent(new TripUpdateEvent(trip.id()));
+        publisher.publishEvent(new TripUpdateEvent(trip.id()));
     }
 
     public void delete(LoginUser loginUser, Long tripId) {
         Trip trip = tripRepository.getById(tripId);
         trip.validateAuthorization(loginUser.memberId());
-
+        publisher.publishEvent(new TripDeleteEvent(tripId));
         tripRepository.delete(trip);
     }
 }
