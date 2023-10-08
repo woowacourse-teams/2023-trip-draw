@@ -6,10 +6,7 @@ import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static dev.tripdraw.trip.domain.TripStatus.FINISHED;
-import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
-import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.common.auth.LoginUser;
@@ -27,7 +24,6 @@ import dev.tripdraw.trip.dto.TripSearchRequest;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
-import dev.tripdraw.trip.exception.TripException;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
