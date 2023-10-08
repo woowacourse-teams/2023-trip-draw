@@ -152,8 +152,11 @@ class TripServiceTest {
 
     @Test
     void 여행을_삭제할_때_존재하지_않는_여행_ID이면_예외를_발생시킨다() {
+        // given
+        Long invalidTripId = Long.MIN_VALUE;
+
         // expect
-        assertThatThrownBy(() -> tripService.delete(new LoginUser(trip.id()), Long.MIN_VALUE))
+        assertThatThrownBy(() -> tripService.delete(loginUser, invalidTripId))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.message());
     }
