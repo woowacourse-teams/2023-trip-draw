@@ -105,12 +105,12 @@
                     android:background="@drawable/shape_td_main_blue_line_12_rect"
                     android:onClick="@{()-> filterSelectionViewModel.openAddressSelection()}"
                     android:paddingHorizontal="12dp"
-                    app:setAddressText="@{filterSelectionViewModel.address}"
-                    tools:text="@string/btn_filter_address"
                     android:textAppearance="@style/subtitle_2"
                     android:textColor="@color/td_main_blue"
                     app:layout_constraintStart_toStartOf="@id/tv_filter_address_title"
-                    app:layout_constraintTop_toBottomOf="@id/tv_filter_address_title" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_address_title"
+                    app:setAddressText="@{filterSelectionViewModel.address}"
+                    tools:text="+" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/divider_address"

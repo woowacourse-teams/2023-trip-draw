@@ -41,7 +41,7 @@ class FilterSelectionViewModel @Inject constructor() : ViewModel() {
         _filterType.value = type
     }
 
-    fun setAddress(address: String) {
+    fun setAddress(address: String = "") {
         _address.value = address
     }
 

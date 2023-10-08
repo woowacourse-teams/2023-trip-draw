@@ -13,6 +13,7 @@ import com.teamtripdraw.android.databinding.FragmentAllPostsBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.filter.FilterSelectionActivity
+import com.teamtripdraw.android.ui.filter.FilterSelectionActivity.Companion.SELECTED_OPTIONS_INTENT_KEY
 import com.teamtripdraw.android.ui.filter.FilterType
 import com.teamtripdraw.android.ui.filter.SelectedOptions
 import com.teamtripdraw.android.ui.post.detail.PostDetailActivity
@@ -32,7 +33,7 @@ class AllPostsFragment : Fragment() {
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
             val intent: Intent = result.data!!
             val selectedOptions =
-                intent.getParcelableExtraCompat<SelectedOptions>(FilterSelectionActivity.SELECTED_OPTIONS_INTENT_KEY)
+                intent.getParcelableExtraCompat<SelectedOptions>(SELECTED_OPTIONS_INTENT_KEY)
                     ?: throw java.lang.IllegalStateException()
             viewModel.updateSelectedOptions(selectedOptions)
         }

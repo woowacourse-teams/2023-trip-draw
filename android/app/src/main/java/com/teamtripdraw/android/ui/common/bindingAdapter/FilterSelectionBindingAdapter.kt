@@ -36,8 +36,10 @@ fun View.setVisibilityIfTrip(filterType: FilterType?) {
 fun AppCompatButton.setAddressText(address: String?) {
     if (address == null) return
     if (address.isEmpty()) {
-        this.text = "+"
+        this.text = INITIAL_ADDRESS_BTN_TEXT
     } else {
         this.text = address
     }
 }
+
+private const val INITIAL_ADDRESS_BTN_TEXT = "+"

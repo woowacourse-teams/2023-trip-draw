@@ -113,7 +113,6 @@
     <string name="et_filter_search">검색어를 입력해주세요</string>
     <string name="tv_filter_address_title">지역 검색</string>
     <string name="tv_filter_current_position_title">현재 위치</string>
-    <string name="btn_filter_address">+</string>
     <string name="tv_filter_date_title">날짜</string>
     <string name="tv_filter_hour_title">시간대</string>
     <string name="tv_filter_options_hour_from">: 00</string>

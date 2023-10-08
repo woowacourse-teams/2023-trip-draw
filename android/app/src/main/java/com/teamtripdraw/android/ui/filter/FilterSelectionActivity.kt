@@ -108,7 +108,7 @@ class FilterSelectionActivity : AppCompatActivity() {
 
     private fun onRefreshClick(isClicked: Boolean) {
         if (isClicked) {
-            viewModel.setAddress("")
+            viewModel.setAddress()
             filterViews.forEach { it.view.clearCheck() }
             binding.filterOptionsHourFrom.value = binding.filterOptionsHourFrom.minValue
             binding.filterOptionsHourTo.value = binding.filterOptionsHourFrom.maxValue
