@@ -9,6 +9,7 @@ import com.teamtripdraw.android.domain.model.filterOption.OptionGender
 import com.teamtripdraw.android.domain.model.filterOption.OptionHour
 import com.teamtripdraw.android.domain.model.filterOption.OptionMonth
 import com.teamtripdraw.android.domain.model.filterOption.OptionYear
+import com.teamtripdraw.android.support.framework.presentation.event.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -37,6 +38,9 @@ class FilterSelectionViewModel @Inject constructor() : ViewModel() {
     private val _refreshEvent = MutableLiveData<Boolean>()
     val refreshEvent: LiveData<Boolean> = _refreshEvent
 
+    private val _backPageEvent: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
+    val backPageEvent: LiveData<Event<Boolean>> = _backPageEvent
+
     fun setupFilterType(type: FilterType) {
         _filterType.value = type
     }
@@ -55,5 +59,9 @@ class FilterSelectionViewModel @Inject constructor() : ViewModel() {
 
     fun refresh() {
         _refreshEvent.value = true
+    }
+
+    fun backPage() {
+        _backPageEvent.value = Event(true)
     }
 }

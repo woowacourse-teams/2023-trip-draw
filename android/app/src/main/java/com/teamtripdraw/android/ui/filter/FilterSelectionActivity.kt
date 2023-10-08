@@ -17,6 +17,7 @@ import com.teamtripdraw.android.domain.model.filterOption.OptionGender
 import com.teamtripdraw.android.domain.model.filterOption.OptionHour
 import com.teamtripdraw.android.domain.model.filterOption.OptionMonth
 import com.teamtripdraw.android.domain.model.filterOption.OptionYear
+import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.ui.filter.address.AddressSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,6 +68,7 @@ class FilterSelectionActivity : AppCompatActivity() {
         initOpenAddressSelectionEventObserve()
         initOpenSearchResultEventObserve()
         initRefreshEventObserve()
+        initBackPageObserve()
     }
 
     private fun initOpenAddressSelectionEventObserve() {
@@ -133,6 +135,13 @@ class FilterSelectionActivity : AppCompatActivity() {
         } else {
             null
         }
+
+    private fun initBackPageObserve() {
+        viewModel.backPageEvent.observe(
+            this,
+            EventObserver { if (it) finish() },
+        )
+    }
 
     companion object {
         private const val FILTER_TYPE_ID = "FILTER_TYPE_ID"

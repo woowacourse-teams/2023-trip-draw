@@ -21,6 +21,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginHorizontal="@dimen/margin_default"
+            android:onClick="@{()->filterSelectionViewModel.backPage()}"
             android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="@id/et_filter_search"
             app:layout_constraintEnd_toStartOf="@id/et_filter_search"
