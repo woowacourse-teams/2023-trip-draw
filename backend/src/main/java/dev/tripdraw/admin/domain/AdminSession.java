@@ -32,7 +32,7 @@ public class AdminSession extends BaseEntity {
         this(null, UUID.randomUUID().toString(), LocalDateTime.now().plusHours(1));
     }
 
-    AdminSession(Long id, String uuid, LocalDateTime expiredDateTime) {
+    public AdminSession(Long id, String uuid, LocalDateTime expiredDateTime) {
         this.id = id;
         this.uuid = uuid;
         this.expiredDateTime = expiredDateTime;

@@ -2,13 +2,17 @@ package dev.tripdraw.admin.application;
 
 import static dev.tripdraw.admin.exception.AdminExceptionType.ADMIN_AUTH_FAIL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.admin.domain.Admin;
 import dev.tripdraw.admin.domain.AdminRepository;
+import dev.tripdraw.admin.domain.AdminSession;
 import dev.tripdraw.admin.domain.AdminSessionRepository;
 import dev.tripdraw.admin.dto.AdminLoginRequest;
 import dev.tripdraw.admin.exception.AdminException;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -98,5 +102,35 @@ class AdminAuthServiceTest {
 
         // then
         assertThat(adminSessionRepository.findAdminSessionByUuid(uuid)).isPresent();
+    }
+
+    @Test
+    void 올바르지_않은_세션값이라면_예외가_발생한다() {
+        // expect
+        assertThatThrownBy(() -> adminAuthService.validateSession("invalidUUID"))
+                .isInstanceOf(AdminException.class)
+                .hasMessage(ADMIN_AUTH_FAIL.message());
+    }
+
+    @Test
+    void 세션이_만료되었다면_예외가_발생한다() {
+        // given
+        String uuid = UUID.randomUUID().toString();
+        AdminSession adminSession = new AdminSession(1L, uuid, LocalDateTime.now().minusMinutes(1));
+        adminSessionRepository.save(adminSession);
+
+        // expect
+        assertThatThrownBy(() -> adminAuthService.validateSession(uuid))
+                .isInstanceOf(AdminException.class)
+                .hasMessage(ADMIN_AUTH_FAIL.message());
+    }
+
+    @Test
+    void 만료되지_않은_세션이라면_예외가_발생하지_않는다() {
+        // given
+        AdminSession adminSession = adminSessionRepository.save(new AdminSession());
+
+        // expect
+        assertThatNoException().isThrownBy(() -> adminAuthService.validateSession(adminSession.uuid()));
     }
 }

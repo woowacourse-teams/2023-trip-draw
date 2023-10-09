@@ -35,4 +35,10 @@ public class AdminAuthService {
         AdminSession adminSession = adminSessionRepository.save(new AdminSession());
         return adminSession.uuid();
     }
+
+    public void validateSession(String uuid) {
+        AdminSession adminSession = adminSessionRepository.findAdminSessionByUuid(uuid)
+                .orElseThrow(() -> new AdminException(ADMIN_AUTH_FAIL));
+        adminSession.validateExpired();
+    }
 }
