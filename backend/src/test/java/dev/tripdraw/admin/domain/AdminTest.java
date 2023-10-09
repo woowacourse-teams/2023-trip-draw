@@ -2,7 +2,6 @@ package dev.tripdraw.admin.domain;
 
 import static dev.tripdraw.admin.exception.AdminExceptionType.AUTH_FAIL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.admin.exception.AdminException;
@@ -15,36 +14,41 @@ import org.junit.jupiter.api.Test;
 class AdminTest {
 
     @Test
-    void 인증에_실패하면_인증_실패_예외를_던진다() {
+    void 인증_실패_카운트가_5회를_초과하는_경우_예외를_던진다() {
         // given
         Admin admin = new Admin("hello", "world");
+        for (int i = 0; i < 5; i++) {
+            admin.increaseFailCount();
+        }
 
         // expect
-        assertThatThrownBy(() -> admin.validatePassword("fail"))
+        assertThatThrownBy(admin::validateFailCount)
                 .isInstanceOf(AdminException.class)
                 .hasMessage(AUTH_FAIL.message());
     }
 
     @Test
-    void 인증에_실패하면_인증_실패_카운트가_증가한다() {
+    void 인증_실패_카운트를_증가시킨다() {
         // given
         Admin admin = new Admin("hello", "world");
 
         // when
-        assertThatThrownBy(() -> admin.validatePassword("fail"))
-                .isInstanceOf(AdminException.class)
-                .hasMessage(AUTH_FAIL.message());
+        admin.increaseFailCount();
 
         // then
-        assertThat(admin.failCount()).isEqualTo(1L);
+        assertThat(admin.failCount()).isOne();
     }
 
     @Test
-    void 인증에_성공하면_예외가_발생하지_않는다() {
+    void 인증_실패_카운트를_초기화시킨다() {
         // given
         Admin admin = new Admin("hello", "world");
+        admin.increaseFailCount();
+
+        // when
+        admin.resetFailCount();
 
         // expect
-        assertThatNoException().isThrownBy(() -> admin.validatePassword("world"));
+        assertThat(admin.failCount()).isZero();
     }
 }

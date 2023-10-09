@@ -20,31 +20,40 @@ import lombok.experimental.Accessors;
 @Entity
 public class Admin extends BaseEntity {
 
+    private static final int MIN_FAIL_COUNT = 5;
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "admin_id")
     private Long id;
 
-    private String nickname;
+    private String email;
 
     private String password;
 
     private Long failCount;
 
-    public Admin(String nickname, String password) {
-        this(null, nickname, password, 0L);
+    public Admin(String email, String password) {
+        this(null, email, password, 0L);
     }
 
-    public Admin(Long id, String nickname, String password, Long failCount) {
+    public Admin(Long id, String email, String password, Long failCount) {
         this.id = id;
-        this.nickname = nickname;
+        this.email = email;
         this.password = password;
         this.failCount = failCount;
     }
 
-    public void validatePassword(String password) {
-        if (!this.password.equals(password)) {
-            failCount++;
+    public void increaseFailCount() {
+        failCount++;
+    }
+
+    public void resetFailCount() {
+        failCount = 0L;
+    }
+
+    public void validateFailCount() {
+        if (failCount >= MIN_FAIL_COUNT) {
             throw new AdminException(AUTH_FAIL);
         }
     }
