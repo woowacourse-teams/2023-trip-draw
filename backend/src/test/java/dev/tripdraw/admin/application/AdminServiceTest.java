@@ -5,9 +5,12 @@ import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.admin.dto.AdminPostResponse;
+import dev.tripdraw.admin.dto.AdminPostsResponse;
 import dev.tripdraw.admin.dto.AdminTripResponse;
+import dev.tripdraw.admin.dto.AdminTripsResponse;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
@@ -51,6 +54,23 @@ class AdminServiceTest {
     }
 
     @Test
+    void 여행을_전체_조회한다() {
+        // given
+        for (int i = 0; i < 11; i++) {
+            tripRepository.save(새로운_여행(member));
+        }
+
+        // when
+        AdminTripsResponse trips = adminService.findTrips(null, 10);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(trips.items()).hasSize(10);
+            softly.assertThat(trips.hasNextPage()).isTrue();
+        });
+    }
+
+    @Test
     void 여행을_조회한다() {
         // given
         Trip trip = tripRepository.save(새로운_여행(member));
@@ -72,6 +92,26 @@ class AdminServiceTest {
 
         // then
         assertThat(tripRepository.existsById(trip.id())).isFalse();
+    }
+
+    @Test
+    void 감상을_전체_조회한다() {
+        // given
+        Trip trip = tripRepository.save(새로운_여행(member));
+        for (int i = 0; i < 11; i++) {
+            Point point = pointRepository.save(새로운_위치정보(trip));
+            postRepository.save(새로운_감상(point, member.id(), String.valueOf(i + 1)));
+            pointRepository.save(point);
+        }
+
+        // when
+        AdminPostsResponse posts = adminService.findPosts(null, 10);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(posts.items()).hasSize(10);
+            softly.assertThat(posts.hasNextPage()).isTrue();
+        });
     }
 
     @Test

@@ -17,4 +17,8 @@ public class TripFixture {
     public static Trip 새로운_여행(Member member) {
         return new Trip(TripName.from(member.nickname()), member.id());
     }
+
+    public static Trip 새로운_여행(Member member, String tripName) {
+        return new Trip(new TripName(tripName), member.id());
+    }
 }
