@@ -1,6 +1,6 @@
 package dev.tripdraw.admin.domain;
 
-import static dev.tripdraw.admin.exception.AdminExceptionType.AUTH_FAIL;
+import static dev.tripdraw.admin.exception.AdminExceptionType.ADMIN_AUTH_FAIL;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import dev.tripdraw.admin.exception.AdminException;
@@ -40,7 +40,7 @@ public class AdminSession extends BaseEntity {
 
     public void validateExpired() {
         if (expiredDateTime.isBefore(LocalDateTime.now())) {
-            throw new AdminException(AUTH_FAIL);
+            throw new AdminException(ADMIN_AUTH_FAIL);
         }
     }
 }

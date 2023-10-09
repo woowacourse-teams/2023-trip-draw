@@ -1,6 +1,6 @@
 package dev.tripdraw.admin.domain;
 
-import static dev.tripdraw.admin.exception.AdminExceptionType.AUTH_FAIL;
+import static dev.tripdraw.admin.exception.AdminExceptionType.ADMIN_AUTH_FAIL;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -54,7 +54,7 @@ public class Admin extends BaseEntity {
 
     public void validateFailCount() {
         if (failCount >= MIN_FAIL_COUNT) {
-            throw new AdminException(AUTH_FAIL);
+            throw new AdminException(ADMIN_AUTH_FAIL);
         }
     }
 }

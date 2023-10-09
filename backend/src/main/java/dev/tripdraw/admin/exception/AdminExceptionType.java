@@ -6,7 +6,7 @@ import dev.tripdraw.common.exception.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum AdminExceptionType implements ExceptionType {
-    AUTH_FAIL(BAD_REQUEST, "인증에 실패했습니다."),
+    ADMIN_AUTH_FAIL(BAD_REQUEST, "인증에 실패했습니다."),
     ;
 
     private final HttpStatus httpStatus;

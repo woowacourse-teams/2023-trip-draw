@@ -1,6 +1,6 @@
 package dev.tripdraw.admin.domain;
 
-import static dev.tripdraw.admin.exception.AdminExceptionType.AUTH_FAIL;
+import static dev.tripdraw.admin.exception.AdminExceptionType.ADMIN_AUTH_FAIL;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.tripdraw.admin.exception.AdminException;
@@ -21,6 +21,6 @@ class AdminSessionTest {
         // expect
         assertThatThrownBy(adminSession::validateExpired)
                 .isInstanceOf(AdminException.class)
-                .hasMessage(AUTH_FAIL.message());
+                .hasMessage(ADMIN_AUTH_FAIL.message());
     }
 }
