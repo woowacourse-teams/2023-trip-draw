@@ -8,11 +8,12 @@ public class FileUrlMaker {
 
     private final String domain;
 
-    public FileUrlMaker(@Value("${trip.domain}") String domain) {
+    public FileUrlMaker(@Value("${file.common.domain}") String domain) {
         this.domain = domain;
     }
 
-    public String make(String filePath) {
-        return domain + filePath;
+    public String make(String originalUrl, String filePath) {
+        int filePathIndex = originalUrl.indexOf(filePath);
+        return domain + originalUrl.substring(filePathIndex - 1);
     }
 }

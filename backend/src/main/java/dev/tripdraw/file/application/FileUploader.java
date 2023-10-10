@@ -1,40 +1,32 @@
 package dev.tripdraw.file.application;
 
-import static dev.tripdraw.file.exception.FileIOExceptionType.FILE_SAVE_FAIL;
-
-import dev.tripdraw.file.domain.FileType;
-import dev.tripdraw.file.exception.FileIOException;
-import java.io.File;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import java.io.IOException;
-import java.util.UUID;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
 @Component
 public class FileUploader {
 
-    private final FilePath filePath;
+    private final AmazonS3 amazonS3;
     private final FileUrlMaker fileUrlMaker;
+    private final String bucket;
 
-    public String upload(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            return null;
-        }
-        FileType type = FileType.from(file.getContentType());
-        UUID id = UUID.randomUUID();
-        String filePathWithBase = filePath.getPathWithBase(type) + id + type.extension();
-        fileUpload(file, filePathWithBase);
-
-        return fileUrlMaker.make(filePath.getPath(type) + id + type.extension());
+    public FileUploader(AmazonS3 amazonS3, FileUrlMaker fileUrlMaker, @Value("${cloud.aws.s3.bucket}") String bucket) {
+        this.amazonS3 = amazonS3;
+        this.fileUrlMaker = fileUrlMaker;
+        this.bucket = bucket;
     }
 
-    private void fileUpload(MultipartFile file, String filePathWithBase) {
-        try {
-            file.transferTo(new File(filePathWithBase));
-        } catch (IOException e) {
-            throw new FileIOException(FILE_SAVE_FAIL);
-        }
+    public String upload(String path, MultipartFile file) throws IOException {
+        ObjectMetadata metaData = new ObjectMetadata();
+        metaData.setContentType(file.getContentType());
+        metaData.setContentLength(file.getSize());
+
+        amazonS3.putObject(bucket, path, file.getInputStream(), metaData);
+
+        return fileUrlMaker.make(amazonS3.getUrl(bucket, path).toString(), path);
     }
 }

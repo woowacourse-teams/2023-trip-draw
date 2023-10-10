@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
-import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
@@ -38,10 +37,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostService {
 
     private final PostQueryService postQueryService;
+    private final PostFileManager postFileManager;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
-    private final FileUploader fileUploader;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public PostCreateResponse addAtCurrentPoint(
@@ -64,12 +63,12 @@ public class PostService {
     }
 
     private void uploadImage(MultipartFile file, Post post, Trip trip) {
-        String filename = fileUploader.upload(file);
-        if (filename == null) {
+        String imageUrl = postFileManager.upload(file);
+        if (imageUrl == null) {
             return;
         }
-        post.changePostImageUrl(filename);
-        trip.changeImageUrl(filename);
+        post.changePostImageUrl(imageUrl);
+        trip.changeImageUrl(imageUrl);
     }
 
     public PostCreateResponse addAtExistingLocation(

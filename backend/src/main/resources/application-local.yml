@@ -50,11 +50,19 @@ springdoc:
   paths-to-match:
     - /**
 
-trip:
-  domain:
-  base:
+cloud:
+  aws:
+    s3:
+      bucket: bucket-name
+
+file:
+  common:
+    domain: https://domain.com
+    root: root/
   post:
+    directory: directory/
   route:
+    directory: directory/
 
 jwt:
   access:

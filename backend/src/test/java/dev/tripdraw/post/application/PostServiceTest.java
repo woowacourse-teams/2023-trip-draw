@@ -20,7 +20,6 @@ import static org.mockito.BDDMockito.mock;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
-import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
@@ -77,7 +76,7 @@ class PostServiceTest {
     private RouteImageGenerator routeImageGenerator;
 
     @MockBean
-    private FileUploader fileUploader;
+    private PostFileManager postFileManager;
 
     private Member member;
     private Trip trip;
@@ -378,7 +377,7 @@ class PostServiceTest {
         LoginUser loginUser = new LoginUser(member.id());
         PostAndPointCreateRequest request = 현재_위치_감상_생성_요청(trip.id());
         MultipartFile multipartFile = mock(MultipartFile.class);
-        given(fileUploader.upload(any())).willReturn("hello.png");
+        given(postFileManager.upload(any())).willReturn("hello.png");
 
         // when
         postService.addAtCurrentPoint(loginUser, request, multipartFile);

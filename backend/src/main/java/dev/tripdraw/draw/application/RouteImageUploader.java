@@ -21,9 +21,9 @@ public class RouteImageUploader {
     private final String route;
 
     public RouteImageUploader(
-            @Value("${trip.domain}") String domain,
-            @Value("${trip.base}") String base,
-            @Value("${trip.route}") String route
+            @Value("${file.common.domain}") String domain,
+            @Value("${file.common.root}") String base,
+            @Value("${file.route.directory}") String route
     ) {
         this.domain = domain;
         this.base = base;

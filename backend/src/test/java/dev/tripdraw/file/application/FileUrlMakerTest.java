@@ -2,6 +2,7 @@ package dev.tripdraw.file.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -10,17 +11,23 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class FileUrlMakerTest {
 
-    private final FileUrlMaker fileUrlMaker = new FileUrlMaker("");
+    private FileUrlMaker fileUrlMaker;
+
+    @BeforeEach
+    void setUp() {
+        fileUrlMaker = new FileUrlMaker("https://domain.com");
+    }
 
     @Test
     void 이미지의_URL을_생성한다() {
         // given
-        String fullPath = "/통후추/통후추의셀카.jpg";
+        String filePath = "root/directory/image.jpg";
+        String originalUrl = "https://original.com/root/directory/image.jpg";
 
         // when
-        String url = fileUrlMaker.make(fullPath);
+        String url = fileUrlMaker.make(originalUrl, filePath);
 
         // then
-        assertThat(url).isEqualTo("/통후추/통후추의셀카.jpg");
+        assertThat(url).isEqualTo("https://domain.com/root/directory/image.jpg");
     }
 }
