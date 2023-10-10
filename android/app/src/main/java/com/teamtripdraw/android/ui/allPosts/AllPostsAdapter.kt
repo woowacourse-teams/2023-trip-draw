@@ -12,26 +12,17 @@ class AllPostsAdapter(
     private val openPostEvent: (Long) -> Unit,
 ) : ListAdapter<UiPostOfAll, RecyclerView.ViewHolder>(diffUtil) {
 
-    private lateinit var loadingBinding: ItemLoadingBinding
-
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position).infiniteLoading == "loading") {
+        return if (getItem(position).postId == LOADING_ITEM_ID) {
             LOADING_VIEW
         } else {
-            POSTS_VIEW
+            POST_VIEW
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            LOADING_VIEW -> {
-                loadingBinding = ItemLoadingBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false,
-                )
-                LoadingViewHolder(loadingBinding)
-            }
+            LOADING_VIEW -> LoadingViewHolder.of(parent)
             else -> AllPostsViewHolder.of(parent, openPostEvent)
         }
     }
@@ -41,8 +32,9 @@ class AllPostsAdapter(
     }
 
     companion object {
+        private const val LOADING_ITEM_ID = -1L
         private const val LOADING_VIEW = 1
-        private const val POSTS_VIEW = 2
+        private const val POST_VIEW = 2
 
         val diffUtil = object : DiffUtil.ItemCallback<UiPostOfAll>() {
             override fun areItemsTheSame(
@@ -62,5 +54,16 @@ class AllPostsAdapter(
     }
 
     class LoadingViewHolder(val binding: ItemLoadingBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+        companion object {
+            fun of(parent: ViewGroup): LoadingViewHolder =
+                LoadingViewHolder(
+                    ItemLoadingBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                    ),
+                )
+        }
+    }
 }
