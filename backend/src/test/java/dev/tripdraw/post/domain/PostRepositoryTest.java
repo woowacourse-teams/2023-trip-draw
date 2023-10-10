@@ -18,6 +18,7 @@ import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -26,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -102,6 +101,29 @@ class PostRepositoryTest {
 
         // expect
         assertThatThrownBy(() -> postRepository.getByPostId(invalidPostId))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUND.message());
+    }
+
+    @Test
+    void 위치정보_ID로_감상을_조회한다() {
+        // given
+        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+
+        // when
+        Post foundPost = postRepository.getByPointId(point.id());
+
+        // then
+        assertThat(foundPost).isEqualTo(post);
+    }
+
+    @Test
+    void 위치정보_ID로_감상을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long invalidPointId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> postRepository.getByPointId(invalidPointId))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
     }
