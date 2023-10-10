@@ -288,11 +288,14 @@ class PostControllerTest extends ControllerTest {
 
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외가_발생한다() {
-        // given & expect
+        // given
+        Long invalidPostId = Long.MIN_VALUE;
+
+        // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(accessToken)
-                .when().get("/posts/{postId}", Long.MAX_VALUE)
+                .when().get("/posts/{postId}", invalidPostId)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }
@@ -305,6 +308,7 @@ class PostControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().preemptive().oauth2(accessToken)
                 .when().get("/points/{pointId}/post", point.id())
                 .then().log().all()
                 .extract();
@@ -322,9 +326,13 @@ class PostControllerTest extends ControllerTest {
 
     @Test
     void 위치정보_ID로_특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외가_발생한다() {
-        // given & expect
+        // given
+        Long invalidPointId = Long.MIN_VALUE;
+
+        // expect
         RestAssured.given().log().all()
-                .when().get("/points/{pointId}/post", Long.MAX_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .when().get("/points/{pointId}/post", invalidPointId)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }
