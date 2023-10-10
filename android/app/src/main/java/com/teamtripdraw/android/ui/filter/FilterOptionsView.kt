@@ -6,11 +6,12 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
 import com.teamtripdraw.android.R
-import com.teamtripdraw.android.databinding.ViewFilterOptionsBinding
 import com.teamtripdraw.android.domain.model.filterOption.FilterOption
 import com.teamtripdraw.android.ui.model.mapper.toText
 
@@ -18,10 +19,12 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
     ConstraintLayout(context, attr) {
 
     private val chips: MutableList<Chip> = mutableListOf()
-    private val binding: ViewFilterOptionsBinding =
-        ViewFilterOptionsBinding.inflate(LayoutInflater.from(context), this, true)
+
+    private lateinit var titleView: TextView
+    private lateinit var chipGroup: ChipGroup
 
     init {
+        initView(context)
         attr?.let {
             val filterOptionsTitle =
                 context.obtainStyledAttributes(it, R.styleable.FilterOptionsView)
@@ -30,10 +33,18 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
         }
     }
 
+    private fun initView(context: Context) {
+        val inflateService = Context.LAYOUT_INFLATER_SERVICE
+        val layoutInflater = context.getSystemService(inflateService) as LayoutInflater
+        layoutInflater.inflate(R.layout.view_filter_options, this, true)
+        titleView = findViewById(R.id.tv_filter_options_title)
+        chipGroup = findViewById(R.id.chip_group_filter_options)
+    }
+
     private fun setTitleAppearance(filterOptionsTitle: TypedArray) {
         when (filterOptionsTitle.getInt(R.styleable.FilterOptionsView_filterOptionsTitle, 1)) {
-            TEXT_APPEARANCE_TITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.subtitle_1)
-            TEXT_APPEARANCE_SUBTITLE -> binding.tvFilterOptionsTitle.setTextAppearance(R.style.body_1)
+            TEXT_APPEARANCE_TITLE -> titleView.setTextAppearance(R.style.subtitle_1)
+            TEXT_APPEARANCE_SUBTITLE -> titleView.setTextAppearance(R.style.body_1)
         }
     }
 
@@ -53,7 +64,7 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
         chip.isCheckable = true
         chip.text = option.toText()
         chips.add(chip)
-        binding.chipGroupFilterOptions.addView(chip)
+        chipGroup.addView(chip)
     }
 
     private fun settingChipStyle(chip: Chip) {
@@ -75,12 +86,12 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
     }
 
     fun setTitle(title: String) {
-        binding.tvFilterOptionsTitle.text = title
+        titleView.text = title
     }
 
-    fun getCheckedChipIds(): List<Int> = binding.chipGroupFilterOptions.checkedChipIds
+    fun getCheckedChipIds(): List<Int> = chipGroup.checkedChipIds
 
-    fun clearCheck() = binding.chipGroupFilterOptions.clearCheck()
+    fun clearCheck() = chipGroup.clearCheck()
 
     companion object {
         private const val TEXT_APPEARANCE_TITLE = 1
