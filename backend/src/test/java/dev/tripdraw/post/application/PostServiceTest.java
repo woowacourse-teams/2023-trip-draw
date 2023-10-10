@@ -241,7 +241,8 @@ class PostServiceTest {
 
         // then
         assertThat(postsSearchResponse.posts())
-                .contains(PostSearchResponse.from(jejuJulyPost), PostSearchResponse.from(jejuMayPost));
+                .contains(PostSearchResponse.from(jejuJulyPost, member.nickname()),
+                        PostSearchResponse.from(jejuMayPost, member.nickname()));
     }
 
     @Test
@@ -264,7 +265,8 @@ class PostServiceTest {
 
         // then
         assertThat(postsSearchResponse.posts())
-                .containsExactly(PostSearchResponse.from(seoulJulyPost), PostSearchResponse.from(jejuJulyPost));
+                .containsExactly(PostSearchResponse.from(seoulJulyPost, member.nickname()),
+                        PostSearchResponse.from(jejuJulyPost, member.nickname()));
     }
 
     @Test

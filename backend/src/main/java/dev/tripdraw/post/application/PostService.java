@@ -7,6 +7,7 @@ import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
@@ -14,6 +15,7 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchConditions;
 import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostSearchResponse;
@@ -37,10 +39,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class PostService {
 
+    private static final int FIRST_INDEX = 0;
     private final PostQueryService postQueryService;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
+    private final MemberRepository memberRepository;
     private final FileUploader fileUploader;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -129,23 +133,23 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
+        PostSearchConditions postSearchConditions = postSearchRequest.toPostSearchConditions();
         PostSearchPaging postSearchPaging = postSearchRequest.toPostSearchPaging();
 
-        List<Post> posts = postQueryService.findAllByConditions(
-                postSearchRequest.toPostSearchConditions(),
-                postSearchPaging
-        );
+        List<Post> posts = postQueryService.findAllByConditions(postSearchConditions, postSearchPaging);
 
-        List<PostSearchResponse> postSearchResponses = posts.stream()
-                .map(PostSearchResponse::from)
+        List<PostSearchResponse> responses = posts.stream()
+                .map(post -> PostSearchResponse.from(post, memberRepository.getNicknameById(post.memberId())))
                 .toList();
-        boolean hasNextPage = (posts.size() == postSearchPaging.limit() + 1);
 
-        if (hasNextPage) {
-            postSearchResponses = postSearchResponses.subList(0, postSearchPaging.limit());
+        if (hasNextPage(postSearchPaging.limit(), posts)) {
+            return PostsSearchResponse.of(responses.subList(FIRST_INDEX, postSearchPaging.limit()), true);
         }
+        return PostsSearchResponse.of(responses, false);
+    }
 
-        return PostsSearchResponse.of(postSearchResponses, hasNextPage);
+    private boolean hasNextPage(int limit, List<Post> posts) {
+        return limit < posts.size();
     }
 }
 
