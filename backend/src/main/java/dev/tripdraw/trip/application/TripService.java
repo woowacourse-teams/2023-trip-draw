@@ -10,16 +10,16 @@ import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
 import dev.tripdraw.trip.dto.TripSearchConditions;
 import dev.tripdraw.trip.dto.TripSearchRequest;
+import dev.tripdraw.trip.dto.TripSearchResponse;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
 import dev.tripdraw.trip.query.TripPaging;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -61,10 +61,14 @@ public class TripService {
 
         List<Trip> trips = tripQueryService.readAllByQueryConditions(condition, tripPaging);
 
-        if (tripPaging.hasNextPage(trips.size())) {
-            return TripsSearchResponse.of(trips.subList(FIRST_INDEX, tripPaging.limit()), true);
+        List<TripSearchResponse> responses = trips.stream()
+                .map(trip -> TripSearchResponse.from(trip, memberRepository.getNicknameById(trip.memberId())))
+                .toList();
+
+        if (tripPaging.hasNextPage(responses.size())) {
+            return TripsSearchResponse.of(responses.subList(FIRST_INDEX, tripPaging.limit()), true);
         }
-        return TripsSearchResponse.of(trips, false);
+        return TripsSearchResponse.of(responses, false);
     }
 
     public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {

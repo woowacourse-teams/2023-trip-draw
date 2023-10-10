@@ -9,6 +9,9 @@ public record TripSearchResponse(
         @Schema(description = "여행 Id", example = "1")
         Long tripId,
 
+        @Schema(description = "회원 닉네임", example = "통후추")
+        String memberNickname,
+
         @Schema(description = "여행명", example = "통후추의 여행")
         String name,
 
@@ -27,9 +30,10 @@ public record TripSearchResponse(
 
     private static final String EMPTY_IMAGE_URL = "";
 
-    public static TripSearchResponse from(Trip trip) {
+    public static TripSearchResponse from(Trip trip, String memberNickname) {
         return new TripSearchResponse(
                 trip.id(),
+                memberNickname,
                 trip.nameValue(),
                 Objects.requireNonNullElse(trip.imageUrl(), EMPTY_IMAGE_URL),
                 Objects.requireNonNullElse(trip.routeImageUrl(), EMPTY_IMAGE_URL),
