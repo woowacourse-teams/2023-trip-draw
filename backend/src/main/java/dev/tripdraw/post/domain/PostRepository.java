@@ -4,6 +4,7 @@ import static dev.tripdraw.post.exception.PostExceptionType.POST_NOT_FOUND;
 
 import dev.tripdraw.post.exception.PostException;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     default Post getByPostId(Long id) {
         return findById(id)
+                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
+    }
+
+    Optional<Post> findByPointId(Long pointId);
+
+    default Post getByPointId(Long pointId) {
+        return findByPointId(pointId)
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
 
