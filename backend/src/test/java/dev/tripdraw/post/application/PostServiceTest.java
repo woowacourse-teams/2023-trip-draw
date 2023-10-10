@@ -198,6 +198,29 @@ class PostServiceTest {
     }
 
     @Test
+    void 위치정보_ID로_특정_감상을_조회한다() {
+        // given
+        Post post = postRepository.save(새로운_감상(point, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+
+        // when
+        PostResponse postResponse = postService.readByPointId(point.id());
+
+        // then
+        assertThat(postResponse).isEqualTo(PostResponse.from(post));
+    }
+
+    @Test
+    void 위치정보_ID로_특정_감상을_조회할_때_존재하지_않는_위치정보_ID이면_예외를_발생시킨다() {
+        // given
+        Long invalidPointId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> postService.readByPointId(invalidPointId))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUND.message());
+    }
+
+    @Test
     void 특정_여행의_모든_감상을_조회한다() {
         // given
         Point point1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 29));

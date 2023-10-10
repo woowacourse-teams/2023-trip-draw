@@ -103,6 +103,12 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
+    public PostResponse readByPointId(Long pointId) {
+        Post post = postRepository.getByPointId(pointId);
+        return PostResponse.from(post);
+    }
+
+    @Transactional(readOnly = true)
     public PostsResponse readAllByTripId(Long tripId) {
         if (!tripRepository.existsById(tripId)) {
             throw new TripException(TRIP_NOT_FOUND);
