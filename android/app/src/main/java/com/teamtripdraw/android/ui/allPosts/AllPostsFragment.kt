@@ -62,7 +62,7 @@ class AllPostsFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        adapter = AllPostsAdapter(viewModel)
+        adapter = AllPostsAdapter(viewModel::openPostDetail)
         binding.rvAllPosts.adapter = adapter
     }
 

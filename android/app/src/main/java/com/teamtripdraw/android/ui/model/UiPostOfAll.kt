@@ -9,4 +9,5 @@ data class UiPostOfAll(
     val postImageUrl: String,
     val routeImageUrl: String,
     val recordedAt: String,
+    val infiniteLoading: String = "",
 )
