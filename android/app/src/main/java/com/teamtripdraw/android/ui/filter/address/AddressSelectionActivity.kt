@@ -11,6 +11,7 @@ import android.widget.ListView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.allViews
 import androidx.databinding.DataBindingUtil
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityAddressSelectionBinding
@@ -85,12 +86,15 @@ class AddressSelectionActivity : AppCompatActivity() {
 
     private fun setListViewSelected(lv: ListView, selectedView: View) {
         selectedView.isSelected = true
-        lv.selector = ContextCompat.getDrawable(this, R.drawable.shape_td_light_blue_fill_0_rect)
+        resetListViewSelected(lv)
+        selectedView.background =
+            ContextCompat.getDrawable(this, R.drawable.shape_td_light_blue_fill_0_rect)
     }
 
     private fun resetListViewSelected(lv: ListView) {
-        lv.clearChoices()
-        lv.selector = ColorDrawable(Color.WHITE)
+        lv.allViews.forEach {
+            it.background = ColorDrawable(Color.WHITE)
+        }
     }
 
     private fun setListView(lv: ListView, adapter: ArrayAdapter<String>) {
