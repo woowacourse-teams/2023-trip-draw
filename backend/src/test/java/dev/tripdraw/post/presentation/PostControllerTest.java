@@ -298,6 +298,38 @@ class PostControllerTest extends ControllerTest {
     }
 
     @Test
+    void 위치정보_ID로_특정_감상을_조회한다() {
+        // given
+        Post post = postRepository.save(새로운_감상(point, member.id()));
+        updateHasPost(List.of(point));
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .when().get("/points/{pointId}/post", point.id())
+                .then().log().all()
+                .extract();
+
+        // then
+        PostResponse postResponse = response.as(PostResponse.class);
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postResponse)
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(PostResponse.from(post));
+        });
+    }
+
+    @Test
+    void 위치정보_ID로_특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외가_발생한다() {
+        // given & expect
+        RestAssured.given().log().all()
+                .when().get("/points/{pointId}/post", Long.MAX_VALUE)
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
     void 특정_여행에_대한_모든_감상을_조회한다() {
         // given
         Point point1 = pointRepository.save(새로운_위치정보(trip));
