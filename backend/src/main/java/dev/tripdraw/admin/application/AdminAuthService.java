@@ -36,6 +36,7 @@ public class AdminAuthService {
         return adminSession.uuid();
     }
 
+    @Transactional(readOnly = true)
     public void validateSession(String uuid) {
         AdminSession adminSession = adminSessionRepository.findAdminSessionByUuid(uuid)
                 .orElseThrow(() -> new AdminException(ADMIN_AUTH_FAIL));
