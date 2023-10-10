@@ -109,6 +109,19 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "위치정보로 감상 조회 API", description = "특정한 1개의 감상을 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "위치정보로 감상 조회 성공."
+    )
+    @GetMapping("/points/{pointId}/post")
+    public ResponseEntity<PostResponse> readByPointId(
+            @PathVariable Long pointId
+    ) {
+        PostResponse response = postService.readByPointId(pointId);
+        return ResponseEntity.ok(response);
+    }
+
     @Operation(summary = "특정 여행의 모든 감상 조회 API", description = "특정한 1개의 여행에 대해 작성한 모든 감상을 조회합니다.")
     @ApiResponse(
             responseCode = "200",
