@@ -61,7 +61,7 @@ class AdminServiceTest {
         }
 
         // when
-        AdminTripsResponse trips = adminService.findTrips(null, 10);
+        AdminTripsResponse trips = adminService.readTrips(null, 10);
 
         // then
         assertSoftly(softly -> {
@@ -76,7 +76,7 @@ class AdminServiceTest {
         Trip trip = tripRepository.save(새로운_여행(member));
 
         // when
-        AdminTripResponse response = adminService.findTripById(trip.id());
+        AdminTripResponse response = adminService.readTripById(trip.id());
 
         // then
         assertThat(response).isEqualTo(AdminTripResponse.from(trip));
@@ -105,7 +105,7 @@ class AdminServiceTest {
         }
 
         // when
-        AdminPostsResponse posts = adminService.findPosts(null, 10);
+        AdminPostsResponse posts = adminService.readPosts(null, 10);
 
         // then
         assertSoftly(softly -> {
@@ -123,7 +123,7 @@ class AdminServiceTest {
         pointRepository.save(point);
 
         // when
-        AdminPostResponse response = adminService.findPostById(post.id());
+        AdminPostResponse response = adminService.readPostById(post.id());
 
         // then
         assertThat(response).isEqualTo(AdminPostResponse.from(post));

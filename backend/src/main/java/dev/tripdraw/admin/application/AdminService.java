@@ -28,7 +28,7 @@ public class AdminService {
     private final PostCustomRepository postCustomRepository;
 
     @Transactional(readOnly = true)
-    public AdminTripsResponse findTrips(Long lastViewId, Integer limit) {
+    public AdminTripsResponse readTrips(Long lastViewId, Integer limit) {
         TripPaging tripPaging = new TripPaging(lastViewId, limit);
         List<Trip> trips = tripCustomRepository.findAll(tripPaging);
         if (limit < trips.size()) {
@@ -38,7 +38,7 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public AdminTripResponse findTripById(Long tripId) {
+    public AdminTripResponse readTripById(Long tripId) {
         return AdminTripResponse.from(tripRepository.getById(tripId));
     }
 
@@ -47,7 +47,7 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public AdminPostsResponse findPosts(Long lastViewId, Integer limit) {
+    public AdminPostsResponse readPosts(Long lastViewId, Integer limit) {
         PostSearchPaging postSearchPaging = new PostSearchPaging(lastViewId, limit);
         List<Post> posts = postCustomRepository.findAll(postSearchPaging);
         if (limit < posts.size()) {
@@ -57,7 +57,7 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public AdminPostResponse findPostById(Long postId) {
+    public AdminPostResponse readPostById(Long postId) {
         return AdminPostResponse.from(postRepository.getByPostId(postId));
     }
 

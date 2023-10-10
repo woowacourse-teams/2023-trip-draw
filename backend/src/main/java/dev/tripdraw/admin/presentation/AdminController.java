@@ -39,12 +39,12 @@ public class AdminController {
 
     @GetMapping("/trips")
     public ResponseEntity<AdminTripsResponse> readTrips(AdminPagingRequest adminPagingRequest) {
-        return ResponseEntity.ok(adminService.findTrips(adminPagingRequest.lastViewId(), adminPagingRequest.limit()));
+        return ResponseEntity.ok(adminService.readTrips(adminPagingRequest.lastViewId(), adminPagingRequest.limit()));
     }
 
     @GetMapping("/trips/{tripId}")
     public ResponseEntity<AdminTripResponse> readTrips(@PathVariable("tripId") Long tripId) {
-        return ResponseEntity.ok(adminService.findTripById(tripId));
+        return ResponseEntity.ok(adminService.readTripById(tripId));
     }
 
     @DeleteMapping("/trips/{tripId}")
@@ -55,12 +55,12 @@ public class AdminController {
 
     @GetMapping("/posts")
     public ResponseEntity<AdminPostsResponse> readPosts(AdminPagingRequest adminPagingRequest) {
-        return ResponseEntity.ok(adminService.findPosts(adminPagingRequest.lastViewId(), adminPagingRequest.limit()));
+        return ResponseEntity.ok(adminService.readPosts(adminPagingRequest.lastViewId(), adminPagingRequest.limit()));
     }
 
     @GetMapping("/posts/{postId}")
     public ResponseEntity<AdminPostResponse> readPosts(@PathVariable("postId") Long postId) {
-        return ResponseEntity.ok(adminService.findPostById(postId));
+        return ResponseEntity.ok(adminService.readPostById(postId));
     }
 
     @DeleteMapping("/posts/{postId}")
