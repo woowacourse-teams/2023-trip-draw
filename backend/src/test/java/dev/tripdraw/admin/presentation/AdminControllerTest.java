@@ -4,9 +4,11 @@ import static dev.tripdraw.test.fixture.MemberFixture.새로운_사용자;
 import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import dev.tripdraw.admin.application.AdminAuthService;
 import dev.tripdraw.admin.application.PasswordEncoder;
@@ -63,14 +65,32 @@ class AdminControllerTest extends ControllerTest {
     private PasswordEncoder passwordEncoder;
 
     private Member member;
+    private Admin admin;
     private String sessionId;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
         member = memberRepository.save(새로운_사용자("통후추"));
-        Admin admin = adminRepository.save(new Admin("tripdraw@tripdraw.site", passwordEncoder.encode("password")));
+        admin = adminRepository.save(new Admin("tripdraw@tripdraw.site", passwordEncoder.encode("password")));
         sessionId = adminAuthService.login(new AdminLoginRequest(admin.email(), "password"));
+    }
+
+    @Test
+    void 관리자_계정으로_로그인한다() {
+        // given
+        AdminLoginRequest adminLoginRequest = new AdminLoginRequest(admin.email(), "password");
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .body(adminLoginRequest)
+                .when().post("/admin/login")
+                .then().log().all()
+                .extract();
+
+        // then
+        assertThat(response.sessionId()).isNotBlank();
     }
 
     @Test
