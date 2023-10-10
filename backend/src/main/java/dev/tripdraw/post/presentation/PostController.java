@@ -116,6 +116,7 @@ public class PostController {
     )
     @GetMapping("/points/{pointId}/post")
     public ResponseEntity<PostResponse> readByPointId(
+            @Auth LoginUser loginUser,
             @PathVariable Long pointId
     ) {
         PostResponse response = postService.readByPointId(pointId);
