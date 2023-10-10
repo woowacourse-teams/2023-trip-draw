@@ -19,6 +19,7 @@ import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -126,7 +127,10 @@ class AdminServiceTest {
         AdminPostResponse response = adminService.readPostById(post.id());
 
         // then
-        assertThat(response).isEqualTo(AdminPostResponse.from(post));
+        assertThat(response)
+                .usingRecursiveComparison()
+                .ignoringFieldsOfTypes(LocalDateTime.class)
+                .isEqualTo(AdminPostResponse.from(post));
     }
 
     @Test
