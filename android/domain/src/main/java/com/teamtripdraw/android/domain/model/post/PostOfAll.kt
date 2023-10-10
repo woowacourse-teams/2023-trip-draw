@@ -11,5 +11,4 @@ data class PostOfAll(
     val postImageUrl: String,
     val routeImageUrl: String,
     val recordedAt: LocalDateTime,
-    val infiniteLoading: String = "",
 )

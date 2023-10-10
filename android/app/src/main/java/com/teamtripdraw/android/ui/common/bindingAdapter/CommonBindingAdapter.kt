@@ -9,6 +9,8 @@ import androidx.databinding.BindingAdapter
 fun TextView.setMessageVisibility(isVisible: Boolean) {
     if (isVisible) {
         this.visibility = View.VISIBLE
+    } else {
+        this.visibility = View.GONE
     }
 }
 
