@@ -40,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostService {
 
     private static final int FIRST_INDEX = 0;
+
     private final PostQueryService postQueryService;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
