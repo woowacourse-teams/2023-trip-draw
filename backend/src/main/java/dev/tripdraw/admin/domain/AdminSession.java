@@ -19,6 +19,8 @@ import lombok.experimental.Accessors;
 @Entity
 public class AdminSession extends BaseEntity {
 
+    private static final int SESSION_SECONDS = 3600;
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "admin_session_id")
@@ -29,7 +31,7 @@ public class AdminSession extends BaseEntity {
     private LocalDateTime expiredDateTime;
 
     public AdminSession() {
-        this(null, UUID.randomUUID().toString(), LocalDateTime.now().plusHours(1));
+        this(null, UUID.randomUUID().toString(), LocalDateTime.now().plusSeconds(SESSION_SECONDS));
     }
 
     public AdminSession(Long id, String uuid, LocalDateTime expiredDateTime) {

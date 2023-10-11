@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AdminController {
 
+    private static final String SESSION_KEY = "SESSION";
+    private static final int SESSION_SECONDS = 3600;
+
     private final AdminService adminService;
     private final AdminAuthService adminAuthService;
 
@@ -32,8 +35,8 @@ public class AdminController {
     public ResponseEntity<Void> login(@RequestBody AdminLoginRequest request, HttpServletRequest httpServletRequest) {
         String sessionId = adminAuthService.login(request);
         HttpSession session = httpServletRequest.getSession();
-        session.setAttribute("SESSION", sessionId);
-        session.setMaxInactiveInterval(3600);
+        session.setAttribute(SESSION_KEY, sessionId);
+        session.setMaxInactiveInterval(SESSION_SECONDS);
         return ResponseEntity.ok().build();
     }
 
