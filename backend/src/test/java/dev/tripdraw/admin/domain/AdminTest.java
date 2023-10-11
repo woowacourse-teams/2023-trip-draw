@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class AdminTest {
 
     @Test
-    void 인증_실패_카운트가_5회를_초과하는_경우_예외를_던진다() {
+    void 인증_실패_카운트가_최대_실패_가능_횟수를_초과하는_경우_예외를_던진다() {
         // given
         Admin admin = new Admin("hello", "world");
         for (int i = 0; i < 5; i++) {

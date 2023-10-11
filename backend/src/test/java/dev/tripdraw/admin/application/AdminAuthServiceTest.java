@@ -50,7 +50,7 @@ class AdminAuthServiceTest {
     }
 
     @Test
-    void 비밀번호를_5회_이상_틀리는_경우_예외가_발생한다() {
+    void 비밀번호를_최대_실패_가능_횟수_이상_틀리는_경우_예외가_발생한다() {
         // given
         Admin admin = new Admin(1L, "email@naver.com", passwordEncoder.encode("password"), 5L);
         adminRepository.save(admin);

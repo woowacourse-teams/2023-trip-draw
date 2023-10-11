@@ -35,7 +35,7 @@ class PasswordEncoderTest {
     }
 
     @Test
-    void 동일한_비밀번호이_아니라면_거짓을_반환한다() {
+    void 동일한_비밀번호가_아니라면_거짓을_반환한다() {
         // given
         String password = "hello";
         String encodedPassword = passwordEncoder.encode(password);
