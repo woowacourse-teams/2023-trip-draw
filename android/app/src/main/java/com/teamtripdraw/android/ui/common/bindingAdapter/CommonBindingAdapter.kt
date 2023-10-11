@@ -5,8 +5,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 
-@BindingAdapter("app:setMessageVisibility")
-fun TextView.setMessageVisibility(isVisible: Boolean) {
+@BindingAdapter("app:setNoItemsMessageVisibility")
+fun TextView.setNoItemsMessageVisibility(isVisible: Boolean) {
     if (isVisible) {
         this.visibility = View.VISIBLE
     } else {

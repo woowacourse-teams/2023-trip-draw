@@ -82,13 +82,16 @@ class AllPostsFragment : Fragment() {
 
     private fun checkFetchPostsCondition(layoutManager: LinearLayoutManager, lastPosition: Int) {
         if (viewModel.hasNextPage &&
-            !viewModel.isAddLoading &&
-            layoutManager.itemCount <= lastPosition + LOAD_THRESHOLD &&
-            !binding.rvAllPosts.canScrollVertically(DOWNWARD_DIRECTION)
+            viewModel.isAddLoading.not() &&
+            checkLoadThreshold(layoutManager, lastPosition) &&
+            binding.rvAllPosts.canScrollVertically(DOWNWARD_DIRECTION).not()
         ) {
             viewModel.fetchPosts()
         }
     }
+
+    private fun checkLoadThreshold(layoutManager: LinearLayoutManager, lastPosition: Int) =
+        layoutManager.itemCount <= lastPosition + LOAD_THRESHOLD
 
     override fun onResume() {
         super.onResume()

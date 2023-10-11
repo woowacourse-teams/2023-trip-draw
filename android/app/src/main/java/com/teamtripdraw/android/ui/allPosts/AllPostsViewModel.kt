@@ -48,7 +48,7 @@ class AllPostsViewModel @Inject constructor(
         private set
 
     fun fetchPosts() {
-        if (!posts.value!!.isEmpty && hasNextPage) {
+        if (posts.value!!.isEmpty.not() && hasNextPage) {
             isAddLoading = true
             addLoadingItem()
         }
@@ -61,7 +61,7 @@ class AllPostsViewModel @Inject constructor(
 
     private fun getPosts() {
         viewModelScope.launch {
-            postRepository.getAllPosts(lastViewedId = lastId, limit = LIMIT_SIZE)
+            postRepository.getAllPosts(lastViewedId = lastId, limit = PAGE_ITEM_SIZE)
                 .onSuccess { posts ->
                     setLastItemId(posts)
                     setHasNextPage(posts)
@@ -79,7 +79,7 @@ class AllPostsViewModel @Inject constructor(
     }
 
     private fun setHasNextPage(posts: List<PostOfAll>) {
-        if (posts.size < LIMIT_SIZE && lastId != null) hasNextPage = false
+        if (posts.size < PAGE_ITEM_SIZE && lastId != null) hasNextPage = false
     }
 
     private fun fetchPosts(posts: List<PostOfAll>) {
@@ -94,6 +94,6 @@ class AllPostsViewModel @Inject constructor(
     }
 
     companion object {
-        private const val LIMIT_SIZE = 20
+        private const val PAGE_ITEM_SIZE = 20
     }
 }
