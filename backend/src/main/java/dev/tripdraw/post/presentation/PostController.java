@@ -79,8 +79,7 @@ public class PostController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<PostCreateResponse> create(
-            @Auth
-            LoginUser loginUser,
+            @Auth LoginUser loginUser,
 
             @Parameter(description = "감상 정보를 담은 JSON 객체")
             @Valid
@@ -102,10 +101,22 @@ public class PostController {
     )
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponse> read(
-            @Auth LoginUser loginUser,
             @PathVariable Long postId
     ) {
         PostResponse response = postService.read(postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "위치정보로 감상 조회 API", description = "특정한 1개의 감상을 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "위치정보로 감상 조회 성공."
+    )
+    @GetMapping("/points/{pointId}/post")
+    public ResponseEntity<PostResponse> readByPointId(
+            @PathVariable Long pointId
+    ) {
+        PostResponse response = postService.readByPointId(pointId);
         return ResponseEntity.ok(response);
     }
 
@@ -116,7 +127,6 @@ public class PostController {
     )
     @GetMapping("/trips/{tripId}/posts")
     public ResponseEntity<PostsResponse> readAllPostsOfTrip(
-            @Auth LoginUser loginUser,
             @PathVariable Long tripId
     ) {
         PostsResponse response = postService.readAllByTripId(tripId);
@@ -130,7 +140,6 @@ public class PostController {
     )
     @GetMapping("/posts")
     public ResponseEntity<PostsSearchResponse> readAllPosts(
-            @Auth LoginUser loginUser,
             PostSearchRequest postSearchRequest
     ) {
         PostsSearchResponse response = postService.readAll(postSearchRequest);
@@ -147,8 +156,7 @@ public class PostController {
             consumes = MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<Void> update(
-            @Auth
-            LoginUser loginUser,
+            @Auth LoginUser loginUser,
 
             @PathVariable Long postId,
 
