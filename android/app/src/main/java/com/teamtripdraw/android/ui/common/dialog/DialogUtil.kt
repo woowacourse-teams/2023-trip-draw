@@ -31,7 +31,6 @@ class DialogUtil(
         super.onViewCreated(view, savedInstanceState)
 
         isCancelable = true
-        setLayout()
         setMessage()
         setConfirmText()
         setConfirmTextColor()
@@ -41,19 +40,7 @@ class DialogUtil(
 
     override fun onStart() {
         super.onStart()
-        setLayout()
-    }
-
-    private fun setLayout() {
-        requireNotNull(dialog).apply {
-            requireNotNull(window).apply {
-                setLayout(
-                    (resources.displayMetrics.widthPixels * DIALOG_WINDOW_SIZE).toInt(),
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                )
-                setBackgroundDrawableResource(R.color.td_white)
-            }
-        }
+        ResponsiveUiDialogSizeAdjuster().adjustSize(dialog, resources)
     }
 
     private fun setMessage() {
@@ -106,7 +93,6 @@ class DialogUtil(
     }
 
     companion object {
-        private const val DIALOG_WINDOW_SIZE = 0.85
         const val DELETE_CHECK = 0
         const val SAVE_CHECK = 1
         const val LOGOUT_CHECK = 2
