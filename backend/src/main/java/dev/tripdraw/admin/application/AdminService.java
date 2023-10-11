@@ -38,7 +38,7 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public AdminTripResponse readTripById(Long tripId) {
+    public AdminTripResponse readTrip(Long tripId) {
         return AdminTripResponse.from(tripRepository.getById(tripId));
     }
 
@@ -57,7 +57,7 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public AdminPostResponse readPostById(Long postId) {
+    public AdminPostResponse readPost(Long postId) {
         return AdminPostResponse.from(postRepository.getByPostId(postId));
     }
 

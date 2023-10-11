@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Entity
 public class Admin extends BaseEntity {
 
-    private static final int MIN_FAIL_COUNT = 5;
+    private static final long MAX_FAIL_COUNT = 5;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -53,7 +53,7 @@ public class Admin extends BaseEntity {
     }
 
     public void validateFailCount() {
-        if (failCount >= MIN_FAIL_COUNT) {
+        if (failCount >= MAX_FAIL_COUNT) {
             throw new AdminException(ADMIN_AUTH_FAIL);
         }
     }

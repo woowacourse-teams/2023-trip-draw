@@ -77,7 +77,7 @@ class AdminServiceTest {
         Trip trip = tripRepository.save(새로운_여행(member));
 
         // when
-        AdminTripResponse response = adminService.readTripById(trip.id());
+        AdminTripResponse response = adminService.readTrip(trip.id());
 
         // then
         assertThat(response).isEqualTo(AdminTripResponse.from(trip));
@@ -124,7 +124,7 @@ class AdminServiceTest {
         pointRepository.save(point);
 
         // when
-        AdminPostResponse response = adminService.readPostById(post.id());
+        AdminPostResponse response = adminService.readPost(post.id());
 
         // then
         assertThat(response)

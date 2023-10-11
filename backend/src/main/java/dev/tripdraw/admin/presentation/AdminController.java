@@ -43,8 +43,8 @@ public class AdminController {
     }
 
     @GetMapping("/trips/{tripId}")
-    public ResponseEntity<AdminTripResponse> readTrips(@PathVariable("tripId") Long tripId) {
-        return ResponseEntity.ok(adminService.readTripById(tripId));
+    public ResponseEntity<AdminTripResponse> readTrip(@PathVariable("tripId") Long tripId) {
+        return ResponseEntity.ok(adminService.readTrip(tripId));
     }
 
     @DeleteMapping("/trips/{tripId}")
@@ -59,8 +59,8 @@ public class AdminController {
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<AdminPostResponse> readPosts(@PathVariable("postId") Long postId) {
-        return ResponseEntity.ok(adminService.readPostById(postId));
+    public ResponseEntity<AdminPostResponse> readPost(@PathVariable("postId") Long postId) {
+        return ResponseEntity.ok(adminService.readPost(postId));
     }
 
     @DeleteMapping("/posts/{postId}")
