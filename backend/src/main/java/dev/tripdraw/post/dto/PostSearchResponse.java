@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public record PostSearchResponse(
         Long postId,
+        String memberNickname,
         Long tripId,
         String title,
         String address,
@@ -17,9 +18,10 @@ public record PostSearchResponse(
 
     private static final String EMPTY_IMAGE_URL = "";
 
-    public static PostSearchResponse from(Post post) {
+    public static PostSearchResponse from(Post post, String memberNickname) {
         return new PostSearchResponse(
                 post.id(),
+                memberNickname,
                 post.tripId(),
                 post.title(),
                 post.address(),

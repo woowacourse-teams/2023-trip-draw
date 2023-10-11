@@ -65,13 +65,14 @@ class TripControllerTest extends ControllerTest {
     private Trip huchuTrip;
     private String reoToken;
     private Trip reoTrip;
+    private Member reo;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
 
         Member huchu = memberRepository.save(새로운_사용자("통후추"));
-        Member reo = memberRepository.save(새로운_사용자("리오"));
+        reo = memberRepository.save(새로운_사용자("리오"));
         huchuToken = jwtTokenProvider.generateAccessToken(huchu.id().toString());
         reoToken = jwtTokenProvider.generateAccessToken(reo.id().toString());
         huchuTrip = tripRepository.save(새로운_여행(huchu));
@@ -208,6 +209,9 @@ class TripControllerTest extends ControllerTest {
             softly.assertThat(tripsSearchResponse.trips())
                     .extracting(TripSearchResponse::tripId)
                     .containsExactly(리오_서울_2023_1_1_일);
+            softly.assertThat(tripsSearchResponse.trips())
+                    .extracting(TripSearchResponse::memberNickname)
+                    .containsExactly(reo.nickname());
         });
     }
 }

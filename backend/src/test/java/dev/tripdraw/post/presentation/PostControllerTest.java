@@ -27,6 +27,7 @@ import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.post.dto.PostsSearchResponse;
@@ -498,7 +499,10 @@ class PostControllerTest extends ControllerTest {
             softly.assertThat(postsSearchResponse.posts())
                     .usingRecursiveComparison()
                     .ignoringFieldsOfTypes(LocalDateTime.class)
-                    .isEqualTo(List.of(PostResponse.from(jejuAugustPost), PostResponse.from(jejuJulyPost)));
+                    .isEqualTo(List.of(
+                            PostSearchResponse.from(jejuAugustPost, member.nickname()),
+                            PostSearchResponse.from(jejuJulyPost, member.nickname())
+                    ));
         });
     }
 

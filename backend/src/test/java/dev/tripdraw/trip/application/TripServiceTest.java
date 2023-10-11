@@ -24,6 +24,7 @@ import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.dto.TripCreateResponse;
 import dev.tripdraw.trip.dto.TripResponse;
 import dev.tripdraw.trip.dto.TripSearchRequest;
+import dev.tripdraw.trip.dto.TripSearchResponse;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
@@ -64,14 +65,14 @@ class TripServiceTest {
     private PostRepository postRepository;
 
     private Trip trip;
-    private Point point;
+    private Member member;
     private LoginUser loginUser;
 
     @BeforeEach
     void setUp() {
-        Member member = memberRepository.save(사용자());
+        member = memberRepository.save(사용자());
         trip = tripRepository.save(새로운_여행(member));
-        point = pointRepository.save(새로운_위치정보(trip));
+        Point point = pointRepository.save(새로운_위치정보(trip));
         trip.add(point);
         loginUser = new LoginUser(member.id());
         postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
@@ -120,7 +121,7 @@ class TripServiceTest {
         assertThat(tripsSearchResponse)
                 .usingRecursiveComparison()
                 .ignoringFieldsOfTypes(LocalDateTime.class)
-                .isEqualTo(TripsSearchResponse.of(List.of(trip), false));
+                .isEqualTo(TripsSearchResponse.of(List.of(TripSearchResponse.from(trip, member.nickname())), false));
     }
 
     @Test
