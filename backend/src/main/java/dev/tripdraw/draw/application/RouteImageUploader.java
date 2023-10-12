@@ -1,10 +1,12 @@
 package dev.tripdraw.draw.application;
 
 import static dev.tripdraw.draw.exception.DrawExceptionType.IMAGE_SAVE_FAIL;
+import static dev.tripdraw.file.domain.FileType.IMAGE_PNG;
 
 import dev.tripdraw.draw.exception.DrawException;
+import dev.tripdraw.file.application.FileUploader;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 import javax.imageio.ImageIO;
@@ -14,34 +16,32 @@ import org.springframework.stereotype.Component;
 @Component
 public class RouteImageUploader {
 
-    private static final String ROUTE_IMAGE_FORMAT = "png";
+    private static final String DOT = ".";
 
-    private final String domain;
-    private final String base;
-    private final String route;
+    private final String root;
+    private final String directory;
+    private final FileUploader fileUploader;
 
     public RouteImageUploader(
-            @Value("${file.common.domain}") String domain,
-            @Value("${file.common.root}") String base,
-            @Value("${file.route.directory}") String route
+            @Value("${file.common.root}") String root,
+            @Value("${file.route.directory}") String directory,
+            FileUploader fileUploader
     ) {
-        this.domain = domain;
-        this.base = base;
-        this.route = route;
+        this.root = root;
+        this.directory = directory;
+        this.fileUploader = fileUploader;
     }
 
     public String upload(BufferedImage bufferedImage) {
-        String imageName = generateImageName();
-        File file = new File(base + route + imageName);
+        String fileName = UUID.randomUUID() + DOT + IMAGE_PNG.extension();
+        String path = root + directory + fileName;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
         try {
-            ImageIO.write(bufferedImage, ROUTE_IMAGE_FORMAT, file);
-            return domain + route + imageName;
+            ImageIO.write(bufferedImage, IMAGE_PNG.extension(), byteArrayOutputStream);
+            return fileUploader.upload(path, ImageMultipartFile.of(byteArrayOutputStream, fileName));
         } catch (IOException e) {
             throw new DrawException(IMAGE_SAVE_FAIL);
         }
-    }
-
-    private String generateImageName() {
-        return UUID.randomUUID() + "." + ROUTE_IMAGE_FORMAT;
     }
 }
