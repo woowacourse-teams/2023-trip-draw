@@ -38,4 +38,5 @@ fun DataTripOfAll.toDomain(): TripOfAll =
         routeImageUrl = routeImageUrl,
         startTime = LocalDateTime.parse(startTime),
         endTime = LocalDateTime.parse(endTime),
+        memberNickname = memberNickname,
     )

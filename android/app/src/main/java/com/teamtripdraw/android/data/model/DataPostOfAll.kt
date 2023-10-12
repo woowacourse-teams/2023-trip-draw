@@ -9,4 +9,5 @@ data class DataPostOfAll(
     val postImageUrl: String,
     val routeImageUrl: String,
     val recordedAt: String,
+    val memberNickname: String,
 )

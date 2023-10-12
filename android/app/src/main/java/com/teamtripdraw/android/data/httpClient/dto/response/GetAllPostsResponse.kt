@@ -29,4 +29,6 @@ data class Post(
     val tripId: Long,
     @Json(name = "writing")
     val writing: String,
+    @Json(name = "memberNickname")
+    val memberNickname: String,
 )

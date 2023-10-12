@@ -25,4 +25,6 @@ data class Trip(
     val startTime: String,
     @Json(name = "tripId")
     val tripId: Long,
+    @Json(name = "memberNickname")
+    val memberNickname: String,
 )

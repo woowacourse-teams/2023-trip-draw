@@ -54,6 +54,7 @@ fun GetAllTripsResponse.toData(): List<DataTripOfAll> {
             routeImageUrl = it.routeImageUrl,
             startTime = it.startTime,
             endTime = it.endTime,
+            memberNickname = it.memberNickname,
         )
     }
 }

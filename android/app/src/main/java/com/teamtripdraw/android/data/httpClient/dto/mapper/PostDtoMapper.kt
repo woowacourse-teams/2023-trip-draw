@@ -82,6 +82,7 @@ fun GetAllPostsResponse.toData(): List<DataPostOfAll> {
             postImageUrl = it.postImageUrl,
             routeImageUrl = it.routeImageUrl,
             recordedAt = it.recordedAt,
+            memberNickname = it.memberNickname,
         )
     }
     return posts
