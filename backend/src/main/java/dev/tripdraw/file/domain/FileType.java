@@ -2,17 +2,20 @@ package dev.tripdraw.file.domain;
 
 import static dev.tripdraw.file.exception.FileIOExceptionType.INVALID_CONTENT_TYPE;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 import dev.tripdraw.file.exception.FileIOException;
 import java.util.Arrays;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.springframework.http.MediaType;
 
 @Accessors(fluent = true)
 @Getter
 public enum FileType {
-    IMAGE(IMAGE_JPEG_VALUE, ".jpg"),
+    IMAGE_JPEG(IMAGE_JPEG_VALUE, MediaType.IMAGE_JPEG.getSubtype()),
+    IMAGE_PNG(IMAGE_PNG_VALUE, MediaType.IMAGE_PNG.getSubtype()),
     ;
 
     private final String contentType;

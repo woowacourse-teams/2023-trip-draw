@@ -1,6 +1,6 @@
 package dev.tripdraw.file.application;
 
-import static dev.tripdraw.file.domain.FileType.IMAGE;
+import static dev.tripdraw.file.domain.FileType.IMAGE_JPEG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +45,7 @@ class PostFileUploaderTest {
     @Test
     void 파일을_업로드하면_URL을_반환한다() throws IOException {
         // given
-        given(multipartFile.getContentType()).willReturn(IMAGE.contentType());
+        given(multipartFile.getContentType()).willReturn(IMAGE_JPEG.contentType());
         given(fileUploader.upload(anyString(), any(MultipartFile.class)))
                 .willReturn("https://domain.com/root/directory/fileName");
 
@@ -61,7 +61,7 @@ class PostFileUploaderTest {
     @Test
     void 파일을_업로드한다() throws IOException {
         // given
-        given(multipartFile.getContentType()).willReturn(IMAGE.contentType());
+        given(multipartFile.getContentType()).willReturn(IMAGE_JPEG.contentType());
 
         PostFileUploader postFileUploader = new PostFileUploader(postFilePath, fileUploader);
 
@@ -77,7 +77,7 @@ class PostFileUploaderTest {
     @Test
     void 파일을_업로드할_때_실패하면_예외를_발생시킨다() throws IOException {
         // given
-        given(multipartFile.getContentType()).willReturn(IMAGE.contentType());
+        given(multipartFile.getContentType()).willReturn(IMAGE_JPEG.contentType());
         given(fileUploader.upload(anyString(), any(MultipartFile.class))).willThrow(new IOException());
 
         PostFileUploader postFileUploader = new PostFileUploader(postFilePath, fileUploader);

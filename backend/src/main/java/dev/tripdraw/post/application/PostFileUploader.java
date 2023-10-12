@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class PostFileUploader {
 
+    private static final String DOT = ".";
+
     private final PostFilePath postFilePath;
     private final FileUploader fileUploader;
 
@@ -28,7 +30,7 @@ public class PostFileUploader {
             return null;
         }
         FileType type = FileType.from(file.getContentType());
-        String fileName = UUID.randomUUID() + type.extension();
+        String fileName = UUID.randomUUID() + DOT + type.extension();
         String path = postFilePath.getPath(type) + fileName;
 
         return fileUpload(path, file);

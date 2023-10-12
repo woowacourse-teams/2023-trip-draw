@@ -1,6 +1,6 @@
 package dev.tripdraw.post.application;
 
-import static dev.tripdraw.file.domain.FileType.IMAGE;
+import static dev.tripdraw.file.domain.FileType.IMAGE_JPEG;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -19,7 +19,7 @@ class PostFilePathTest {
         PostFilePath postFilePath = new PostFilePath(root, directory);
 
         // when
-        String path = postFilePath.getPath(IMAGE);
+        String path = postFilePath.getPath(IMAGE_JPEG);
 
         // then
         assertThat(path).isEqualTo("root/directory/");
