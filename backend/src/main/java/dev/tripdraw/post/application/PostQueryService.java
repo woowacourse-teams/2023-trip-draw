@@ -1,13 +1,12 @@
 package dev.tripdraw.post.application;
 
 import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.dto.PostSearchConditions;
-import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.query.PostCustomRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class PostQueryService {
@@ -19,7 +18,7 @@ public class PostQueryService {
     }
 
     @Transactional(readOnly = true)
-    public List<Post> findAllByConditions(PostSearchConditions conditions, PostSearchPaging paging) {
+    public List<Post> readAllByConditions(PostSearchConditions conditions, PostPaging paging) {
         return postCustomRepository.findAllByConditions(conditions, paging);
     }
 }
