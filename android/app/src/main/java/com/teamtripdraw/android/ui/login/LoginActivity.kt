@@ -18,8 +18,6 @@ import com.teamtripdraw.android.support.framework.presentation.loginManager.Kaka
 import com.teamtripdraw.android.support.framework.presentation.loginManager.SocialLoginManager
 import com.teamtripdraw.android.ui.main.MainActivity
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
-import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
-import com.teamtripdraw.android.ui.policy.TermsOfServiceActivity
 import com.teamtripdraw.android.ui.signUp.NicknameSetupActivity
 import dagger.hilt.android.AndroidEntryPoint
 
