@@ -103,7 +103,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider_nickname_layout" />
 
         <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_open_source_license"
+            android:id="@+id/divider_terms_of_service"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/margin_default"
@@ -111,6 +111,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_my_trip_history" />
+
+        <TextView
+            android:id="@+id/btn_terms_of_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/td_white"
+            android:onClick="@{() -> myPageViewModel.openTermsOfService()}"
+            android:padding="@dimen/margin_default"
+            android:text="@string/btn_terms_of_service"
+            android:textAppearance="@style/subtitle_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_terms_of_service" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_open_source_license"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:dividerColor="@color/td_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_terms_of_service" />
 
         <TextView
             android:id="@+id/btn_open_source_license"

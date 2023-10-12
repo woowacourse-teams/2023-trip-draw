@@ -78,6 +78,7 @@
     <string name="tv_nickname_title">닉네임</string>
     <string name="tv_my_trip_history">나의 여행</string>
     <string name="btn_privacy_policy">개인정보 처리방침</string>
+    <string name="btn_terms_of_service">이용약관</string>
     <string name="btn_open_source_license">오픈소스 라이선스</string>
     <string name="btn_version_info">버전정보</string>
     <string name="btn_logout">로그아웃</string>
