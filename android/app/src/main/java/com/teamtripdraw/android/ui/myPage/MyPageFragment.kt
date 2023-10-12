@@ -47,6 +47,7 @@ class MyPageFragment : Fragment() {
 
     private fun initObserver() {
         initOpenTripHistoryObserver()
+        initOpenTermsOfServiceObserver()
         initOpenOpenSourceLicenseObserver()
         initOpenPrivacyPolicyObserver()
         initLogOutEventObserver()
@@ -57,6 +58,15 @@ class MyPageFragment : Fragment() {
     private fun initOpenTripHistoryObserver() {
         viewModel.openTripHistoryEvent.observe(viewLifecycleOwner) {
             if (it) startActivity(HistoryActivity.getIntent(requireContext()))
+        }
+    }
+
+    private fun initOpenTermsOfServiceObserver() {
+        viewModel.openTermsOfService.observe(viewLifecycleOwner) {
+            if (it.not()) return@observe
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.TERMS_OF_SERVICE_URL))
+            startActivity(browserIntent)
         }
     }
 
