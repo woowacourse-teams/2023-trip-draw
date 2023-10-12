@@ -7,11 +7,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.dto.PostSearchConditions;
 import dev.tripdraw.post.dto.PostSearchPaging;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
@@ -83,5 +82,15 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         }
 
         return post.address.like(address + "%");
+    }
+
+    @Override
+    public List<Post> findAll(PostSearchPaging paging) {
+        return jpaQueryFactory.selectFrom(post)
+                .leftJoin(post.point).fetchJoin()
+                .where(postIdLt(paging.lastViewedId()))
+                .limit(paging.limit().longValue() + 1L)
+                .orderBy(post.id.desc())
+                .fetch();
     }
 }

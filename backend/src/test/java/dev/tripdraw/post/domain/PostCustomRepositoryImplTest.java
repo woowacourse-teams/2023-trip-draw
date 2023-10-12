@@ -14,6 +14,7 @@ import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.query.PostCustomRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -64,6 +65,25 @@ class PostCustomRepositoryImplTest {
 
         // then
         assertThat(posts).containsExactly(seoulJulyPost, jejuJulyPost);
+    }
+
+    @Test
+    void 감상을_전체_조회한다() {
+        // given
+        Member member = memberRepository.save(사용자());
+        for (int i = 1; i <= 5; i++) {
+            Point point = pointRepository.save(새로운_위치정보(LocalDateTime.now()));
+            postRepository.save(새로운_감상(point, member.id(), "주소 " + i));
+        }
+        PostSearchPaging postSearchPaging = new PostSearchPaging(null, 3);
+
+        // when
+        List<Post> posts = postCustomRepository.findAll(postSearchPaging);
+
+        // then
+        assertThat(posts)
+                .extracting(Post::address)
+                .containsExactly("주소 5", "주소 4", "주소 3", "주소 2");
     }
 }
 

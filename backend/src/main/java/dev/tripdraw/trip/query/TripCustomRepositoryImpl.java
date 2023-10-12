@@ -74,4 +74,14 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
         }
         return post.address.like(address + "%");
     }
+
+    @Override
+    public List<Trip> findAll(TripPaging tripPaging) {
+        return query
+                .selectFrom(trip)
+                .where(tripIdLt(tripPaging.lastViewedId()))
+                .orderBy(trip.id.desc())
+                .limit(tripPaging.limit().longValue() + 1L)
+                .fetch();
+    }
 }

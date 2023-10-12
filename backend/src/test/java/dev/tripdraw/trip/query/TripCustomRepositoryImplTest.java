@@ -1,6 +1,7 @@
 package dev.tripdraw.trip.query;
 
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
+import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.addressTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.daysOfWeekTripSearchConditions;
 import static dev.tripdraw.test.fixture.TripSearchConditionsFixture.emptyTripSearchConditions;
@@ -422,6 +423,23 @@ class TripCustomRepositoryImplTest {
 
             // then
             assertThat(trips).isEmpty();
+        }
+
+        @Test
+        void 여행을_전체_조회한다() {
+            // given
+            for (int i = 1; i <= 5; i++) {
+                tripRepository.save(새로운_여행(member, "여행 " + i));
+            }
+            TripPaging tripPaging = new TripPaging(null, 3);
+
+            // when
+            List<Trip> trips = tripCustomRepository.findAll(tripPaging);
+
+            // then
+            assertThat(trips)
+                    .extracting(Trip::nameValue)
+                    .containsExactly("여행 5", "여행 4", "여행 3", "여행 2");
         }
 
         private Trip jeju_2023_2_1_Wed() {
