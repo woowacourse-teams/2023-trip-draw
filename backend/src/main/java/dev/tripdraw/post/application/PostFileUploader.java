@@ -13,12 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Component
-public class PostFileManager {
+public class PostFileUploader {
 
     private final PostFilePath postFilePath;
     private final FileUploader fileUploader;
 
-    public PostFileManager(PostFilePath postFilePath, FileUploader fileUploader) {
+    public PostFileUploader(PostFilePath postFilePath, FileUploader fileUploader) {
         this.postFilePath = postFilePath;
         this.fileUploader = fileUploader;
     }

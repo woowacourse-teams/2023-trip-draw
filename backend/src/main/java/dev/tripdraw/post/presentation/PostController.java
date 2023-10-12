@@ -8,7 +8,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import dev.tripdraw.common.auth.Auth;
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.common.swagger.SwaggerAuthorizationRequired;
-import dev.tripdraw.post.application.PostService;
+import dev.tripdraw.post.application.PostServiceFacade;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
@@ -40,7 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class PostController {
 
-    private final PostService postService;
+    private final PostServiceFacade postServiceFacade;
 
     @Operation(summary = "현재 위치에 대한 감상 생성 API", description = "현재 위치에 대한 감상을 생성합니다.")
     @ApiResponse(
@@ -64,7 +64,7 @@ public class PostController {
             @RequestPart(value = "file", required = false)
             MultipartFile file
     ) {
-        PostCreateResponse response = postService.addAtCurrentPoint(loginUser, postAndPointCreateRequest, file);
+        PostCreateResponse response = postServiceFacade.addAtCurrentPoint(loginUser, postAndPointCreateRequest, file);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -91,7 +91,7 @@ public class PostController {
             @RequestParam(value = "file", required = false)
             MultipartFile file
     ) {
-        PostCreateResponse response = postService.addAtExistingLocation(loginUser, postRequest, file);
+        PostCreateResponse response = postServiceFacade.addAtExistingLocation(loginUser, postRequest, file);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -105,7 +105,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             @PathVariable Long postId
     ) {
-        PostResponse response = postService.read(postId);
+        PostResponse response = postServiceFacade.read(postId);
         return ResponseEntity.ok(response);
     }
 
@@ -119,7 +119,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             @PathVariable Long tripId
     ) {
-        PostsResponse response = postService.readAllByTripId(tripId);
+        PostsResponse response = postServiceFacade.readAllByTripId(tripId);
         return ResponseEntity.ok(response);
     }
 
@@ -133,7 +133,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             PostSearchRequest postSearchRequest
     ) {
-        PostsSearchResponse response = postService.readAll(postSearchRequest);
+        PostsSearchResponse response = postServiceFacade.readAll(postSearchRequest);
         return ResponseEntity.ok(response);
     }
 
@@ -159,7 +159,7 @@ public class PostController {
             @Parameter(description = "감상에 등록할 이미지 파일")
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        postService.update(loginUser, postId, postUpdateRequest, file);
+        postServiceFacade.update(loginUser, postId, postUpdateRequest, file);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
@@ -173,7 +173,7 @@ public class PostController {
             @Auth LoginUser loginUser,
             @PathVariable Long postId
     ) {
-        postService.delete(loginUser, postId);
+        postServiceFacade.delete(loginUser, postId);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 }

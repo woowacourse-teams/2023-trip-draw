@@ -5,20 +5,17 @@ import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMI
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+@RequiredArgsConstructor
 @Component
 public class TripUpdateEventHandler {
 
     private final RouteImageGenerator routeImageGenerator;
     private final TripRepository tripRepository;
-
-    public TripUpdateEventHandler(RouteImageGenerator routeImageGenerator, TripRepository tripRepository) {
-        this.routeImageGenerator = routeImageGenerator;
-        this.tripRepository = tripRepository;
-    }
 
     @Async
     @TransactionalEventListener(phase = AFTER_COMMIT)

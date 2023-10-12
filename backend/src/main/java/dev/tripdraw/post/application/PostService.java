@@ -5,7 +5,6 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Transactional
@@ -37,53 +35,39 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostService {
 
     private final PostQueryService postQueryService;
-    private final PostFileManager postFileManager;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public PostCreateResponse addAtCurrentPoint(
-            LoginUser loginUser,
+            Long memberId,
             PostAndPointCreateRequest postAndPointCreateRequest,
-            MultipartFile file
+            Trip trip,
+            String imageUrl
     ) {
-        Long memberId = loginUser.memberId();
-
-        Trip trip = tripRepository.getById(postAndPointCreateRequest.tripId());
-        trip.validateAuthorization(memberId);
         Point point = pointRepository.save(postAndPointCreateRequest.toPoint(trip));
-
         Post post = postAndPointCreateRequest.toPost(memberId, point);
-        uploadImage(file, post, trip);
+
+        post.changePostImageUrl(imageUrl);
+        trip.changeImageUrl(imageUrl);
         Post savedPost = postRepository.save(post);
 
         applicationEventPublisher.publishEvent(new PostCreateEvent(post.id(), trip.id()));
         return PostCreateResponse.from(savedPost);
     }
 
-    private void uploadImage(MultipartFile file, Post post, Trip trip) {
-        String imageUrl = postFileManager.upload(file);
-        if (imageUrl == null) {
-            return;
-        }
+    public PostCreateResponse addAtExistingLocation(
+            Long memberId,
+            PostRequest postRequest,
+            Trip trip,
+            String imageUrl
+    ) {
+        Point point = pointRepository.getById(postRequest.pointId());
+        Post post = postRequest.toPost(memberId, point);
+
         post.changePostImageUrl(imageUrl);
         trip.changeImageUrl(imageUrl);
-    }
-
-    public PostCreateResponse addAtExistingLocation(
-            LoginUser loginUser,
-            PostRequest postRequest,
-            MultipartFile file
-    ) {
-        Long memberId = loginUser.memberId();
-
-        Trip trip = tripRepository.getById(postRequest.tripId());
-        trip.validateAuthorization(memberId);
-        Point point = pointRepository.getById(postRequest.pointId());
-
-        Post post = postRequest.toPost(memberId, point);
-        uploadImage(file, post, trip);
         Post savedPost = postRepository.save(post);
 
         applicationEventPublisher.publishEvent(new PostCreateEvent(post.id(), trip.id()));
@@ -107,25 +91,6 @@ public class PostService {
                 .collect(collectingAndThen(toList(), PostsResponse::from));
     }
 
-    public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
-        Long memberId = loginUser.memberId();
-
-        Post post = postRepository.getByPostId(postId);
-        post.validateAuthorization(memberId);
-        Trip trip = tripRepository.getById(post.tripId());
-        trip.validateAuthorization(memberId);
-
-        post.changeTitle(postUpdateRequest.title());
-        post.changeWriting(postUpdateRequest.writing());
-        uploadImage(file, post, trip);
-    }
-
-    public void delete(LoginUser loginUser, Long postId) {
-        Post post = postRepository.getByPostId(postId);
-        post.validateAuthorization(loginUser.memberId());
-        postRepository.deleteById(postId);
-    }
-
     @Transactional(readOnly = true)
     public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
         PostSearchPaging postSearchPaging = postSearchRequest.toPostSearchPaging();
@@ -145,6 +110,31 @@ public class PostService {
         }
 
         return PostsSearchResponse.of(postSearchResponses, hasNextPage);
+    }
+
+    @Transactional(readOnly = true)
+    public Trip getAuthorizedTrip(Long memberId, Long tripId) {
+        Trip trip = tripRepository.getById(tripId);
+        trip.validateAuthorization(memberId);
+        return trip;
+    }
+
+    @Transactional(readOnly = true)
+    public Post getAuthroizedPost(Long memberId, Long postId) {
+        Post post = postRepository.getByPostId(postId);
+        post.validateAuthorization(memberId);
+        return post;
+    }
+
+    public void update(PostUpdateRequest postUpdateRequest, Post post, Trip trip, String imageUrl) {
+        post.changeTitle(postUpdateRequest.title());
+        post.changeWriting(postUpdateRequest.writing());
+        post.changePostImageUrl(imageUrl);
+        trip.changeImageUrl(imageUrl);
+    }
+
+    public void delete(Post post) {
+        postRepository.delete(post);
     }
 }
 

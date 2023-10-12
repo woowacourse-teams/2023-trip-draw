@@ -10,8 +10,8 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 
 import dev.tripdraw.file.exception.FileIOException;
-import dev.tripdraw.post.application.PostFileManager;
 import dev.tripdraw.post.application.PostFilePath;
+import dev.tripdraw.post.application.PostFileUploader;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
-class PostFileManagerTest {
+class PostFileUploaderTest {
 
     @Mock
     private MultipartFile multipartFile;
@@ -49,10 +49,10 @@ class PostFileManagerTest {
         given(fileUploader.upload(anyString(), any(MultipartFile.class)))
                 .willReturn("https://domain.com/root/directory/fileName");
 
-        PostFileManager postFileManager = new PostFileManager(postFilePath, fileUploader);
+        PostFileUploader postFileUploader = new PostFileUploader(postFilePath, fileUploader);
 
         // when
-        String url = postFileManager.upload(multipartFile);
+        String url = postFileUploader.upload(multipartFile);
 
         // then
         assertThat(url).isEqualTo("https://domain.com/root/directory/fileName");
@@ -63,10 +63,10 @@ class PostFileManagerTest {
         // given
         given(multipartFile.getContentType()).willReturn(IMAGE.contentType());
 
-        PostFileManager postFileManager = new PostFileManager(postFilePath, fileUploader);
+        PostFileUploader postFileUploader = new PostFileUploader(postFilePath, fileUploader);
 
         // when
-        postFileManager.upload(multipartFile);
+        postFileUploader.upload(multipartFile);
 
         // then
         then(fileUploader)
@@ -80,10 +80,10 @@ class PostFileManagerTest {
         given(multipartFile.getContentType()).willReturn(IMAGE.contentType());
         given(fileUploader.upload(anyString(), any(MultipartFile.class))).willThrow(new IOException());
 
-        PostFileManager postFileManager = new PostFileManager(postFilePath, fileUploader);
+        PostFileUploader postFileUploader = new PostFileUploader(postFilePath, fileUploader);
 
         // expect
-        assertThatThrownBy(() -> postFileManager.upload(multipartFile))
+        assertThatThrownBy(() -> postFileUploader.upload(multipartFile))
                 .isInstanceOf(FileIOException.class)
                 .hasMessage("파일 저장에 실패했습니다.");
     }
