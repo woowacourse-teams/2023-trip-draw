@@ -6,14 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.teamtripdraw.android.databinding.ItemLoadingBinding
-import com.teamtripdraw.android.ui.model.UiPostOfAll
+import com.teamtripdraw.android.ui.model.allPosts.UiItemView
+import com.teamtripdraw.android.ui.model.allPosts.UiLoading
+import com.teamtripdraw.android.ui.model.allPosts.UiPostOfAll
 
 class AllPostsAdapter(
     private val openPostEvent: (Long) -> Unit,
-) : ListAdapter<UiPostOfAll, RecyclerView.ViewHolder>(diffUtil) {
+) : ListAdapter<UiItemView, RecyclerView.ViewHolder>(diffUtil) {
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position).postId == LOADING_ITEM_ID) {
+        return if (getItem(position) is UiLoading) {
             LOADING_VIEW
         } else {
             POST_VIEW
@@ -28,27 +30,32 @@ class AllPostsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is AllPostsViewHolder) holder.bind(getItem(position))
+        if (holder is AllPostsViewHolder) holder.bind(getItem(position) as UiPostOfAll)
     }
 
     companion object {
-        private const val LOADING_ITEM_ID = -1L
         private const val LOADING_VIEW = 1
         private const val POST_VIEW = 2
 
-        val diffUtil = object : DiffUtil.ItemCallback<UiPostOfAll>() {
+        val diffUtil = object : DiffUtil.ItemCallback<UiItemView>() {
             override fun areItemsTheSame(
-                oldItem: UiPostOfAll,
-                newItem: UiPostOfAll,
+                oldItem: UiItemView,
+                newItem: UiItemView,
             ): Boolean {
-                return oldItem.postId == newItem.postId
+                if (oldItem is UiPostOfAll && newItem is UiPostOfAll) {
+                    return oldItem.postId == newItem.postId
+                }
+                return true
             }
 
             override fun areContentsTheSame(
-                oldItem: UiPostOfAll,
-                newItem: UiPostOfAll,
+                oldItem: UiItemView,
+                newItem: UiItemView,
             ): Boolean {
-                return oldItem == newItem
+                if (oldItem is UiPostOfAll && newItem is UiPostOfAll) {
+                    return oldItem == newItem
+                }
+                return true
             }
         }
     }

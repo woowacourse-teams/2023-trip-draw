@@ -11,7 +11,7 @@
 
         <variable
             name="postItem"
-            type="com.teamtripdraw.android.ui.model.UiPostOfAll" />
+            type="com.teamtripdraw.android.ui.model.allPosts.UiPostOfAll" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

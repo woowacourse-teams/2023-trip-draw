@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamtripdraw.android.databinding.ItemAllPostsBinding
-import com.teamtripdraw.android.ui.model.UiPostOfAll
+import com.teamtripdraw.android.ui.model.allPosts.UiPostOfAll
 
 class AllPostsViewHolder(
     private val binding: ItemAllPostsBinding,
