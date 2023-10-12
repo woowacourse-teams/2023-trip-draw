@@ -1,11 +1,22 @@
 package dev.tripdraw.trip.query;
 
+import java.util.Objects;
+
 public record TripPaging(Long lastViewedId, Integer limit) {
+
+    private static final int DEFAULT_LIMIT = 20;
     private static final int LIMIT_MAXIMUM = 100;
 
     public TripPaging(Long lastViewedId, Integer limit) {
         this.lastViewedId = lastViewedId;
-        this.limit = ceil(limit);
+        this.limit = preprocess(limit);
+    }
+
+    private int preprocess(Integer limit) {
+        if (Objects.isNull(limit)) {
+            return DEFAULT_LIMIT;
+        }
+        return ceil(limit);
     }
 
     private int ceil(Integer limit) {

@@ -27,7 +27,7 @@ class TripPagingTest {
     }
 
     @Test
-    void limit이_100을_넘기면_100으로_조정된다() {
+    void limit이_최대값을_넘기면_최대값으로_조정된다() {
         // given
         int limit = 101;
 
@@ -36,5 +36,17 @@ class TripPagingTest {
 
         // then
         assertThat(tripPaging.limit()).isEqualTo(100);
+    }
+
+    @Test
+    void limit이_null이면_기본값으로_조정된다() {
+        // given
+        Integer limit = null;
+
+        // when
+        TripPaging tripPaging = new TripPaging(1L, limit);
+
+        // then
+        assertThat(tripPaging.limit()).isEqualTo(20);
     }
 }

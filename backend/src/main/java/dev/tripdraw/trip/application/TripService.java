@@ -55,10 +55,10 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripsSearchResponse readAll(TripSearchRequest tripSearchRequest) {
-        TripSearchConditions condition = tripSearchRequest.toTripSearchConditions();
+        TripSearchConditions conditions = tripSearchRequest.toTripSearchConditions();
         TripPaging tripPaging = tripSearchRequest.toTripPaging();
 
-        List<Trip> trips = tripQueryService.readAllByQueryConditions(condition, tripPaging);
+        List<Trip> trips = tripQueryService.readAllByConditions(conditions, tripPaging);
 
         List<TripSearchResponse> responses = trips.stream()
                 .map(trip -> TripSearchResponse.from(trip, memberRepository.getNicknameById(trip.memberId())))
