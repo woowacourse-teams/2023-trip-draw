@@ -38,7 +38,8 @@ fun PostOfAll.toPresentation() = UiPostOfAll(
     postImageUrl = this.postImageUrl,
     routeImageUrl = this.routeImageUrl,
     recordedAt = this.recordedAt.formattedDateTime(),
-
+    isMine = this.isMine,
+    authorNickname = this.authorNickname,
 )
 
 private fun LocalDateTime.formattedDateTime() =
