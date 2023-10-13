@@ -90,7 +90,7 @@ class TripServiceTest {
     @Test
     void 여행을_ID로_조회한다() {
         // when
-        TripResponse tripResponse = tripService.readTripById(loginUser, trip.id());
+        TripResponse tripResponse = tripService.readTripById(trip.id());
 
         // expect
         assertThat(tripResponse).isEqualTo(TripResponse.from(trip));
@@ -146,7 +146,7 @@ class TripServiceTest {
         tripService.delete(loginUser, trip.id());
 
         // then
-        assertThatThrownBy(() -> tripService.readTripById(loginUser, trip.id()))
+        assertThatThrownBy(() -> tripService.readTripById(trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.message());
     }
