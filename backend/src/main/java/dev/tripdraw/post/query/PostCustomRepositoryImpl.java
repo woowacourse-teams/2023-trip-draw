@@ -5,8 +5,8 @@ import static dev.tripdraw.post.domain.QPost.post;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.dto.PostSearchConditions;
-import dev.tripdraw.post.dto.PostSearchPaging;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Post> findAllByConditions(PostSearchConditions conditions, PostSearchPaging paging) {
+    public List<Post> findAllByConditions(PostSearchConditions conditions, PostPaging paging) {
         // TODO: 2023/09/16 연령대, 성별 추가
         return jpaQueryFactory.selectFrom(post)
                 .leftJoin(post.point).fetchJoin()
@@ -85,7 +85,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     }
 
     @Override
-    public List<Post> findAll(PostSearchPaging paging) {
+    public List<Post> findAll(PostPaging paging) {
         return jpaQueryFactory.selectFrom(post)
                 .leftJoin(post.point).fetchJoin()
                 .where(postIdLt(paging.lastViewedId()))

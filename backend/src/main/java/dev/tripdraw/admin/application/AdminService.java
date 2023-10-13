@@ -6,7 +6,7 @@ import dev.tripdraw.admin.dto.AdminTripResponse;
 import dev.tripdraw.admin.dto.AdminTripsResponse;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
-import dev.tripdraw.post.dto.PostSearchPaging;
+import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.query.PostCustomRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
@@ -48,8 +48,8 @@ public class AdminService {
 
     @Transactional(readOnly = true)
     public AdminPostsResponse readPosts(Long lastViewId, Integer limit) {
-        PostSearchPaging postSearchPaging = new PostSearchPaging(lastViewId, limit);
-        List<Post> posts = postCustomRepository.findAll(postSearchPaging);
+        PostPaging postPaging = new PostPaging(lastViewId, limit);
+        List<Post> posts = postCustomRepository.findAll(postPaging);
         if (limit < posts.size()) {
             return AdminPostsResponse.of(posts.subList(0, limit), true);
         }

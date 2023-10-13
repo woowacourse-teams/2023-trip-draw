@@ -9,8 +9,8 @@ import dev.tripdraw.common.config.JpaConfig;
 import dev.tripdraw.common.config.QueryDslConfig;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
+import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.dto.PostSearchConditions;
-import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.query.PostCustomRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
@@ -58,7 +58,7 @@ class PostCustomRepositoryImplTest {
         PostSearchConditions conditions = PostSearchConditions.builder()
                 .months(Set.of(7))
                 .build();
-        PostSearchPaging paging = new PostSearchPaging(null, 10);
+        PostPaging paging = new PostPaging(null, 10);
 
         // when
         List<Post> posts = postCustomRepository.findAllByConditions(conditions, paging);
@@ -75,10 +75,10 @@ class PostCustomRepositoryImplTest {
             Point point = pointRepository.save(새로운_위치정보(LocalDateTime.now()));
             postRepository.save(새로운_감상(point, member.id(), "주소 " + i));
         }
-        PostSearchPaging postSearchPaging = new PostSearchPaging(null, 3);
+        PostPaging postPaging = new PostPaging(null, 3);
 
         // when
-        List<Post> posts = postCustomRepository.findAll(postSearchPaging);
+        List<Post> posts = postCustomRepository.findAll(postPaging);
 
         // then
         assertThat(posts)

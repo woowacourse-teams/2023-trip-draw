@@ -1,8 +1,7 @@
-package dev.tripdraw.common.domain;
+package dev.tripdraw.post.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dev.tripdraw.trip.query.TripPaging;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -11,16 +10,16 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class TripPagingTest {
+class PostPagingTest {
 
     @ParameterizedTest
     @CsvSource({"19, false", "20, false", "21, true"})
     void 다음_페이지가_있는지_확인한다(int size, boolean expected) {
         // given
-        TripPaging tripPaging = new TripPaging(1L, 20);
+        PostPaging postPaging = new PostPaging(1L, 20);
 
         // when
-        boolean actual = tripPaging.hasNextPage(size);
+        boolean actual = postPaging.hasNextPage(size);
 
         // then
         assertThat(actual).isEqualTo(expected);
@@ -32,10 +31,10 @@ class TripPagingTest {
         int limit = 101;
 
         // when
-        TripPaging tripPaging = new TripPaging(1L, limit);
+        PostPaging postPaging = new PostPaging(1L, limit);
 
         // then
-        assertThat(tripPaging.limit()).isEqualTo(100);
+        assertThat(postPaging.limit()).isEqualTo(100);
     }
 
     @Test
@@ -44,9 +43,9 @@ class TripPagingTest {
         Integer limit = null;
 
         // when
-        TripPaging tripPaging = new TripPaging(1L, limit);
+        PostPaging postPaging = new PostPaging(1L, limit);
 
         // then
-        assertThat(tripPaging.limit()).isEqualTo(20);
+        assertThat(postPaging.limit()).isEqualTo(20);
     }
 }

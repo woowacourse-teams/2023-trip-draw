@@ -41,7 +41,7 @@ class TripQueryServiceTest {
                 .willReturn(new ArrayList<>());
 
         // when
-        List<Trip> trips = tripQueryService.readAllByQueryConditions(tripSearchConditions, tripPaging);
+        List<Trip> trips = tripQueryService.readAllByConditions(tripSearchConditions, tripPaging);
 
         // then
         assertThat(trips).isEmpty();

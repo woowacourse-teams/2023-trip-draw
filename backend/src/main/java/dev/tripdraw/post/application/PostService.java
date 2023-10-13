@@ -13,10 +13,10 @@ import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
+import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
 import dev.tripdraw.post.dto.PostSearchConditions;
-import dev.tripdraw.post.dto.PostSearchPaging;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
@@ -142,23 +142,19 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
-        PostSearchConditions postSearchConditions = postSearchRequest.toPostSearchConditions();
-        PostSearchPaging postSearchPaging = postSearchRequest.toPostSearchPaging();
+        PostSearchConditions conditions = postSearchRequest.toPostSearchConditions();
+        PostPaging postPaging = postSearchRequest.toPostPaging();
 
-        List<Post> posts = postQueryService.findAllByConditions(postSearchConditions, postSearchPaging);
+        List<Post> posts = postQueryService.readAllByConditions(conditions, postPaging);
 
         List<PostSearchResponse> responses = posts.stream()
                 .map(post -> PostSearchResponse.from(post, memberRepository.getNicknameById(post.memberId())))
                 .toList();
 
-        if (hasNextPage(postSearchPaging.limit(), posts)) {
-            return PostsSearchResponse.of(responses.subList(FIRST_INDEX, postSearchPaging.limit()), true);
+        if (postPaging.hasNextPage(responses.size())) {
+            return PostsSearchResponse.of(responses.subList(FIRST_INDEX, postPaging.limit()), true);
         }
         return PostsSearchResponse.of(responses, false);
-    }
-
-    private boolean hasNextPage(int limit, List<Post> posts) {
-        return limit < posts.size();
     }
 }
 
