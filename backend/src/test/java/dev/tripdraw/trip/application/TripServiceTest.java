@@ -90,10 +90,10 @@ class TripServiceTest {
     @Test
     void 여행을_ID로_조회한다() {
         // when
-        TripResponse tripResponse = tripService.readTripById(trip.id());
+        TripResponse tripResponse = tripService.readTripById(loginUser, trip.id());
 
         // expect
-        assertThat(tripResponse).isEqualTo(TripResponse.from(trip));
+        assertThat(tripResponse).isEqualTo(TripResponse.from(trip, loginUser.memberId()));
     }
 
     @Test
@@ -121,7 +121,7 @@ class TripServiceTest {
         assertThat(tripsSearchResponse)
                 .usingRecursiveComparison()
                 .ignoringFieldsOfTypes(LocalDateTime.class)
-                .isEqualTo(TripsSearchResponse.of(List.of(TripSearchResponse.from(trip, member.nickname())), false));
+                .isEqualTo(TripsSearchResponse.of(List.of(TripSearchResponse.from(trip, member.id())), false));
     }
 
     @Test
@@ -146,7 +146,7 @@ class TripServiceTest {
         tripService.delete(loginUser, trip.id());
 
         // then
-        assertThatThrownBy(() -> tripService.readTripById(trip.id()))
+        assertThatThrownBy(() -> tripService.readTripById(loginUser, trip.id()))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.message());
     }

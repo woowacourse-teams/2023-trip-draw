@@ -7,6 +7,7 @@ import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
+import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
@@ -54,13 +55,12 @@ public class PostService {
             PostAndPointCreateRequest postAndPointCreateRequest,
             MultipartFile file
     ) {
-        Long memberId = loginUser.memberId();
-
+        Member member = memberRepository.getById(loginUser.memberId());
         Trip trip = tripRepository.getById(postAndPointCreateRequest.tripId());
-        trip.validateAuthorization(memberId);
+        trip.validateAuthorization(member.id());
         Point point = pointRepository.save(postAndPointCreateRequest.toPoint(trip));
 
-        Post post = postAndPointCreateRequest.toPost(memberId, point);
+        Post post = postAndPointCreateRequest.toPost(member, point);
         uploadImage(file, post, trip);
         Post savedPost = postRepository.save(post);
 
@@ -82,13 +82,12 @@ public class PostService {
             PostRequest postRequest,
             MultipartFile file
     ) {
-        Long memberId = loginUser.memberId();
-
+        Member member = memberRepository.getById(loginUser.memberId());
         Trip trip = tripRepository.getById(postRequest.tripId());
-        trip.validateAuthorization(memberId);
+        trip.validateAuthorization(member.id());
         Point point = pointRepository.getById(postRequest.pointId());
 
-        Post post = postRequest.toPost(memberId, point);
+        Post post = postRequest.toPost(member, point);
         uploadImage(file, post, trip);
         Post savedPost = postRepository.save(post);
 
@@ -97,26 +96,26 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse read(Long postId) {
+    public PostResponse read(LoginUser loginUser, Long postId) {
         Post post = postRepository.getByPostId(postId);
-        return PostResponse.from(post);
+        return PostResponse.from(post, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
-    public PostResponse readByPointId(Long pointId) {
+    public PostResponse readByPointId(LoginUser loginUser, Long pointId) {
         Post post = postRepository.getByPointId(pointId);
-        return PostResponse.from(post);
+        return PostResponse.from(post, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
-    public PostsResponse readAllByTripId(Long tripId) {
+    public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
         if (!tripRepository.existsById(tripId)) {
             throw new TripException(TRIP_NOT_FOUND);
         }
 
         return postRepository.findAllByTripId(tripId).stream()
                 .sorted(comparing(Post::pointRecordedAt).reversed())
-                .collect(collectingAndThen(toList(), PostsResponse::from));
+                .collect(collectingAndThen(toList(), posts -> PostsResponse.from(posts, loginUser.memberId())));
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
@@ -141,14 +140,14 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
+    public PostsSearchResponse readAll(LoginUser loginUser, PostSearchRequest postSearchRequest) {
         PostSearchConditions conditions = postSearchRequest.toPostSearchConditions();
         PostPaging postPaging = postSearchRequest.toPostPaging();
 
         List<Post> posts = postQueryService.readAllByConditions(conditions, postPaging);
 
         List<PostSearchResponse> responses = posts.stream()
-                .map(post -> PostSearchResponse.from(post, memberRepository.getNicknameById(post.memberId())))
+                .map(post -> PostSearchResponse.from(post, loginUser.memberId()))
                 .toList();
 
         if (postPaging.hasNextPage(responses.size())) {

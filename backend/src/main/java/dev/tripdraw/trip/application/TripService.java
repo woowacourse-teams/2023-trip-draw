@@ -34,17 +34,15 @@ public class TripService {
     private final ApplicationEventPublisher publisher;
 
     public TripCreateResponse create(LoginUser loginUser) {
-        Long memberId = loginUser.memberId();
-
-        Trip trip = Trip.of(memberId, memberRepository.getNicknameById(memberId));
+        Trip trip = Trip.of(memberRepository.getById(loginUser.memberId()));
         Trip savedTrip = tripRepository.save(trip);
         return TripCreateResponse.from(savedTrip);
     }
 
     @Transactional(readOnly = true)
-    public TripResponse readTripById(Long id) {
+    public TripResponse readTripById(LoginUser loginUser, Long id) {
         Trip trip = tripRepository.getById(id);
-        return TripResponse.from(trip);
+        return TripResponse.from(trip, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
@@ -61,7 +59,7 @@ public class TripService {
         List<Trip> trips = tripQueryService.readAllByConditions(conditions, tripPaging);
 
         List<TripSearchResponse> responses = trips.stream()
-                .map(trip -> TripSearchResponse.from(trip, memberRepository.getNicknameById(trip.memberId())))
+                .map(trip -> TripSearchResponse.from(trip, trip.member().id()))
                 .toList();
 
         if (tripPaging.hasNextPage(responses.size())) {

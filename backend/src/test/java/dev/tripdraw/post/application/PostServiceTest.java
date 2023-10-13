@@ -8,7 +8,6 @@ import static dev.tripdraw.test.fixture.MemberFixture.다른_사용자;
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
-import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,12 +81,14 @@ class PostServiceTest {
     private Member member;
     private Trip trip;
     private Point point;
+    private LoginUser loginUser;
 
     @BeforeEach
     void setUp() {
         member = memberRepository.save(사용자());
-        trip = tripRepository.save(Trip.of(member.id(), member.nickname()));
+        trip = tripRepository.save(Trip.of(member));
         point = pointRepository.save(새로운_위치정보(trip));
+        loginUser = new LoginUser(member.id());
     }
 
     @Test
@@ -101,18 +102,6 @@ class PostServiceTest {
 
         // then
         assertThat(postCreateResponse.postId()).isNotNull();
-    }
-
-    @Test
-    void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
-        // given
-        LoginUser invalidUser = new LoginUser(Long.MIN_VALUE);
-        PostAndPointCreateRequest postAndPointCreateRequest = 현재_위치_감상_생성_요청(trip.id());
-
-        // expect
-        assertThatThrownBy(() -> postService.addAtCurrentPoint(invalidUser, postAndPointCreateRequest, null))
-                .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test
@@ -139,18 +128,6 @@ class PostServiceTest {
 
         // then
         assertThat(postCreateResponse.postId()).isNotNull();
-    }
-
-    @Test
-    void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
-        // given
-        PostRequest postRequest = 감상_생성_요청(trip.id(), point.id());
-        LoginUser invalidUser = new LoginUser(Long.MIN_VALUE);
-
-        // expect
-        assertThatThrownBy(() -> postService.addAtExistingLocation(invalidUser, postRequest, null))
-                .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test
@@ -183,16 +160,16 @@ class PostServiceTest {
         Post post = postRepository.save(새로운_감상(point, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
 
         // when
-        PostResponse postResponse = postService.read(post.id());
+        PostResponse postResponse = postService.read(loginUser, post.id());
 
         // then
-        assertThat(postResponse).isEqualTo(PostResponse.from(post));
+        assertThat(postResponse).isEqualTo(PostResponse.from(post, loginUser.memberId()));
     }
 
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외를_발생시킨다() {
         // expect
-        assertThatThrownBy(() -> postService.read(Long.MIN_VALUE))
+        assertThatThrownBy(() -> postService.read(loginUser, Long.MIN_VALUE))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
     }
@@ -203,10 +180,10 @@ class PostServiceTest {
         Post post = postRepository.save(새로운_감상(point, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
 
         // when
-        PostResponse postResponse = postService.readByPointId(point.id());
+        PostResponse postResponse = postService.readByPointId(loginUser, point.id());
 
         // then
-        assertThat(postResponse).isEqualTo(PostResponse.from(post));
+        assertThat(postResponse).isEqualTo(PostResponse.from(post, loginUser.memberId()));
     }
 
     @Test
@@ -215,7 +192,7 @@ class PostServiceTest {
         Long invalidPointId = Long.MIN_VALUE;
 
         // expect
-        assertThatThrownBy(() -> postService.readByPointId(invalidPointId))
+        assertThatThrownBy(() -> postService.readByPointId(loginUser, invalidPointId))
                 .isInstanceOf(PostException.class)
                 .hasMessage(POST_NOT_FOUND.message());
     }
@@ -229,17 +206,19 @@ class PostServiceTest {
         Post post2 = postRepository.save(새로운_감상(point2, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
 
         // when
-        PostsResponse postsResponse = postService.readAllByTripId(trip.id());
+        PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
 
         // then
-        assertThat(postsResponse.posts())
-                .containsExactly(PostResponse.from(post2), PostResponse.from(post1));
+        assertThat(postsResponse.posts()).containsExactly(
+                PostResponse.from(post2, loginUser.memberId()),
+                PostResponse.from(post1, loginUser.memberId())
+        );
     }
 
     @Test
     void 특정_여행의_모든_감상을_조회할_때_존재하지_않는_여행_ID이면_예외가_발생한다() {
         // expect
-        assertThatThrownBy(() -> postService.readAllByTripId(Long.MIN_VALUE))
+        assertThatThrownBy(() -> postService.readAllByTripId(loginUser, Long.MIN_VALUE))
                 .isInstanceOf(TripException.class)
                 .hasMessage(TRIP_NOT_FOUND.message());
     }
@@ -260,12 +239,13 @@ class PostServiceTest {
                 .build();
 
         // when
-        PostsSearchResponse postsSearchResponse = postService.readAll(postSearchRequest);
+        PostsSearchResponse postsSearchResponse = postService.readAll(loginUser, postSearchRequest);
 
         // then
-        assertThat(postsSearchResponse.posts())
-                .contains(PostSearchResponse.from(jejuJulyPost, member.nickname()),
-                        PostSearchResponse.from(jejuMayPost, member.nickname()));
+        assertThat(postsSearchResponse.posts()).contains(
+                PostSearchResponse.from(jejuJulyPost, member.id()),
+                PostSearchResponse.from(jejuMayPost, member.id())
+        );
     }
 
     @Test
@@ -284,12 +264,13 @@ class PostServiceTest {
                 .build();
 
         // when
-        PostsSearchResponse postsSearchResponse = postService.readAll(postSearchRequest);
+        PostsSearchResponse postsSearchResponse = postService.readAll(loginUser, postSearchRequest);
 
         // then
-        assertThat(postsSearchResponse.posts())
-                .containsExactly(PostSearchResponse.from(seoulJulyPost, member.nickname()),
-                        PostSearchResponse.from(jejuJulyPost, member.nickname()));
+        assertThat(postsSearchResponse.posts()).containsExactly(
+                PostSearchResponse.from(seoulJulyPost, member.id()),
+                PostSearchResponse.from(jejuJulyPost, member.id())
+        );
     }
 
     @Test
@@ -361,7 +342,7 @@ class PostServiceTest {
         // then
         assertSoftly(softly -> {
             softly.assertThat(point.hasPost()).isFalse();
-            softly.assertThatThrownBy(() -> postService.read(post.id()))
+            softly.assertThatThrownBy(() -> postService.read(loginUser, post.id()))
                     .isInstanceOf(PostException.class)
                     .hasMessage(POST_NOT_FOUND.message());
         });

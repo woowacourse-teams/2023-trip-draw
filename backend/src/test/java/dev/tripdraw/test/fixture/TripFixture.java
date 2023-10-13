@@ -11,14 +11,14 @@ import dev.tripdraw.trip.domain.TripStatus;
 public class TripFixture {
 
     public static Trip 여행() {
-        return new Trip(1L, TripName.from("통후추"), 사용자().id(), TripStatus.ONGOING, "", "");
+        return new Trip(1L, TripName.from("통후추"), 사용자(), TripStatus.ONGOING, "", "");
     }
 
     public static Trip 새로운_여행(Member member) {
-        return new Trip(TripName.from(member.nickname()), member.id());
+        return new Trip(TripName.from(member.nickname()), member);
     }
 
     public static Trip 새로운_여행(Member member, String tripName) {
-        return new Trip(new TripName(tripName), member.id());
+        return new Trip(new TripName(tripName), member);
     }
 }
