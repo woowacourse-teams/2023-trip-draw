@@ -9,8 +9,11 @@ public record TripSearchResponse(
         @Schema(description = "여행 Id", example = "1")
         Long tripId,
 
-        @Schema(description = "회원 닉네임", example = "통후추")
-        String memberNickname,
+        @Schema(description = "나의 여행 확인 flag", example = "true")
+        boolean isMine,
+
+        @Schema(description = "작성자 닉네임", example = "통후추")
+        String authorNickname,
 
         @Schema(description = "여행명", example = "통후추의 여행")
         String name,
@@ -30,10 +33,11 @@ public record TripSearchResponse(
 
     private static final String EMPTY_IMAGE_URL = "";
 
-    public static TripSearchResponse from(Trip trip, String memberNickname) {
+    public static TripSearchResponse from(Trip trip, Long loginUserId) {
         return new TripSearchResponse(
                 trip.id(),
-                memberNickname,
+                trip.member().id().equals(loginUserId),
+                trip.member().nickname(),
                 trip.nameValue(),
                 Objects.requireNonNullElse(trip.imageUrl(), EMPTY_IMAGE_URL),
                 Objects.requireNonNullElse(trip.routeImageUrl(), EMPTY_IMAGE_URL),

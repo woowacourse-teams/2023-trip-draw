@@ -10,6 +10,12 @@ public record TripResponse(
         @Schema(description = "여행 Id", example = "1")
         Long tripId,
 
+        @Schema(description = "나의 여행 확인 flag", example = "true")
+        boolean isMine,
+
+        @Schema(description = "작성자 닉네임", example = "통후추")
+        String authorNickname,
+
         @Schema(description = "여행명", example = "통후추의 여행")
         String name,
 
@@ -28,9 +34,11 @@ public record TripResponse(
 
     private static final String EMPTY_IMAGE_URL = "";
 
-    public static TripResponse from(Trip trip) {
+    public static TripResponse from(Trip trip, Long loginUserId) {
         return new TripResponse(
                 trip.id(),
+                trip.member().id().equals(loginUserId),
+                trip.member().nickname(),
                 trip.nameValue(),
                 generateRoute(trip),
                 trip.status(),

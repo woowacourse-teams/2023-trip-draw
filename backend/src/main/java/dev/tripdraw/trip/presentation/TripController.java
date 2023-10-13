@@ -53,8 +53,8 @@ public class TripController {
             description = "나의 여행 조회 성공."
     )
     @GetMapping("/{tripId}")
-    public ResponseEntity<TripResponse> readById(@PathVariable Long tripId) {
-        TripResponse response = tripService.readTripById(tripId);
+    public ResponseEntity<TripResponse> readById(@Auth LoginUser loginUser, @PathVariable Long tripId) {
+        TripResponse response = tripService.readTripById(loginUser, tripId);
         return ResponseEntity.ok(response);
     }
 
