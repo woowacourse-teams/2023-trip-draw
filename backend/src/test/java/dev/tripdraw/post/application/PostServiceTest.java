@@ -359,9 +359,12 @@ class PostServiceTest {
         postService.delete(loginUser, post.id());
 
         // then
-        assertThatThrownBy(() -> postService.read(post.id()))
-                .isInstanceOf(PostException.class)
-                .hasMessage(POST_NOT_FOUND.message());
+        assertSoftly(softly -> {
+            softly.assertThat(point.hasPost()).isFalse();
+            softly.assertThatThrownBy(() -> postService.read(post.id()))
+                    .isInstanceOf(PostException.class)
+                    .hasMessage(POST_NOT_FOUND.message());
+        });
     }
 
     @Test

@@ -42,9 +42,8 @@ public class TripService {
     }
 
     @Transactional(readOnly = true)
-    public TripResponse readTripById(LoginUser loginUser, Long id) {
+    public TripResponse readTripById(Long id) {
         Trip trip = tripRepository.getById(id);
-        trip.validateAuthorization(loginUser.memberId());
         return TripResponse.from(trip);
     }
 

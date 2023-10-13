@@ -57,4 +57,17 @@ class PointTest {
             softly.assertThat(trip.route().points()).contains(point);
         });
     }
+
+    @Test
+    void 위치에_감상을_등록_해제한다() {
+        // given
+        Point point = new Point();
+        point.registerPost();
+
+        // when
+        point.unregisterPost();
+
+        // then
+        assertThat(point.hasPost()).isFalse();
+    }
 }
