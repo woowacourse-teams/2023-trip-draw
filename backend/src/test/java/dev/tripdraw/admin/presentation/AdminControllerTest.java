@@ -10,7 +10,6 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import dev.tripdraw.admin.application.AdminAuthService;
 import dev.tripdraw.admin.application.PasswordEncoder;
 import dev.tripdraw.admin.domain.Admin;
 import dev.tripdraw.admin.domain.AdminRepository;
@@ -59,9 +58,6 @@ class AdminControllerTest extends ControllerTest {
     private AdminRepository adminRepository;
 
     @Autowired
-    private AdminAuthService adminAuthService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private Member member;
@@ -73,7 +69,16 @@ class AdminControllerTest extends ControllerTest {
         super.setUp();
         member = memberRepository.save(새로운_사용자("통후추"));
         admin = adminRepository.save(new Admin("tripdraw@tripdraw.site", passwordEncoder.encode("password")));
-        sessionId = adminAuthService.login(new AdminLoginRequest(admin.email(), "password"));
+        sessionId = loginRequest(new AdminLoginRequest(admin.email(), "password")).sessionId();
+    }
+
+    private static ExtractableResponse<Response> loginRequest(AdminLoginRequest adminLoginRequest) {
+        return RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .body(adminLoginRequest)
+                .when().post("/admin/login")
+                .then().log().all()
+                .extract();
     }
 
     @Test
@@ -82,12 +87,7 @@ class AdminControllerTest extends ControllerTest {
         AdminLoginRequest adminLoginRequest = new AdminLoginRequest(admin.email(), "password");
 
         // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .body(adminLoginRequest)
-                .when().post("/admin/login")
-                .then().log().all()
-                .extract();
+        ExtractableResponse<Response> response = loginRequest(adminLoginRequest);
 
         // then
         assertThat(response.sessionId()).isNotBlank();
@@ -102,7 +102,7 @@ class AdminControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .header("SESSION", sessionId)
+                .sessionId(sessionId)
                 .params("limit", 10)
                 .when().get("/admin/trips")
                 .then().log().all()
@@ -124,7 +124,7 @@ class AdminControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .header("SESSION", sessionId)
+                .sessionId(sessionId)
                 .when().get("/admin/trips/{tripId}", trip.id())
                 .then().log().all()
                 .extract();
@@ -144,7 +144,7 @@ class AdminControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .header("SESSION", sessionId)
+                .sessionId(sessionId)
                 .when().delete("/admin/trips/{tripId}", trip.id())
                 .then().log().all()
                 .extract();
@@ -169,7 +169,7 @@ class AdminControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .header("SESSION", sessionId)
+                .sessionId(sessionId)
                 .params("limit", 10)
                 .when().get("/admin/posts")
                 .then().log().all()
@@ -194,7 +194,7 @@ class AdminControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .header("SESSION", sessionId)
+                .sessionId(sessionId)
                 .when().get("/admin/posts/{postId}", post.id())
                 .then().log().all()
                 .extract();
@@ -219,7 +219,7 @@ class AdminControllerTest extends ControllerTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .header("SESSION", sessionId)
+                .sessionId(sessionId)
                 .when().delete("/admin/posts/{postId}", post.id())
                 .then().log().all()
                 .extract();

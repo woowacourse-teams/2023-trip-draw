@@ -25,7 +25,6 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (session == null) {
             throw new AdminException(ADMIN_AUTH_FAIL);
         }
-
         String uuid = (String) session.getAttribute(SESSION);
         adminAuthService.validateSession(uuid);
         return true;
