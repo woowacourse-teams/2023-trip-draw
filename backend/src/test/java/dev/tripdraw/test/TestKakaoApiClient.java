@@ -16,6 +16,6 @@ public class TestKakaoApiClient implements OauthClient {
 
     @Override
     public OauthInfo requestOauthInfo(String accessToken) {
-        return OAuth_정보();
+        return OAuth_정보(accessToken);
     }
 }

@@ -9,7 +9,7 @@ import dev.tripdraw.auth.dto.OauthInfo;
 
 public class AuthFixture {
 
-    public static final String OAUTH_TOKEN = "KAKAO.OAUTH.TOKEN";
+    public static final String OAUTH_TOKEN = OAUTH_아이디;
     private static final long INVALID_TOKEN_EXPIRE_TIME = -180000L;
     private static final String ACCESS_TOKEN_KEY =
             "ACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKENACCESSTOKEN";
@@ -36,5 +36,9 @@ public class AuthFixture {
 
     public static OauthInfo OAuth_정보() {
         return new OauthInfo(OAUTH_아이디, KAKAO);
+    }
+
+    public static OauthInfo OAuth_정보(String oauthId) {
+        return new OauthInfo(oauthId, KAKAO);
     }
 }

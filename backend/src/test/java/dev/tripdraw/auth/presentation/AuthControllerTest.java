@@ -4,6 +4,7 @@ import static dev.tripdraw.common.auth.OauthType.KAKAO;
 import static dev.tripdraw.test.fixture.AuthFixture.OAUTH_TOKEN;
 import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_ACCESS_TOKEN_설정;
 import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_REFRESH_TOKEN_설정;
+import static dev.tripdraw.test.fixture.MemberFixture.OAUTH_아이디;
 import static dev.tripdraw.test.fixture.MemberFixture.닉네임이_없는_사용자;
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -121,7 +122,7 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 정상_등록하면_토큰이_포함된_응답을_반환한다() {
             // given
-            memberRepository.save(닉네임이_없는_사용자());
+            memberRepository.save(닉네임이_없는_사용자(OAUTH_아이디));
             RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, OAUTH_TOKEN);
 
             // when
