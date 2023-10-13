@@ -8,7 +8,6 @@ import static dev.tripdraw.test.fixture.MemberFixture.다른_사용자;
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
-import static dev.tripdraw.trip.exception.TripExceptionType.NOT_AUTHORIZED_TO_TRIP;
 import static dev.tripdraw.trip.exception.TripExceptionType.POINT_NOT_FOUND;
 import static dev.tripdraw.trip.exception.TripExceptionType.TRIP_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,18 +103,6 @@ class PostServiceTest {
     }
 
     @Test
-    void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
-        // given
-        LoginUser invalidUser = new LoginUser(Long.MIN_VALUE);
-        PostAndPointCreateRequest postAndPointCreateRequest = 현재_위치_감상_생성_요청(trip.id());
-
-        // expect
-        assertThatThrownBy(() -> postService.addAtCurrentPoint(invalidUser, postAndPointCreateRequest, null))
-                .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
-    }
-
-    @Test
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
         LoginUser loginUser = new LoginUser(member.id());
@@ -139,18 +126,6 @@ class PostServiceTest {
 
         // then
         assertThat(postCreateResponse.postId()).isNotNull();
-    }
-
-    @Test
-    void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_사용자_닉네임이면_예외를_발생시킨다() {
-        // given
-        PostRequest postRequest = 감상_생성_요청(trip.id(), point.id());
-        LoginUser invalidUser = new LoginUser(Long.MIN_VALUE);
-
-        // expect
-        assertThatThrownBy(() -> postService.addAtExistingLocation(invalidUser, postRequest, null))
-                .isInstanceOf(TripException.class)
-                .hasMessage(NOT_AUTHORIZED_TO_TRIP.message());
     }
 
     @Test

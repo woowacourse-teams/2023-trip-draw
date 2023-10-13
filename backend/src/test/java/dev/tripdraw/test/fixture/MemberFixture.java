@@ -11,6 +11,10 @@ public class MemberFixture {
         return new Member(1L, "통후추", OAUTH_아이디 + "통후추", OauthType.KAKAO);
     }
 
+    public static Member 사용자(Long memberId) {
+        return new Member(memberId, "통후추", OAUTH_아이디 + "통후추", OauthType.KAKAO);
+    }
+
     public static Member 다른_사용자() {
         return new Member("순후추", OAUTH_아이디 + "순후추", OauthType.KAKAO);
     }

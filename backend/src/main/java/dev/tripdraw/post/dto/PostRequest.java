@@ -1,5 +1,6 @@
 package dev.tripdraw.post.dto;
 
+import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.trip.domain.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,7 +30,7 @@ public record PostRequest(
         String writing
 ) {
 
-    public Post toPost(Long memberId, Point point) {
-        return new Post(title, point, address, writing, memberId, tripId);
+    public Post toPost(Member member, Point point) {
+        return new Post(title, point, address, writing, member, tripId);
     }
 }
