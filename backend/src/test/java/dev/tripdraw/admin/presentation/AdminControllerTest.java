@@ -72,7 +72,7 @@ class AdminControllerTest extends ControllerTest {
         sessionId = loginRequest(new AdminLoginRequest(admin.email(), "password")).sessionId();
     }
 
-    private static ExtractableResponse<Response> loginRequest(AdminLoginRequest adminLoginRequest) {
+    private ExtractableResponse<Response> loginRequest(AdminLoginRequest adminLoginRequest) {
         return RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .body(adminLoginRequest)
