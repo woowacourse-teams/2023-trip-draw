@@ -20,7 +20,7 @@ class TripSearchResponseOfMemberTest {
         // given
         Member member = 사용자();
         TripName tripName = TripName.from("통후추의 여행");
-        Trip trip = new Trip(1L, tripName, member.id(), ONGOING, null, null);
+        Trip trip = new Trip(1L, tripName, member, ONGOING, null, null);
 
         // when
         TripSearchResponseOfMember response = TripSearchResponseOfMember.from(trip);
@@ -28,6 +28,6 @@ class TripSearchResponseOfMemberTest {
         // then
         assertThat(response)
                 .usingRecursiveComparison()
-                .isEqualTo(TripSearchResponseOfMember.from(new Trip(1L, tripName, member.id(), ONGOING, "", "")));
+                .isEqualTo(TripSearchResponseOfMember.from(new Trip(1L, tripName, member, ONGOING, "", "")));
     }
 }

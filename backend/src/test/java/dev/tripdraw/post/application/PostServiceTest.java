@@ -85,7 +85,7 @@ class PostServiceTest {
     @BeforeEach
     void setUp() {
         member = memberRepository.save(사용자());
-        trip = tripRepository.save(Trip.of(member.id(), member.nickname()));
+        trip = tripRepository.save(Trip.of(member));
         point = pointRepository.save(새로운_위치정보(trip));
     }
 
