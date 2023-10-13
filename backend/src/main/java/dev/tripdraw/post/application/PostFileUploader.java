@@ -5,7 +5,6 @@ import static dev.tripdraw.file.exception.FileIOExceptionType.FILE_SAVE_FAIL;
 import dev.tripdraw.file.application.FileUploader;
 import dev.tripdraw.file.domain.FileType;
 import dev.tripdraw.file.exception.FileIOException;
-import java.io.IOException;
 import java.util.UUID;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
@@ -39,7 +38,7 @@ public class PostFileUploader {
     private String fileUpload(String path, MultipartFile file) {
         try {
             return fileUploader.upload(path, file);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new FileIOException(FILE_SAVE_FAIL);
         }
     }

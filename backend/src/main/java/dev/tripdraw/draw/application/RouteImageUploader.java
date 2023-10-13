@@ -7,7 +7,6 @@ import dev.tripdraw.draw.exception.DrawException;
 import dev.tripdraw.file.application.FileUploader;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +39,7 @@ public class RouteImageUploader {
         try {
             ImageIO.write(bufferedImage, IMAGE_PNG.extension(), byteArrayOutputStream);
             return fileUploader.upload(path, ImageMultipartFile.of(byteArrayOutputStream, fileName));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new DrawException(IMAGE_SAVE_FAIL);
         }
     }
