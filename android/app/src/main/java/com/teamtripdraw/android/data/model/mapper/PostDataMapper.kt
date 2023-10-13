@@ -53,5 +53,7 @@ fun DataPostOfAll.toDomain(): PostOfAll {
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
         recordedAt = LocalDateTime.parse(recordedAt),
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 }
