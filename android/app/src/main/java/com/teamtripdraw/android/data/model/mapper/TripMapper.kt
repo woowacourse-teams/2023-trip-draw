@@ -40,4 +40,6 @@ fun DataTripOfAll.toDomain(): TripOfAll =
         routeImageUrl = routeImageUrl,
         startTime = LocalDateTime.parse(startTime),
         endTime = LocalDateTime.parse(endTime),
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
