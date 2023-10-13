@@ -17,6 +17,10 @@ data class GetTripInfoResponse(
     val imageUrl: String,
     @Json(name = "routeImageUrl")
     val routeImageUrl: String,
+    @Json(name = "isMine")
+    val isMine: Boolean,
+    @Json(name = "authorNickname")
+    val authorNickname: String,
 )
 
 @JsonClass(generateAdapter = true)
