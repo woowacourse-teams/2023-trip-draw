@@ -96,26 +96,26 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse read(Long postId) {
+    public PostResponse read(LoginUser loginUser, Long postId) {
         Post post = postRepository.getByPostId(postId);
-        return PostResponse.from(post);
+        return PostResponse.from(post, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
-    public PostResponse readByPointId(Long pointId) {
+    public PostResponse readByPointId(LoginUser loginUser, Long pointId) {
         Post post = postRepository.getByPointId(pointId);
-        return PostResponse.from(post);
+        return PostResponse.from(post, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
-    public PostsResponse readAllByTripId(Long tripId) {
+    public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
         if (!tripRepository.existsById(tripId)) {
             throw new TripException(TRIP_NOT_FOUND);
         }
 
         return postRepository.findAllByTripId(tripId).stream()
                 .sorted(comparing(Post::pointRecordedAt).reversed())
-                .collect(collectingAndThen(toList(), PostsResponse::from));
+                .collect(collectingAndThen(toList(), posts -> PostsResponse.from(posts, loginUser.memberId())));
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
@@ -140,14 +140,14 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
+    public PostsSearchResponse readAll(LoginUser loginUser, PostSearchRequest postSearchRequest) {
         PostSearchConditions conditions = postSearchRequest.toPostSearchConditions();
         PostPaging postPaging = postSearchRequest.toPostPaging();
 
         List<Post> posts = postQueryService.readAllByConditions(conditions, postPaging);
 
         List<PostSearchResponse> responses = posts.stream()
-                .map(post -> PostSearchResponse.from(post, post.member().nickname()))
+                .map(post -> PostSearchResponse.from(post, loginUser.memberId()))
                 .toList();
 
         if (postPaging.hasNextPage(responses.size())) {

@@ -101,9 +101,10 @@ public class PostController {
     )
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponse> read(
+            @Auth LoginUser loginUser,
             @PathVariable Long postId
     ) {
-        PostResponse response = postService.read(postId);
+        PostResponse response = postService.read(loginUser, postId);
         return ResponseEntity.ok(response);
     }
 
@@ -114,9 +115,10 @@ public class PostController {
     )
     @GetMapping("/points/{pointId}/post")
     public ResponseEntity<PostResponse> readByPointId(
+            @Auth LoginUser loginUser,
             @PathVariable Long pointId
     ) {
-        PostResponse response = postService.readByPointId(pointId);
+        PostResponse response = postService.readByPointId(loginUser, pointId);
         return ResponseEntity.ok(response);
     }
 
@@ -127,9 +129,10 @@ public class PostController {
     )
     @GetMapping("/trips/{tripId}/posts")
     public ResponseEntity<PostsResponse> readAllPostsOfTrip(
+            @Auth LoginUser loginUser,
             @PathVariable Long tripId
     ) {
-        PostsResponse response = postService.readAllByTripId(tripId);
+        PostsResponse response = postService.readAllByTripId(loginUser, tripId);
         return ResponseEntity.ok(response);
     }
 
@@ -140,9 +143,10 @@ public class PostController {
     )
     @GetMapping("/posts")
     public ResponseEntity<PostsSearchResponse> readAllPosts(
+            @Auth LoginUser loginUser,
             PostSearchRequest postSearchRequest
     ) {
-        PostsSearchResponse response = postService.readAll(postSearchRequest);
+        PostsSearchResponse response = postService.readAll(loginUser, postSearchRequest);
         return ResponseEntity.ok(response);
     }
 

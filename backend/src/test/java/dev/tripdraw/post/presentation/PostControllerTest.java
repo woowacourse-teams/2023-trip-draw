@@ -18,6 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.auth.application.JwtTokenProvider;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -80,6 +81,7 @@ class PostControllerTest extends ControllerTest {
     private Trip trip;
     private Point point;
     private String accessToken;
+    private LoginUser loginUser;
 
     @BeforeEach
     public void setUp() {
@@ -88,6 +90,7 @@ class PostControllerTest extends ControllerTest {
         trip = tripRepository.save(새로운_여행(member));
         point = pointRepository.save(새로운_위치정보(trip));
         accessToken = jwtTokenProvider.generateAccessToken(member.id().toString());
+        loginUser = new LoginUser(member.id());
     }
 
     @Test
@@ -279,7 +282,7 @@ class PostControllerTest extends ControllerTest {
             softly.assertThat(postResponse)
                     .usingRecursiveComparison()
                     .ignoringFieldsOfTypes(LocalDateTime.class)
-                    .isEqualTo(PostResponse.from(post));
+                    .isEqualTo(PostResponse.from(post, loginUser.memberId()));
         });
     }
 
@@ -321,7 +324,7 @@ class PostControllerTest extends ControllerTest {
             softly.assertThat(postResponse)
                     .usingRecursiveComparison()
                     .ignoringFieldsOfTypes(LocalDateTime.class)
-                    .isEqualTo(PostResponse.from(post));
+                    .isEqualTo(PostResponse.from(post, loginUser.memberId()));
         });
     }
 
@@ -362,7 +365,10 @@ class PostControllerTest extends ControllerTest {
             softly.assertThat(postsResponse.posts())
                     .usingRecursiveComparison()
                     .ignoringFieldsOfTypes(LocalDateTime.class)
-                    .isEqualTo(List.of(PostResponse.from(post2), PostResponse.from(post1)));
+                    .isEqualTo(List.of(
+                            PostResponse.from(post2, loginUser.memberId()),
+                            PostResponse.from(post1, loginUser.memberId())
+                    ));
         });
     }
 
@@ -500,8 +506,8 @@ class PostControllerTest extends ControllerTest {
                     .usingRecursiveComparison()
                     .ignoringFieldsOfTypes(LocalDateTime.class)
                     .isEqualTo(List.of(
-                            PostSearchResponse.from(jejuAugustPost, member.nickname()),
-                            PostSearchResponse.from(jejuJulyPost, member.nickname())
+                            PostSearchResponse.from(jejuAugustPost, member.id()),
+                            PostSearchResponse.from(jejuJulyPost, member.id())
                     ));
         });
     }
