@@ -135,6 +135,8 @@ public class PostService {
     public void delete(LoginUser loginUser, Long postId) {
         Post post = postRepository.getByPostId(postId);
         post.validateAuthorization(loginUser.memberId());
+        Point point = post.point();
+        point.unregisterPost();
         postRepository.deleteById(postId);
     }
 
