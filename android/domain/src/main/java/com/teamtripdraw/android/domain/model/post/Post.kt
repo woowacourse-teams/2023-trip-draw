@@ -11,25 +11,11 @@ data class Post(
     val point: Point,
     val postImageUrl: String,
     val routeImageUrl: String,
+    val isMine: Boolean,
+    val authorNickname: String,
 ) {
 
     companion object {
         const val NULL_SUBSTITUTE_ID = -1L
-
-        fun getPrePost(
-            tripId: Long,
-            pointId: Long,
-            title: String,
-            writing: String,
-            address: String,
-        ): PrePost {
-            return PrePost(
-                tripId = tripId,
-                pointId = pointId,
-                title = title,
-                writing = writing,
-                address = address,
-            )
-        }
     }
 }

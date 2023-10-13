@@ -38,6 +38,8 @@ fun DataPost.toDomain(): Post {
         point = point.toDomain(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 }
 
