@@ -65,6 +65,8 @@ fun GetTripPostResponse.toData(): DataPost {
         point = point.toData(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 }
 
