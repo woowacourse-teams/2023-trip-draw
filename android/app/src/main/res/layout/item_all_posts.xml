@@ -74,8 +74,8 @@
             android:layout_marginBottom="4dp"
             android:contentDescription="@string/btn_post_detail_location_icon_description"
             android:src="@drawable/ic_location"
-            app:layout_constraintStart_toStartOf="@id/ic_user"
-            app:layout_constraintTop_toBottomOf="@id/ic_user" />
+            app:layout_constraintStart_toStartOf="@id/iv_item_all_posts_user_icon"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_all_posts_user_icon" />
 
         <TextView
             android:id="@+id/tv_item_all_posts_address"
@@ -104,11 +104,10 @@
             tools:text="2023.07.18 | 21:00" />
 
         <ImageView
-            android:id="@+id/ic_user"
+            android:id="@+id/iv_item_all_posts_user_icon"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginEnd="4dp"
             android:background="@drawable/ic_user"
             app:layout_constraintStart_toStartOf="@id/tv_item_all_posts_writing"
             app:layout_constraintTop_toBottomOf="@id/tv_item_all_posts_writing" />
@@ -117,12 +116,13 @@
             android:id="@+id/tv_item_all_posts_author"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{postItem.memberNickname}"
+            android:layout_marginStart="4dp"
+            android:text="@{postItem.authorNickname}"
             android:textAppearance="@style/caption_1"
             android:textColor="@color/td_black"
-            app:layout_constraintBottom_toBottomOf="@id/ic_user"
-            app:layout_constraintStart_toEndOf="@id/ic_user"
-            app:layout_constraintTop_toTopOf="@id/ic_user"
+            app:layout_constraintBottom_toBottomOf="@id/iv_item_all_posts_user_icon"
+            app:layout_constraintStart_toEndOf="@id/iv_item_all_posts_user_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_item_all_posts_user_icon"
             tools:text="통후추" />
 
         <com.google.android.material.divider.MaterialDivider
