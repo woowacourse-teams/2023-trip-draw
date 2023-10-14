@@ -27,6 +27,9 @@ class MyPageViewModel @Inject constructor(
     private val _openTripHistoryEvent: MutableLiveData<Boolean> = MutableLiveData()
     val openTripHistoryEvent: LiveData<Boolean> = _openTripHistoryEvent
 
+    private val _openTermsOfService: MutableLiveData<Boolean> = MutableLiveData(false)
+    val openTermsOfService: LiveData<Boolean> = _openTermsOfService
+
     private val _openOpenSourceLicenseEvent: MutableLiveData<Boolean> = MutableLiveData(false)
     val openOpenSourceLicenseEvent: LiveData<Boolean> = _openOpenSourceLicenseEvent
 
@@ -68,6 +71,11 @@ class MyPageViewModel @Inject constructor(
 
     fun resetLogoutEvent() {
         _logoutEvent.value = false
+    }
+
+    fun openTermsOfService() {
+        _openTermsOfService.value = true
+        _openTermsOfService.value = false
     }
 
     fun openOpenSourceLicense() {

@@ -7,4 +7,6 @@ data class DataTrip(
     val status: String,
     val imageUrl: String,
     val routeImageUrl: String,
+    val isMine: Boolean,
+    val authorNickname: String,
 )

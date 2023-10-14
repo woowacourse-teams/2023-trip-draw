@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.FragmentTripTitleDialogBinding
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.getParcelableCompat
@@ -54,19 +53,7 @@ class SetTripTitleDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        setLayout()
-    }
-
-    private fun setLayout() {
-        requireNotNull(dialog).apply {
-            requireNotNull(window).apply {
-                setLayout(
-                    (resources.displayMetrics.widthPixels * DIALOG_WINDOW_SIZE).toInt(),
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                )
-                setBackgroundDrawableResource(R.color.td_white)
-            }
-        }
+        ResponsiveUiDialogSizeAdjuster().adjustSize(dialog, resources)
     }
 
     private fun initCompletedEventObserve() {
@@ -106,7 +93,6 @@ class SetTripTitleDialog : DialogFragment() {
     }
 
     companion object {
-        private const val DIALOG_WINDOW_SIZE = 0.85
         private const val TRIP_ID_KEY = "TRIP_ID_KEY"
         private const val SET_TITLE_SITUATION_KEY = "SET_TITLE_SITUATION_KEY"
 

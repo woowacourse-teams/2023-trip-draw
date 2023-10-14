@@ -9,4 +9,6 @@ data class DataPost(
     val point: DataPoint,
     val postImageUrl: String,
     val routeImageUrl: String,
+    val isMine: Boolean,
+    val authorNickname: String,
 )

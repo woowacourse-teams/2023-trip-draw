@@ -2,11 +2,13 @@ package com.teamtripdraw.android.ui.login
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil
+import com.teamtripdraw.android.BuildConfig
 import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityLoginBinding
 import com.teamtripdraw.android.domain.model.auth.LoginInfo
@@ -16,8 +18,6 @@ import com.teamtripdraw.android.support.framework.presentation.loginManager.Kaka
 import com.teamtripdraw.android.support.framework.presentation.loginManager.SocialLoginManager
 import com.teamtripdraw.android.ui.main.MainActivity
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
-import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
-import com.teamtripdraw.android.ui.policy.TermsOfServiceActivity
 import com.teamtripdraw.android.ui.signUp.NicknameSetupActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -83,14 +83,19 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initOpenPrivacyPolicyEventObserver() {
         loginViewModel.openPrivacyPolicyEvent.observe(this) {
-            if (it) startActivity(PrivacyPolicyActivity.getIntent(this))
-            loginViewModel.resetTermsOfServiceEvent()
+            if (it.not()) return@observe
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PRIVACY_POLICY_URL))
+            startActivity(browserIntent)
         }
     }
 
     private fun initOpenTermsOfServiceEventObserver() {
         loginViewModel.openTermsOfServiceEvent.observe(this) {
-            if (it) startActivity(TermsOfServiceActivity.getIntent(this))
+            if (it.not()) return@observe
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.TERMS_OF_SERVICE_URL))
+            startActivity(browserIntent)
         }
     }
 

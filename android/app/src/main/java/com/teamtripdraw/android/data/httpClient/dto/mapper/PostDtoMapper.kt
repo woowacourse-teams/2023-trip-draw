@@ -65,6 +65,8 @@ fun GetTripPostResponse.toData(): DataPost {
         point = point.toData(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 }
 
@@ -82,6 +84,8 @@ fun GetAllPostsResponse.toData(): List<DataPostOfAll> {
             postImageUrl = it.postImageUrl,
             routeImageUrl = it.routeImageUrl,
             recordedAt = it.recordedAt,
+            isMine = it.isMine,
+            authorNickname = it.authorNickname,
         )
     }
     return posts
