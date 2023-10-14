@@ -22,6 +22,8 @@ fun DataTrip.toDomain(): Trip =
         status = status,
         imageUrl = imageUrl,
         routeImageUrl = routeImageUrl,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 
 fun PreSetTripTitle.toData(): DataPreSetTripTitle =
@@ -38,5 +40,6 @@ fun DataTripOfAll.toDomain(): TripOfAll =
         routeImageUrl = routeImageUrl,
         startTime = LocalDateTime.parse(startTime),
         endTime = LocalDateTime.parse(endTime),
-        memberNickname = memberNickname,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )

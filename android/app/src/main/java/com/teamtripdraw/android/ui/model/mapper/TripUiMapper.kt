@@ -28,8 +28,8 @@ fun Trip.toPreviewPresentation(): UiPreviewTrip =
     UiPreviewTrip(
         id = tripId,
         name = name,
-        imageUrl = imageUrl ?: "",
-        routeImageUrl = routeImageUrl ?: "",
+        imageUrl = imageUrl,
+        routeImageUrl = routeImageUrl,
     )
 
 fun UiPreviewTrip.toDomain(): PreviewTrip =
@@ -47,6 +47,8 @@ fun TripOfAll.toPresentation() = UiTripOfAll(
     routeImageUrl = routeImageUrl,
     startTime = startTime.formattedTripDate(),
     endTime = endTime.formattedTripDate(),
+    isMine = isMine,
+    authorNickname = authorNickname,
 )
 
 private fun LocalDateTime.formattedTripDate() =

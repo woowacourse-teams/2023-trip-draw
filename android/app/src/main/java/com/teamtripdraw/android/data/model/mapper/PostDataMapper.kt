@@ -38,6 +38,8 @@ fun DataPost.toDomain(): Post {
         point = point.toDomain(),
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 }
 
@@ -51,6 +53,7 @@ fun DataPostOfAll.toDomain(): PostOfAll {
         postImageUrl = postImageUrl,
         routeImageUrl = routeImageUrl,
         recordedAt = LocalDateTime.parse(recordedAt),
-        memberNickname = memberNickname,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 }

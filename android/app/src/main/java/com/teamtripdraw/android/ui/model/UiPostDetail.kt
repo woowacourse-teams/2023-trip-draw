@@ -8,4 +8,6 @@ data class UiPostDetail(
     val recordedAt: String,
     val postImageUrl: String,
     val routeImageUrl: String,
+    val isMine: Boolean,
+    val authorNickname: String,
 )

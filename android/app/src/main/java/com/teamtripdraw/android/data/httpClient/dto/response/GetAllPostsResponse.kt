@@ -29,6 +29,8 @@ data class Post(
     val tripId: Long,
     @Json(name = "writing")
     val writing: String,
-    @Json(name = "memberNickname")
-    val memberNickname: String,
+    @Json(name = "isMine")
+    val isMine: Boolean,
+    @Json(name = "authorNickname")
+    val authorNickname: String,
 )

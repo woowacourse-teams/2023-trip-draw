@@ -9,5 +9,6 @@ data class TripOfAll(
     val routeImageUrl: String,
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
-    val memberNickname: String,
+    val isMine: Boolean,
+    val authorNickname: String,
 )
