@@ -47,17 +47,39 @@
             app:layout_constraintTop_toBottomOf="@id/iv_item_all_trips_image"
             tools:text="여수 여행" />
 
+        <ImageView
+            android:id="@+id/iv_item_all_trips_user_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/ic_user"
+            app:layout_constraintStart_toStartOf="@id/tv_item_all_trips_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_all_trips_name" />
+
+        <TextView
+            android:id="@+id/tv_item_all_trips_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{tripItem.authorNickname}"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_item_all_trips_user_icon"
+            app:layout_constraintStart_toEndOf="@id/iv_item_all_trips_user_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_item_all_trips_user_icon"
+            tools:text="통후추" />
+
         <TextView
             android:id="@+id/tv_item_all_trips_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_default"
             android:text="@{@string/tv_item_all_trips_date(tripItem.startTime, tripItem.endTime)}"
-            android:textAppearance="@style/subtitle_1"
+            android:textAppearance="@style/body2"
             android:textColor="@color/td_dark_gray"
             app:layout_constraintBottom_toBottomOf="@id/iv_item_all_trips_route"
-            app:layout_constraintStart_toStartOf="@id/tv_item_all_trips_name"
-            app:layout_constraintTop_toBottomOf="@id/tv_item_all_trips_name"
+            app:layout_constraintStart_toStartOf="@id/iv_item_all_trips_user_icon"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_all_trips_user_icon"
             tools:text="2023.07.18 ~ 2023.08.18" />
 
         <ImageView
@@ -70,14 +92,6 @@
             app:layout_constraintTop_toBottomOf="@id/iv_item_all_trips_image"
             app:loadPostImage="@{tripItem.routeImageUrl}"
             tools:background="@color/td_main_blue" />
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_item_all_trips"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
