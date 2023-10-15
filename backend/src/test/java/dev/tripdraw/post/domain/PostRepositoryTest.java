@@ -72,6 +72,29 @@ class PostRepositoryTest {
     }
 
     @Test
+    void 감상_ID로_감상을_조회한다() {
+        // given
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
+
+        // when
+        Post foundPost = postRepository.getByPostId(post.id());
+
+        // then
+        assertThat(foundPost).isEqualTo(post);
+    }
+
+    @Test
+    void 감상_ID로_감상을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long invalidPostId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> postRepository.getByPostId(invalidPostId))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUND.message());
+    }
+
+    @Test
     void 감상_ID로_위치정보를_포함한_감상을_조회한다() {
         // given
         Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));

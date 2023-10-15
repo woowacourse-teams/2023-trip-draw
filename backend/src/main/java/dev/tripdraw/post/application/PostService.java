@@ -121,9 +121,9 @@ public class PostService {
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
         Long memberId = loginUser.memberId();
 
-        Post post = postRepository.getPostWithPointAndMemberById(postId);
+        Post post = postRepository.getByPostId(postId);
         post.validateAuthorization(memberId);
-        Trip trip = tripRepository.getTripWithPointsAndMemberByTripId(post.tripId());
+        Trip trip = tripRepository.getByTripId(post.tripId());
         trip.validateAuthorization(memberId);
 
         post.changeTitle(postUpdateRequest.title());
@@ -132,7 +132,7 @@ public class PostService {
     }
 
     public void delete(LoginUser loginUser, Long postId) {
-        Post post = postRepository.getPostWithPointAndMemberById(postId);
+        Post post = postRepository.getPostWithPointByPostId(postId);
         post.validateAuthorization(loginUser.memberId());
         Point point = post.point();
         point.unregisterPost();

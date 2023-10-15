@@ -18,6 +18,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "where p.tripId = :tripId ")
     List<Post> findAllPostWithPointAndMemberByTripId(@Param("tripId") Long tripId);
 
+    default Post getByPostId(Long postId) {
+        return findById(postId)
+                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
+    }
+
     @Query("SELECT p FROM Post p JOIN FETCH p.point where p.id = :postId")
     Optional<Post> findPostWithPointByPostId(@Param("postId") Long postId);
 
