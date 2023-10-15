@@ -73,6 +73,24 @@ android {
             localProperties.getProperty("ENCRYPTED_SHARED_PREFERENCE_MASTER_KEY_ALIAS"),
         )
 
+        buildConfigField(
+            "String",
+            "OPEN_SOURCE_LICENSE_URL",
+            localProperties.getProperty("OPEN_SOURCE_LICENSE_URL"),
+        )
+
+        buildConfigField(
+            "String",
+            "PRIVACY_POLICY_URL",
+            localProperties.getProperty("PRIVACY_POLICY_URL"),
+        )
+
+        buildConfigField(
+            "String",
+            "TERMS_OF_SERVICE_URL",
+            localProperties.getProperty("TERMS_OF_SERVICE_URL"),
+        )
+
         manifestPlaceholders["NATIVE_APP_KEY"] =
             localProperties.getProperty("KAKAO_NATIVE_APP_KEY_NO_QUOTES")
 
@@ -222,4 +240,7 @@ dependencies {
     // hilt
     implementation(libs.hilt)
     kapt(libs.hiltKapt)
+
+    // lottie
+    implementation(libs.lottie)
 }

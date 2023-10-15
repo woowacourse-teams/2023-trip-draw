@@ -3,8 +3,8 @@
 compileSdk = "33"
 minSdk = "26"
 targetSdk = "33"
-appVersion = "1.0.0"
-versionCode = "3"
+appVersion = "1.1.2"
+versionCode = "6"
 
 # Kotlin
 kotlin = "1.8.10"
@@ -98,6 +98,9 @@ timber = "5.0.1"
 # hilt
 hilt = "2.44"
 
+# lottie
+lottie = "6.1.0"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -187,6 +190,9 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 # hilt
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hiltKapt = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+
+# lottie
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]

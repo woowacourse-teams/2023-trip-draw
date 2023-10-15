@@ -7,4 +7,6 @@ data class DataTripOfAll(
     val routeImageUrl: String,
     val startTime: String,
     val endTime: String,
+    val isMine: Boolean,
+    val authorNickname: String,
 )

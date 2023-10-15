@@ -53,11 +53,8 @@ class LoginViewModel @Inject constructor(
         _openPrivacyPolicyEvent.value = false
     }
 
-    fun startTermsOfServiceEvent() {
+    fun openTermsOfService() {
         _openTermsOfServiceEvent.value = true
-    }
-
-    fun resetTermsOfServiceEvent() {
         _openTermsOfServiceEvent.value = false
     }
 

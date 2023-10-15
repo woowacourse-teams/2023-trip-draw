@@ -20,6 +20,8 @@ fun GetTripInfoResponse.toData(): DataTrip =
         status = status,
         imageUrl = imageUrl,
         routeImageUrl = routeImageUrl,
+        isMine = isMine,
+        authorNickname = authorNickname,
     )
 
 fun GetTripInfoPoint.toData(): DataPoint =
@@ -54,6 +56,8 @@ fun GetAllTripsResponse.toData(): List<DataTripOfAll> {
             routeImageUrl = it.routeImageUrl,
             startTime = it.startTime,
             endTime = it.endTime,
+            isMine = it.isMine,
+            authorNickname = it.authorNickname,
         )
     }
 }
