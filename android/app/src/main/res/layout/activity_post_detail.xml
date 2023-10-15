@@ -43,7 +43,7 @@
                 android:contentDescription="@string/btn_delete_description"
                 android:onClick="@{()->postDetailViewModel.openDeletionEvent()}"
                 android:src="@drawable/ic_delete"
-                app:setEditDeleteIconVisibility="@{postDetailViewModel.postDetail.isMine}" />
+                app:setIconVisibility="@{postDetailViewModel.postDetail.isMine}" />
 
             <ImageView
                 android:id="@+id/btn_post_detail_edit"
@@ -54,7 +54,7 @@
                 android:contentDescription="@string/btn_edit_description"
                 android:onClick="@{() -> postDetailViewModel.editPost()}"
                 android:src="@drawable/ic_edit"
-                app:setEditDeleteIconVisibility="@{postDetailViewModel.postDetail.isMine}" />
+                app:setIconVisibility="@{postDetailViewModel.postDetail.isMine}" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
