@@ -35,10 +35,10 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
             + "JOIN FETCH t.route.points "
             + "JOIN FETCH t.member "
             + "where t.id = :tripId")
-    Optional<Trip> findTripWithPointAndMemberByTripId(@Param("tripId") Long tripId);
+    Optional<Trip> findTripWithPointsAndMemberByTripId(@Param("tripId") Long tripId);
 
     default Trip getTripWithPointsAndMemberByTripId(Long id) {
-        return findTripWithPointAndMemberByTripId(id)
+        return findTripWithPointsAndMemberByTripId(id)
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
 
