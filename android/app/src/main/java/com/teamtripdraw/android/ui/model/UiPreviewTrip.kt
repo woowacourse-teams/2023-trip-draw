@@ -9,4 +9,5 @@ data class UiPreviewTrip(
     val name: String,
     val imageUrl: String,
     val routeImageUrl: String,
+    val isMine: Boolean = true,
 ) : Parcelable
