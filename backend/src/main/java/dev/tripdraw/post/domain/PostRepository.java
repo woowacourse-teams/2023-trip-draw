@@ -12,20 +12,33 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.point where p.tripId = :tripId")
+    @Query("SELECT p FROM Post p "
+            + "JOIN FETCH p.point "
+            + "JOIN FETCH p.member "
+            + "where p.tripId = :tripId ")
     List<Post> findAllByTripId(@Param("tripId") Long tripId);
 
+    @Query("SELECT p FROM Post p "
+            + "JOIN FETCH p.point "
+            + "JOIN FETCH p.member m "
+            + "where p.id = :postId ")
+    Optional<Post> findByPostId(@Param("postId") Long postId);
+
     default Post getByPostId(Long id) {
-        return findById(id)
+        return findByPostId(id)
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
-
-    Optional<Post> findByPointId(Long pointId);
 
     default Post getByPointId(Long pointId) {
         return findByPointId(pointId)
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
+
+    @Query("SELECT p FROM Post p "
+            + "JOIN FETCH p.point "
+            + "JOIN FETCH p.member "
+            + "where p.point.id = :pointId")
+    Optional<Post> findByPointId(@Param("pointId") Long pointId);
 
     @Modifying
     @Query("DELETE FROM Post p WHERE p.member.id = :memberId")
