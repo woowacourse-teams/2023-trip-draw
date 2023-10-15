@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 
-@BindingAdapter("app:setEditDeleteIconVisibility")
+@BindingAdapter("app:setIconVisibility")
 fun ImageView.setIconVisibility(isMine: Boolean?) {
     if (isMine == null) return
     if (isMine) {

@@ -102,7 +102,7 @@
                         android:contentDescription="@string/btn_delete_description"
                         android:onClick="@{()->historyDetailViewModel.openDeleteDialog()}"
                         android:src="@drawable/ic_delete"
-                        app:setEditDeleteIconVisibility="@{historyDetailViewModel.previewTrip.isMine}" />
+                        app:setIconVisibility="@{historyDetailViewModel.previewTrip.isMine}" />
 
                     <ImageView
                         android:id="@+id/btn_history_detail_edit"
@@ -112,7 +112,7 @@
                         android:layout_marginEnd="@dimen/margin_default"
                         android:onClick="@{()->historyDetailViewModel.openEditTitle()}"
                         android:src="@drawable/ic_edit"
-                        app:setEditDeleteIconVisibility="@{historyDetailViewModel.previewTrip.isMine}" />
+                        app:setIconVisibility="@{historyDetailViewModel.previewTrip.isMine}" />
 
                 </com.google.android.material.appbar.MaterialToolbar>
 
