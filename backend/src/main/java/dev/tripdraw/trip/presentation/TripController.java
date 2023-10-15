@@ -75,8 +75,8 @@ public class TripController {
             description = "모든 회원 여행 전체 조회 성공."
     )
     @GetMapping
-    public ResponseEntity<TripsSearchResponse> readAll(TripSearchRequest tripSearchRequest) {
-        TripsSearchResponse response = tripService.readAll(tripSearchRequest);
+    public ResponseEntity<TripsSearchResponse> readAll(@Auth LoginUser loginUser, TripSearchRequest tripSearchRequest) {
+        TripsSearchResponse response = tripService.readAll(loginUser, tripSearchRequest);
         return ResponseEntity.ok(response);
     }
 

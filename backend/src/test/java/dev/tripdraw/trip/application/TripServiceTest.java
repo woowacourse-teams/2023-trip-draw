@@ -115,7 +115,7 @@ class TripServiceTest {
                 .build();
 
         // when
-        TripsSearchResponse tripsSearchResponse = tripService.readAll(request);
+        TripsSearchResponse tripsSearchResponse = tripService.readAll(loginUser, request);
 
         // then
         assertThat(tripsSearchResponse)
