@@ -240,4 +240,7 @@ dependencies {
     // hilt
     implementation(libs.hilt)
     kapt(libs.hiltKapt)
+
+    // lottie
+    implementation(libs.lottie)
 }

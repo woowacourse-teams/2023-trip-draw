@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.model
+package com.teamtripdraw.android.ui.model.allPosts
 
 data class UiPostOfAll(
     val postId: Long,
@@ -11,4 +11,4 @@ data class UiPostOfAll(
     val recordedAt: String,
     val isMine: Boolean,
     val authorNickname: String,
-)
+) : UiItemView

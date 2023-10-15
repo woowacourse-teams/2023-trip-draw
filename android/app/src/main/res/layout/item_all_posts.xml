@@ -6,19 +6,19 @@
     <data>
 
         <variable
-            name="allPostsViewModel"
-            type="com.teamtripdraw.android.ui.allPosts.AllPostsViewModel" />
+            name="openPostEvent"
+            type="kotlin.jvm.functions.Function1" />
 
         <variable
             name="postItem"
-            type="com.teamtripdraw.android.ui.model.UiPostOfAll" />
+            type="com.teamtripdraw.android.ui.model.allPosts.UiPostOfAll" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_default"
-        android:onClick="@{()->allPostsViewModel.openPostDetail(postItem.postId)}">
+        android:onClick="@{(value)->openPostEvent.invoke(postItem.postId)}">
 
         <ImageView
             android:id="@+id/iv_item_all_posts_image"
