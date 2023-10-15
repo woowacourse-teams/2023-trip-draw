@@ -45,6 +45,7 @@ class AllTripsViewModel @Inject constructor(
             name = trip.name,
             imageUrl = trip.imageUrl,
             routeImageUrl = trip.routeImageUrl,
+            isMine = trip.isMine,
         )
         _openHistoryDetailEvent.value = previewTrip
     }
