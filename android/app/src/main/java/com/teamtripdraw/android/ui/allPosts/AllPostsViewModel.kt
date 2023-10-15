@@ -11,7 +11,7 @@ import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.allPosts.UiAllPosts
 import com.teamtripdraw.android.ui.model.allPosts.UiItemView
-import com.teamtripdraw.android.ui.model.allPosts.UiLoading
+import com.teamtripdraw.android.ui.model.allPosts.UiLoadingItem
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,7 +24,6 @@ class AllPostsViewModel @Inject constructor(
 
     private val _uiPosts: MutableLiveData<List<UiItemView>> = MutableLiveData(listOf())
     val posts: LiveData<UiAllPosts> = Transformations.map(_uiPosts) { post -> UiAllPosts(post) }
-    private val loadingItem = UiLoading()
 
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
@@ -46,7 +45,7 @@ class AllPostsViewModel @Inject constructor(
     }
 
     private fun addLoadingItem() {
-        _uiPosts.value = _uiPosts.value!!.toMutableList().apply { add(loadingItem) }
+        _uiPosts.value = _uiPosts.value!!.toMutableList().apply { add(UiLoadingItem) }
     }
 
     private fun getPosts() {
@@ -74,7 +73,7 @@ class AllPostsViewModel @Inject constructor(
 
     private fun fetchPosts(posts: List<PostOfAll>) {
         _uiPosts.value = _uiPosts.value!!.toMutableList().apply {
-            remove(loadingItem)
+            remove(UiLoadingItem)
             addAll(posts.map { it.toPresentation() })
         }
     }

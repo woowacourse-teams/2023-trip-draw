@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.teamtripdraw.android.databinding.ItemLoadingBinding
 import com.teamtripdraw.android.ui.model.allPosts.UiItemView
-import com.teamtripdraw.android.ui.model.allPosts.UiLoading
+import com.teamtripdraw.android.ui.model.allPosts.UiLoadingItem
 import com.teamtripdraw.android.ui.model.allPosts.UiPostOfAll
 
 class AllPostsAdapter(
@@ -15,7 +15,7 @@ class AllPostsAdapter(
 ) : ListAdapter<UiItemView, RecyclerView.ViewHolder>(diffUtil) {
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position) is UiLoading) {
+        return if (getItem(position) is UiLoadingItem) {
             LOADING_VIEW
         } else {
             POST_VIEW
@@ -45,7 +45,7 @@ class AllPostsAdapter(
                 if (oldItem is UiPostOfAll && newItem is UiPostOfAll) {
                     return oldItem.postId == newItem.postId
                 }
-                return true
+                return false
             }
 
             override fun areContentsTheSame(
@@ -55,7 +55,7 @@ class AllPostsAdapter(
                 if (oldItem is UiPostOfAll && newItem is UiPostOfAll) {
                     return oldItem == newItem
                 }
-                return true
+                return false
             }
         }
     }
