@@ -56,12 +56,15 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
     private fun initMarkerSelectedViewModelData() {
         initPointData()?.let { pointId -> markerSelectedViewModel.updatePointId(pointId) }
         initTripId()?.let { tripId -> markerSelectedViewModel.updateTripId(tripId) }
+        initIsMine()?.let { isMine -> markerSelectedViewModel.updateIsMine(isMine) }
         markerSelectedViewModel.getPointInfo()
     }
 
     private fun initPointData(): Long? = arguments?.getLong(POINT_ID)
 
     private fun initTripId(): Long? = arguments?.getLong(TRIP_ID)
+
+    private fun initIsMine(): Boolean? = arguments?.getBoolean(IS_MINE_KEY)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -124,13 +127,20 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
         private const val POINT_ID = "POINT_ID"
         private const val TRIP_ID = "TRIP_ID"
         private const val BOTTOM_SHEET_CLICK_SITUATION_ID = "BOTTOM_SHEET_CLICK_SITUATION_ID"
+        private const val IS_MINE_KEY = "IS_MINE_KEY"
 
-        fun getBundle(pointId: Long, tripId: Long, situation: BottomSheetClickSituation): Bundle {
+        fun getBundle(
+            pointId: Long,
+            tripId: Long,
+            situation: BottomSheetClickSituation,
+            isMine: Boolean = true,
+        ): Bundle {
             val bundle = Bundle()
             bundle.apply {
                 putLong(POINT_ID, pointId)
                 putLong(TRIP_ID, tripId)
                 putParcelable(BOTTOM_SHEET_CLICK_SITUATION_ID, situation)
+                putBoolean(IS_MINE_KEY, isMine)
             }
             return bundle
         }

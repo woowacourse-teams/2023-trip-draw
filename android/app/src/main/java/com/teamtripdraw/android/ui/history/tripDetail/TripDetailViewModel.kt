@@ -26,6 +26,9 @@ class TripDetailViewModel @Inject constructor(
     val tripRoute: LiveData<UiRoute> =
         Transformations.map(_tripRoute) { route -> route.toPresentation() }
 
+    var isMine: Boolean = true
+        private set
+
     private val _tripTitle = MutableLiveData<String>()
     val tripTitle: LiveData<String> = _tripTitle
 
@@ -59,6 +62,7 @@ class TripDetailViewModel @Inject constructor(
                 .onSuccess {
                     _tripRoute.value = it.route
                     _tripTitle.value = it.name
+                    isMine = it.isMine
                 }
                 .onFailure {
                     TripDrawApplication.logUtil.general.log(it)
