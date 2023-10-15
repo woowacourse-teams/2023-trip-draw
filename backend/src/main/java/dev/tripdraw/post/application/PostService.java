@@ -56,7 +56,7 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = memberRepository.getById(loginUser.memberId());
-        Trip trip = tripRepository.getById(postAndPointCreateRequest.tripId());
+        Trip trip = tripRepository.getByTripId(postAndPointCreateRequest.tripId());
         trip.validateAuthorization(member.id());
         Point point = pointRepository.save(postAndPointCreateRequest.toPoint(trip));
 
@@ -83,7 +83,7 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = memberRepository.getById(loginUser.memberId());
-        Trip trip = tripRepository.getById(postRequest.tripId());
+        Trip trip = tripRepository.getByTripId(postRequest.tripId());
         trip.validateAuthorization(member.id());
         Point point = pointRepository.getById(postRequest.pointId());
 
@@ -123,7 +123,7 @@ public class PostService {
 
         Post post = postRepository.getByPostId(postId);
         post.validateAuthorization(memberId);
-        Trip trip = tripRepository.getById(post.tripId());
+        Trip trip = tripRepository.getTripWithPointsAndMemberByTripId(post.tripId());
         trip.validateAuthorization(memberId);
 
         post.changeTitle(postUpdateRequest.title());

@@ -44,7 +44,7 @@ public class AdminService {
 
     @Transactional(readOnly = true)
     public AdminTripResponse readTrip(Long tripId) {
-        return AdminTripResponse.from(tripRepository.getById(tripId));
+        return AdminTripResponse.from(tripRepository.getTripWithPointsAndMemberByTripId(tripId));
     }
 
     public void deleteTrip(Long tripId) {

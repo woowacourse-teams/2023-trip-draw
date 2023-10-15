@@ -133,7 +133,7 @@ class TripServiceTest {
         tripService.updateTripById(loginUser, trip.id(), request);
 
         // then
-        Trip trip = tripRepository.getById(this.trip.id());
+        Trip trip = tripRepository.getTripWithPointsAndMemberByTripId(this.trip.id());
         assertSoftly(softly -> {
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");
             softly.assertThat(trip.status()).isEqualTo(FINISHED);

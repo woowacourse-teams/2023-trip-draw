@@ -1,6 +1,7 @@
 package dev.tripdraw.trip.presentation;
 
 import static dev.tripdraw.test.fixture.MemberFixture.새로운_사용자;
+import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.TestFixture.서울_2022_1_2_일;
 import static dev.tripdraw.test.fixture.TestFixture.서울_2023_1_1_일;
 import static dev.tripdraw.test.fixture.TestFixture.제주_2023_1_1_일;
@@ -20,6 +21,7 @@ import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.test.ControllerTest;
+import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
@@ -32,6 +34,7 @@ import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -76,7 +79,12 @@ class TripControllerTest extends ControllerTest {
         reo = memberRepository.save(새로운_사용자("리오"));
         huchuToken = jwtTokenProvider.generateAccessToken(huchu.id().toString());
         reoToken = jwtTokenProvider.generateAccessToken(reo.id().toString());
-        huchuTrip = tripRepository.save(새로운_여행(huchu));
+
+        Trip trip = 새로운_여행(huchu);
+        Point point = 새로운_위치정보(trip);
+        trip.add(point);
+
+        huchuTrip = tripRepository.save(trip);
         reoTrip = tripRepository.save(새로운_여행(reo));
     }
 
@@ -110,7 +118,9 @@ class TripControllerTest extends ControllerTest {
         TripResponse tripResponse = response.as(TripResponse.class);
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
-            softly.assertThat(tripResponse).isEqualTo(TripResponse.from(huchuTrip, huchu.id()));
+            softly.assertThat(tripResponse).usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(TripResponse.from(huchuTrip, huchu.id()));
         });
     }
 
@@ -148,7 +158,7 @@ class TripControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        Trip trip = tripRepository.getById(huchuTrip.id());
+        Trip trip = tripRepository.getTripWithPointsAndMemberByTripId(huchuTrip.id());
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(trip.nameValue()).isEqualTo("제주도 여행");

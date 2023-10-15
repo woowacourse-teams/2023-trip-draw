@@ -67,7 +67,30 @@ class TripRepositoryTest {
     }
 
     @Test
-    void 여행_ID를_입력받아_여행_목록과_위치_정보까지_조회한다() {
+    void 여행_ID로_여행을_조회한다() {
+        // given
+        Trip trip = tripRepository.save(새로운_여행(member));
+
+        // when
+        Trip foundTrip = tripRepository.getByTripId(trip.id());
+
+        // then
+        assertThat(foundTrip).isEqualTo(trip);
+    }
+
+    @Test
+    void 여행_ID로_여행을_조회할_때_여행이_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long invalidId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> tripRepository.getByTripId(invalidId))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.message());
+    }
+
+    @Test
+    void 여행_ID로_위치정보_목록이_포함된_여행을_조회한다() {
         // given
         Trip trip = 새로운_여행(member);
         Point point1 = 새로운_위치정보(trip);
@@ -87,6 +110,49 @@ class TripRepositoryTest {
     }
 
     @Test
+    void 여행_ID로_위치정보_목록이_포함된_여행을_조회할_때_여행이_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long invalidId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> tripRepository.getTripWithPoints(invalidId))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.message());
+    }
+
+    @Test
+    void 여행_ID로_위치정보_목록과_회원이_포함된_여행을_조회한다() {
+        // given
+        Trip trip = 새로운_여행(member);
+        Point point1 = 새로운_위치정보(trip);
+        Point point2 = 새로운_위치정보(trip);
+        trip.add(point1);
+        trip.add(point2);
+        tripRepository.save(trip);
+
+        // when
+        Trip savedTrips = tripRepository.getTripWithPointsAndMemberByTripId(trip.id());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(savedTrips.points()).containsExactly(point1, point2);
+            softly.assertThat(savedTrips.member()).isEqualTo(member);
+            softly.assertThat(savedTrips).isEqualTo(trip);
+        });
+    }
+
+    @Test
+    void 여행_ID로_위치정보_목록과_회원이_포함된_여행을_조회할_때_여행이_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long invalidId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> tripRepository.getTripWithPointsAndMemberByTripId(invalidId))
+                .isInstanceOf(TripException.class)
+                .hasMessage(TRIP_NOT_FOUND.message());
+    }
+
+    @Test
     void 회원_ID로_여행을_삭제한다() {
         // given
         Trip trip = tripRepository.save(새로운_여행(member));
@@ -96,29 +162,6 @@ class TripRepositoryTest {
 
         // then
         assertThat(tripRepository.existsById(trip.id())).isFalse();
-    }
-
-    @Test
-    void 여행_ID로_여행을_조회한다() {
-        // given
-        Trip trip = tripRepository.save(새로운_여행(member));
-
-        // when
-        Trip foundTrip = tripRepository.getById(trip.id());
-
-        // then
-        assertThat(foundTrip).isEqualTo(trip);
-    }
-
-    @Test
-    void 여행_ID로_여행을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
-        // given
-        Long invalidId = Long.MIN_VALUE;
-
-        // expect
-        assertThatThrownBy(() -> tripRepository.getById(invalidId))
-                .isInstanceOf(TripException.class)
-                .hasMessage(TRIP_NOT_FOUND.message());
     }
 
     @Test

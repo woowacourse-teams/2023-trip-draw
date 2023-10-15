@@ -41,7 +41,7 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripResponse readTripById(LoginUser loginUser, Long id) {
-        Trip trip = tripRepository.getById(id);
+        Trip trip = tripRepository.getTripWithPointsAndMemberByTripId(id);
         return TripResponse.from(trip, loginUser.memberId());
     }
 
@@ -69,7 +69,7 @@ public class TripService {
     }
 
     public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {
-        Trip trip = tripRepository.getById(tripId);
+        Trip trip = tripRepository.getByTripId(tripId);
         trip.validateAuthorization(loginUser.memberId());
 
         trip.changeName(tripUpdateRequest.name());
@@ -79,7 +79,7 @@ public class TripService {
     }
 
     public void delete(LoginUser loginUser, Long tripId) {
-        Trip trip = tripRepository.getById(tripId);
+        Trip trip = tripRepository.getByTripId(tripId);
         trip.validateAuthorization(loginUser.memberId());
         publisher.publishEvent(new TripDeleteEvent(tripId));
         tripRepository.delete(trip);
