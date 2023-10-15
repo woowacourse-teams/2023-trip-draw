@@ -9,11 +9,10 @@ import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import com.teamtripdraw.android.ui.filter.SelectedOptions
 import com.teamtripdraw.android.ui.model.allPosts.UiAllPosts
 import com.teamtripdraw.android.ui.model.allPosts.UiItemView
 import com.teamtripdraw.android.ui.model.allPosts.UiLoadingItem
-import com.teamtripdraw.android.ui.filter.SelectedOptions
-import com.teamtripdraw.android.ui.model.UiAllPosts
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
