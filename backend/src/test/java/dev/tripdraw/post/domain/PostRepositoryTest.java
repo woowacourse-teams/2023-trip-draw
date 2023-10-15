@@ -7,6 +7,7 @@ import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import dev.tripdraw.common.config.JpaConfig;
@@ -61,7 +62,7 @@ class PostRepositoryTest {
     @Test
     void 여행_ID로_위치정보와_회원을_포함한_감상_목록을_조회한다() {
         // given
-        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
 
         // when
         List<Post> posts = postRepository.findAllPostWithPointAndMemberByTripId(trip.id());
@@ -71,15 +72,45 @@ class PostRepositoryTest {
     }
 
     @Test
+    void 감상_ID로_위치정보를_포함한_감상을_조회한다() {
+        // given
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
+
+        // when
+        Post foundPost = postRepository.getPostWithPointByPostId(post.id());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(foundPost).isEqualTo(post);
+            softly.assertThat(foundPost.point()).isEqualTo(point);
+        });
+    }
+
+    @Test
+    void 감상_ID로_위치정보를_포함한_감상을_조회할_때_존재하지_않는_경우_예외를_발생시킨다() {
+        // given
+        Long invalidPostId = Long.MIN_VALUE;
+
+        // expect
+        assertThatThrownBy(() -> postRepository.getPostWithPointByPostId(invalidPostId))
+                .isInstanceOf(PostException.class)
+                .hasMessage(POST_NOT_FOUND.message());
+    }
+
+    @Test
     void 감상_ID로_위치정보와_회원을_포함한_감상을_조회한다() {
         // given
-        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
 
         // when
         Post foundPost = postRepository.getPostWithPointAndMemberById(post.id());
 
         // then
-        assertThat(foundPost).isEqualTo(post);
+        assertSoftly(softly -> {
+            softly.assertThat(foundPost).isEqualTo(post);
+            softly.assertThat(foundPost.point()).isEqualTo(point);
+            softly.assertThat(foundPost.member()).isEqualTo(member);
+        });
     }
 
     @Test
@@ -96,13 +127,17 @@ class PostRepositoryTest {
     @Test
     void 위치정보_ID로_위치정보와_회원을_포함한_감상을_조회한다() {
         // given
-        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
 
         // when
         Post foundPost = postRepository.getPostWithPointAndMemberByPointId(point.id());
 
         // then
-        assertThat(foundPost).isEqualTo(post);
+        assertSoftly(softly -> {
+            softly.assertThat(foundPost).isEqualTo(post);
+            softly.assertThat(foundPost.point()).isEqualTo(point);
+            softly.assertThat(foundPost.member()).isEqualTo(member);
+        });
     }
 
     @Test
@@ -119,7 +154,7 @@ class PostRepositoryTest {
     @Test
     void 회원_ID로_감상을_삭제한다() {
         // given
-        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
 
         // when
         postRepository.deleteByMemberId(member.id());
@@ -131,7 +166,7 @@ class PostRepositoryTest {
     @Test
     void 여행_ID로_감상을_삭제한다() {
         // given
-        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
 
         // when
         postRepository.deleteByTripId(trip.id());

@@ -75,7 +75,7 @@ class TripServiceTest {
         Point point = pointRepository.save(새로운_위치정보(trip));
         trip.add(point);
         loginUser = new LoginUser(member.id());
-        postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+        postRepository.save(새로운_감상(point, member, "", trip.id()));
     }
 
     @Test
