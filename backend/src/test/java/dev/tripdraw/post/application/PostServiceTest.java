@@ -284,7 +284,7 @@ class PostServiceTest {
         postService.update(loginUser, post.id(), postUpdateRequest, null);
 
         // then
-        Post updatedPost = postRepository.getByPostId(post.id());
+        Post updatedPost = postRepository.getPostWithPointAndMemberById(post.id());
         assertSoftly(softly -> {
             softly.assertThat(updatedPost.title()).isEqualTo("우도의 땅콩 아이스크림");
             softly.assertThat(updatedPost.writing()).isEqualTo("수정한 내용입니다.");

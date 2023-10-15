@@ -97,13 +97,13 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostResponse read(LoginUser loginUser, Long postId) {
-        Post post = postRepository.getByPostId(postId);
+        Post post = postRepository.getPostWithPointAndMemberById(postId);
         return PostResponse.from(post, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
     public PostResponse readByPointId(LoginUser loginUser, Long pointId) {
-        Post post = postRepository.getByPointId(pointId);
+        Post post = postRepository.getPostWithPointAndMemberByPointId(pointId);
         return PostResponse.from(post, loginUser.memberId());
     }
 
@@ -113,7 +113,7 @@ public class PostService {
             throw new TripException(TRIP_NOT_FOUND);
         }
 
-        return postRepository.findAllByTripId(tripId).stream()
+        return postRepository.findAllPostWithPointAndMemberByTripId(tripId).stream()
                 .sorted(comparing(Post::pointRecordedAt).reversed())
                 .collect(collectingAndThen(toList(), posts -> PostsResponse.from(posts, loginUser.memberId())));
     }
@@ -121,7 +121,7 @@ public class PostService {
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
         Long memberId = loginUser.memberId();
 
-        Post post = postRepository.getByPostId(postId);
+        Post post = postRepository.getPostWithPointAndMemberById(postId);
         post.validateAuthorization(memberId);
         Trip trip = tripRepository.getTripWithPointsAndMemberByTripId(post.tripId());
         trip.validateAuthorization(memberId);
@@ -132,7 +132,7 @@ public class PostService {
     }
 
     public void delete(LoginUser loginUser, Long postId) {
-        Post post = postRepository.getByPostId(postId);
+        Post post = postRepository.getPostWithPointAndMemberById(postId);
         post.validateAuthorization(loginUser.memberId());
         Point point = post.point();
         point.unregisterPost();

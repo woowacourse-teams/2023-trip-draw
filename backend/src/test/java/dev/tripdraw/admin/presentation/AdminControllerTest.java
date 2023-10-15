@@ -231,7 +231,7 @@ class AdminControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        Optional<Post> findPost = postRepository.findByPostId(post.id());
+        Optional<Post> findPost = postRepository.findPostWithPointAndMemberById(post.id());
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(findPost).isNotPresent();

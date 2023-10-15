@@ -33,7 +33,7 @@ public class PostCreateEventHandler {
     @TransactionalEventListener(phase = AFTER_COMMIT)
     public void handle(PostCreateEvent postCreateEvent) {
         Trip trip = tripRepository.getTripWithPoints(postCreateEvent.tripId());
-        Post post = postRepository.getByPostId(postCreateEvent.postId());
+        Post post = postRepository.getPostWithPointAndMemberById(postCreateEvent.postId());
 
         String imageUrl = routeImageGenerator.generate(
                 trip.getLatitudes(),

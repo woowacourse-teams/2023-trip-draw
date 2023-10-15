@@ -16,21 +16,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "JOIN FETCH p.point "
             + "JOIN FETCH p.member "
             + "where p.tripId = :tripId ")
-    List<Post> findAllByTripId(@Param("tripId") Long tripId);
+    List<Post> findAllPostWithPointAndMemberByTripId(@Param("tripId") Long tripId);
 
     @Query("SELECT p FROM Post p "
             + "JOIN FETCH p.point "
             + "JOIN FETCH p.member m "
             + "where p.id = :postId ")
-    Optional<Post> findByPostId(@Param("postId") Long postId);
+    Optional<Post> findPostWithPointAndMemberById(@Param("postId") Long postId);
 
-    default Post getByPostId(Long id) {
-        return findByPostId(id)
-                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
-    }
-
-    default Post getByPointId(Long pointId) {
-        return findByPointId(pointId)
+    default Post getPostWithPointAndMemberById(Long id) {
+        return findPostWithPointAndMemberById(id)
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
 
@@ -38,7 +33,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "JOIN FETCH p.point "
             + "JOIN FETCH p.member "
             + "where p.point.id = :pointId")
-    Optional<Post> findByPointId(@Param("pointId") Long pointId);
+    Optional<Post> findPostWithPointAndMemberByPointId(@Param("pointId") Long pointId);
+
+    default Post getPostWithPointAndMemberByPointId(Long pointId) {
+        return findPostWithPointAndMemberByPointId(pointId)
+                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
+    }
 
     @Modifying
     @Query("DELETE FROM Post p WHERE p.member.id = :memberId")

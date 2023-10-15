@@ -63,7 +63,7 @@ public class AdminService {
 
     @Transactional(readOnly = true)
     public AdminPostResponse readPost(Long postId) {
-        return AdminPostResponse.from(postRepository.getByPostId(postId));
+        return AdminPostResponse.from(postRepository.getPostWithPointAndMemberById(postId));
     }
 
     public void deletePost(Long postId) {
