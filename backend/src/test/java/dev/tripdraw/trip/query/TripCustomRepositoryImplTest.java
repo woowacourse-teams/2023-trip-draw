@@ -59,6 +59,93 @@ class TripCustomRepositoryImplTest {
     @Nested
     class 조건에_따라_여행을_조회할_때 {
 
+        @Test
+        void 감상이_없는_여행은_조회되지_않는다() {
+            // given
+            emptyPostTrip();
+
+            TripSearchConditions tripSearchConditions = emptyTripSearchConditions();
+
+            // when
+            List<Trip> trips = tripCustomRepository.findAllByConditions(
+                    tripSearchConditions,
+                    new TripPaging(null, 10)
+            );
+
+            // then
+            assertThat(trips).isEmpty();
+        }
+
+        @Test
+        void 여행을_전체_조회한다() {
+            // given
+            for (int i = 1; i <= 5; i++) {
+                tripRepository.save(새로운_여행(member, "여행 " + i));
+            }
+            TripPaging tripPaging = new TripPaging(null, 3);
+
+            // when
+            List<Trip> trips = tripCustomRepository.findAll(tripPaging);
+
+            // then
+            assertThat(trips)
+                    .extracting(Trip::nameValue)
+                    .containsExactly("여행 5", "여행 4", "여행 3", "여행 2");
+        }
+
+        private Trip jeju_2023_2_1_Wed() {
+            Trip trip = Trip.of(member.id(), member.nickname());
+            Point point = PointFixture.새로운_위치정보(2023, 2, 1, 1, 1);
+            trip.add(point);
+            tripRepository.save(trip);
+            postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member.id(), trip.id()));
+            return trip;
+        }
+
+        private Trip seoul_2023_1_1_Sun() {
+            Trip trip = Trip.of(member.id(), member.nickname());
+            Point point = PointFixture.새로운_위치정보(2023, 1, 1, 10, 1);
+            trip.add(point);
+            tripRepository.save(trip);
+            postRepository.save(new Post("", point, "서울특별시 송파구 신천동", "", member.id(), trip.id()));
+            return trip;
+        }
+
+        private Trip jeju_2023_1_1_Sun() {
+            Trip trip = Trip.of(member.id(), member.nickname());
+            Point point = PointFixture.새로운_위치정보(2023, 1, 1, 1, 1);
+            trip.add(point);
+            tripRepository.save(trip);
+            postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member.id(), trip.id()));
+            return trip;
+        }
+
+        private Trip seoul_2022_1_2_Sun() {
+            Trip trip = Trip.of(member.id(), member.nickname());
+            Point point = PointFixture.새로운_위치정보(2022, 1, 2, 1, 1);
+            trip.add(point);
+            tripRepository.save(trip);
+            postRepository.save(new Post("", point, "서울특별시 송파구 방이동", "", member.id(), trip.id()));
+            return trip;
+        }
+
+        private Trip yangyang_2021_3_2_Tue() {
+            Trip trip = Trip.of(member.id(), member.nickname());
+            Point point = PointFixture.새로운_위치정보(2021, 3, 2, 1, 1);
+            trip.add(point);
+            tripRepository.save(trip);
+            postRepository.save(new Post("", point, "강원도 양양군", "", member.id(), trip.id()));
+            return trip;
+        }
+
+        private Trip emptyPostTrip() {
+            Trip trip = Trip.of(member.id(), member.nickname());
+            Point point = PointFixture.새로운_위치정보(2021, 3, 2, 1, 1);
+            trip.add(point);
+            tripRepository.save(trip);
+            return trip;
+        }
+
         @Nested
         class 개수_제한이 {
 
@@ -406,93 +493,6 @@ class TripCustomRepositoryImplTest {
                         yangyang2021_3_2_Tue
                 );
             }
-        }
-
-        @Test
-        void 감상이_없는_여행은_조회되지_않는다() {
-            // given
-            emptyPostTrip();
-
-            TripSearchConditions tripSearchConditions = emptyTripSearchConditions();
-
-            // when
-            List<Trip> trips = tripCustomRepository.findAllByConditions(
-                    tripSearchConditions,
-                    new TripPaging(null, 10)
-            );
-
-            // then
-            assertThat(trips).isEmpty();
-        }
-
-        @Test
-        void 여행을_전체_조회한다() {
-            // given
-            for (int i = 1; i <= 5; i++) {
-                tripRepository.save(새로운_여행(member, "여행 " + i));
-            }
-            TripPaging tripPaging = new TripPaging(null, 3);
-
-            // when
-            List<Trip> trips = tripCustomRepository.findAll(tripPaging);
-
-            // then
-            assertThat(trips)
-                    .extracting(Trip::nameValue)
-                    .containsExactly("여행 5", "여행 4", "여행 3", "여행 2");
-        }
-
-        private Trip jeju_2023_2_1_Wed() {
-            Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = PointFixture.새로운_위치정보(2023, 2, 1, 1, 1);
-            trip.add(point);
-            tripRepository.save(trip);
-            postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member.id(), trip.id()));
-            return trip;
-        }
-
-        private Trip seoul_2023_1_1_Sun() {
-            Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = PointFixture.새로운_위치정보(2023, 1, 1, 10, 1);
-            trip.add(point);
-            tripRepository.save(trip);
-            postRepository.save(new Post("", point, "서울특별시 송파구 신천동", "", member.id(), trip.id()));
-            return trip;
-        }
-
-        private Trip jeju_2023_1_1_Sun() {
-            Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = PointFixture.새로운_위치정보(2023, 1, 1, 1, 1);
-            trip.add(point);
-            tripRepository.save(trip);
-            postRepository.save(new Post("", point, "제주특별자치도 제주시 애월읍", "", member.id(), trip.id()));
-            return trip;
-        }
-
-        private Trip seoul_2022_1_2_Sun() {
-            Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = PointFixture.새로운_위치정보(2022, 1, 2, 1, 1);
-            trip.add(point);
-            tripRepository.save(trip);
-            postRepository.save(new Post("", point, "서울특별시 송파구 방이동", "", member.id(), trip.id()));
-            return trip;
-        }
-
-        private Trip yangyang_2021_3_2_Tue() {
-            Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = PointFixture.새로운_위치정보(2021, 3, 2, 1, 1);
-            trip.add(point);
-            tripRepository.save(trip);
-            postRepository.save(new Post("", point, "강원도 양양군", "", member.id(), trip.id()));
-            return trip;
-        }
-
-        private Trip emptyPostTrip() {
-            Trip trip = Trip.of(member.id(), member.nickname());
-            Point point = PointFixture.새로운_위치정보(2021, 3, 2, 1, 1);
-            trip.add(point);
-            tripRepository.save(trip);
-            return trip;
         }
     }
 

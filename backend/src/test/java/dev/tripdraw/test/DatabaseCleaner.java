@@ -10,7 +10,7 @@ public class DatabaseCleaner extends AbstractTestExecutionListener {
     private static final String TRUNCATE_TABLE_QUERY = """
             SELECT Concat('TRUNCATE TABLE \"', TABLE_NAME, '\";') 
             FROM INFORMATION_SCHEMA.TABLES
-            WHERE TABLE_SCHEMA = 'PUBLIC'
+            WHERE TABLE_SCHEMA = 'test'
             """;
 
     @Override
@@ -29,8 +29,8 @@ public class DatabaseCleaner extends AbstractTestExecutionListener {
     }
 
     private void truncateTables(JdbcTemplate jdbcTemplate, List<String> truncateTableQueries) {
-        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE");
+        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
         truncateTableQueries.forEach(jdbcTemplate::execute);
-        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY TRUE");
+        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
     }
 }
