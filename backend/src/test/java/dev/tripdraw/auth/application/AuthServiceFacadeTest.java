@@ -17,20 +17,13 @@ import dev.tripdraw.auth.oauth.OauthClientProvider;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.test.TestKakaoApiClient;
-import jakarta.transaction.Transactional;
+import dev.tripdraw.test.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Transactional
-@SpringBootTest
-class AuthServiceFacadeTest {
+class AuthServiceFacadeTest extends ServiceTest {
 
     @Autowired
     private AuthServiceFacade authServiceFacade;
