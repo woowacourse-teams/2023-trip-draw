@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.domain.repository.TripRepository
-import com.teamtripdraw.android.ui.model.UiAllTrips
+import com.teamtripdraw.android.ui.model.allTrips.UiAllTrips
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
-import com.teamtripdraw.android.ui.model.UiTripOfAll
+import com.teamtripdraw.android.ui.model.allTrips.UiTripOfAll
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

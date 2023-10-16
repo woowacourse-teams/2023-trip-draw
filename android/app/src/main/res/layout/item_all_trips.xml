@@ -11,7 +11,7 @@
 
         <variable
             name="tripItem"
-            type="com.teamtripdraw.android.ui.model.UiTripOfAll" />
+            type="com.teamtripdraw.android.ui.model.allTrips.UiTripOfAll" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
