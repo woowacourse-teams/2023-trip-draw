@@ -91,7 +91,7 @@ class MarkerSelectedBottomSheet : BottomSheetDialogFragment() {
 
     private fun navigateToPostWriting(pointId: Long) {
         val tripId = initTripId() ?: throw IllegalArgumentException("trip을 가져올 수 없습니다.")
-        startActivity(PostWritingActivity.getIntent(requireContext(), tripId, pointId))
+        startActivity(PostWritingActivity.getIntentByPoint(requireContext(), tripId, pointId))
         dismiss()
     }
 

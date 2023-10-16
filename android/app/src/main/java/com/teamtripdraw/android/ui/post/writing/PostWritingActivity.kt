@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,7 +17,6 @@ import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.extensions.toResizedImageFile
-import com.teamtripdraw.android.support.framework.presentation.getParcelableExtraCompat
 import com.teamtripdraw.android.support.framework.presentation.images.createImageUri
 import com.teamtripdraw.android.support.framework.presentation.permission.checkCameraPermission
 import com.teamtripdraw.android.support.framework.presentation.permission.requestCameraPermission
@@ -121,23 +119,15 @@ class PostWritingActivity : AppCompatActivity() {
         private const val INTENT_KEY_TRIP_ID = "tripId"
         private const val INTENT_KEY_POINT_ID = "pointId"
         private const val INTENT_KEY_POST_ID = "postId"
-        private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다. (PostWritingActivity)"
 
-        /**
-         * 지정된 위치에 대한 글을 작성합니다.
-         * 위치에 대한 감상 여부에 따라 자동으로 글 작성 모드가 설정됩니다.
-         */
-        fun getIntent(context: Context, tripId: Long, pointId: Long): Intent {
+        fun getIntentByPoint(context: Context, tripId: Long, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
             intent.putExtra(INTENT_KEY_TRIP_ID, tripId)
             intent.putExtra(INTENT_KEY_POINT_ID, pointId)
             return intent
         }
 
-        /**
-         * 기존의 글을 수정합니다.
-         */
-        fun getIntent(
+        fun getIntentByPost(
             context: Context,
             postId: Long,
         ): Intent {
