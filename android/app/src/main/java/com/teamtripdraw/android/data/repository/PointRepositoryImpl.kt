@@ -6,6 +6,7 @@ import com.teamtripdraw.android.data.model.mapper.toData
 import com.teamtripdraw.android.data.model.mapper.toDomain
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.point.PrePoint
+import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.repository.PointRepository
 import javax.inject.Inject
 
@@ -21,6 +22,9 @@ class PointRepositoryImpl @Inject constructor(
 
     override suspend fun getPoint(pointId: Long, tripId: Long): Result<Point> =
         pointDataSource.getPoint(tripId = tripId, pointId = pointId).map { it.toDomain() }
+
+    override suspend fun getPost(pointId: Long): Result<Post> =
+        pointDataSource.getPost(pointId = pointId).map { it.toDomain() }
 
     override suspend fun deletePoint(tripId: Long, pointId: Long): Result<Unit> =
         pointDataSource.deletePoint(tripId = tripId, pointId = pointId)
