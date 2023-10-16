@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
@@ -99,17 +100,22 @@ class PostWritingViewModel @Inject constructor(
         _selectPhotoEvent.value = false
     }
 
-    fun initPostMetaData(tripId: Long, pointId: Long, writingMode: WritingMode = WritingMode.NEW) {
-        this.writingMode = writingMode
+    fun initPostData(
+        tripId: Long = Trip.NULL_SUBSTITUTE_ID,
+        pointId: Long = Point.NULL_SUBSTITUTE_ID,
+        postId: Long = Post.NULL_SUBSTITUTE_ID,
+    ) {
         this.tripId = tripId
         this.pointId = pointId
-        fetchPoint()
+        this.postId = postId
+        setWritingMode(tripId, pointId, postId)
+        fetchPostData()
     }
 
-    fun initPostMetaData(postId: Long, writingMode: WritingMode = WritingMode.EDIT) {
-        this.writingMode = writingMode
-        this.postId = postId
-        fetchPost()
+    private fun setWritingMode(tripId: Long, pointId: Long, postId: Long) {
+        if (tripId != Trip.NULL_SUBSTITUTE_ID && pointId != Point.NULL_SUBSTITUTE_ID) {
+            writingMode = WritingMode.NEW
+        } else if (postId != Post.NULL_SUBSTITUTE_ID) writingMode = WritingMode.EDIT
     }
 
     fun textChangedEvent() {
@@ -150,25 +156,25 @@ class PostWritingViewModel @Inject constructor(
         }
     }
 
-    private fun fetchPoint() {
-        viewModelScope.launch {
-            pointRepository.getPoint(pointId = pointId, tripId = tripId)
-                .onSuccess {
+    private fun fetchPostData() {
+        if (writingMode == WritingMode.NEW) {
+            viewModelScope.launch {
+                pointRepository.getPoint(pointId = pointId, tripId = tripId).onSuccess {
                     _point.value = it
                     fetchAddress()
+                    fetchWritingMode()
                 }
+            }
+        } else if (writingMode == WritingMode.EDIT) {
+            fetchPost()
         }
     }
 
     private fun fetchPost() {
         viewModelScope.launch {
             postRepository.getPost(postId = postId)
-                .onSuccess {
-                    _address.value = it.address
-                    title.value = it.title
-                    writing.value = it.writing
-                    _imageUri.value = it.postImageUrl
-                }
+                .onSuccess { setPostData(it) }
+                .onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
     }
 
@@ -179,5 +185,28 @@ class PostWritingViewModel @Inject constructor(
                     .onSuccess { _address.value = it }
             }
         }
+    }
+
+    private fun fetchWritingMode() {
+        if (_point.value == null) throw IllegalArgumentException("")
+        if (_point.value == null || _point.value!!.hasPost.not()) {
+            writingMode = WritingMode.NEW
+            return
+        }
+        writingMode = WritingMode.EDIT
+        viewModelScope.launch {
+            pointRepository.getPost(pointId).onSuccess {
+                setPostData(it)
+                fetchPost()
+            }.onFailure { TripDrawApplication.logUtil.general.log(it) }
+        }
+    }
+
+    private fun setPostData(post: Post) {
+        postId = post.postId
+        _address.value = post.address
+        title.value = post.title
+        writing.value = post.writing
+        _imageUri.value = post.postImageUrl
     }
 }

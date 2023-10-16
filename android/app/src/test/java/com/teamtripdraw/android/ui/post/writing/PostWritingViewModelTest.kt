@@ -62,7 +62,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         coEvery { pointRepository.getPoint(any(), any()) } returns getPointResult
 
         // when
-        sut.initPostMetaData(pointId)
+        sut.initPostData(pointId)
         val actualLat = sut.point.value?.latitude
         val actualLng = sut.point.value?.longitude
 
@@ -91,7 +91,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         coEvery { postRepository.getPost(postId) } returns expectedGetPostSuccessResult
 
         // when
-        sut.initPostMetaData(postId)
+        sut.initPostData(postId)
         val actualAddress = sut.address.value
         val actualTitle = sut.title.value
         val actualWriting = sut.writing.value
