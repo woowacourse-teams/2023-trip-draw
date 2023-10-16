@@ -9,4 +9,4 @@ data class UiTripOfAll(
     val endTime: String,
     val isMine: Boolean,
     val authorNickname: String,
-)
+) : UiAllTripItem
