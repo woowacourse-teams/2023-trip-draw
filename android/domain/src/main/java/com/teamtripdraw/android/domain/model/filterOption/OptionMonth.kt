@@ -2,7 +2,7 @@ package com.teamtripdraw.android.domain.model.filterOption
 
 import java.time.Month
 
-enum class OptionMonth(override val id: Int, override val value: Any) : FilterOption {
+enum class OptionMonth(override val id: Int, override val value: Month) : FilterOption<Month> {
     JANUARY(1, Month.JANUARY),
     FEBRUARY(2, Month.FEBRUARY),
     MARCH(3, Month.MARCH),

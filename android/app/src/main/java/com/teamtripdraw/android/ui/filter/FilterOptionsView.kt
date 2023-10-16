@@ -42,18 +42,23 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
     }
 
     private fun setTitleAppearance(filterOptionsTitle: TypedArray) {
-        when (filterOptionsTitle.getInt(R.styleable.FilterOptionsView_filterOptionsTitleAppearance, 1)) {
+        when (
+            filterOptionsTitle.getInt(
+                R.styleable.FilterOptionsView_filterOptionsTitleAppearance,
+                1,
+            )
+        ) {
             TEXT_APPEARANCE_TITLE -> titleView.setTextAppearance(R.style.subtitle_1)
             TEXT_APPEARANCE_SUBTITLE -> titleView.setTextAppearance(R.style.body_1)
         }
     }
 
-    fun setupOptions(options: List<FilterOption>, selectedOptions: List<Int>?) {
+    fun <T> setOptions(options: List<FilterOption<T>>, selectedOptions: List<Int>?) {
         options.forEach { option -> createOptionChip(option) }
         if (selectedOptions != null) checkSelectedOptions(selectedOptions)
     }
 
-    private fun createOptionChip(option: FilterOption) {
+    private fun <T> createOptionChip(option: FilterOption<T>) {
         val chip = Chip(context)
         chip.id = option.id
         chip.layoutParams = LinearLayout.LayoutParams(

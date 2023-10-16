@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.domain.model.filterOption
 
-sealed interface FilterOption {
+sealed interface FilterOption<T> {
     val id: Int
-    val value: Any
+    val value: T
 }

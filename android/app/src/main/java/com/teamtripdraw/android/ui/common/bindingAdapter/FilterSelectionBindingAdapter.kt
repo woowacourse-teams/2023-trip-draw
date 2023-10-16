@@ -9,17 +9,17 @@ import com.teamtripdraw.android.ui.filter.FilterOptionsView
 import com.teamtripdraw.android.ui.filter.FilterType
 
 @BindingAdapter("app:setupFilterOptionTitle", "app:setupFilterOptions", "app:setupSelectedOptions")
-fun FilterOptionsView.setupFilterOption(
+fun <T> FilterOptionsView.setupFilterOption(
     title: String,
-    options: List<FilterOption>,
+    options: List<FilterOption<T>>,
     selectedOptions: List<Int>? = null,
 ) {
     setTitle(title)
-    setupOptions(options, selectedOptions)
+    setOptions(options, selectedOptions)
 }
 
 @BindingAdapter("app:setupFilterOptionHour")
-fun NumberPicker.setupFilterOptionHour(options: List<FilterOption>) {
+fun <T> NumberPicker.setupFilterOptionHour(options: List<FilterOption<T>>) {
     minValue = options.first().value as Int
     maxValue = options.last().value as Int
 }

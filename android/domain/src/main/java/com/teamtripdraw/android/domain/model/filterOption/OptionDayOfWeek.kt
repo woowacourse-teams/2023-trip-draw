@@ -2,7 +2,7 @@ package com.teamtripdraw.android.domain.model.filterOption
 
 import java.time.DayOfWeek
 
-enum class OptionDayOfWeek(override val id: Int, override val value: Any) : FilterOption {
+enum class OptionDayOfWeek(override val id: Int, override val value: DayOfWeek) : FilterOption<DayOfWeek> {
     SUNDAY(1, DayOfWeek.SUNDAY),
     MONDAY(2, DayOfWeek.MONDAY),
     TUESDAY(3, DayOfWeek.TUESDAY),

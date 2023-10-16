@@ -8,7 +8,7 @@ import com.teamtripdraw.android.domain.model.filterOption.OptionHour
 import com.teamtripdraw.android.domain.model.filterOption.OptionMonth
 import com.teamtripdraw.android.domain.model.filterOption.OptionYear
 
-fun FilterOption.toText(): String {
+fun <T> FilterOption<T>.toText(): String {
     return when (this) {
         is OptionYear -> this.toText()
         is OptionMonth -> this.toText()

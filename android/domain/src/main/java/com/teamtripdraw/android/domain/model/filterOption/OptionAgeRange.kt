@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.domain.model.filterOption
 
-enum class OptionAgeRange(override val id: Int, override val value: Any) : FilterOption {
+enum class OptionAgeRange(override val id: Int, override val value: IntRange) : FilterOption<IntRange> {
     AGE_1_TO_9(1, IntRange(1, 9)),
     AGE_10_TO_14(2, IntRange(10, 14)),
     AGE_15_TO_19(3, IntRange(15, 19)),

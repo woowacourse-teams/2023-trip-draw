@@ -1,6 +1,6 @@
 package com.teamtripdraw.android.domain.model.filterOption
 
-enum class OptionHour(override val id: Int, override val value: Any) : FilterOption {
+enum class OptionHour(override val id: Int, override val value: Int) : FilterOption<Int> {
     ZERO(0, 0),
     ONE(1, 1),
     TWO(2, 2),
@@ -30,8 +30,8 @@ enum class OptionHour(override val id: Int, override val value: Any) : FilterOpt
     companion object {
 
         fun getSelectedHourIds(fromValue: Int, toValue: Int): List<Int> {
-            val firstHourValue = OptionHour.values().first().value as Int
-            val lastHourValue = OptionHour.values().last().value as Int
+            val firstHourValue = OptionHour.values().first().value
+            val lastHourValue = OptionHour.values().last().value
 
             val selectedHourIds = mutableListOf<Int>()
             if (fromValue < toValue) {
