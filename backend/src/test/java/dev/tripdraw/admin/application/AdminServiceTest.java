@@ -9,6 +9,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import dev.tripdraw.admin.dto.AdminPostResponse;
 import dev.tripdraw.admin.dto.AdminPostsResponse;
+import dev.tripdraw.admin.dto.AdminStatsResponse;
 import dev.tripdraw.admin.dto.AdminTripResponse;
 import dev.tripdraw.admin.dto.AdminTripsResponse;
 import dev.tripdraw.member.domain.Member;
@@ -26,9 +27,11 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@Transactional
 @SpringBootTest
 class AdminServiceTest {
 
@@ -62,12 +65,12 @@ class AdminServiceTest {
         }
 
         // when
-        AdminTripsResponse trips = adminService.readTrips(null, 10);
+        AdminTripsResponse response = adminService.readTrips(null, 10);
 
         // then
         assertSoftly(softly -> {
-            softly.assertThat(trips.items()).hasSize(10);
-            softly.assertThat(trips.hasNextPage()).isTrue();
+            softly.assertThat(response.items()).hasSize(10);
+            softly.assertThat(response.hasNextPage()).isTrue();
         });
     }
 
@@ -106,12 +109,12 @@ class AdminServiceTest {
         }
 
         // when
-        AdminPostsResponse posts = adminService.readPosts(null, 10);
+        AdminPostsResponse response = adminService.readPosts(null, 10);
 
         // then
         assertSoftly(softly -> {
-            softly.assertThat(posts.items()).hasSize(10);
-            softly.assertThat(posts.hasNextPage()).isTrue();
+            softly.assertThat(response.items()).hasSize(10);
+            softly.assertThat(response.hasNextPage()).isTrue();
         });
     }
 
@@ -145,5 +148,21 @@ class AdminServiceTest {
 
         // then
         assertThat(postRepository.existsById(post.id())).isFalse();
+    }
+
+    @Test
+    void 대시보드를_위한_정보를_반환한다() {
+        // given
+        Trip trip = tripRepository.save(새로운_여행(member));
+        tripRepository.save(새로운_여행(member));
+        Point point = pointRepository.save(새로운_위치정보(trip));
+        pointRepository.save(새로운_위치정보(trip));
+        postRepository.save(새로운_감상(point, member.id()));
+
+        // when
+        AdminStatsResponse response = adminService.stats();
+
+        // then
+        assertThat(response).isEqualTo(new AdminStatsResponse(1L, 2L, 2L, 1L));
     }
 }

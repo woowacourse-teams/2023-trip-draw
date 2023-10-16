@@ -52,14 +52,14 @@ public class TripService {
     }
 
     @Transactional(readOnly = true)
-    public TripsSearchResponse readAll(TripSearchRequest tripSearchRequest) {
+    public TripsSearchResponse readAll(LoginUser loginUser, TripSearchRequest tripSearchRequest) {
         TripSearchConditions conditions = tripSearchRequest.toTripSearchConditions();
         TripPaging tripPaging = tripSearchRequest.toTripPaging();
 
         List<Trip> trips = tripQueryService.readAllByConditions(conditions, tripPaging);
 
         List<TripSearchResponse> responses = trips.stream()
-                .map(trip -> TripSearchResponse.from(trip, trip.member().id()))
+                .map(trip -> TripSearchResponse.from(trip, loginUser.memberId()))
                 .toList();
 
         if (tripPaging.hasNextPage(responses.size())) {
