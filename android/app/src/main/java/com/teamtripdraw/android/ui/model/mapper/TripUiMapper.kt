@@ -7,7 +7,7 @@ import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.support.framework.presentation.LocalDateTimeFormatter
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.UiRoute
-import com.teamtripdraw.android.ui.model.UiTripOfAll
+import com.teamtripdraw.android.ui.model.allTrips.UiTripOfAll
 import java.time.LocalDateTime
 
 fun Route.toPresentation(): UiRoute =

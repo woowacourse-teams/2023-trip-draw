@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamtripdraw.android.databinding.ItemAllTripsBinding
-import com.teamtripdraw.android.ui.model.UiTripOfAll
+import com.teamtripdraw.android.ui.model.allTrips.UiTripOfAll
 
 class AllTripsViewHolder(
     private val binding: ItemAllTripsBinding,

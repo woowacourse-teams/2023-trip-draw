@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.model
+package com.teamtripdraw.android.ui.model.allTrips
 
 data class UiAllTrips(
     val tripItems: List<UiTripOfAll>,
