@@ -5,6 +5,7 @@ import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.DeletePointService
 import com.teamtripdraw.android.data.httpClient.service.DeleteTripService
 import com.teamtripdraw.android.data.httpClient.service.GetAllTripsService
+import com.teamtripdraw.android.data.httpClient.service.GetPointPostService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
 import com.teamtripdraw.android.data.httpClient.service.GetTripInfoService
 import com.teamtripdraw.android.data.httpClient.service.GetUserInfoService
@@ -50,6 +51,11 @@ object ServiceModule {
     @Singleton
     fun providesCreateRecordingPointService(@TripDrawRetrofit retrofit: Retrofit): CreateRecordingPointService =
         retrofit.create(CreateRecordingPointService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesGetPointPostService(@TripDrawRetrofit retrofit: Retrofit): GetPointPostService =
+        retrofit.create(GetPointPostService::class.java)
 
     @Provides
     @Singleton
