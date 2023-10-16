@@ -99,6 +99,8 @@ class AllPostsFragment : Fragment() {
                     viewModel.selectedOptions,
                 )
             getFilterOptionsResult.launch(intent)
+        } else {
+            binding.rvAllPosts.scrollToPosition(INITIAL_POSITION)
         }
     }
 
@@ -146,5 +148,6 @@ class AllPostsFragment : Fragment() {
     companion object {
         private const val LOAD_THRESHOLD = 3
         private const val DOWNWARD_DIRECTION = 1
+        private const val INITIAL_POSITION = 0
     }
 }

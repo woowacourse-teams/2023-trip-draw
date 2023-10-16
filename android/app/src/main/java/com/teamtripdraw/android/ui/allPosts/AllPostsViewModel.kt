@@ -43,7 +43,12 @@ class AllPostsViewModel @Inject constructor(
         private set
 
     fun fetchPosts() {
-        if (_uiPosts.value!!.isNotEmpty() && hasNextPage) {
+        // 필터검색을 했다면 값을 처음부터 불러온다
+        if (_openFilterSelectionEvent.value == true) {
+            lastId = null
+        }
+
+        if (lastId != null && hasNextPage) {
             isAddLoading = true
             addLoadingItem()
         }
@@ -56,16 +61,29 @@ class AllPostsViewModel @Inject constructor(
 
     private fun getPosts() {
         viewModelScope.launch {
-            postRepository.getAllPosts(lastViewedId = lastId, limit = PAGE_ITEM_SIZE)
-                .onSuccess { posts ->
-                    setLastItemId(posts)
-                    setHasNextPage(posts)
-                    isAddLoading = false
+            postRepository.getAllPosts(
+                lastViewedId = lastId,
+                limit = PAGE_ITEM_SIZE,
+                address = selectedOptions?.address ?: "",
+                years = selectedOptions?.years ?: listOf(),
+                months = selectedOptions?.months ?: listOf(),
+                daysOfWeek = selectedOptions?.daysOfWeek ?: listOf(),
+                hours = selectedOptions?.hours ?: listOf(),
+                ageRanges = selectedOptions?.ageRanges ?: listOf(),
+                genders = selectedOptions?.genders ?: listOf(),
+            ).onSuccess { posts ->
+                setLastItemId(posts)
+                setHasNextPage(posts)
+                isAddLoading = false
+
+                if (_openFilterSelectionEvent.value == true) {
+                    getSearchResult(posts)
+                } else {
                     fetchPosts(posts)
                 }
-                .onFailure {
-                    TripDrawApplication.logUtil.general.log(it)
-                }
+            }.onFailure {
+                TripDrawApplication.logUtil.general.log(it)
+            }
         }
     }
 
@@ -75,6 +93,14 @@ class AllPostsViewModel @Inject constructor(
 
     private fun setHasNextPage(posts: List<PostOfAll>) {
         if (posts.size < PAGE_ITEM_SIZE && lastId != null) hasNextPage = false
+    }
+
+    private fun getSearchResult(posts: List<PostOfAll>) {
+        _uiPosts.value = _uiPosts.value!!.toMutableList().apply {
+            clear()
+            addAll(posts.map { it.toPresentation() })
+        }
+        _openFilterSelectionEvent.value = false
     }
 
     private fun fetchPosts(posts: List<PostOfAll>) {
