@@ -16,6 +16,7 @@ import dev.tripdraw.admin.domain.AdminRepository;
 import dev.tripdraw.admin.dto.AdminLoginRequest;
 import dev.tripdraw.admin.dto.AdminPostResponse;
 import dev.tripdraw.admin.dto.AdminPostsResponse;
+import dev.tripdraw.admin.dto.AdminStatsResponse;
 import dev.tripdraw.admin.dto.AdminTripResponse;
 import dev.tripdraw.admin.dto.AdminTripsResponse;
 import dev.tripdraw.member.domain.Member;
@@ -229,6 +230,28 @@ class AdminControllerTest extends ControllerTest {
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(findPost).isNotPresent();
+        });
+    }
+
+    @Test
+    void 대시보드를_위한_정보를_반환한다() {
+        // given
+        Trip trip = tripRepository.save(새로운_여행(member));
+        Point point = pointRepository.save(새로운_위치정보(trip));
+        postRepository.save(새로운_감상(point, member.id()));
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .sessionId(sessionId)
+                .when().get("/admin/stats")
+                .then().log().all()
+                .extract();
+
+        // then
+        AdminStatsResponse adminStatsResponse = response.as(AdminStatsResponse.class);
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(adminStatsResponse).isEqualTo(new AdminStatsResponse(1L, 1L, 1L, 1L));
         });
     }
 }

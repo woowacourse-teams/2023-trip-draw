@@ -6,6 +6,7 @@ import dev.tripdraw.admin.dto.AdminLoginRequest;
 import dev.tripdraw.admin.dto.AdminPagingRequest;
 import dev.tripdraw.admin.dto.AdminPostResponse;
 import dev.tripdraw.admin.dto.AdminPostsResponse;
+import dev.tripdraw.admin.dto.AdminStatsResponse;
 import dev.tripdraw.admin.dto.AdminTripResponse;
 import dev.tripdraw.admin.dto.AdminTripsResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,5 +71,10 @@ public class AdminController {
     public ResponseEntity<Void> deletePostById(@PathVariable("postId") Long postId) {
         adminService.deletePost(postId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<AdminStatsResponse> stats() {
+        return ResponseEntity.ok(adminService.stats());
     }
 }

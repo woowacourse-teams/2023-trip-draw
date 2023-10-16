@@ -2,12 +2,15 @@ package dev.tripdraw.admin.application;
 
 import dev.tripdraw.admin.dto.AdminPostResponse;
 import dev.tripdraw.admin.dto.AdminPostsResponse;
+import dev.tripdraw.admin.dto.AdminStatsResponse;
 import dev.tripdraw.admin.dto.AdminTripResponse;
 import dev.tripdraw.admin.dto.AdminTripsResponse;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.query.PostCustomRepository;
+import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.query.TripCustomRepository;
@@ -22,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AdminService {
 
+    private final MemberRepository memberRepository;
+    private final PointRepository pointRepository;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final TripCustomRepository tripCustomRepository;
@@ -63,5 +68,15 @@ public class AdminService {
 
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
+    }
+
+    @Transactional(readOnly = true)
+    public AdminStatsResponse stats() {
+        return new AdminStatsResponse(
+                memberRepository.count(),
+                tripRepository.count(),
+                pointRepository.count(),
+                postRepository.count()
+        );
     }
 }
