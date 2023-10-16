@@ -40,7 +40,7 @@ class PostCreateEventHandlerTest {
         // given
         PostCreateEvent postCreateEvent = new PostCreateEvent(1L, 1L);
         given(tripRepository.getTripWithPoints(postCreateEvent.tripId())).willReturn(여행());
-        given(postRepository.getPostWithPointByPostId(postCreateEvent.postId())).willReturn(감상());
+        given(postRepository.getByPostId(postCreateEvent.postId())).willReturn(감상());
 
         // when
         postCreateEventHandler.handle(postCreateEvent);

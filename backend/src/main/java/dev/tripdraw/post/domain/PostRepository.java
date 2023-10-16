@@ -23,14 +23,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.point where p.id = :postId")
-    Optional<Post> findPostWithPointByPostId(@Param("postId") Long postId);
-
-    default Post getPostWithPointByPostId(Long postId) {
-        return findPostWithPointByPostId(postId)
-                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
-    }
-
     @Query("SELECT p FROM Post p "
             + "JOIN FETCH p.point "
             + "JOIN FETCH p.member "
