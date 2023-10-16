@@ -1,87 +1,118 @@
 package dev.tripdraw.trip.query;
 
+import static dev.tripdraw.common.util.QueryDslUtils.addressLike;
+import static dev.tripdraw.common.util.QueryDslUtils.dayOfWeekIn;
+import static dev.tripdraw.common.util.QueryDslUtils.monthIn;
+import static dev.tripdraw.common.util.QueryDslUtils.pointTripIdLt;
+import static dev.tripdraw.common.util.QueryDslUtils.postTripIdLt;
+import static dev.tripdraw.common.util.QueryDslUtils.tripIdLt;
+import static dev.tripdraw.common.util.QueryDslUtils.yearIn;
 import static dev.tripdraw.post.domain.QPost.post;
 import static dev.tripdraw.trip.domain.QPoint.point;
 import static dev.tripdraw.trip.domain.QTrip.trip;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.dto.TripSearchConditions;
-import io.micrometer.common.util.StringUtils;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 @RequiredArgsConstructor
 @Repository
 public class TripCustomRepositoryImpl implements TripCustomRepository {
 
-    private final JPAQueryFactory query;
+    private static final long UNIT_FOR_HAS_NEXT_PAGE = 1L;
+
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Trip> findAllByConditions(TripSearchConditions tripSearchConditions, TripPaging tripPaging) {
-        return query
-                .selectFrom(trip)
-                .distinct()
-                .join(post).on(trip.id.eq(post.tripId))
-                .join(point).on(post.point.id.eq(point.id))
+    public List<Trip> findAllByConditions(TripSearchConditions tripSearchConditions, TripPaging paging) {
+        if (tripSearchConditions.hasNoCondition()) {
+            List<Long> tripIds = getTripIdsWithoutCondition(paging);
+            return getTripsIn(tripIds);
+        }
+
+        if (tripSearchConditions.hasOnlyAddressCondition()) {
+            List<Long> tripIds = getTripIdsWithAddressCondition(tripSearchConditions, paging);
+            return getTripsIn(tripIds);
+        }
+
+        if (tripSearchConditions.hasOnlyTimeConditions()) {
+            List<Long> tripIds = getTripIdsWithTimeConditions(tripSearchConditions, paging);
+            return getTripsIn(tripIds);
+        }
+
+        List<Long> tripIds = getTripIdsWithAllConditions(tripSearchConditions, paging);
+        return getTripsIn(tripIds);
+    }
+
+    private List<Long> getTripIdsWithoutCondition(TripPaging paging) {
+        return jpaQueryFactory.selectDistinct(point.trip.id).from(point)
                 .where(
-                        tripIdLt(tripPaging.lastViewedId()),
-                        yearIn(tripSearchConditions.years()),
-                        monthIn(tripSearchConditions.months()),
-                        dayOfWeekIn(tripSearchConditions.daysOfWeek()),
-                        addressLike(tripSearchConditions.address())
+                        point.hasPost.isTrue(),
+                        pointTripIdLt(paging.lastViewedId())
                 )
-                .orderBy(trip.id.desc())
-                .limit(tripPaging.limit().longValue() + 1L)
+                .orderBy(point.trip.id.desc())
+                .limit(paging.limit().longValue() + UNIT_FOR_HAS_NEXT_PAGE)
                 .fetch();
     }
 
-    private BooleanExpression tripIdLt(Long lastViewedId) {
-        if (lastViewedId == null) {
-            return null;
-        }
-        return trip.id.lt(lastViewedId);
+    private List<Trip> getTripsIn(List<Long> tripIds) {
+        return jpaQueryFactory.selectFrom(trip)
+                .innerJoin(trip.member).fetchJoin()
+                .where(trip.id.in(tripIds))
+                .orderBy(trip.id.desc())
+                .fetch();
     }
 
-    private BooleanExpression yearIn(Set<Integer> years) {
-        if (CollectionUtils.isEmpty(years)) {
-            return null;
-        }
-        return point.recordedAt.year().in(years);
+    private List<Long> getTripIdsWithAddressCondition(TripSearchConditions tripSearchConditions, TripPaging paging) {
+        return jpaQueryFactory.selectDistinct(post.tripId).from(post)
+                .where(
+                        addressLike(tripSearchConditions.address()),
+                        postTripIdLt(paging.lastViewedId())
+                )
+                .orderBy(post.tripId.desc())
+                .limit(paging.limit().longValue() + UNIT_FOR_HAS_NEXT_PAGE)
+                .fetch();
     }
 
-    private BooleanExpression monthIn(Set<Integer> months) {
-        if (CollectionUtils.isEmpty(months)) {
-            return null;
-        }
-        return point.recordedAt.month().in(months);
+    private List<Long> getTripIdsWithTimeConditions(TripSearchConditions tripSearchConditions, TripPaging paging) {
+        return jpaQueryFactory.selectDistinct(point.trip.id).from(point)
+                .where(
+                        yearIn(tripSearchConditions.years()),
+                        monthIn(tripSearchConditions.months()),
+                        dayOfWeekIn(tripSearchConditions.daysOfWeek()),
+                        point.hasPost.isTrue(),
+                        pointTripIdLt(paging.lastViewedId())
+                )
+                .orderBy(point.trip.id.desc())
+                .limit(paging.limit().longValue() + UNIT_FOR_HAS_NEXT_PAGE)
+                .fetch();
     }
 
-    private BooleanExpression dayOfWeekIn(Set<Integer> daysOfWeek) {
-        if (CollectionUtils.isEmpty(daysOfWeek)) {
-            return null;
-        }
-        return point.recordedAt.dayOfWeek().in(daysOfWeek);
-    }
-
-    private BooleanExpression addressLike(String address) {
-        if (StringUtils.isBlank(address)) {
-            return null;
-        }
-        return post.address.like(address + "%");
+    private List<Long> getTripIdsWithAllConditions(TripSearchConditions tripSearchConditions, TripPaging paging) {
+        return jpaQueryFactory.selectDistinct(point.trip.id).from(point)
+                .innerJoin(post).on(post.point.id.eq(point.id))
+                .where(
+                        yearIn(tripSearchConditions.years()),
+                        monthIn(tripSearchConditions.months()),
+                        dayOfWeekIn(tripSearchConditions.daysOfWeek()),
+                        addressLike(tripSearchConditions.address()),
+                        pointTripIdLt(paging.lastViewedId())
+                )
+                .orderBy(point.trip.id.desc())
+                .limit(paging.limit().longValue() + UNIT_FOR_HAS_NEXT_PAGE)
+                .fetch();
     }
 
     @Override
-    public List<Trip> findAll(TripPaging tripPaging) {
-        return query
+    public List<Trip> findAll(TripPaging paging) {
+        return jpaQueryFactory
                 .selectFrom(trip)
-                .where(tripIdLt(tripPaging.lastViewedId()))
+                .where(tripIdLt(paging.lastViewedId()))
                 .orderBy(trip.id.desc())
-                .limit(tripPaging.limit().longValue() + 1L)
+                .limit(paging.limit().longValue() + UNIT_FOR_HAS_NEXT_PAGE)
                 .fetch();
     }
 }
