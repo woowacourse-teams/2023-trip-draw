@@ -26,7 +26,6 @@ import javax.inject.Inject
 class PostWritingViewModel @Inject constructor(
     private val pointRepository: PointRepository,
     private val postRepository: PostRepository,
-    private val tripRepository: TripRepository,
     private val geocodingRepository: GeocodingRepository,
 ) : ViewModel() {
 
@@ -126,32 +125,38 @@ class PostWritingViewModel @Inject constructor(
     }
 
     fun completeWritingEvent() {
+        when (writingMode) {
+            WritingMode.NEW -> writeNewPost()
+            WritingMode.EDIT -> writeEditedPost()
+        }
+    }
+
+    private fun writeNewPost() {
         viewModelScope.launch {
-            when (writingMode) {
-                WritingMode.NEW -> {
-                    val prePost = PrePost(
-                        tripId = tripId,
-                        pointId = pointId,
-                        title = title.value ?: "",
-                        writing = writing.value ?: "",
-                        address = address.value ?: "",
-                        imageFile = imageFile.value,
-                    )
-                    postRepository.addPost(prePost).onSuccess {
-                        _writingCompletedEvent.value = Event(true)
-                    }
-                }
-                WritingMode.EDIT -> {
-                    val prePatchPost = PrePatchPost(
-                        postId = postId,
-                        title = title.value ?: "",
-                        writing = writing.value ?: "",
-                        imageFile = imageFile.value,
-                    )
-                    postRepository.patchPost(prePatchPost).onSuccess {
-                        _writingCompletedEvent.value = Event(true)
-                    }
-                }
+            val prePost = PrePost(
+                tripId = tripId,
+                pointId = pointId,
+                title = title.value ?: "",
+                writing = writing.value ?: "",
+                address = address.value ?: "",
+                imageFile = imageFile.value,
+            )
+            postRepository.addPost(prePost).onSuccess {
+                _writingCompletedEvent.value = Event(true)
+            }
+        }
+    }
+
+    private fun writeEditedPost() {
+        viewModelScope.launch {
+            val prePatchPost = PrePatchPost(
+                postId = postId,
+                title = title.value ?: "",
+                writing = writing.value ?: "",
+                imageFile = imageFile.value,
+            )
+            postRepository.patchPost(prePatchPost).onSuccess {
+                _writingCompletedEvent.value = Event(true)
             }
         }
     }
@@ -189,7 +194,7 @@ class PostWritingViewModel @Inject constructor(
 
     private fun fetchWritingMode() {
         if (_point.value == null) throw IllegalArgumentException("")
-        if (_point.value == null || _point.value!!.hasPost.not()) {
+        if (_point.value!!.hasPost.not()) {
             writingMode = WritingMode.NEW
             return
         }
