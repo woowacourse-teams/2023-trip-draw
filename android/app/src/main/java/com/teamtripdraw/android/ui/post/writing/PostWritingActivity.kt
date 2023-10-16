@@ -70,17 +70,11 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun initIntentData() {
-        val writingMode =
-            intent.getParcelableExtraCompat<ParcelableWritingMode>(INTENT_KEY_WRITING_MODE)
         val tripId = intent.getLongExtra(INTENT_KEY_TRIP_ID, Trip.NULL_SUBSTITUTE_ID)
         val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, Point.NULL_SUBSTITUTE_ID)
         val postId = intent.getLongExtra(INTENT_KEY_POST_ID, Post.NULL_SUBSTITUTE_ID)
 
-        when (writingMode) {
-            ParcelableWritingMode.NEW -> viewModel.initPostMetaData(tripId, pointId)
-            ParcelableWritingMode.EDIT -> viewModel.initPostMetaData(postId)
-            else -> throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
-        }
+        viewModel.initPostData(tripId, pointId, postId)
     }
 
     private fun initObserve() {
@@ -124,18 +118,17 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val INTENT_KEY_WRITING_MODE = "writingMode"
         private const val INTENT_KEY_TRIP_ID = "tripId"
         private const val INTENT_KEY_POINT_ID = "pointId"
         private const val INTENT_KEY_POST_ID = "postId"
         private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다. (PostWritingActivity)"
 
         /**
-         * 새로운 글을 작성합니다.
+         * 지정된 위치에 대한 글을 작성합니다.
+         * 위치에 대한 감상 여부에 따라 자동으로 글 작성 모드가 설정됩니다.
          */
         fun getIntent(context: Context, tripId: Long, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
-            intent.putExtra(INTENT_KEY_WRITING_MODE, ParcelableWritingMode.NEW as Parcelable)
             intent.putExtra(INTENT_KEY_TRIP_ID, tripId)
             intent.putExtra(INTENT_KEY_POINT_ID, pointId)
             return intent
@@ -149,7 +142,6 @@ class PostWritingActivity : AppCompatActivity() {
             postId: Long,
         ): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
-            intent.putExtra(INTENT_KEY_WRITING_MODE, ParcelableWritingMode.EDIT as Parcelable)
             intent.putExtra(INTENT_KEY_POST_ID, postId)
             return intent
         }
