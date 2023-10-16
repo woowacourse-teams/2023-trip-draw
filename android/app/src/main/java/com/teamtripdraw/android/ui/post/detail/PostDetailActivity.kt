@@ -73,7 +73,7 @@ class PostDetailActivity : AppCompatActivity() {
             this,
             EventObserver {
                 if (it) {
-                    val intent = PostWritingActivity.getIntent(this, viewModel.postId)
+                    val intent = PostWritingActivity.getIntentByPost(this, viewModel.postId)
                     startActivity(intent)
                 }
             },
