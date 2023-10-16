@@ -6,9 +6,9 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.TripDrawApplication
-import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
+import com.teamtripdraw.android.ui.model.allTrips.UiAllTripItem
 import com.teamtripdraw.android.ui.model.allTrips.UiAllTrips
 import com.teamtripdraw.android.ui.model.allTrips.UiTripOfAll
 import com.teamtripdraw.android.ui.model.mapper.toPresentation
@@ -20,9 +20,9 @@ import javax.inject.Inject
 class AllTripsViewModel @Inject constructor(
     private val tripRepository: TripRepository,
 ) : ViewModel() {
-    private val _trips: MutableLiveData<List<TripOfAll>> = MutableLiveData()
-    val trips: LiveData<UiAllTrips> =
-        Transformations.map(_trips) { trip -> UiAllTrips(trip.map { it.toPresentation() }) }
+
+    private val _trips: MutableLiveData<List<UiAllTripItem>> = MutableLiveData()
+    val trips: LiveData<UiAllTrips> = Transformations.map(_trips) { trip -> UiAllTrips(trip) }
 
     private val _openHistoryDetailEvent = MutableLiveData<UiPreviewTrip>()
     val openHistoryDetailEvent: LiveData<UiPreviewTrip> = _openHistoryDetailEvent
@@ -30,8 +30,8 @@ class AllTripsViewModel @Inject constructor(
     fun fetchTrips() {
         viewModelScope.launch {
             tripRepository.getAllTrips()
-                .onSuccess {
-                    _trips.value = it
+                .onSuccess { it ->
+                    _trips.value = it.map { it.toPresentation() }
                 }
                 .onFailure {
                     TripDrawApplication.logUtil.general.log(it)
