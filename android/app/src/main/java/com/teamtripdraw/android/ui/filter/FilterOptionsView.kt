@@ -42,7 +42,7 @@ class FilterOptionsView @JvmOverloads constructor(context: Context, attr: Attrib
     }
 
     private fun setTitleAppearance(filterOptionsTitle: TypedArray) {
-        when (filterOptionsTitle.getInt(R.styleable.FilterOptionsView_filterOptionsTitle, 1)) {
+        when (filterOptionsTitle.getInt(R.styleable.FilterOptionsView_filterOptionsTitleAppearance, 1)) {
             TEXT_APPEARANCE_TITLE -> titleView.setTextAppearance(R.style.subtitle_1)
             TEXT_APPEARANCE_SUBTITLE -> titleView.setTextAppearance(R.style.body_1)
         }
