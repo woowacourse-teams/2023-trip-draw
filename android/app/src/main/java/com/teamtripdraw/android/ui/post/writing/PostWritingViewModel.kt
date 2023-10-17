@@ -15,7 +15,6 @@ import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.repository.GeocodingRepository
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
-import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -177,7 +176,7 @@ class PostWritingViewModel @Inject constructor(
 
     private fun fetchPost() {
         viewModelScope.launch {
-            postRepository.getPost(postId = postId)
+            postRepository.getPostByPostId(postId = postId)
                 .onSuccess { setPostData(it) }
                 .onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
@@ -200,7 +199,7 @@ class PostWritingViewModel @Inject constructor(
         }
         writingMode = WritingMode.EDIT
         viewModelScope.launch {
-            pointRepository.getPost(pointId).onSuccess {
+            postRepository.getPostByPointId(pointId).onSuccess {
                 setPostData(it)
                 fetchPost()
             }.onFailure { TripDrawApplication.logUtil.general.log(it) }

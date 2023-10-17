@@ -7,6 +7,5 @@ import com.teamtripdraw.android.domain.model.post.Post
 interface PointRepository {
     suspend fun createRecordingPoint(prePoint: PrePoint, tripId: Long? = null): Result<Long>
     suspend fun getPoint(pointId: Long, tripId: Long): Result<Point>
-    suspend fun getPost(pointId: Long): Result<Post>
     suspend fun deletePoint(tripId: Long, pointId: Long): Result<Unit>
 }
