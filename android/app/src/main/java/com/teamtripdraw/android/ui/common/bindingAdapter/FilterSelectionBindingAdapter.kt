@@ -8,13 +8,11 @@ import com.teamtripdraw.android.domain.model.filterOption.FilterOption
 import com.teamtripdraw.android.ui.filter.FilterOptionsView
 import com.teamtripdraw.android.ui.filter.FilterType
 
-@BindingAdapter("app:setupFilterOptionTitle", "app:setupFilterOptions", "app:setupSelectedOptions")
+@BindingAdapter("app:setupFilterOptions", "app:setupSelectedOptions")
 fun <T> FilterOptionsView.setupFilterOption(
-    title: String,
     options: List<FilterOption<T>>,
     selectedOptions: List<Int>? = null,
 ) {
-    setTitle(title)
     setOptions(options, selectedOptions)
 }
 

@@ -145,7 +145,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_filter_date_title"
-                    app:setupFilterOptionTitle="@{@string/tv_filter_option_year}"
+                    app:setTitle="@{@string/tv_filter_option_year}"
                     app:setupFilterOptions="@{filterSelectionViewModel.years}"
                     app:setupSelectedOptions="@{selectedOptions.years}" />
 
@@ -157,7 +157,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/filter_options_year"
-                    app:setupFilterOptionTitle="@{@string/tv_filter_option_month}"
+                    app:setTitle="@{@string/tv_filter_option_month}"
                     app:setupFilterOptions="@{filterSelectionViewModel.months}"
                     app:setupSelectedOptions="@{selectedOptions.months}" />
 
@@ -169,7 +169,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/filter_options_month"
-                    app:setupFilterOptionTitle="@{@string/tv_filter_option_day_of_week}"
+                    app:setTitle="@{@string/tv_filter_option_day_of_week}"
                     app:setupFilterOptions="@{filterSelectionViewModel.dayOfWeek}"
                     app:setupSelectedOptions="@{selectedOptions.daysOfWeek}" />
 
@@ -262,7 +262,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_date"
-                    app:setupFilterOptionTitle="@{@string/tv_filter_option_age_range}"
+                    app:setTitle="@{@string/tv_filter_option_age_range}"
                     app:setupFilterOptions="@{filterSelectionViewModel.ageRange}"
                     app:setupSelectedOptions="@{selectedOptions.ageRanges}" />
 
@@ -284,7 +284,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_age_range"
-                    app:setupFilterOptionTitle="@{@string/tv_filter_option_gender}"
+                    app:setTitle="@{@string/tv_filter_option_gender}"
                     app:setupFilterOptions="@{filterSelectionViewModel.gender}"
                     app:setupSelectedOptions="@{selectedOptions.genders}" />
 
