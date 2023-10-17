@@ -116,6 +116,52 @@ class PostWritingViewModel @Inject constructor(
         } else if (postId != Post.NULL_SUBSTITUTE_ID) writingMode = WritingMode.EDIT
     }
 
+    private fun fetchPostData() {
+        if (writingMode == WritingMode.NEW) {
+            viewModelScope.launch {
+                pointRepository.getPoint(pointId = pointId, tripId = tripId).onSuccess {
+                    _point.value = it
+                    fetchAddress()
+                    fetchWritingMode()
+                }
+            }
+        } else if (writingMode == WritingMode.EDIT) {
+            fetchPost()
+        }
+    }
+
+    private fun fetchAddress() {
+        _point.value?.let { point ->
+            viewModelScope.launch {
+                geocodingRepository.getAddress(point.latitude, point.longitude)
+                    .onSuccess { _address.value = it }
+            }
+        }
+    }
+
+    private fun fetchWritingMode() {
+        if (_point.value == null) throw IllegalArgumentException("")
+        if (_point.value!!.hasPost.not()) {
+            writingMode = WritingMode.NEW
+            return
+        }
+        writingMode = WritingMode.EDIT
+        viewModelScope.launch {
+            postRepository.getPostByPointId(pointId).onSuccess {
+                setPostData(it)
+                fetchPost()
+            }.onFailure { TripDrawApplication.logUtil.general.log(it) }
+        }
+    }
+
+    private fun fetchPost() {
+        viewModelScope.launch {
+            postRepository.getPostByPostId(postId = postId)
+                .onSuccess { setPostData(it) }
+                .onFailure { TripDrawApplication.logUtil.general.log(it) }
+        }
+    }
+
     fun textChangedEvent() {
         _postWritingValidState.value = PostWritingValidState.getValidState(
             requireNotNull(title.value),
@@ -157,52 +203,6 @@ class PostWritingViewModel @Inject constructor(
             postRepository.patchPost(prePatchPost).onSuccess {
                 _writingCompletedEvent.value = Event(true)
             }
-        }
-    }
-
-    private fun fetchPostData() {
-        if (writingMode == WritingMode.NEW) {
-            viewModelScope.launch {
-                pointRepository.getPoint(pointId = pointId, tripId = tripId).onSuccess {
-                    _point.value = it
-                    fetchAddress()
-                    fetchWritingMode()
-                }
-            }
-        } else if (writingMode == WritingMode.EDIT) {
-            fetchPost()
-        }
-    }
-
-    private fun fetchPost() {
-        viewModelScope.launch {
-            postRepository.getPostByPostId(postId = postId)
-                .onSuccess { setPostData(it) }
-                .onFailure { TripDrawApplication.logUtil.general.log(it) }
-        }
-    }
-
-    private fun fetchAddress() {
-        _point.value?.let { point ->
-            viewModelScope.launch {
-                geocodingRepository.getAddress(point.latitude, point.longitude)
-                    .onSuccess { _address.value = it }
-            }
-        }
-    }
-
-    private fun fetchWritingMode() {
-        if (_point.value == null) throw IllegalArgumentException("")
-        if (_point.value!!.hasPost.not()) {
-            writingMode = WritingMode.NEW
-            return
-        }
-        writingMode = WritingMode.EDIT
-        viewModelScope.launch {
-            postRepository.getPostByPointId(pointId).onSuccess {
-                setPostData(it)
-                fetchPost()
-            }.onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
     }
 
