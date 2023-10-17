@@ -44,6 +44,11 @@ class AllTripsViewModel @Inject constructor(
     val openFilterSelectionEvent: LiveData<Boolean> = _openFilterSelectionEvent
 
     fun fetchTrips() {
+        // 필터검색을 했다면 값을 처음부터 불러온다
+        if (_openFilterSelectionEvent.value == true) {
+            lastId = null
+        }
+
         if (_uiTripItems.value!!.isNotEmpty() && hasNextPage) {
             isAddLoading = true
             addLoadingItem()
@@ -53,12 +58,36 @@ class AllTripsViewModel @Inject constructor(
 
     private fun fetchMoreTrips() {
         viewModelScope.launch {
-            tripRepository.getAllTrips(lastViewedId = lastId).onSuccess { trips ->
+            tripRepository.getAllTrips(
+                lastViewedId = lastId,
+                limit = PAGE_ITEM_SIZE,
+                address = selectedOptions?.address ?: "",
+                years = selectedOptions?.years ?: listOf(),
+                months = selectedOptions?.months ?: listOf(),
+                daysOfWeek = selectedOptions?.daysOfWeek ?: listOf(),
+                ageRanges = selectedOptions?.ageRanges ?: listOf(),
+                genders = selectedOptions?.genders ?: listOf(),
+            ).onSuccess { trips ->
                 setLastItemId(trips)
                 setHasNextPage(trips)
+
+                if (_openFilterSelectionEvent.value == true) {
+                    getSearchResult(trips)
+                } else {
+                    setAddedItems(trips)
+                }
+
                 setAddedItems(trips)
             }.onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
+    }
+
+    private fun getSearchResult(trips: List<TripOfAll>) {
+        _uiTripItems.value = _uiTripItems.value!!.toMutableList().apply {
+            clear()
+            addAll(trips.map { it.toPresentation() })
+        }
+        _openFilterSelectionEvent.value = false
     }
 
     private fun setAddedItems(trips: List<TripOfAll>) {

@@ -98,6 +98,8 @@ class AllTripsFragment : Fragment() {
                     viewModel.selectedOptions,
                 )
             getFilterOptionsResult.launch(intent)
+        } else {
+            binding.rvAllTrips.scrollToPosition(INITIAL_POSITION)
         }
     }
 
@@ -142,5 +144,6 @@ class AllTripsFragment : Fragment() {
     companion object {
         private const val LOAD_THRESHOLD = 3
         private const val DOWNWARD_DIRECTION = 1
+        private const val INITIAL_POSITION = 0
     }
 }
