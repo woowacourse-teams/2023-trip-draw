@@ -71,8 +71,16 @@ class PostWritingActivity : AppCompatActivity() {
         val tripId = intent.getLongExtra(INTENT_KEY_TRIP_ID, Trip.NULL_SUBSTITUTE_ID)
         val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, Point.NULL_SUBSTITUTE_ID)
         val postId = intent.getLongExtra(INTENT_KEY_POST_ID, Post.NULL_SUBSTITUTE_ID)
+        val latitude: Double = intent.getDoubleExtra(INTENT_KEY_LATITUDE, Point.NULL_LATITUDE)
+        val longitude: Double = intent.getDoubleExtra(INTENT_KEY_LONGITUDE, Point.NULL_LONGITUDE)
 
-        viewModel.initPostData(tripId, pointId, postId)
+        viewModel.initPostData(
+            tripId = tripId,
+            pointId = pointId,
+            postId = postId,
+            latitude = latitude,
+            longitude = longitude,
+        )
     }
 
     private fun initObserve() {
@@ -119,11 +127,26 @@ class PostWritingActivity : AppCompatActivity() {
         private const val INTENT_KEY_TRIP_ID = "tripId"
         private const val INTENT_KEY_POINT_ID = "pointId"
         private const val INTENT_KEY_POST_ID = "postId"
+        private const val INTENT_KEY_LATITUDE = "latitude"
+        private const val INTENT_KEY_LONGITUDE = "longitude"
 
         fun getIntentByPoint(context: Context, tripId: Long, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
             intent.putExtra(INTENT_KEY_TRIP_ID, tripId)
             intent.putExtra(INTENT_KEY_POINT_ID, pointId)
+            return intent
+        }
+
+        fun getIntentByLatLng(
+            context: Context,
+            tripId: Long,
+            latitude: Double,
+            longitude: Double,
+        ): Intent {
+            val intent = Intent(context, PostWritingActivity::class.java)
+            intent.putExtra(INTENT_KEY_TRIP_ID, tripId)
+            intent.putExtra(INTENT_KEY_LATITUDE, latitude)
+            intent.putExtra(INTENT_KEY_LONGITUDE, longitude)
             return intent
         }
 
