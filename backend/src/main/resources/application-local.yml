@@ -68,3 +68,9 @@ jwt:
 oauth:
   kakao:
     info-url: https://kapi.kakao.com/v2/user/me
+
+open:
+  api:
+    area:
+      service: TRIPDRAW
+      key: TRIPDRAW
