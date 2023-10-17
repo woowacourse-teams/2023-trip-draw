@@ -1,5 +1,6 @@
 package com.teamtripdraw.android.di
 
+import com.teamtripdraw.android.data.httpClient.service.CreateCurrentPointPostService
 import com.teamtripdraw.android.data.httpClient.service.CreateRecordingPointService
 import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.DeletePointService
@@ -46,6 +47,11 @@ object ServiceModule {
     @Singleton
     fun providesPostService(@TripDrawRetrofit retrofit: Retrofit): PostService =
         retrofit.create(PostService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesCreateCurrentPointPostService(@TripDrawRetrofit retrofit: Retrofit): CreateCurrentPointPostService =
+        retrofit.create(CreateCurrentPointPostService::class.java)
 
     @Provides
     @Singleton
