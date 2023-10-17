@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.teamtripdraw.android.databinding.FragmentAllTripsBinding
 import com.teamtripdraw.android.ui.history.detail.HistoryDetailActivity
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
@@ -31,6 +33,7 @@ class AllTripsFragment : Fragment() {
         bindViewModel()
         initObserver()
         setAdapter()
+        addScrollListener()
 
         return binding.root
     }
@@ -75,5 +78,31 @@ class AllTripsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun addScrollListener() {
+        binding.rvAllTrips.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = binding.rvAllTrips.layoutManager as LinearLayoutManager
+                val lastPosition = layoutManager.findLastCompletelyVisibleItemPosition()
+                if (isMoreFetchTripsCondition(layoutManager, lastPosition)) viewModel.fetchTrips()
+            }
+        })
+    }
+
+    private fun isMoreFetchTripsCondition(layoutManager: LinearLayoutManager, lastPosition: Int):
+        Boolean =
+        viewModel.hasNextPage &&
+            viewModel.isAddLoading.not() &&
+            isLoadThreshold(layoutManager, lastPosition) &&
+            binding.rvAllTrips.canScrollVertically(DOWNWARD_DIRECTION).not()
+
+    private fun isLoadThreshold(layoutManager: LinearLayoutManager, lastPosition: Int): Boolean =
+        layoutManager.itemCount <= lastPosition + LOAD_THRESHOLD
+
+    companion object {
+        private const val LOAD_THRESHOLD = 3
+        private const val DOWNWARD_DIRECTION = 1
     }
 }
