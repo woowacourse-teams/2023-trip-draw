@@ -113,27 +113,8 @@ class PostWritingViewModel @Inject constructor(
         this.postId = postId
         this.latitude = latitude
         this.longitude = longitude
-        setWritingMode(tripId, pointId, postId, latitude, longitude)
+        writingMode = WritingMode.getWritingMode(tripId, pointId, postId, latitude, longitude)
         fetchPostData()
-    }
-
-    private fun setWritingMode(
-        tripId: Long,
-        pointId: Long,
-        postId: Long,
-        latitude: Double,
-        longitude: Double,
-    ) {
-        writingMode =
-            if (tripId != Trip.NULL_SUBSTITUTE_ID && pointId != Point.NULL_SUBSTITUTE_ID) {
-                WritingMode.NEW_RECORDED_POINT
-            } else if (postId != Post.NULL_SUBSTITUTE_ID) {
-                WritingMode.EDIT
-            } else if (latitude != Point.NULL_LATITUDE && longitude != Point.NULL_LONGITUDE) {
-                WritingMode.NEW_CURRENT_POINT
-            } else {
-                throw IllegalArgumentException("값이 잘못 설정되었습니다. (PostWritingViewModel)")
-            }
     }
 
     private fun fetchPostData() {
