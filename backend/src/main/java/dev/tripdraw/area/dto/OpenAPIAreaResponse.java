@@ -1,4 +1,4 @@
-package dev.tripdraw.area.application;
+package dev.tripdraw.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

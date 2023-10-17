@@ -1,4 +1,4 @@
-package dev.tripdraw.area.application;
+package dev.tripdraw.area.dto;
 
 import java.util.Map;
 

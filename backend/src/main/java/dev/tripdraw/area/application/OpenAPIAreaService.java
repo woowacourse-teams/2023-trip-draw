@@ -1,19 +1,23 @@
 package dev.tripdraw.area.application;
 
 import dev.tripdraw.area.domain.Area;
+import dev.tripdraw.area.dto.OpenAPIAccessTokenResponse;
+import dev.tripdraw.area.dto.OpenAPIAreaResponse;
 import dev.tripdraw.area.dto.OpenAPITotalAreaResponse;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
-@Component
-public class AreaInitializer {
+@Transactional
+@Service
+public class OpenAPIAreaService {
 
     private static final String AREA_API_DOMAIN = "https://sgisapi.kostat.go.kr";
     private static final String AREA_CODE_NAME = "cd";
@@ -22,7 +26,6 @@ public class AreaInitializer {
     private static final String SECRET_KEY_NAME = "consumer_secret";
     private static final String AUTHENTICATION_URI = "/OpenAPI3/auth/authentication.json";
     private static final String AREA_URI = "/OpenAPI3/addr/stage.json";
-    private static final String ALL_AREA_CODE = "";
 
     private final RestTemplate restTemplate;
 
@@ -32,28 +35,46 @@ public class AreaInitializer {
     @Value("${open.api.area.key}")
     private String keySecret;
 
-    public List<Area> init() {
+    public List<Area> download() {
         String accessToken = requestAccessToken();
-        return requestAreas(accessToken);
+        return downloadAreas(accessToken);
     }
 
-    private List<Area> requestAreas(String accessToken) {
+    private List<Area> downloadAreas(String accessToken) {
         List<Area> allAreas = new ArrayList<>();
 
         List<OpenAPIAreaResponse> sidoResponses = requestAreas(accessToken, null);
         for (OpenAPIAreaResponse sidoResponse : sidoResponses) {
             String sido = sidoResponse.address();
-            List<OpenAPIAreaResponse> sigunguResponses = requestAreas(accessToken, sidoResponse.code());
-            for (OpenAPIAreaResponse sigunguResponse : sigunguResponses) {
-                String sigungu = sigunguResponse.address();
-                List<OpenAPIAreaResponse> umdResponses = requestAreas(accessToken, sidoResponse.code());
-                for (OpenAPIAreaResponse umdResponse : umdResponses) {
-                    String umd = umdResponse.address();
-                    allAreas.add(new Area(sido, sigungu, umd));
-                }
-            }
+            fetchSigunguAndUmd(accessToken, allAreas, sidoResponse, sido);
         }
         return allAreas;
+    }
+
+    private void fetchSigunguAndUmd(
+            String accessToken,
+            List<Area> allAreas,
+            OpenAPIAreaResponse sidoResponse,
+            String sido
+    ) {
+        List<OpenAPIAreaResponse> sigunguResponses = requestAreas(accessToken, sidoResponse.code());
+        for (OpenAPIAreaResponse sigunguResponse : sigunguResponses) {
+            String sigungu = sigunguResponse.address();
+            List<OpenAPIAreaResponse> umdResponses = requestAreas(accessToken, sidoResponse.code());
+            fetchUmd(allAreas, sido, sigungu, umdResponses);
+        }
+    }
+
+    private void fetchUmd(
+            List<Area> allAreas,
+            String sido,
+            String sigungu,
+            List<OpenAPIAreaResponse> umdResponses
+    ) {
+        for (OpenAPIAreaResponse umdResponse : umdResponses) {
+            String umd = umdResponse.address();
+            allAreas.add(new Area(sido, sigungu, umd));
+        }
     }
 
     private String requestAccessToken() {
