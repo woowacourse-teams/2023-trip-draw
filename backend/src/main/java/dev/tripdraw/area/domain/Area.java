@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -32,10 +33,6 @@ public class Area extends BaseEntity {
     @Column(name = "umd") // 읍,면,동
     private String umd;
 
-    public String toFullAddress() {
-        return sido + " " + sigungu + " " + umd;
-    }
-
     public Area(Long id, String sido, String sigungu, String umd) {
         this.id = id;
         this.sido = sido;
@@ -45,5 +42,27 @@ public class Area extends BaseEntity {
 
     public Area(String sido, String sigungu, String umd) {
         this(null, sido, sigungu, umd);
+    }
+
+    public String toFullAddress() {
+        return sido + " " + sigungu + " " + umd;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Area area = (Area) o;
+        return Objects.equals(sido, area.sido) && Objects.equals(sigungu, area.sigungu)
+                && Objects.equals(umd, area.umd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sido, sigungu, umd);
     }
 }

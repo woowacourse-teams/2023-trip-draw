@@ -40,43 +40,6 @@ public class OpenAPIAreaService {
         return downloadAreas(accessToken);
     }
 
-    private List<Area> downloadAreas(String accessToken) {
-        List<Area> allAreas = new ArrayList<>();
-
-        List<OpenAPIAreaResponse> sidoResponses = requestAreas(accessToken, null);
-        for (OpenAPIAreaResponse sidoResponse : sidoResponses) {
-            String sido = sidoResponse.address();
-            fetchSigunguAndUmd(accessToken, allAreas, sidoResponse, sido);
-        }
-        return allAreas;
-    }
-
-    private void fetchSigunguAndUmd(
-            String accessToken,
-            List<Area> allAreas,
-            OpenAPIAreaResponse sidoResponse,
-            String sido
-    ) {
-        List<OpenAPIAreaResponse> sigunguResponses = requestAreas(accessToken, sidoResponse.code());
-        for (OpenAPIAreaResponse sigunguResponse : sigunguResponses) {
-            String sigungu = sigunguResponse.address();
-            List<OpenAPIAreaResponse> umdResponses = requestAreas(accessToken, sidoResponse.code());
-            fetchUmd(allAreas, sido, sigungu, umdResponses);
-        }
-    }
-
-    private void fetchUmd(
-            List<Area> allAreas,
-            String sido,
-            String sigungu,
-            List<OpenAPIAreaResponse> umdResponses
-    ) {
-        for (OpenAPIAreaResponse umdResponse : umdResponses) {
-            String umd = umdResponse.address();
-            allAreas.add(new Area(sido, sigungu, umd));
-        }
-    }
-
     private String requestAccessToken() {
         URI authenticationUri = UriComponentsBuilder.fromUriString(AREA_API_DOMAIN)
                 .path(AUTHENTICATION_URI)
@@ -90,8 +53,44 @@ public class OpenAPIAreaService {
                 authenticationUri,
                 OpenAPIAccessTokenResponse.class
         );
+        System.out.println(accessTokenResponse.id());
 
         return accessTokenResponse.result().get(ACCESS_TOKEN_NAME);
+    }
+
+    private List<Area> downloadAreas(String accessToken) {
+        List<Area> allAreas = new ArrayList<>();
+
+        List<OpenAPIAreaResponse> sidoResponses = requestAreas(accessToken, null);
+        for (OpenAPIAreaResponse sidoResponse : sidoResponses) {
+            fetchSigunguAndUmd(accessToken, allAreas, sidoResponse);
+        }
+        return allAreas;
+    }
+
+    private void fetchSigunguAndUmd(
+            String accessToken,
+            List<Area> allAreas,
+            OpenAPIAreaResponse sidoResponse
+    ) {
+        List<OpenAPIAreaResponse> sigunguResponses = requestAreas(accessToken, sidoResponse.code());
+        for (OpenAPIAreaResponse sigunguResponse : sigunguResponses) {
+            String sigungu = sigunguResponse.address();
+            List<OpenAPIAreaResponse> umdResponses = requestAreas(accessToken, sigunguResponse.code());
+            addAreas(allAreas, sidoResponse.address(), sigungu, umdResponses);
+        }
+    }
+
+    private void addAreas(
+            List<Area> allAreas,
+            String sido,
+            String sigungu,
+            List<OpenAPIAreaResponse> umdResponses
+    ) {
+        for (OpenAPIAreaResponse umdResponse : umdResponses) {
+            String umd = umdResponse.address();
+            allAreas.add(new Area(sido, sigungu, umd));
+        }
     }
 
     private List<OpenAPIAreaResponse> requestAreas(String accessToken, String code) {

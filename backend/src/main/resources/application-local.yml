@@ -72,5 +72,5 @@ oauth:
 open:
   api:
     area:
-      service: TRIPDRAW
-      key: TRIPDRAW
+      service: tripdraw
+      key: tripdraw

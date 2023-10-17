@@ -1,7 +1,11 @@
 package dev.tripdraw.area.application;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.domain.AreaRepository;
@@ -9,8 +13,6 @@ import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
 import java.util.List;
 import java.util.stream.Stream;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -19,9 +21,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -32,6 +34,9 @@ class AreaServiceTest {
 
     @Autowired
     private AreaRepository areaRepository;
+
+    @MockBean
+    private OpenAPIAreaService openAPIAreaService;
 
     @Autowired
     private AreaService areaService;
@@ -46,7 +51,43 @@ class AreaServiceTest {
         areaRepository.save(new Area("부산시", "강남구", "개포동"));
 
         // expect
-        Assertions.assertThat(areaService.read(reqeust)).isEqualTo(response);
+        assertThat(areaService.read(reqeust)).isEqualTo(response);
+    }
+
+    @Test
+    void 전체_행정구역을_저장한다() {
+        // given
+        when(openAPIAreaService.download()).thenReturn(
+                List.of(
+                        new Area("서울시", "강동구", "천호동"),
+                        new Area("부산시", "부산진구", "부전동")
+                )
+        );
+
+        // when
+        areaService.create();
+
+        // then
+        verify(openAPIAreaService, times(1)).download();
+    }
+
+    @Test
+    void 데이터가_존재하면_행정구역을_저장하지_않는다() {
+        // given
+        areaRepository.save(new Area("서울시", "강동구", "천호동"));
+        areaRepository.save(new Area("부산시", "부산진구", "부전동"));
+        when(openAPIAreaService.download()).thenReturn(
+                List.of(
+                        new Area("서울시", "강동구", "천호동"),
+                        new Area("부산시", "부산진구", "부전동")
+                )
+        );
+
+        // when
+        areaService.create();
+
+        // then
+        verify(openAPIAreaService, never()).download();
     }
 
     static class RequestProvider implements ArgumentsProvider {
