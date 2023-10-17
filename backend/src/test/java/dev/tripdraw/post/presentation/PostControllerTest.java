@@ -399,7 +399,7 @@ class PostControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        Post updatedPost = postRepository.getByPostId(post.id());
+        Post updatedPost = postRepository.getPostWithPointAndMemberById(post.id());
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(updatedPost.title()).isEqualTo("우도의 땅콩 아이스크림");

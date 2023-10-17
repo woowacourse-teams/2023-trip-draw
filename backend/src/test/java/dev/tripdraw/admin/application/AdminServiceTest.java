@@ -77,7 +77,10 @@ class AdminServiceTest {
     @Test
     void 여행을_조회한다() {
         // given
-        Trip trip = tripRepository.save(새로운_여행(member));
+        Trip trip = 새로운_여행(member);
+        Point point = 새로운_위치정보(trip);
+        trip.add(point);
+        tripRepository.save(trip);
 
         // when
         AdminTripResponse response = adminService.readTrip(trip.id());

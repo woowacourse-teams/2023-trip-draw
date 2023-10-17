@@ -1,7 +1,6 @@
 package dev.tripdraw.trip.application;
 
 import dev.tripdraw.common.auth.LoginUser;
-import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
@@ -20,10 +19,9 @@ public class PointService {
 
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
-    private final MemberRepository memberRepository;
 
     public PointCreateResponse create(LoginUser loginUser, PointCreateRequest pointCreateRequest) {
-        Trip trip = tripRepository.getById(pointCreateRequest.tripId());
+        Trip trip = tripRepository.getByTripId(pointCreateRequest.tripId());
         trip.validateAuthorization(loginUser.memberId());
 
         Point point = pointCreateRequest.toPoint();
@@ -35,7 +33,7 @@ public class PointService {
 
     @Transactional(readOnly = true)
     public PointResponse read(LoginUser loginUser, Long tripId, Long pointId) {
-        Trip trip = tripRepository.getById(tripId);
+        Trip trip = tripRepository.getByTripId(tripId);
         trip.validateAuthorization(loginUser.memberId());
 
         Point point = pointRepository.getById(pointId);
@@ -43,7 +41,7 @@ public class PointService {
     }
 
     public void delete(LoginUser loginUser, Long pointId, Long tripId) {
-        Trip trip = tripRepository.getById(tripId);
+        Trip trip = tripRepository.getByTripId(tripId);
         trip.validateAuthorization(loginUser.memberId());
 
         Point point = pointRepository.getById(pointId);

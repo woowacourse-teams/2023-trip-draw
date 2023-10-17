@@ -121,7 +121,10 @@ class AdminControllerTest extends ControllerTest {
     @Test
     void 여행을_조회한다() {
         // given
-        Trip trip = tripRepository.save(새로운_여행(member));
+        Trip trip = 새로운_여행(member);
+        Point point = 새로운_위치정보(trip);
+        trip.add(point);
+        tripRepository.save(trip);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -134,7 +137,9 @@ class AdminControllerTest extends ControllerTest {
         AdminTripResponse adminTripResponse = response.as(AdminTripResponse.class);
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(OK.value());
-            softly.assertThat(adminTripResponse).isEqualTo(AdminTripResponse.from(trip));
+            softly.assertThat(adminTripResponse).usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(AdminTripResponse.from(trip));
         });
     }
 
@@ -226,7 +231,7 @@ class AdminControllerTest extends ControllerTest {
                 .extract();
 
         // then
-        Optional<Post> findPost = postRepository.findById(post.id());
+        Optional<Post> findPost = postRepository.findPostWithPointAndMemberById(post.id());
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
             softly.assertThat(findPost).isNotPresent();

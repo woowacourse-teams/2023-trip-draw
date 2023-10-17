@@ -18,7 +18,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     @Query("DELETE FROM Trip t WHERE t.member.id = :memberId")
     void deleteByMemberId(@Param("memberId") Long memberId);
 
-    default Trip getById(Long id) {
+    default Trip getByTripId(Long id) {
         return findById(id)
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
@@ -28,6 +28,17 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
     default Trip getTripWithPoints(Long tripId) {
         return findTripWithPoints(tripId)
+                .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
+    }
+
+    @Query("SELECT t FROM Trip t "
+            + "JOIN FETCH t.route.points "
+            + "JOIN FETCH t.member "
+            + "where t.id = :tripId")
+    Optional<Trip> findTripWithPointsAndMemberByTripId(@Param("tripId") Long tripId);
+
+    default Trip getTripWithPointsAndMemberByTripId(Long id) {
+        return findTripWithPointsAndMemberByTripId(id)
                 .orElseThrow(() -> new TripException(TRIP_NOT_FOUND));
     }
 

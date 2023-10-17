@@ -157,7 +157,7 @@ class PostServiceTest {
     @Test
     void 특정_감상을_조회한다() {
         // given
-        Post post = postRepository.save(새로운_감상(point, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "제주특별자치도 제주시 애월읍", trip.id()));
 
         // when
         PostResponse postResponse = postService.read(loginUser, post.id());
@@ -177,7 +177,7 @@ class PostServiceTest {
     @Test
     void 위치정보_ID로_특정_감상을_조회한다() {
         // given
-        Post post = postRepository.save(새로운_감상(point, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "제주특별자치도 제주시 애월읍", trip.id()));
 
         // when
         PostResponse postResponse = postService.readByPointId(loginUser, point.id());
@@ -202,8 +202,8 @@ class PostServiceTest {
         // given
         Point point1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 29));
         Point point2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
-        Post post1 = postRepository.save(새로운_감상(point1, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
-        Post post2 = postRepository.save(새로운_감상(point2, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+        Post post1 = postRepository.save(새로운_감상(point1, member, "제주특별자치도 제주시 애월읍", trip.id()));
+        Post post2 = postRepository.save(새로운_감상(point2, member, "제주특별자치도 제주시 애월읍", trip.id()));
 
         // when
         PostsResponse postsResponse = postService.readAllByTripId(loginUser, trip.id());
@@ -277,14 +277,14 @@ class PostServiceTest {
     void 감상을_수정한다() {
         // given
         LoginUser loginUser = new LoginUser(member.id());
-        Post post = postRepository.save(새로운_감상(point, member.id(), "", trip.id()));
+        Post post = postRepository.save(새로운_감상(point, member, "", trip.id()));
         PostUpdateRequest postUpdateRequest = new PostUpdateRequest("우도의 땅콩 아이스크림", "수정한 내용입니다.");
 
         // when
         postService.update(loginUser, post.id(), postUpdateRequest, null);
 
         // then
-        Post updatedPost = postRepository.getByPostId(post.id());
+        Post updatedPost = postRepository.getPostWithPointAndMemberById(post.id());
         assertSoftly(softly -> {
             softly.assertThat(updatedPost.title()).isEqualTo("우도의 땅콩 아이스크림");
             softly.assertThat(updatedPost.writing()).isEqualTo("수정한 내용입니다.");

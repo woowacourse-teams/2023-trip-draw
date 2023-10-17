@@ -74,7 +74,7 @@ class PointServiceTest {
         PointCreateResponse response = pointService.create(loginUser, pointCreateRequest);
 
         // then
-        Trip savedTrip = tripRepository.getById(trip.id());
+        Trip savedTrip = tripRepository.getTripWithPointsAndMemberByTripId(trip.id());
         assertThat(savedTrip.points())
                 .extracting(Point::id)
                 .contains(response.pointId());

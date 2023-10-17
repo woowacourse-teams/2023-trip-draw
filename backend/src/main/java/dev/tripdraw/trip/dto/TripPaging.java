@@ -1,4 +1,4 @@
-package dev.tripdraw.trip.query;
+package dev.tripdraw.trip.dto;
 
 import java.util.Objects;
 

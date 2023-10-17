@@ -4,9 +4,11 @@ import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripDeleteEvent;
+import dev.tripdraw.trip.domain.TripDynamicQueryRepository;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;
 import dev.tripdraw.trip.dto.TripCreateResponse;
+import dev.tripdraw.trip.dto.TripPaging;
 import dev.tripdraw.trip.dto.TripResponse;
 import dev.tripdraw.trip.dto.TripSearchConditions;
 import dev.tripdraw.trip.dto.TripSearchRequest;
@@ -14,7 +16,6 @@ import dev.tripdraw.trip.dto.TripSearchResponse;
 import dev.tripdraw.trip.dto.TripUpdateRequest;
 import dev.tripdraw.trip.dto.TripsSearchResponse;
 import dev.tripdraw.trip.dto.TripsSearchResponseOfMember;
-import dev.tripdraw.trip.query.TripPaging;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,7 +31,7 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
-    private final TripQueryService tripQueryService;
+    private final TripDynamicQueryRepository tripDynamicQueryRepository;
     private final ApplicationEventPublisher publisher;
 
     public TripCreateResponse create(LoginUser loginUser) {
@@ -41,7 +42,7 @@ public class TripService {
 
     @Transactional(readOnly = true)
     public TripResponse readTripById(LoginUser loginUser, Long id) {
-        Trip trip = tripRepository.getById(id);
+        Trip trip = tripRepository.getTripWithPointsAndMemberByTripId(id);
         return TripResponse.from(trip, loginUser.memberId());
     }
 
@@ -56,7 +57,7 @@ public class TripService {
         TripSearchConditions conditions = tripSearchRequest.toTripSearchConditions();
         TripPaging tripPaging = tripSearchRequest.toTripPaging();
 
-        List<Trip> trips = tripQueryService.readAllByConditions(conditions, tripPaging);
+        List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(conditions, tripPaging);
 
         List<TripSearchResponse> responses = trips.stream()
                 .map(trip -> TripSearchResponse.from(trip, loginUser.memberId()))
@@ -69,7 +70,7 @@ public class TripService {
     }
 
     public void updateTripById(LoginUser loginUser, Long tripId, TripUpdateRequest tripUpdateRequest) {
-        Trip trip = tripRepository.getById(tripId);
+        Trip trip = tripRepository.getByTripId(tripId);
         trip.validateAuthorization(loginUser.memberId());
 
         trip.changeName(tripUpdateRequest.name());
@@ -79,7 +80,7 @@ public class TripService {
     }
 
     public void delete(LoginUser loginUser, Long tripId) {
-        Trip trip = tripRepository.getById(tripId);
+        Trip trip = tripRepository.getByTripId(tripId);
         trip.validateAuthorization(loginUser.memberId());
         publisher.publishEvent(new TripDeleteEvent(tripId));
         tripRepository.delete(trip);

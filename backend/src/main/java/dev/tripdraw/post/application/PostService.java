@@ -11,6 +11,7 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
+import dev.tripdraw.post.domain.PostDynamicQueryRepository;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
@@ -42,7 +43,7 @@ public class PostService {
 
     private static final int FIRST_INDEX = 0;
 
-    private final PostQueryService postQueryService;
+    private final PostDynamicQueryRepository postDynamicQueryRepository;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
@@ -56,7 +57,7 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = memberRepository.getById(loginUser.memberId());
-        Trip trip = tripRepository.getById(postAndPointCreateRequest.tripId());
+        Trip trip = tripRepository.getByTripId(postAndPointCreateRequest.tripId());
         trip.validateAuthorization(member.id());
         Point point = pointRepository.save(postAndPointCreateRequest.toPoint(trip));
 
@@ -83,7 +84,7 @@ public class PostService {
             MultipartFile file
     ) {
         Member member = memberRepository.getById(loginUser.memberId());
-        Trip trip = tripRepository.getById(postRequest.tripId());
+        Trip trip = tripRepository.getByTripId(postRequest.tripId());
         trip.validateAuthorization(member.id());
         Point point = pointRepository.getById(postRequest.pointId());
 
@@ -97,13 +98,13 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostResponse read(LoginUser loginUser, Long postId) {
-        Post post = postRepository.getByPostId(postId);
+        Post post = postRepository.getPostWithPointAndMemberById(postId);
         return PostResponse.from(post, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
     public PostResponse readByPointId(LoginUser loginUser, Long pointId) {
-        Post post = postRepository.getByPointId(pointId);
+        Post post = postRepository.getPostWithPointAndMemberByPointId(pointId);
         return PostResponse.from(post, loginUser.memberId());
     }
 
@@ -113,7 +114,7 @@ public class PostService {
             throw new TripException(TRIP_NOT_FOUND);
         }
 
-        return postRepository.findAllByTripId(tripId).stream()
+        return postRepository.findAllPostWithPointAndMemberByTripId(tripId).stream()
                 .sorted(comparing(Post::pointRecordedAt).reversed())
                 .collect(collectingAndThen(toList(), posts -> PostsResponse.from(posts, loginUser.memberId())));
     }
@@ -123,7 +124,7 @@ public class PostService {
 
         Post post = postRepository.getByPostId(postId);
         post.validateAuthorization(memberId);
-        Trip trip = tripRepository.getById(post.tripId());
+        Trip trip = tripRepository.getByTripId(post.tripId());
         trip.validateAuthorization(memberId);
 
         post.changeTitle(postUpdateRequest.title());
@@ -144,7 +145,7 @@ public class PostService {
         PostSearchConditions conditions = postSearchRequest.toPostSearchConditions();
         PostPaging postPaging = postSearchRequest.toPostPaging();
 
-        List<Post> posts = postQueryService.readAllByConditions(conditions, postPaging);
+        List<Post> posts = postDynamicQueryRepository.findAllByConditions(conditions, postPaging);
 
         List<PostSearchResponse> responses = posts.stream()
                 .map(post -> PostSearchResponse.from(post, loginUser.memberId()))

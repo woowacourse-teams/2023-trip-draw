@@ -12,18 +12,36 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.point where p.tripId = :tripId")
-    List<Post> findAllByTripId(@Param("tripId") Long tripId);
+    @Query("SELECT p FROM Post p "
+            + "JOIN FETCH p.point "
+            + "JOIN FETCH p.member "
+            + "where p.tripId = :tripId ")
+    List<Post> findAllPostWithPointAndMemberByTripId(@Param("tripId") Long tripId);
 
-    default Post getByPostId(Long id) {
-        return findById(id)
+    default Post getByPostId(Long postId) {
+        return findById(postId)
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
 
-    Optional<Post> findByPointId(Long pointId);
+    @Query("SELECT p FROM Post p "
+            + "JOIN FETCH p.point "
+            + "JOIN FETCH p.member "
+            + "where p.id = :postId ")
+    Optional<Post> findPostWithPointAndMemberById(@Param("postId") Long postId);
 
-    default Post getByPointId(Long pointId) {
-        return findByPointId(pointId)
+    default Post getPostWithPointAndMemberById(Long id) {
+        return findPostWithPointAndMemberById(id)
+                .orElseThrow(() -> new PostException(POST_NOT_FOUND));
+    }
+
+    @Query("SELECT p FROM Post p "
+            + "JOIN FETCH p.point "
+            + "JOIN FETCH p.member "
+            + "where p.point.id = :pointId")
+    Optional<Post> findPostWithPointAndMemberByPointId(@Param("pointId") Long pointId);
+
+    default Post getPostWithPointAndMemberByPointId(Long pointId) {
+        return findPostWithPointAndMemberByPointId(pointId)
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
     }
 
