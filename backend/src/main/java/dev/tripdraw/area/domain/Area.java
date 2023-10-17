@@ -32,6 +32,10 @@ public class Area extends BaseEntity {
     @Column(name = "umd") // 읍,면,동
     private String umd;
 
+    public String toFullAddress() {
+        return sido + " " + sigungu + " " + umd;
+    }
+
     public Area(Long id, String sido, String sigungu, String umd) {
         this.id = id;
         this.sido = sido;
