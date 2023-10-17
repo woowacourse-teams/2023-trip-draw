@@ -1,4 +1,4 @@
-package dev.tripdraw.trip.query;
+package dev.tripdraw.trip.domain;
 
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
@@ -14,9 +14,7 @@ import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.test.fixture.PointFixture;
-import dev.tripdraw.trip.domain.Point;
-import dev.tripdraw.trip.domain.Trip;
-import dev.tripdraw.trip.domain.TripRepository;
+import dev.tripdraw.trip.dto.TripPaging;
 import dev.tripdraw.trip.dto.TripSearchConditions;
 import java.util.List;
 import java.util.Set;
@@ -35,10 +33,10 @@ import org.springframework.transaction.annotation.Transactional;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Transactional
 @SpringBootTest
-class TripCustomRepositoryImplTest {
+class TripDynamicQueryRepositoryTest {
 
     @Autowired
-    private TripCustomRepository tripCustomRepository;
+    private TripDynamicQueryRepository tripDynamicQueryRepository;
 
     @Autowired
     private TripRepository tripRepository;
@@ -73,7 +71,8 @@ class TripCustomRepositoryImplTest {
                 TripPaging tripPaging = new TripPaging(null, limit);
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(emptyTripSearchConditions(), tripPaging);
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(emptyTripSearchConditions(),
+                        tripPaging);
 
                 // then
                 assertThat(trips).hasSize(expectedSize);
@@ -88,7 +87,8 @@ class TripCustomRepositoryImplTest {
                 TripPaging tripPaging = new TripPaging(null, limit);
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(emptyTripSearchConditions(), tripPaging);
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(emptyTripSearchConditions(),
+                        tripPaging);
 
                 // then
                 assertThat(trips).hasSize(expectedSize);
@@ -108,7 +108,7 @@ class TripCustomRepositoryImplTest {
                 Long lastViewedId = null;
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         emptyTripSearchConditions(),
                         new TripPaging(lastViewedId, 10)
                 );
@@ -131,7 +131,7 @@ class TripCustomRepositoryImplTest {
                 Long lastViewedId = jeju2023_2_1_Wed.id();
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         emptyTripSearchConditions(),
                         new TripPaging(lastViewedId, 10)
                 );
@@ -155,7 +155,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = yearsTripSearchConditions(Set.of(2023));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -176,7 +176,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = yearsTripSearchConditions(Set.of(2023, 2021));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -205,7 +205,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = monthsTripSearchConditions(Set.of(1));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -226,7 +226,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = monthsTripSearchConditions(Set.of(1, 3));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -255,7 +255,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = daysOfWeekTripSearchConditions(Set.of(1));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -276,7 +276,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = daysOfWeekTripSearchConditions(Set.of(1, 3));
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -304,7 +304,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = addressTripSearchConditions("서울특별시 송파구 신천동");
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -323,7 +323,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = addressTripSearchConditions("서울특별시 송파구");
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -342,7 +342,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = addressTripSearchConditions("서울특별시");
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -371,7 +371,7 @@ class TripCustomRepositoryImplTest {
                         .build();
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -392,7 +392,7 @@ class TripCustomRepositoryImplTest {
                 TripSearchConditions tripSearchConditions = emptyTripSearchConditions();
 
                 // when
-                List<Trip> trips = tripCustomRepository.findAllByConditions(
+                List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                         tripSearchConditions,
                         new TripPaging(null, 10)
                 );
@@ -416,7 +416,7 @@ class TripCustomRepositoryImplTest {
             TripSearchConditions tripSearchConditions = emptyTripSearchConditions();
 
             // when
-            List<Trip> trips = tripCustomRepository.findAllByConditions(
+            List<Trip> trips = tripDynamicQueryRepository.findAllByConditions(
                     tripSearchConditions,
                     new TripPaging(null, 10)
             );
@@ -434,7 +434,7 @@ class TripCustomRepositoryImplTest {
             TripPaging tripPaging = new TripPaging(null, 3);
 
             // when
-            List<Trip> trips = tripCustomRepository.findAll(tripPaging);
+            List<Trip> trips = tripDynamicQueryRepository.findAll(tripPaging);
 
             // then
             assertThat(trips)

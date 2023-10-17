@@ -1,8 +1,7 @@
-package dev.tripdraw.common.domain;
+package dev.tripdraw.trip.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dev.tripdraw.trip.query.TripPaging;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package dev.tripdraw.trip.query;
+package dev.tripdraw.trip.domain;
 
 import static dev.tripdraw.common.util.QueryDslUtils.addressLike;
 import static dev.tripdraw.common.util.QueryDslUtils.dayOfWeekIn;
@@ -12,7 +12,7 @@ import static dev.tripdraw.trip.domain.QPoint.point;
 import static dev.tripdraw.trip.domain.QTrip.trip;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.dto.TripPaging;
 import dev.tripdraw.trip.dto.TripSearchConditions;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,12 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class TripCustomRepositoryImpl implements TripCustomRepository {
+public class TripDynamicQueryRepository {
 
     private static final long UNIT_FOR_HAS_NEXT_PAGE = 1L;
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
     public List<Trip> findAllByConditions(TripSearchConditions tripSearchConditions, TripPaging paging) {
         if (tripSearchConditions.hasNoCondition()) {
             List<Long> tripIds = getTripIdsWithoutCondition(paging);
@@ -106,7 +105,6 @@ public class TripCustomRepositoryImpl implements TripCustomRepository {
                 .fetch();
     }
 
-    @Override
     public List<Trip> findAll(TripPaging paging) {
         return jpaQueryFactory
                 .selectFrom(trip)

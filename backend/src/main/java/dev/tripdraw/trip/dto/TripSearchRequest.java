@@ -1,6 +1,5 @@
 package dev.tripdraw.trip.dto;
 
-import dev.tripdraw.trip.query.TripPaging;
 import java.util.Set;
 import lombok.Builder;
 

@@ -7,14 +7,14 @@ import dev.tripdraw.admin.dto.AdminTripResponse;
 import dev.tripdraw.admin.dto.AdminTripsResponse;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.domain.PostDynamicQueryRepository;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.post.dto.PostPaging;
-import dev.tripdraw.post.query.PostCustomRepository;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripDynamicQueryRepository;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.trip.query.TripCustomRepository;
-import dev.tripdraw.trip.query.TripPaging;
+import dev.tripdraw.trip.dto.TripPaging;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,13 +29,13 @@ public class AdminService {
     private final PointRepository pointRepository;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
-    private final TripCustomRepository tripCustomRepository;
-    private final PostCustomRepository postCustomRepository;
+    private final TripDynamicQueryRepository tripDynamicQueryRepository;
+    private final PostDynamicQueryRepository postDynamicQueryRepository;
 
     @Transactional(readOnly = true)
     public AdminTripsResponse readTrips(Long lastViewId, Integer limit) {
         TripPaging tripPaging = new TripPaging(lastViewId, limit);
-        List<Trip> trips = tripCustomRepository.findAll(tripPaging);
+        List<Trip> trips = tripDynamicQueryRepository.findAll(tripPaging);
         if (limit < trips.size()) {
             return AdminTripsResponse.of(trips.subList(0, limit), true);
         }
@@ -54,7 +54,7 @@ public class AdminService {
     @Transactional(readOnly = true)
     public AdminPostsResponse readPosts(Long lastViewId, Integer limit) {
         PostPaging postPaging = new PostPaging(lastViewId, limit);
-        List<Post> posts = postCustomRepository.findAll(postPaging);
+        List<Post> posts = postDynamicQueryRepository.findAll(postPaging);
         if (limit < posts.size()) {
             return AdminPostsResponse.of(posts.subList(0, limit), true);
         }

@@ -11,7 +11,6 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.dto.PostSearchConditions;
-import dev.tripdraw.post.query.PostCustomRepository;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import java.time.LocalDateTime;
@@ -30,10 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Import({JpaConfig.class, QueryDslConfig.class})
 @SpringBootTest
-class PostCustomRepositoryImplTest {
+class PostDynamicQueryRepositoryTest {
 
     @Autowired
-    private PostCustomRepository postCustomRepository;
+    private PostDynamicQueryRepository postDynamicQueryRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -61,7 +60,7 @@ class PostCustomRepositoryImplTest {
         PostPaging paging = new PostPaging(null, 10);
 
         // when
-        List<Post> posts = postCustomRepository.findAllByConditions(conditions, paging);
+        List<Post> posts = postDynamicQueryRepository.findAllByConditions(conditions, paging);
 
         // then
         assertThat(posts).containsExactly(seoulJulyPost, jejuJulyPost);
@@ -78,7 +77,7 @@ class PostCustomRepositoryImplTest {
         PostPaging postPaging = new PostPaging(null, 3);
 
         // when
-        List<Post> posts = postCustomRepository.findAll(postPaging);
+        List<Post> posts = postDynamicQueryRepository.findAll(postPaging);
 
         // then
         assertThat(posts)

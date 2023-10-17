@@ -11,6 +11,7 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
+import dev.tripdraw.post.domain.PostDynamicQueryRepository;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
@@ -42,7 +43,7 @@ public class PostService {
 
     private static final int FIRST_INDEX = 0;
 
-    private final PostQueryService postQueryService;
+    private final PostDynamicQueryRepository postDynamicQueryRepository;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
@@ -144,7 +145,7 @@ public class PostService {
         PostSearchConditions conditions = postSearchRequest.toPostSearchConditions();
         PostPaging postPaging = postSearchRequest.toPostPaging();
 
-        List<Post> posts = postQueryService.readAllByConditions(conditions, postPaging);
+        List<Post> posts = postDynamicQueryRepository.findAllByConditions(conditions, postPaging);
 
         List<PostSearchResponse> responses = posts.stream()
                 .map(post -> PostSearchResponse.from(post, loginUser.memberId()))
