@@ -9,7 +9,6 @@ import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.trip.TripOfAll
 import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.ui.filter.SelectedOptions
-import com.teamtripdraw.android.ui.model.UiAllTrips
 import com.teamtripdraw.android.ui.model.UiPreviewTrip
 import com.teamtripdraw.android.ui.model.allTrips.UiAllTripItem
 import com.teamtripdraw.android.ui.model.allTrips.UiAllTripLoadingItem
