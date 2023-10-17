@@ -32,20 +32,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AuthControllerTest extends ControllerTest {
-
-    @LocalServerPort
-    private int port;
 
     @MockBean
     private OauthClientProvider oauthClientProvider;
@@ -61,7 +53,7 @@ class AuthControllerTest extends ControllerTest {
 
     @BeforeEach
     public void setUp() {
-        RestAssured.port = port;
+        super.setUp();
         given(oauthClientProvider.provide(KAKAO)).willReturn(new TestKakaoApiClient());
     }
 

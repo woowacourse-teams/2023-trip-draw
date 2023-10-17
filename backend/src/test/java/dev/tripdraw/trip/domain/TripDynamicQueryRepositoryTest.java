@@ -13,6 +13,7 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
+import dev.tripdraw.test.DataCleaner;
 import dev.tripdraw.test.fixture.PointFixture;
 import dev.tripdraw.trip.dto.TripPaging;
 import dev.tripdraw.trip.dto.TripSearchConditions;
@@ -47,10 +48,14 @@ class TripDynamicQueryRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    DataCleaner dataCleaner;
+
     private Member member;
 
     @BeforeEach
     void setUp() {
+        dataCleaner.clean();
         member = memberRepository.save(사용자());
     }
 
