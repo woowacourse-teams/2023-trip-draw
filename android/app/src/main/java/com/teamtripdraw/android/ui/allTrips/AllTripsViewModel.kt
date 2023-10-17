@@ -50,11 +50,7 @@ class AllTripsViewModel @Inject constructor(
             tripRepository.getAllTrips(lastViewedId = lastId).onSuccess { trips ->
                 setLastItemId(trips)
                 setHasNextPage(trips)
-                if (lastId == null) {
-                    _uiTripItems.value = trips.map { it.toPresentation() }
-                } else {
-                    setAddedItems(trips)
-                }
+                setAddedItems(trips)
             }.onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
     }
