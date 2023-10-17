@@ -6,6 +6,7 @@ import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.PatchPostRequest
+import com.teamtripdraw.android.data.httpClient.service.GetPointPostService
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.model.DataPost
 import com.teamtripdraw.android.data.model.DataPostOfAll
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class RemotePostDataSourceImpl @Inject constructor(
     private val moshi: Moshi,
     private val postService: PostService,
+    private val getPointPostService: GetPointPostService,
 ) : PostDataSource.Remote {
 
     override suspend fun addPost(
@@ -39,11 +41,15 @@ class RemotePostDataSourceImpl @Inject constructor(
             }
     }
 
-    override suspend fun getPost(postId: Long): Result<DataPost> {
+    override suspend fun getPostByPostId(postId: Long): Result<DataPost> {
         return postService.getPost(postId).process { body, headers ->
             Result.success(body.toData())
         }
     }
+
+    override suspend fun getPostByPointId(pointId: Long): Result<DataPost> =
+        getPointPostService.getPost(pointId)
+            .process { body, headers -> Result.success(body.toData()) }
 
     override suspend fun getTripPosts(tripId: Long): Result<List<DataPost>> {
         return postService.getTripPosts(tripId).process { body, headers ->

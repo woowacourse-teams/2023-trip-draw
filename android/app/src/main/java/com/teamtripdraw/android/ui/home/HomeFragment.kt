@@ -239,7 +239,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun navigateToPostWriting(pointId: Long) {
-        startActivity(PostWritingActivity.getIntent(requireContext(), pointId))
+        val tripId = homeViewModel.tripId
+        startActivity(PostWritingActivity.getIntentByPoint(requireContext(), tripId, pointId))
     }
 
     private fun observeUpdateTripId() {

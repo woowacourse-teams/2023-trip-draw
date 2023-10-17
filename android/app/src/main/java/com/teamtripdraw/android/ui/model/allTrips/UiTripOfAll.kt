@@ -1,4 +1,4 @@
-package com.teamtripdraw.android.ui.model
+package com.teamtripdraw.android.ui.model.allTrips
 
 data class UiTripOfAll(
     val tripId: Long,
@@ -9,4 +9,4 @@ data class UiTripOfAll(
     val endTime: String,
     val isMine: Boolean,
     val authorNickname: String,
-)
+) : UiAllTripItem

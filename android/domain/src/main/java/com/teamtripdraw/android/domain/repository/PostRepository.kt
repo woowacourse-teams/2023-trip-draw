@@ -9,7 +9,9 @@ interface PostRepository {
 
     suspend fun addPost(prePost: PrePost): Result<Long>
 
-    suspend fun getPost(postId: Long): Result<Post>
+    suspend fun getPostByPostId(postId: Long): Result<Post>
+
+    suspend fun getPostByPointId(pointId: Long): Result<Post>
 
     suspend fun getTripPosts(tripId: Long): Result<List<Post>>
 

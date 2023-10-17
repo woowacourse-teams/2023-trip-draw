@@ -3,6 +3,7 @@ package com.teamtripdraw.android.ui.post.writing
 import com.teamtripdraw.android.DefaultViewModelTest
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.repository.GeocodingRepository
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.domain.repository.TripRepository
@@ -24,6 +25,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
     private lateinit var postRepository: PostRepository
     private lateinit var pointRepository: PointRepository
     private lateinit var tripRepository: TripRepository
+    private lateinit var geocodingRepository: GeocodingRepository
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun setUp() {
@@ -32,11 +34,13 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         postRepository = mockk()
         pointRepository = mockk()
         tripRepository = mockk()
+        geocodingRepository = mockk()
 
         sut = PostWritingViewModel(
             postRepository = postRepository,
             pointRepository = pointRepository,
             tripRepository = tripRepository,
+            geocodingRepository = geocodingRepository,
         )
     }
 
@@ -58,7 +62,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         coEvery { pointRepository.getPoint(any(), any()) } returns getPointResult
 
         // when
-        sut.initWritingMode(WritingMode.NEW, pointId)
+        sut.initPostData(pointId)
         val actualLat = sut.point.value?.latitude
         val actualLng = sut.point.value?.longitude
 
@@ -84,10 +88,10 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
             postImageUrl = expectedImageUri,
         )
         val expectedGetPostSuccessResult: Result<Post> = Result.success(expectedPost)
-        coEvery { postRepository.getPost(postId) } returns expectedGetPostSuccessResult
+        coEvery { postRepository.getPostByPostId(postId) } returns expectedGetPostSuccessResult
 
         // when
-        sut.initWritingMode(WritingMode.EDIT, postId)
+        sut.initPostData(postId)
         val actualAddress = sut.address.value
         val actualTitle = sut.title.value
         val actualWriting = sut.writing.value
