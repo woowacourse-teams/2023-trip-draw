@@ -17,7 +17,9 @@ interface PostDataSource {
             imageFile: File?,
         ): Result<Long>
 
-        suspend fun getPost(postId: Long): Result<DataPost>
+        suspend fun getPostByPostId(postId: Long): Result<DataPost>
+
+        suspend fun getPostByPointId(pointId: Long): Result<DataPost>
 
         suspend fun getTripPosts(tripId: Long): Result<List<DataPost>>
 

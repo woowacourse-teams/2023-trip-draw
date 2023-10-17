@@ -23,9 +23,12 @@ class PostRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getPost(postId: Long): Result<Post> {
-        return remotePostDataSource.getPost(postId).map { it.toDomain() }
+    override suspend fun getPostByPostId(postId: Long): Result<Post> {
+        return remotePostDataSource.getPostByPostId(postId).map { it.toDomain() }
     }
+
+    override suspend fun getPostByPointId(pointId: Long): Result<Post> =
+        remotePostDataSource.getPostByPointId(pointId = pointId).map { it.toDomain() }
 
     override suspend fun getTripPosts(tripId: Long): Result<List<Post>> {
         return remotePostDataSource.getTripPosts(tripId)

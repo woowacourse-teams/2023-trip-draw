@@ -40,7 +40,7 @@ class PostDetailViewModel @Inject constructor(
 
     fun fetchPost() {
         viewModelScope.launch {
-            repository.getPost(postId)
+            repository.getPostByPostId(postId)
                 .onSuccess {
                     _postDetail.value = it.toDetailPresentation()
                 }

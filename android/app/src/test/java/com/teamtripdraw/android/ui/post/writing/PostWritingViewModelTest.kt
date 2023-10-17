@@ -88,7 +88,7 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
             postImageUrl = expectedImageUri,
         )
         val expectedGetPostSuccessResult: Result<Post> = Result.success(expectedPost)
-        coEvery { postRepository.getPost(postId) } returns expectedGetPostSuccessResult
+        coEvery { postRepository.getPostByPostId(postId) } returns expectedGetPostSuccessResult
 
         // when
         sut.initPostData(postId)

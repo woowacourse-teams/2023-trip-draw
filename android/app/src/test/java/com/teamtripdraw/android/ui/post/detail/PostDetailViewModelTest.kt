@@ -40,7 +40,7 @@ class PostDetailViewModelTest : DefaultViewModelTest() {
         // given
         val post = getPost()
         val result: Result<Post> = Result.success(post)
-        coEvery { postRepository.getPost(any()) } returns result
+        coEvery { postRepository.getPostByPostId(any()) } returns result
 
         // when
         sut.fetchPost()
