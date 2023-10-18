@@ -19,6 +19,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
 import java.util.stream.Stream;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -71,8 +72,10 @@ class AreaControllerTest extends ControllerTest {
 
         // then
         AreaResponse areaResponse = actual.as(AreaResponse.class);
-        assertThat(actual.statusCode()).isEqualTo(OK.value());
-        assertThat(areaResponse).isEqualTo(response);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actual.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(areaResponse).isEqualTo(response);
+        });
     }
 
     private static Stream<Arguments> requestAndresponse() {
