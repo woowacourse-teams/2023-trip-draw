@@ -21,13 +21,13 @@ public class Area extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "area_id")
+    @Column(name = "area_id", nullable = false)
     private Long id;
 
-    @Column(name = "sido")
+    @Column(name = "sido", nullable = false)
     private String sido;
 
-    @Column(name = "sigungu")
+    @Column(name = "sigungu", nullable = false)
     private String sigungu;
 
     @Column(name = "umd") // 읍,면,동
