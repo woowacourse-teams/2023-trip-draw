@@ -16,14 +16,14 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 @AutoConfigureWebClient(registerRestTemplate = true)
-@RestClientTest(value = {OpenAPIAreaService.class})
-class OpenAPIAreaServiceTest {
+@RestClientTest(value = {OpenAPIAreaDownloader.class})
+class OpenAPIAreaDownloaderTest {
 
     @Autowired
     private MockRestServiceServer mockServer;
 
     @Autowired
-    private OpenAPIAreaService openAPIAreaService;
+    private OpenAPIAreaDownloader openAPIAreaDownloader;
 
     @Test
     void 전체_행정구역을_받아온다() {
@@ -105,7 +105,7 @@ class OpenAPIAreaServiceTest {
                 .andRespond(withSuccess(expectedGangnamdongJson, APPLICATION_JSON));
 
         // when
-        List<Area> allAreas = openAPIAreaService.download();
+        List<Area> allAreas = openAPIAreaDownloader.download();
 
         // then
         assertThat(allAreas).containsExactly(new Area("서울특별시", "강남구", "강남동"));

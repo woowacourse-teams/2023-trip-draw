@@ -3,7 +3,7 @@ package dev.tripdraw.area.presentation;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
-import dev.tripdraw.area.application.AreaService;
+import dev.tripdraw.area.application.AreaServiceFacade;
 import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
 import dev.tripdraw.common.swagger.SwaggerAuthorizationRequired;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AreaController {
 
-    private final AreaService areaService;
+    private final AreaServiceFacade areaServiceFacade;
 
     @Operation(summary = "행정구역 조회 API", description = "행정구역을 조회합니다.")
     @ApiResponse(
@@ -34,7 +34,7 @@ public class AreaController {
     )
     @GetMapping
     public ResponseEntity<AreaResponse> read(@RequestBody AreaReqeust areaReqeust) {
-        AreaResponse response = areaService.read(areaReqeust);
+        AreaResponse response = areaServiceFacade.read(areaReqeust);
         return ResponseEntity.ok(response);
     }
 
@@ -45,7 +45,7 @@ public class AreaController {
     )
     @PostMapping
     public ResponseEntity<Void> create() {
-        areaService.create();
+        areaServiceFacade.create();
         return ResponseEntity.status(CREATED).build();
     }
 }

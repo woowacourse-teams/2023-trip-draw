@@ -9,15 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
-@Transactional
-@Service
-public class OpenAPIAreaService {
+@Component
+public class OpenAPIAreaDownloader {
 
     private static final String AREA_API_DOMAIN = "https://sgisapi.kostat.go.kr";
     private static final String AREA_CODE_NAME = "cd";
@@ -67,6 +65,23 @@ public class OpenAPIAreaService {
         return allAreas;
     }
 
+    private List<OpenAPIAreaResponse> requestAreas(String accessToken, String code) {
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(AREA_API_DOMAIN)
+                .path(AREA_URI)
+                .queryParam(ACCESS_TOKEN_NAME, accessToken);
+
+        if (code != null) {
+            uriComponentsBuilder.queryParam(AREA_CODE_NAME, code);
+        }
+
+        URI areaUri = uriComponentsBuilder.encode()
+                .build()
+                .toUri();
+
+        OpenAPITotalAreaResponse totalAreaResponse = restTemplate.getForObject(areaUri, OpenAPITotalAreaResponse.class);
+        return totalAreaResponse.result();
+    }
+
     private void fetchSigunguAndUmd(
             String accessToken,
             List<Area> allAreas,
@@ -90,22 +105,5 @@ public class OpenAPIAreaService {
             String umd = umdResponse.address();
             allAreas.add(new Area(sido, sigungu, umd));
         }
-    }
-
-    private List<OpenAPIAreaResponse> requestAreas(String accessToken, String code) {
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(AREA_API_DOMAIN)
-                .path(AREA_URI)
-                .queryParam(ACCESS_TOKEN_NAME, accessToken);
-
-        if (code != null) {
-            uriComponentsBuilder.queryParam(AREA_CODE_NAME, code);
-        }
-
-        URI areaUri = uriComponentsBuilder.encode()
-                .build()
-                .toUri();
-
-        OpenAPITotalAreaResponse totalAreaResponse = restTemplate.getForObject(areaUri, OpenAPITotalAreaResponse.class);
-        return totalAreaResponse.result();
     }
 }

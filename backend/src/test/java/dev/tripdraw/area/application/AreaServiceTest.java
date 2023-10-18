@@ -1,6 +1,7 @@
 package dev.tripdraw.area.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -13,6 +14,8 @@ import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
 import java.util.List;
 import java.util.stream.Stream;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -35,9 +38,6 @@ class AreaServiceTest {
     @Autowired
     private AreaRepository areaRepository;
 
-    @MockBean
-    private OpenAPIAreaService openAPIAreaService;
-
     @Autowired
     private AreaService areaService;
 
@@ -57,18 +57,13 @@ class AreaServiceTest {
     @Test
     void 전체_행정구역을_저장한다() {
         // given
-        when(openAPIAreaService.download()).thenReturn(
-                List.of(
-                        new Area("서울시", "강동구", "천호동"),
-                        new Area("부산시", "부산진구", "부전동")
-                )
+        List<Area> areas = List.of(
+                new Area("서울시", "강동구", "천호동"),
+                new Area("부산시", "부산진구", "부전동")
         );
 
-        // when
-        areaService.create();
-
-        // then
-        verify(openAPIAreaService, times(1)).download();
+        // expect
+        assertThatNoException().isThrownBy(() -> areaService.create(areas));
     }
 
     @Test
@@ -76,18 +71,16 @@ class AreaServiceTest {
         // given
         areaRepository.save(new Area("서울시", "강동구", "천호동"));
         areaRepository.save(new Area("부산시", "부산진구", "부전동"));
-        when(openAPIAreaService.download()).thenReturn(
-                List.of(
-                        new Area("서울시", "강동구", "천호동"),
-                        new Area("부산시", "부산진구", "부전동")
-                )
-        );
 
         // when
-        areaService.create();
+        areaService.create(List.of(
+                new Area("서울시", "강동구", "성내동")
+        ));
 
         // then
-        verify(openAPIAreaService, never()).download();
+        assertThat(areaRepository.findBySidoAndSigungu("서울시", "강동구"))
+                .hasSize(1)
+                .containsExactly(new Area("서울시", "강동구", "천호동"));
     }
 
     static class RequestProvider implements ArgumentsProvider {

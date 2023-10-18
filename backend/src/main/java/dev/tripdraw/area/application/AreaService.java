@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AreaService {
 
     private final AreaRepository areaRepository;
-    private final OpenAPIAreaService openAPIAreaService;
+    private final OpenAPIAreaDownloader openAPIAreaDownloader;
 
     @Transactional(readOnly = true)
     public AreaResponse read(AreaReqeust areaReqeust) {
@@ -68,22 +68,13 @@ public class AreaService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 0 1 * ?") // 매달 1일에 업데이트 한다는 CRON 표현식
-    public void create() {
+    public void create(List<Area> areas) {
         long count = areaRepository.count();
         if (count != 0) {
-            AreaResponse.from(List.of());
             return;
         }
 
         areaRepository.deleteAllInBatch();
-        List<Area> areas = openAPIAreaService.download();
-
-        List<Area> allAreas = areaRepository.saveAll(areas);
-        List<String> allAddresses = allAreas.stream()
-                .map(Area::toFullAddress)
-                .toList();
-
-        AreaResponse.from(allAddresses);
+        areaRepository.saveAll(areas);
     }
 }
