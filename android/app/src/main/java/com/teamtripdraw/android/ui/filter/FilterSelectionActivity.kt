@@ -44,8 +44,8 @@ class FilterSelectionActivity : AppCompatActivity() {
         bindViewModel()
 
         viewModel.setupFilterType(initFilterType())
-        filterViews = setupFilterViews()
-        setupWithSelectedOptions()
+        setupFilterViews()
+        initViewBySelectedOptions()
         initObserver()
     }
 
@@ -57,20 +57,22 @@ class FilterSelectionActivity : AppCompatActivity() {
     private fun initFilterType(): FilterType =
         intent.getParcelableExtraCompat(FILTER_TYPE_ID) ?: throw IllegalStateException()
 
-    private fun setupWithSelectedOptions() {
-        val history =
+    private fun initViewBySelectedOptions() {
+        val selectedOptions =
             intent.getParcelableExtraCompat<SelectedOptions>(SELECTED_OPTIONS_HISTORY_KEY) ?: return
-        binding.selectedOptions = history
-        viewModel.setAddress(history.address)
+        viewModel.setSelectedOption(selectedOptions)
+        viewModel.setAddress(selectedOptions.address)
     }
 
-    private fun setupFilterViews() = listOf(
-        FilterView(typeOf<OptionYear>(), binding.filterOptionsYear),
-        FilterView(typeOf<OptionMonth>(), binding.filterOptionsMonth),
-        FilterView(typeOf<OptionDayOfWeek>(), binding.filterOptionsDayOfWeek),
-        FilterView(typeOf<OptionAgeRange>(), binding.filterOptionsAgeRange),
-        FilterView(typeOf<OptionGender>(), binding.filterOptionsGender),
-    )
+    private fun setupFilterViews() {
+        filterViews = listOf(
+            FilterView(typeOf<OptionYear>(), binding.filterOptionsYear),
+            FilterView(typeOf<OptionMonth>(), binding.filterOptionsMonth),
+            FilterView(typeOf<OptionDayOfWeek>(), binding.filterOptionsDayOfWeek),
+            FilterView(typeOf<OptionAgeRange>(), binding.filterOptionsAgeRange),
+            FilterView(typeOf<OptionGender>(), binding.filterOptionsGender),
+        )
+    }
 
     private fun initObserver() {
         initOpenAddressSelectionEventObserve()
@@ -120,8 +122,6 @@ class FilterSelectionActivity : AppCompatActivity() {
         if (isClicked) {
             viewModel.setAddress()
             filterViews.forEach { it.view.clearCheck() }
-            binding.filterOptionsHourFrom.value = binding.filterOptionsHourFrom.minValue
-            binding.filterOptionsHourTo.value = binding.filterOptionsHourFrom.maxValue
         }
     }
 

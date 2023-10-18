@@ -1,7 +1,6 @@
 package com.teamtripdraw.android.ui.common.bindingAdapter
 
 import android.view.View
-import android.widget.NumberPicker
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import com.teamtripdraw.android.domain.model.filterOption.FilterOption
@@ -14,26 +13,6 @@ fun <T> FilterOptionsView.setupFilterOption(
     selectedOptions: List<Int>? = null,
 ) {
     setOptions(options, selectedOptions)
-}
-
-@BindingAdapter("app:setupFilterOptionHour")
-fun <T> NumberPicker.setupFilterOptionHour(options: List<FilterOption<T>>) {
-    minValue = options.first().value as Int
-    maxValue = options.last().value as Int
-}
-
-@BindingAdapter("app:setupFilterOptionHourFrom")
-fun NumberPicker.setupFilterOptionHourFrom(selectedOptions: List<Int>?) {
-    if (selectedOptions == null) return
-    value = selectedOptions.first()
-}
-
-@BindingAdapter("app:setupFilterOptionHourTo")
-fun NumberPicker.setupFilterOptionHourTo(selectedOptions: List<Int>?) {
-    value = maxValue
-
-    if (selectedOptions == null) return
-    value = selectedOptions.last()
 }
 
 @BindingAdapter("app:setVisibilityIfTrip")

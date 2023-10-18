@@ -29,20 +29,17 @@ enum class OptionHour(override val id: Int, override val value: Int) : FilterOpt
 
     companion object {
 
-        fun getSelectedHourIds(fromValue: Int, toValue: Int): List<Int> {
-            val firstHourValue = OptionHour.values().first().value
-            val lastHourValue = OptionHour.values().last().value
+        val minHour = values().minByOrNull { it.value } ?: values().first()
+        val maxHour = values().maxByOrNull { it.value } ?: values().last()
 
-            val selectedHourIds = mutableListOf<Int>()
-            if (fromValue < toValue) {
-                for (i in fromValue..toValue) selectedHourIds.add(i)
-            } else if (fromValue > toValue) {
-                for (i in fromValue..lastHourValue) selectedHourIds.add(i)
-                for (i in firstHourValue..toValue) selectedHourIds.add(i)
-            } else {
-                selectedHourIds.add(fromValue)
-            }
-            return selectedHourIds.toList()
+        fun getSelectedHourIds(fromValue: Int, toValue: Int): List<Int> {
+            val range =
+                if (fromValue <= toValue) {
+                    fromValue..toValue
+                } else {
+                    (fromValue..maxHour.value) + (minHour.value..toValue)
+                }
+            return range.toList()
         }
     }
 }

@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="selectedOptions"
-            type="com.teamtripdraw.android.ui.filter.SelectedOptions" />
-
-        <variable
             name="filterSelectionViewModel"
             type="com.teamtripdraw.android.ui.filter.FilterSelectionViewModel" />
 
@@ -152,7 +148,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_filter_date_title"
                     app:setTitle="@{@string/tv_filter_option_year}"
                     app:setupFilterOptions="@{filterSelectionViewModel.years}"
-                    app:setupSelectedOptions="@{selectedOptions.years}" />
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.years}" />
 
                 <com.teamtripdraw.android.ui.filter.FilterOptionsView
                     android:id="@+id/filter_options_month"
@@ -164,7 +160,7 @@
                     app:layout_constraintTop_toBottomOf="@id/filter_options_year"
                     app:setTitle="@{@string/tv_filter_option_month}"
                     app:setupFilterOptions="@{filterSelectionViewModel.months}"
-                    app:setupSelectedOptions="@{selectedOptions.months}" />
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.months}" />
 
                 <com.teamtripdraw.android.ui.filter.FilterOptionsView
                     android:id="@+id/filter_options_day_of_week"
@@ -176,7 +172,7 @@
                     app:layout_constraintTop_toBottomOf="@id/filter_options_month"
                     app:setTitle="@{@string/tv_filter_option_day_of_week}"
                     app:setupFilterOptions="@{filterSelectionViewModel.dayOfWeek}"
-                    app:setupSelectedOptions="@{selectedOptions.daysOfWeek}" />
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.daysOfWeek}" />
 
                 <TextView
                     android:id="@+id/tv_filter_hour_title"
@@ -196,9 +192,10 @@
                     app:layout_constraintEnd_toStartOf="@id/tv_filter_options_hour_divider"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_filter_hour_title"
+                    app:maxValue="@{filterSelectionViewModel.maxHour.value}"
+                    app:minValue="@{filterSelectionViewModel.minHour.value}"
                     app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
-                    app:setupFilterOptionHour="@{filterSelectionViewModel.hour}"
-                    app:setupFilterOptionHourFrom="@{selectedOptions.hours}" />
+                    app:value="@{filterSelectionViewModel.selectedHourFrom}" />
 
                 <TextView
                     android:id="@+id/tv_filter_options_hour_from"
@@ -232,9 +229,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_filter_options_hour_divider"
                     app:layout_constraintTop_toTopOf="@id/filter_options_hour_from"
+                    app:maxValue="@{filterSelectionViewModel.maxHour.value}"
+                    app:minValue="@{filterSelectionViewModel.minHour.value}"
                     app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
-                    app:setupFilterOptionHour="@{filterSelectionViewModel.hour}"
-                    app:setupFilterOptionHourTo="@{selectedOptions.hours}" />
+                    app:value="@{filterSelectionViewModel.selectedHourTo}" />
 
                 <TextView
                     android:id="@+id/tv_filter_options_hour_to"
@@ -269,7 +267,7 @@
                     app:layout_constraintTop_toBottomOf="@id/divider_date"
                     app:setTitle="@{@string/tv_filter_option_age_range}"
                     app:setupFilterOptions="@{filterSelectionViewModel.ageRange}"
-                    app:setupSelectedOptions="@{selectedOptions.ageRanges}" />
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.ageRanges}" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/divider_age_range"
@@ -291,7 +289,7 @@
                     app:layout_constraintTop_toBottomOf="@id/divider_age_range"
                     app:setTitle="@{@string/tv_filter_option_gender}"
                     app:setupFilterOptions="@{filterSelectionViewModel.gender}"
-                    app:setupSelectedOptions="@{selectedOptions.genders}" />
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.genders}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

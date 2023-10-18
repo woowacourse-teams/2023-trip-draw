@@ -22,9 +22,24 @@ class FilterSelectionViewModel @Inject constructor() : ViewModel() {
     val years = OptionYear.values().toList()
     val months = OptionMonth.values().toList()
     val dayOfWeek = OptionDayOfWeek.values().toList()
-    val hour = OptionHour.values().toList()
+    val minHour = OptionHour.minHour
+    val maxHour = OptionHour.maxHour
     val ageRange = OptionAgeRange.values().toList()
     val gender = OptionGender.values().toList()
+
+    private val _selectedOption = MutableLiveData<SelectedOptions>()
+    val selectedOption: LiveData<SelectedOptions> = _selectedOption
+
+    private val _selectedHourFrom = MutableLiveData(OptionHour.minHour.value)
+    val selectedHourFrom: LiveData<Int> = _selectedHourFrom
+    private val _selectedHourTo = MutableLiveData(OptionHour.maxHour.value)
+    val selectedHourTo: LiveData<Int> = _selectedHourTo
+
+    fun setSelectedOption(options: SelectedOptions) {
+        _selectedOption.value = options
+        _selectedHourFrom.value = options.hours?.first()
+        _selectedHourTo.value = options.hours?.last()
+    }
 
     private val _address = MutableLiveData("")
     val address: LiveData<String> = _address
@@ -59,6 +74,8 @@ class FilterSelectionViewModel @Inject constructor() : ViewModel() {
 
     fun refresh() {
         _refreshEvent.value = true
+        _selectedHourFrom.value = OptionHour.minHour.value
+        _selectedHourTo.value = OptionHour.maxHour.value
     }
 
     fun backPage() {
