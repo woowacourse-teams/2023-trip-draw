@@ -24,6 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -41,7 +42,7 @@ class AreaServiceTest {
     @Autowired
     private AreaService areaService;
 
-    @ArgumentsSource(RequestProvider.class)
+    @MethodSource("requestAndresponse")
     @ParameterizedTest
     void 해당하는_지역을_조회한다(AreaReqeust reqeust, AreaResponse response) {
         // given
@@ -83,14 +84,11 @@ class AreaServiceTest {
                 .containsExactly(new Area("서울시", "강동구", "천호동"));
     }
 
-    static class RequestProvider implements ArgumentsProvider {
-        @Override
-        public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-            return Stream.of(
-                    arguments(new AreaReqeust("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
-                    arguments(new AreaReqeust("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
-                    arguments(new AreaReqeust("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
-            );
-        }
+    private static Stream<Arguments> requestAndresponse() {
+        return Stream.of(
+                arguments(new AreaReqeust("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
+                arguments(new AreaReqeust("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
+                arguments(new AreaReqeust("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
+        );
     }
 }

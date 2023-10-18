@@ -25,8 +25,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -58,7 +57,7 @@ class AreaControllerTest extends ControllerTest {
         areaRepository.save(new Area("부산시", "강남구", "개포동"));
     }
 
-    @ArgumentsSource(RequestProvider.class)
+    @MethodSource("requestAndresponse")
     @ParameterizedTest
     void 지역을_조회한다(AreaReqeust reqeust, AreaResponse response) {
         // when
@@ -76,14 +75,11 @@ class AreaControllerTest extends ControllerTest {
         assertThat(areaResponse).isEqualTo(response);
     }
 
-    static class RequestProvider implements ArgumentsProvider {
-        @Override
-        public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-            return Stream.of(
-                    arguments(new AreaReqeust("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
-                    arguments(new AreaReqeust("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
-                    arguments(new AreaReqeust("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
-            );
-        }
+    private static Stream<Arguments> requestAndresponse() {
+        return Stream.of(
+                arguments(new AreaReqeust("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
+                arguments(new AreaReqeust("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
+                arguments(new AreaReqeust("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
+        );
     }
 }
