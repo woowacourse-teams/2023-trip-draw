@@ -21,7 +21,7 @@ public class Area extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "area_id", nullable = false)
+    @Column(name = "area_id")
     private Long id;
 
     @Column(name = "sido", nullable = false)
@@ -30,18 +30,18 @@ public class Area extends BaseEntity {
     @Column(name = "sigungu", nullable = false)
     private String sigungu;
 
-    @Column(name = "umd") // 읍,면,동
+    @Column(name = "umd", nullable = false) // 읍,면,동
     private String umd;
+
+    public Area(String sido, String sigungu, String umd) {
+        this(null, sido, sigungu, umd);
+    }
 
     public Area(Long id, String sido, String sigungu, String umd) {
         this.id = id;
         this.sido = sido;
         this.sigungu = sigungu;
         this.umd = umd;
-    }
-
-    public Area(String sido, String sigungu, String umd) {
-        this(null, sido, sigungu, umd);
     }
 
     public String toFullAddress() {
