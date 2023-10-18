@@ -43,20 +43,26 @@ class AllPostsViewModel @Inject constructor(
         private set
 
     fun fetchPosts() {
-        // 필터검색을 했다면 값을 처음부터 불러온다
+        reloadIfFiltered()
+        checkLoadOrNot()
+        getPosts()
+    }
+
+    private fun reloadIfFiltered() {
         if (_openFilterSelectionEvent.value == true) {
             lastId = null
         }
+    }
 
+    private fun checkLoadOrNot() {
         if (lastId != null && hasNextPage) {
             isAddLoading = true
             addLoadingItem()
         }
-        getPosts()
     }
 
     private fun addLoadingItem() {
-        _uiPosts.value = _uiPosts.value!!.toMutableList().apply { add(UiLoadingItem) }
+        _uiPosts.value = requireNotNull(_uiPosts.value).toMutableList().apply { add(UiLoadingItem) }
     }
 
     private fun getPosts() {
@@ -101,7 +107,7 @@ class AllPostsViewModel @Inject constructor(
     }
 
     private fun fetchPosts(posts: List<PostOfAll>) {
-        _uiPosts.value = _uiPosts.value!!.toMutableList().apply {
+        _uiPosts.value = requireNotNull(_uiPosts.value).toMutableList().apply {
             remove(UiLoadingItem)
             addAll(posts.map { it.toPresentation() })
         }

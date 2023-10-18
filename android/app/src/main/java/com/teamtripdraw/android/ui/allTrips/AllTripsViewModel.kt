@@ -44,16 +44,20 @@ class AllTripsViewModel @Inject constructor(
     val openFilterSelectionEvent: LiveData<Boolean> = _openFilterSelectionEvent
 
     fun fetchTrips() {
-        // 필터검색을 했다면 값을 처음부터 불러온다
-        if (_openFilterSelectionEvent.value == true) {
-            lastId = null
-        }
+        reloadIfFiltered()
+        checkLoadOrNot()
+        fetchMoreTrips()
+    }
 
-        if (_uiTripItems.value!!.isNotEmpty() && hasNextPage) {
+    private fun reloadIfFiltered() {
+        if (_openFilterSelectionEvent.value == true) lastId = null
+    }
+
+    private fun checkLoadOrNot() {
+        if (lastId != null && hasNextPage) {
             isAddLoading = true
             addLoadingItem()
         }
-        fetchMoreTrips()
     }
 
     private fun fetchMoreTrips() {
@@ -74,30 +78,10 @@ class AllTripsViewModel @Inject constructor(
                 if (_openFilterSelectionEvent.value == true) {
                     getSearchResult(trips)
                 } else {
-                    setAddedItems(trips)
+                    addItems(trips)
                 }
-
-                setAddedItems(trips)
             }.onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
-    }
-
-    private fun getSearchResult(trips: List<TripOfAll>) {
-        _uiTripItems.value = trips.map { it.toPresentation() }
-        _openFilterSelectionEvent.value = false
-    }
-
-    private fun setAddedItems(trips: List<TripOfAll>) {
-        _uiTripItems.value = _uiTripItems.value!!.toMutableList().apply {
-            remove(UiAllTripLoadingItem)
-            addAll(trips.map { it.toPresentation() })
-        }
-        isAddLoading = false
-    }
-
-    private fun addLoadingItem() {
-        _uiTripItems.value =
-            _uiTripItems.value!!.toMutableList().apply { add(UiAllTripLoadingItem) }
     }
 
     private fun setLastItemId(trips: List<TripOfAll>) {
@@ -106,6 +90,24 @@ class AllTripsViewModel @Inject constructor(
 
     private fun setHasNextPage(trips: List<TripOfAll>) {
         if (trips.size < PAGE_ITEM_SIZE && lastId != null) hasNextPage = false
+    }
+
+    private fun getSearchResult(trips: List<TripOfAll>) {
+        _uiTripItems.value = trips.map { it.toPresentation() }
+        _openFilterSelectionEvent.value = false
+    }
+
+    private fun addItems(trips: List<TripOfAll>) {
+        _uiTripItems.value = requireNotNull(_uiTripItems.value).toMutableList().apply {
+            remove(UiAllTripLoadingItem)
+            addAll(trips.map { it.toPresentation() })
+        }
+        isAddLoading = false
+    }
+
+    private fun addLoadingItem() {
+        _uiTripItems.value =
+            requireNotNull(_uiTripItems.value).toMutableList().apply { add(UiAllTripLoadingItem) }
     }
 
     fun updateSelectedOptions(options: SelectedOptions) {
