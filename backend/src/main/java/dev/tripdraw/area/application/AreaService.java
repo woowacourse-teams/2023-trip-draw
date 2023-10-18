@@ -18,10 +18,7 @@ public class AreaService {
     private final OpenApiAreaDownloader openAPIAreaDownloader;
 
     @Transactional(readOnly = true)
-    public AreaResponse read(AreaReqeust areaReqeust) {
-        String sido = areaReqeust.sido();
-        String sigungu = areaReqeust.sigungu();
-
+    public AreaResponse read(String sido, String sigungu) {
         if (sido.isBlank()) {
             return readAllSidos();
         }

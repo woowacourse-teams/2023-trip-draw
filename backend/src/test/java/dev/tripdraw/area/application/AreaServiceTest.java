@@ -3,31 +3,22 @@ package dev.tripdraw.area.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.domain.AreaRepository;
-import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -42,9 +33,9 @@ class AreaServiceTest {
     @Autowired
     private AreaService areaService;
 
-    @MethodSource("requestAndresponse")
+    @MethodSource("paramsAndResponse")
     @ParameterizedTest
-    void 해당하는_지역을_조회한다(AreaReqeust reqeust, AreaResponse response) {
+    void 해당하는_지역을_조회한다(List<String> sidoAndsigungu, AreaResponse response) {
         // given
         areaRepository.save(new Area("서울시", "강남구", "개포동"));
         areaRepository.save(new Area("서울시", "강남구", "강남동"));
@@ -52,7 +43,7 @@ class AreaServiceTest {
         areaRepository.save(new Area("부산시", "강남구", "개포동"));
 
         // expect
-        assertThat(areaService.read(reqeust)).isEqualTo(response);
+        assertThat(areaService.read(sidoAndsigungu.get(0), sidoAndsigungu.get(1))).isEqualTo(response);
     }
 
     @Test
@@ -84,11 +75,11 @@ class AreaServiceTest {
                 .containsExactly(new Area("서울시", "강동구", "천호동"));
     }
 
-    private static Stream<Arguments> requestAndresponse() {
+    private static Stream<Arguments> paramsAndResponse() {
         return Stream.of(
-                arguments(new AreaReqeust("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
-                arguments(new AreaReqeust("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
-                arguments(new AreaReqeust("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
+                arguments(List.of("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
+                arguments(List.of("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
+                arguments(List.of("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
         );
     }
 }

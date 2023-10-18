@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Area", description = "행정구역 관련 API 명세")
@@ -33,8 +34,8 @@ public class AreaController {
             description = "행정구역 조회 성공."
     )
     @GetMapping
-    public ResponseEntity<AreaResponse> read(@RequestBody AreaReqeust areaReqeust) {
-        AreaResponse response = areaServiceFacade.read(areaReqeust);
+    public ResponseEntity<AreaResponse> read(@RequestParam String sido, @RequestParam String sigungu) {
+        AreaResponse response = areaServiceFacade.read(sido, sigungu);
         return ResponseEntity.ok(response);
     }
 

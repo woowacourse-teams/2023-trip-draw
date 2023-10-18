@@ -23,7 +23,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -58,14 +57,15 @@ class AreaControllerTest extends ControllerTest {
         areaRepository.save(new Area("부산시", "강남구", "개포동"));
     }
 
-    @MethodSource("requestAndresponse")
+    @MethodSource("paramsAndresponse")
     @ParameterizedTest
-    void 지역을_조회한다(AreaReqeust reqeust, AreaResponse response) {
+    void 지역을_조회한다(List<String> sidoAndSigungu, AreaResponse response) {
         // when
         ExtractableResponse<Response> actual = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(huchuToken)
-                .body(reqeust)
+                .param("sido", sidoAndSigungu.get(0))
+                .param("sigungu", sidoAndSigungu.get(1))
                 .when().get("/areas")
                 .then().log().all()
                 .extract();
@@ -78,11 +78,11 @@ class AreaControllerTest extends ControllerTest {
         });
     }
 
-    private static Stream<Arguments> requestAndresponse() {
+    private static Stream<Arguments> paramsAndresponse() {
         return Stream.of(
-                arguments(new AreaReqeust("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
-                arguments(new AreaReqeust("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
-                arguments(new AreaReqeust("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
+                arguments(List.of("", ""), AreaResponse.from(List.of("부산시", "서울시"))),
+                arguments(List.of("서울시", ""), AreaResponse.from(List.of("강남구", "송파구"))),
+                arguments(List.of("서울시", "강남구"), AreaResponse.from(List.of("강남동", "개포동")))
         );
     }
 }

@@ -15,8 +15,8 @@ public class AreaServiceFacade {
     private final AreaService areaService;
     private final OpenApiAreaDownloader openApiAreaDownloader;
 
-    public AreaResponse read(AreaReqeust areaReqeust) {
-        return areaService.read(areaReqeust);
+    public AreaResponse read(String sido, String sigungu) {
+        return areaService.read(sido, sigungu);
     }
 
     @Scheduled(cron = "0 0 0 1 * ?") // 매달 1일에 업데이트 한다는 CRON 표현식
