@@ -2,7 +2,7 @@ package dev.tripdraw.area.dto;
 
 import java.util.Map;
 
-public record OpenAPIAccessTokenResponse(
+public record OpenApiAccessTokenResponse(
         String id,
         Map<String, String> result,
         String errMsg,

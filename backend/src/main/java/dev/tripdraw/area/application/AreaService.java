@@ -6,7 +6,6 @@ import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AreaService {
 
     private final AreaRepository areaRepository;
-    private final OpenAPIAreaDownloader openAPIAreaDownloader;
+    private final OpenApiAreaDownloader openAPIAreaDownloader;
 
     @Transactional(readOnly = true)
     public AreaResponse read(AreaReqeust areaReqeust) {

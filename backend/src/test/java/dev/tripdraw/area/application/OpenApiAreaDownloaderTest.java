@@ -16,14 +16,14 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 @AutoConfigureWebClient(registerRestTemplate = true)
-@RestClientTest(value = {OpenAPIAreaDownloader.class})
-class OpenAPIAreaDownloaderTest {
+@RestClientTest(value = {OpenApiAreaDownloader.class})
+class OpenApiAreaDownloaderTest {
 
     @Autowired
     private MockRestServiceServer mockServer;
 
     @Autowired
-    private OpenAPIAreaDownloader openAPIAreaDownloader;
+    private OpenApiAreaDownloader openAPIAreaDownloader;
 
     @Test
     void 전체_행정구역을_받아온다() {

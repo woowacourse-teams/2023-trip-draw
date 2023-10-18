@@ -1,9 +1,9 @@
 package dev.tripdraw.area.application;
 
 import dev.tripdraw.area.domain.Area;
-import dev.tripdraw.area.dto.OpenAPIAccessTokenResponse;
-import dev.tripdraw.area.dto.OpenAPIAreaResponse;
-import dev.tripdraw.area.dto.OpenAPITotalAreaResponse;
+import dev.tripdraw.area.dto.OpenApiAccessTokenResponse;
+import dev.tripdraw.area.dto.OpenApiAreaResponse;
+import dev.tripdraw.area.dto.OpenApiTotalAreaResponse;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @Component
-public class OpenAPIAreaDownloader {
+public class OpenApiAreaDownloader {
 
     private static final String AREA_API_DOMAIN = "https://sgisapi.kostat.go.kr";
     private static final String AREA_CODE_NAME = "cd";
@@ -47,9 +47,9 @@ public class OpenAPIAreaDownloader {
                 .build()
                 .toUri();
 
-        OpenAPIAccessTokenResponse accessTokenResponse = restTemplate.getForObject(
+        OpenApiAccessTokenResponse accessTokenResponse = restTemplate.getForObject(
                 authenticationUri,
-                OpenAPIAccessTokenResponse.class
+                OpenApiAccessTokenResponse.class
         );
 
         return accessTokenResponse.result().get(ACCESS_TOKEN_NAME);
@@ -58,14 +58,14 @@ public class OpenAPIAreaDownloader {
     private List<Area> downloadAreas(String accessToken) {
         List<Area> allAreas = new ArrayList<>();
 
-        List<OpenAPIAreaResponse> sidoResponses = requestAreas(accessToken, null);
-        for (OpenAPIAreaResponse sidoResponse : sidoResponses) {
+        List<OpenApiAreaResponse> sidoResponses = requestAreas(accessToken, null);
+        for (OpenApiAreaResponse sidoResponse : sidoResponses) {
             fetchSigunguAndUmd(accessToken, allAreas, sidoResponse);
         }
         return allAreas;
     }
 
-    private List<OpenAPIAreaResponse> requestAreas(String accessToken, String code) {
+    private List<OpenApiAreaResponse> requestAreas(String accessToken, String code) {
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(AREA_API_DOMAIN)
                 .path(AREA_URI)
                 .queryParam(ACCESS_TOKEN_NAME, accessToken);
@@ -78,19 +78,19 @@ public class OpenAPIAreaDownloader {
                 .build()
                 .toUri();
 
-        OpenAPITotalAreaResponse totalAreaResponse = restTemplate.getForObject(areaUri, OpenAPITotalAreaResponse.class);
+        OpenApiTotalAreaResponse totalAreaResponse = restTemplate.getForObject(areaUri, OpenApiTotalAreaResponse.class);
         return totalAreaResponse.result();
     }
 
     private void fetchSigunguAndUmd(
             String accessToken,
             List<Area> allAreas,
-            OpenAPIAreaResponse sidoResponse
+            OpenApiAreaResponse sidoResponse
     ) {
-        List<OpenAPIAreaResponse> sigunguResponses = requestAreas(accessToken, sidoResponse.code());
-        for (OpenAPIAreaResponse sigunguResponse : sigunguResponses) {
+        List<OpenApiAreaResponse> sigunguResponses = requestAreas(accessToken, sidoResponse.code());
+        for (OpenApiAreaResponse sigunguResponse : sigunguResponses) {
             String sigungu = sigunguResponse.address();
-            List<OpenAPIAreaResponse> umdResponses = requestAreas(accessToken, sigunguResponse.code());
+            List<OpenApiAreaResponse> umdResponses = requestAreas(accessToken, sigunguResponse.code());
             addAreas(allAreas, sidoResponse.address(), sigungu, umdResponses);
         }
     }
@@ -99,9 +99,9 @@ public class OpenAPIAreaDownloader {
             List<Area> allAreas,
             String sido,
             String sigungu,
-            List<OpenAPIAreaResponse> umdResponses
+            List<OpenApiAreaResponse> umdResponses
     ) {
-        for (OpenAPIAreaResponse umdResponse : umdResponses) {
+        for (OpenApiAreaResponse umdResponse : umdResponses) {
             String umd = umdResponse.address();
             allAreas.add(new Area(sido, sigungu, umd));
         }

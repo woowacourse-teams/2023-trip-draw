@@ -2,7 +2,7 @@ package dev.tripdraw.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record OpenAPIAreaResponse(
+public record OpenApiAreaResponse(
         @JsonProperty("cd")
         String code,
 
