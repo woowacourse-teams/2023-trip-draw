@@ -53,7 +53,6 @@ public class OpenAPIAreaService {
                 authenticationUri,
                 OpenAPIAccessTokenResponse.class
         );
-        System.out.println(accessTokenResponse.id());
 
         return accessTokenResponse.result().get(ACCESS_TOKEN_NAME);
     }
