@@ -26,11 +26,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
 
   flyway:
     enabled: true
-    baselineOnMigrate: true
 
 logging:
   level:

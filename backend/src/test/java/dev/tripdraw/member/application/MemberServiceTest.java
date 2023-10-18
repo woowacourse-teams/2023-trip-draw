@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
+@SuppressWarnings("NonAsciiCharacters")
 @RecordApplicationEvents
-class MemberServiceTest extends ServiceTest {
+@ServiceTest
+class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;

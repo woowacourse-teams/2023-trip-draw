@@ -17,11 +17,15 @@ public class PointFixture {
         return new Point(1.1, 2.2, LocalDateTime.now(), trip);
     }
 
-    public static Point 새로운_위치정보(int year, int month, int dayOfMonth, int hour, int minute) {
-        return new Point(1.1, 2.2, LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+    public static Point 새로운_위치정보(int year, int month, int dayOfMonth, int hour, int minute, Trip trip) {
+        return new Point(1.1, 2.2, LocalDateTime.of(year, month, dayOfMonth, hour, minute), trip);
     }
 
     public static Point 새로운_위치정보(LocalDateTime localDateTime) {
         return new Point(1.1, 2.2, localDateTime);
+    }
+
+    public static Point 새로운_위치정보(LocalDateTime localDateTime, Trip trip) {
+        return new Point(1.1, 2.2, localDateTime, trip);
     }
 }

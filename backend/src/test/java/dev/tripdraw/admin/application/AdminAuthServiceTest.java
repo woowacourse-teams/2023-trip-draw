@@ -17,7 +17,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class AdminAuthServiceTest extends ServiceTest {
+@SuppressWarnings("NonAsciiCharacters")
+@ServiceTest
+class AdminAuthServiceTest {
 
     @Autowired
     private AdminAuthService adminAuthService;

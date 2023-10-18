@@ -28,7 +28,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-class PointServiceTest extends ServiceTest {
+@SuppressWarnings("NonAsciiCharacters")
+@ServiceTest
+class PointServiceTest {
 
     @Autowired
     private PointService pointService;

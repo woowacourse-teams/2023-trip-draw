@@ -21,6 +21,10 @@ public class PostFixture {
         return new Post("감상 제목", point, address, "감상", 사용자(memberId), 1L);
     }
 
+    public static Post 새로운_감상(Point point, Long memberId, String address, Long tripId) {
+        return new Post("감상 제목", point, address, "감상", 사용자(memberId), tripId);
+    }
+
     public static Post 새로운_감상(Point point, Member member, String address, Long tripId) {
         return new Post("감상 제목", point, address, "감상", member, tripId);
     }

@@ -1,6 +1,7 @@
 package dev.tripdraw.test;
 
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -22,6 +23,10 @@ public abstract class ControllerTest {
     @BeforeEach
     public void setUp() {
         RestAssured.port = port;
+    }
+
+    @AfterEach
+    void tearDown() {
         dataCleaner.clean();
     }
 }

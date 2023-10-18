@@ -26,7 +26,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class AdminServiceTest extends ServiceTest {
+@SuppressWarnings("NonAsciiCharacters")
+@ServiceTest
+class AdminServiceTest {
 
     @Autowired
     private AdminService adminService;

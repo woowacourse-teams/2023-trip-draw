@@ -3,6 +3,7 @@ package dev.tripdraw.post.domain;
 import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
+import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.tripdraw.common.config.JpaConfig;
@@ -13,6 +14,8 @@ import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.dto.PostSearchConditions;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
+import dev.tripdraw.trip.domain.Trip;
+import dev.tripdraw.trip.domain.TripRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -43,13 +46,17 @@ class PostDynamicQueryRepositoryTest {
     @Autowired
     private PointRepository pointRepository;
 
+    @Autowired
+    private TripRepository tripRepository;
+
     @Test
     void 조건에_해당하는_감상을_조회한다() {
         // given
         Member member = memberRepository.save(사용자());
-        Point mayPoint = pointRepository.save(새로운_위치정보(2023, 5, 12, 15, 30));
-        Point julyPoint1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
-        Point julyPoint2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
+        Trip trip = tripRepository.save(새로운_여행(member));
+        Point mayPoint = pointRepository.save(새로운_위치정보(2023, 5, 12, 15, 30, trip));
+        Point julyPoint1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30, trip));
+        Point julyPoint2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30, trip));
         Post jejuMayPost = postRepository.save(새로운_감상(mayPoint, member.id(), "제주특별자치도 제주시 애월읍"));
         Post jejuJulyPost = postRepository.save(새로운_감상(julyPoint1, member.id(), "제주특별자치도 제주시 애월읍"));
         Post seoulJulyPost = postRepository.save(새로운_감상(julyPoint2, member.id(), "서울특별시 송파구 문정동"));
@@ -70,9 +77,10 @@ class PostDynamicQueryRepositoryTest {
     void 감상을_전체_조회한다() {
         // given
         Member member = memberRepository.save(사용자());
+        Trip trip = tripRepository.save(새로운_여행(member));
         for (int i = 1; i <= 5; i++) {
-            Point point = pointRepository.save(새로운_위치정보(LocalDateTime.now()));
-            postRepository.save(새로운_감상(point, member.id(), "주소 " + i));
+            Point point = pointRepository.save(새로운_위치정보(LocalDateTime.now(), trip));
+            postRepository.save(새로운_감상(point, member.id(), "주소 " + i, trip.id()));
         }
         PostPaging postPaging = new PostPaging(null, 3);
 
