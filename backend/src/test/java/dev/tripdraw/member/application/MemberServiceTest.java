@@ -9,21 +9,16 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.member.dto.MemberSearchResponse;
-import jakarta.transaction.Transactional;
+import dev.tripdraw.test.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
-@RecordApplicationEvents
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Transactional
-@SpringBootTest
+@RecordApplicationEvents
+@ServiceTest
 class MemberServiceTest {
 
     @Autowired

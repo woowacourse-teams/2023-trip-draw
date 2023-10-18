@@ -34,27 +34,22 @@ import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.post.dto.PostsSearchResponse;
 import dev.tripdraw.post.exception.PostException;
+import dev.tripdraw.test.ServiceTest;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.exception.TripException;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.multipart.MultipartFile;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Transactional
-@SpringBootTest
+@ServiceTest
 class PostServiceTest {
 
     @Autowired
@@ -200,8 +195,8 @@ class PostServiceTest {
     @Test
     void 특정_여행의_모든_감상을_조회한다() {
         // given
-        Point point1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 29));
-        Point point2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
+        Point point1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 29, trip));
+        Point point2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30, trip));
         Post post1 = postRepository.save(새로운_감상(point1, member, "제주특별자치도 제주시 애월읍", trip.id()));
         Post post2 = postRepository.save(새로운_감상(point2, member, "제주특별자치도 제주시 애월읍", trip.id()));
 
@@ -226,9 +221,9 @@ class PostServiceTest {
     @Test
     void 주소로_모든_여행을_조회한다() {
         // given
-        Point mayPoint = pointRepository.save(새로운_위치정보(2023, 5, 12, 15, 30));
-        Point julyPoint1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
-        Point julyPoint2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
+        Point mayPoint = pointRepository.save(새로운_위치정보(2023, 5, 12, 15, 30, trip));
+        Point julyPoint1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30, trip));
+        Point julyPoint2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30, trip));
         Post jejuMayPost = postRepository.save(새로운_감상(mayPoint, member.id(), "제주특별자치도 제주시 애월읍"));
         Post jejuJulyPost = postRepository.save(새로운_감상(julyPoint1, member.id(), "제주특별자치도 제주시 애월읍"));
         Post seoulJulyPost = postRepository.save(새로운_감상(julyPoint2, member.id(), "서울특별시 송파구 문정동"));
@@ -251,9 +246,9 @@ class PostServiceTest {
     @Test
     void 기간으로_진행된_여행을_조회한다() {
         // given
-        Point mayPoint = pointRepository.save(새로운_위치정보(2023, 5, 12, 15, 30));
-        Point julyPoint1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
-        Point julyPoint2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30));
+        Point mayPoint = pointRepository.save(새로운_위치정보(2023, 5, 12, 15, 30, trip));
+        Point julyPoint1 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30, trip));
+        Point julyPoint2 = pointRepository.save(새로운_위치정보(2023, 7, 12, 15, 30, trip));
         Post jejuMayPost = postRepository.save(새로운_감상(mayPoint, member.id(), "제주특별자치도 제주시 애월읍"));
         Post jejuJulyPost = postRepository.save(새로운_감상(julyPoint1, member.id(), "제주특별자치도 제주시 애월읍"));
         Post seoulJulyPost = postRepository.save(새로운_감상(julyPoint2, member.id(), "서울특별시 송파구 문정동"));

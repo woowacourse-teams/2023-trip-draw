@@ -46,14 +46,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
 
     private static final String INVALID_TOKEN = "wrong.long.token";
@@ -344,8 +340,8 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 특정_여행에_대한_모든_감상을_조회한다() {
         // given
-        Point point1 = pointRepository.save(새로운_위치정보(trip));
-        Point point2 = pointRepository.save(새로운_위치정보(trip));
+        Point point1 = pointRepository.save(새로운_위치정보(2023, 10, 23, 10, 23, trip));
+        Point point2 = pointRepository.save(새로운_위치정보(2023, 10, 23, 10, 24, trip));
         Post post1 = postRepository.save(새로운_감상(point1, member.id()));
         Post post2 = postRepository.save(새로운_감상(point2, member.id()));
         updateHasPost(List.of(point1, point2));
@@ -481,12 +477,12 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 다른_사용자들의_감상을_조회한다() {
         // given
-        Point julyPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 7, 18, 20, 24)));
-        Point augustPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 8, 18, 17, 24)));
-        Point septemberPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 9, 18, 17, 24)));
-        Post jejuJulyPost = postRepository.save(새로운_감상(julyPoint, member.id(), "제주특별자치도 제주시 애월읍"));
-        Post jejuAugustPost = postRepository.save(새로운_감상(augustPoint, member.id(), "제주특별자치도 제주시 애월읍"));
-        Post seoulSeptemberPost = postRepository.save(새로운_감상(septemberPoint, member.id(), "서울특별시 송파구 잠실동"));
+        Point julyPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 7, 18, 20, 24), trip));
+        Point augustPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 8, 18, 17, 24), trip));
+        Point septemberPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 9, 18, 17, 24), trip));
+        Post jejuJulyPost = postRepository.save(새로운_감상(julyPoint, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+        Post jejuAugustPost = postRepository.save(새로운_감상(augustPoint, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+        Post seoulSeptemberPost = postRepository.save(새로운_감상(septemberPoint, member.id(), "서울특별시 송파구 잠실동", trip.id()));
         updateHasPost(List.of(julyPoint, augustPoint, septemberPoint));
         Map<String, Object> params = Map.of("address", "제주특별자치도 제주시 애월읍", "limit", 10);
 

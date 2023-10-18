@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL
-    username: sa
-    password:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:8://test
+    username: root
+    password: test
 
   task:
     execution:
@@ -25,10 +26,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
 
   flyway:
-    enabled: false
+    enabled: true
 
 logging:
   level:

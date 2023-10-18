@@ -1,11 +1,13 @@
 package dev.tripdraw.admin.presentation;
 
+import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static dev.tripdraw.test.fixture.MemberFixture.새로운_사용자;
 import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
 import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
 import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -38,9 +40,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AdminControllerTest extends ControllerTest {
 
     @Autowired
@@ -68,7 +69,7 @@ class AdminControllerTest extends ControllerTest {
     @BeforeEach
     public void setUp() {
         super.setUp();
-        member = memberRepository.save(새로운_사용자("통후추"));
+        member = memberRepository.save(사용자());
         admin = adminRepository.save(new Admin("tripdraw@tripdraw.site", passwordEncoder.encode("password")));
         sessionId = loginRequest(new AdminLoginRequest(admin.email(), "password")).sessionId();
     }

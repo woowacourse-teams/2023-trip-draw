@@ -20,12 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class MemberControllerTest extends ControllerTest {
-
-    @LocalServerPort
-    int port;
 
     @Autowired
     MemberRepository memberRepository;
@@ -35,7 +30,7 @@ class MemberControllerTest extends ControllerTest {
 
     @BeforeEach
     public void setUp() {
-        RestAssured.port = port;
+        super.setUp();
     }
 
     @Test

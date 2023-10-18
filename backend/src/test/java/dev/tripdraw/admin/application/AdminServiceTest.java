@@ -16,23 +16,18 @@ import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostRepository;
+import dev.tripdraw.test.ServiceTest;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Transactional
-@SpringBootTest
+@ServiceTest
 class AdminServiceTest {
 
     @Autowired

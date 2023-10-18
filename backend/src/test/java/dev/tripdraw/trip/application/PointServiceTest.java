@@ -13,6 +13,7 @@ import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
+import dev.tripdraw.test.ServiceTest;
 import dev.tripdraw.trip.domain.Point;
 import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
@@ -21,20 +22,14 @@ import dev.tripdraw.trip.dto.PointCreateRequest;
 import dev.tripdraw.trip.dto.PointCreateResponse;
 import dev.tripdraw.trip.dto.PointResponse;
 import dev.tripdraw.trip.exception.TripException;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Transactional
-@SpringBootTest
+@ServiceTest
 class PointServiceTest {
 
     @Autowired

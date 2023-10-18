@@ -11,19 +11,14 @@ import dev.tripdraw.admin.domain.AdminSession;
 import dev.tripdraw.admin.domain.AdminSessionRepository;
 import dev.tripdraw.admin.dto.AdminLoginRequest;
 import dev.tripdraw.admin.exception.AdminException;
+import dev.tripdraw.test.ServiceTest;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@Transactional
-@SpringBootTest
+@ServiceTest
 class AdminAuthServiceTest {
 
     @Autowired
