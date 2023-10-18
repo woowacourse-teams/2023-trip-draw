@@ -96,10 +96,7 @@ class AllPostsViewModel @Inject constructor(
     }
 
     private fun getSearchResult(posts: List<PostOfAll>) {
-        _uiPosts.value = _uiPosts.value!!.toMutableList().apply {
-            clear()
-            addAll(posts.map { it.toPresentation() })
-        }
+        _uiPosts.value = posts.map { it.toPresentation() }
         _openFilterSelectionEvent.value = false
     }
 

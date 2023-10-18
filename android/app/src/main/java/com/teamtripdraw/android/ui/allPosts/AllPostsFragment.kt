@@ -68,7 +68,9 @@ class AllPostsFragment : Fragment() {
 
     private fun initPostsObserve() {
         viewModel.posts.observe(viewLifecycleOwner) {
-            adapter.submitList(it.postItems)
+            adapter.submitList(it.postItems) {
+                binding.rvAllPosts.smoothScrollToPosition(INITIAL_POSITION)
+            }
         }
     }
 

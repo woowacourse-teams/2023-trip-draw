@@ -68,7 +68,9 @@ class AllTripsFragment : Fragment() {
 
     private fun initTripsObserve() {
         viewModel.trips.observe(viewLifecycleOwner) {
-            adapter.submitList(it.tripItems)
+            adapter.submitList(it.tripItems) {
+                binding.rvAllTrips.smoothScrollToPosition(INITIAL_POSITION)
+            }
         }
     }
 
@@ -98,8 +100,6 @@ class AllTripsFragment : Fragment() {
                     viewModel.selectedOptions,
                 )
             getFilterOptionsResult.launch(intent)
-        } else {
-            binding.rvAllTrips.scrollToPosition(INITIAL_POSITION)
         }
     }
 

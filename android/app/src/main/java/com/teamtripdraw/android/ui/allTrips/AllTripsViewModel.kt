@@ -83,10 +83,7 @@ class AllTripsViewModel @Inject constructor(
     }
 
     private fun getSearchResult(trips: List<TripOfAll>) {
-        _uiTripItems.value = _uiTripItems.value!!.toMutableList().apply {
-            clear()
-            addAll(trips.map { it.toPresentation() })
-        }
+        _uiTripItems.value = trips.map { it.toPresentation() }
         _openFilterSelectionEvent.value = false
     }
 
