@@ -71,8 +71,9 @@ class AreaControllerTest extends ControllerTest {
                 .extract();
 
         // then
+        AreaResponse areaResponse = actual.as(AreaResponse.class);
         assertThat(actual.statusCode()).isEqualTo(OK.value());
-        assertThat(actual.as(AreaResponse.class)).isEqualTo(response);
+        assertThat(areaResponse).isEqualTo(response);
     }
 
     static class RequestProvider implements ArgumentsProvider {

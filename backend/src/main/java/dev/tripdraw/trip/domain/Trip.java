@@ -43,7 +43,7 @@ public class Trip extends BaseEntity {
     private Member member;
 
     @Embedded
-    private Route route = new Route();
+    private final Route route = new Route();
 
     @Column(nullable = false)
     private TripStatus status;

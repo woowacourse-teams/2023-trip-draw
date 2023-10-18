@@ -66,7 +66,6 @@ public class AreaService {
         return AreaResponse.from(umds);
     }
 
-    @Transactional
     public void create(List<Area> areas) {
         long count = areaRepository.count();
         if (count != 0) {
