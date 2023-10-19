@@ -31,15 +31,17 @@ class AddressSelectionActivity : AppCompatActivity() {
     private fun initSiDoListView() {
         val siDoAdapter = AddressSelectionAdapter { viewModel.selectSiDo(it) }
         binding.rvAddressSelectionSiDo.adapter = siDoAdapter
+        binding.rvAddressSelectionSiDo.itemAnimator = null
 
         viewModel.siDos.observe(this) { siDos ->
-            siDoAdapter.submitList(siDos)
+            siDoAdapter.submitList(siDos.toList())
         }
     }
 
     private fun initSiGunGuListView() {
         val siGunGuAdapter = AddressSelectionAdapter { viewModel.selectSiGunGu(it) }
         binding.rvAddressSelectionSiGunGu.adapter = siGunGuAdapter
+        binding.rvAddressSelectionSiGunGu.itemAnimator = null
 
         viewModel.siGunGus.observe(this) { siGunGus ->
             siGunGuAdapter.submitList(siGunGus)
@@ -49,6 +51,7 @@ class AddressSelectionActivity : AppCompatActivity() {
     private fun initEupMyeonDongListView() {
         val eupMyeonDongAdapter = AddressSelectionAdapter { viewModel.selectEupMyeonDong(it) }
         binding.rvAddressSelectionEupMyeonDong.adapter = eupMyeonDongAdapter
+        binding.rvAddressSelectionEupMyeonDong.itemAnimator = null
 
         viewModel.eupMyeonDongs.observe(this) { eupMyeonDongs ->
             eupMyeonDongAdapter.submitList(eupMyeonDongs)

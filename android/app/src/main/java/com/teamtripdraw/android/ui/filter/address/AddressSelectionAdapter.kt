@@ -29,7 +29,9 @@ class AddressSelectionAdapter(
             override fun areContentsTheSame(
                 oldItem: UiAddressSelectionItem,
                 newItem: UiAddressSelectionItem,
-            ): Boolean = false
+            ): Boolean =
+                oldItem.isSelected == newItem.isSelected &&
+                    oldItem.addressName == newItem.addressName
         }
     }
 }

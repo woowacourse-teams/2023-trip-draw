@@ -39,16 +39,15 @@ class AddressSelectionViewModel @Inject constructor(
         fetchSiDos()
     }
 
-    fun selectSiDo(siDo: UiAddressSelectionItem) {
-        _siDos.value?.let {
-            val uiAddressSelectionItems = it.toMutableList()
-            uiAddressSelectionItems.map { it.isSelected = false }
-            siDo.isSelected = true
-
-            _siDos.value = uiAddressSelectionItems
+    fun selectSiDo(selectedSiDoItem: UiAddressSelectionItem) {
+        _siDos.value?.let { siDoItems ->
+            _siDos.value = siDoItems.toMutableList().map { item ->
+                val isSelected = item.addressName == selectedSiDoItem.addressName
+                UiAddressSelectionItem(item.addressName, isSelected)
+            }
         }
 
-        selectedSiDo.value = siDo.addressName
+        this.selectedSiDo.value = selectedSiDoItem.addressName
         selectedSiGunGu.value = ""
         selectedEupMyeonDong.value = ""
 
@@ -58,16 +57,15 @@ class AddressSelectionViewModel @Inject constructor(
         fetchSiGunGu()
     }
 
-    fun selectSiGunGu(siGunGu: UiAddressSelectionItem) {
-        _siGunGus.value?.let {
-            val uiAddressSelectionItems = it.toMutableList()
-            uiAddressSelectionItems.map { it.isSelected = false }
-            siGunGu.isSelected = true
-
-            _siGunGus.value = uiAddressSelectionItems
+    fun selectSiGunGu(selectedSiGunGuItem: UiAddressSelectionItem) {
+        _siGunGus.value?.let { siGunGuItems ->
+            _siGunGus.value = siGunGuItems.toMutableList().map { item ->
+                val isSelected = item.addressName == selectedSiGunGuItem.addressName
+                UiAddressSelectionItem(item.addressName, isSelected)
+            }
         }
 
-        selectedSiGunGu.value = siGunGu.addressName
+        selectedSiGunGu.value = selectedSiGunGuItem.addressName
         selectedEupMyeonDong.value = ""
 
         _eupMyeonDongs.value = listOf()
@@ -75,16 +73,15 @@ class AddressSelectionViewModel @Inject constructor(
         fetchEupMyeonDong()
     }
 
-    fun selectEupMyeonDong(eupMyeonDong: UiAddressSelectionItem) {
-        _eupMyeonDongs.value?.let {
-            val uiAddressSelectionItems = it.toMutableList()
-            uiAddressSelectionItems.map { it.isSelected = false }
-            eupMyeonDong.isSelected = true
-
-            _eupMyeonDongs.value = uiAddressSelectionItems
+    fun selectEupMyeonDong(selectedEupMyeonDongItem: UiAddressSelectionItem) {
+        _eupMyeonDongs.value?.let { eupMyeonDongs ->
+            _eupMyeonDongs.value = eupMyeonDongs.toMutableList().map { item ->
+                val isSelected = item.addressName == selectedEupMyeonDongItem.addressName
+                UiAddressSelectionItem(item.addressName, isSelected)
+            }
         }
 
-        selectedEupMyeonDong.value = eupMyeonDong.addressName
+        selectedEupMyeonDong.value = selectedEupMyeonDongItem.addressName
     }
 
     private fun fetchSiDos() {

@@ -1,11 +1,8 @@
 package com.teamtripdraw.android.ui.filter.address
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ItemFilterOptionAddressBinding
 import com.teamtripdraw.android.ui.model.UiAddressSelectionItem
 
@@ -21,17 +18,6 @@ class AddressSelectionViewHolder(
     fun bind(address: UiAddressSelectionItem) {
         binding.addressItem = address
         binding.tvFilterOptionAddressName.text = address.addressName
-
-        if (address.isSelected) {
-            binding.tvFilterOptionAddressName.setBackgroundColor(
-                ContextCompat.getColor(
-                    binding.tvFilterOptionAddressName.context,
-                    R.color.td_light_blue,
-                ),
-            )
-        } else {
-            binding.tvFilterOptionAddressName.setBackgroundColor(Color.WHITE)
-        }
     }
 
     companion object {
