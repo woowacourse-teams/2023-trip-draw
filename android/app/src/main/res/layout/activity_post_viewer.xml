@@ -60,7 +60,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_post_viewer"
-            app:setMessageVisibility="@{postViewerViewModel.posts.empty}" />
+            app:setNoItemsMessageVisibility="@{postViewerViewModel.posts.empty}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_post_viewer"

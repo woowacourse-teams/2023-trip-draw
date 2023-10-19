@@ -4,4 +4,8 @@
     <dimen name="toolbar_default">56dp</dimen>
     <dimen name="button_height_default">52dp</dimen>
 
+    <!--    PostWritingActivity    -->
+    <dimen name="post_wiring_activity_image_view_width">56dp</dimen>
+    <dimen name="post_wiring_activity_image_delete_view_width">16dp</dimen>
+
 </resources>

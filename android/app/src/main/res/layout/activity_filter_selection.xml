@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="filterSelectionViewModel"
+            type="com.teamtripdraw.android.ui.filter.FilterSelectionViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.filter.FilterSelectionActivity">
+
+        <ImageView
+            android:id="@+id/btn_filter_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="@dimen/margin_default"
+            android:onClick="@{()->filterSelectionViewModel.backPage()}"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toTopOf="@id/sv_filter_options"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_filter_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:autofillHints="username"
+            android:hint="@string/et_filter_search"
+            android:inputType="text"
+            android:padding="@dimen/margin_default"
+            android:textAppearance="@style/caption_1"
+            android:textColorHint="@color/td_gray"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_filter_back"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/sv_filter_options"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_filter_search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_filter_back">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_filter_address_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_default"
+                    android:text="@string/tv_filter_address_title"
+                    android:textAppearance="@style/subtitle_1"
+                    app:layout_constraintHorizontal_weight="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_filter_current_position_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_default"
+                    android:gravity="end"
+                    android:text="@string/tv_filter_current_position_title"
+                    android:textAppearance="@style/subtitle_1"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_filter_address_title"
+                    app:layout_constraintEnd_toStartOf="@id/tbtn_filter_current_position"
+                    app:layout_constraintHorizontal_weight="5"
+                    app:layout_constraintStart_toEndOf="@id/tv_filter_address_title"
+                    app:layout_constraintTop_toTopOf="@id/tv_filter_address_title"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/tbtn_filter_current_position"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_filter_current_position_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/tv_filter_current_position_title"
+                    app:layout_constraintTop_toTopOf="@id/tv_filter_current_position_title"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
+                    app:thumbTint="@color/td_sub_blue"
+                    app:trackTint="@color/td_gray" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_filter_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/shape_td_main_blue_line_12_rect"
+                    android:onClick="@{()-> filterSelectionViewModel.openAddressSelection()}"
+                    android:paddingHorizontal="12dp"
+                    android:textAppearance="@style/subtitle_2"
+                    android:textColor="@color/td_main_blue"
+                    app:layout_constraintStart_toStartOf="@id/tv_filter_address_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_address_title"
+                    app:setAddressText="@{filterSelectionViewModel.address}"
+                    tools:text="+" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_address"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@color/td_light_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_filter_address" />
+
+                <TextView
+                    android:id="@+id/tv_filter_date_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_default"
+                    android:text="@string/tv_filter_date_title"
+                    android:textAppearance="@style/subtitle_1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_address" />
+
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
+                    android:id="@+id/filter_options_year"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:filterOptionsTitleAppearance="subtitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_date_title"
+                    app:setTitle="@{@string/tv_filter_option_year}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.years}"
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.years}" />
+
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
+                    android:id="@+id/filter_options_month"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:filterOptionsTitleAppearance="subtitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_year"
+                    app:setTitle="@{@string/tv_filter_option_month}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.months}"
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.months}" />
+
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
+                    android:id="@+id/filter_options_day_of_week"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:filterOptionsTitleAppearance="subtitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_month"
+                    app:setTitle="@{@string/tv_filter_option_day_of_week}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.dayOfWeek}"
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.daysOfWeek}" />
+
+                <TextView
+                    android:id="@+id/tv_filter_hour_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_default"
+                    android:text="@string/tv_filter_hour_title"
+                    android:textAppearance="@style/subtitle_2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_day_of_week"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
+
+                <NumberPicker
+                    android:id="@+id/filter_options_hour_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@id/tv_filter_options_hour_divider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_filter_hour_title"
+                    app:maxValue="@{filterSelectionViewModel.maxHour.value}"
+                    app:minValue="@{filterSelectionViewModel.minHour.value}"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
+                    app:value="@{filterSelectionViewModel.selectedHourFrom}" />
+
+                <TextView
+                    android:id="@+id/tv_filter_options_hour_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_filter_options_hour_from"
+                    android:textAppearance="@style/subtitle_2"
+                    android:textColor="@color/td_deep_gray"
+                    app:layout_constraintBottom_toBottomOf="@+id/filter_options_hour_from"
+                    app:layout_constraintEnd_toEndOf="@+id/filter_options_hour_from"
+                    app:layout_constraintStart_toEndOf="@id/filter_options_hour_from"
+                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
+
+                <TextView
+                    android:id="@+id/tv_filter_options_hour_divider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_filter_options_hour_divider"
+                    android:textAppearance="@style/title_1B"
+                    app:layout_constraintBottom_toBottomOf="@+id/filter_options_hour_from"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
+
+                <NumberPicker
+                    android:id="@+id/filter_options_hour_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_filter_options_hour_divider"
+                    app:layout_constraintTop_toTopOf="@id/filter_options_hour_from"
+                    app:maxValue="@{filterSelectionViewModel.maxHour.value}"
+                    app:minValue="@{filterSelectionViewModel.minHour.value}"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}"
+                    app:value="@{filterSelectionViewModel.selectedHourTo}" />
+
+                <TextView
+                    android:id="@+id/tv_filter_options_hour_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_filter_options_hour_to"
+                    android:textAppearance="@style/subtitle_2"
+                    android:textColor="@color/td_deep_gray"
+                    app:layout_constraintBottom_toBottomOf="@+id/filter_options_hour_from"
+                    app:layout_constraintEnd_toEndOf="@+id/filter_options_hour_to"
+                    app:layout_constraintStart_toEndOf="@id/filter_options_hour_to"
+                    app:layout_constraintTop_toTopOf="@+id/filter_options_hour_from"
+                    app:setVisibilityIfTrip="@{filterSelectionViewModel.filterType}" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_date"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@color/td_light_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_hour_to" />
+
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
+                    android:id="@+id/filter_options_age_range"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:filterOptionsTitleAppearance="title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_date"
+                    app:setTitle="@{@string/tv_filter_option_age_range}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.ageRange}"
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.ageRanges}" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_age_range"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@color/td_light_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/filter_options_age_range" />
+
+                <com.teamtripdraw.android.ui.filter.FilterOptionsView
+                    android:id="@+id/filter_options_gender"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:filterOptionsTitleAppearance="title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_age_range"
+                    app:setTitle="@{@string/tv_filter_option_gender}"
+                    app:setupFilterOptions="@{filterSelectionViewModel.gender}"
+                    app:setupSelectedOptions="@{filterSelectionViewModel.selectedOption.genders}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/btn_refresh_filter"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:background="@drawable/ic_refresh"
+            android:onClick="@{()-> filterSelectionViewModel.refresh()}"
+            app:layout_constraintBottom_toTopOf="@id/tv_refresh_filter"
+            app:layout_constraintEnd_toStartOf="@id/btn_filter_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_filter_search" />
+
+        <TextView
+            android:id="@+id/tv_refresh_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()-> filterSelectionViewModel.refresh()}"
+            android:text="@string/tv_refresh_filter"
+            android:textAppearance="@style/body2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/btn_filter_search"
+            app:layout_constraintEnd_toEndOf="@id/btn_refresh_filter"
+            app:layout_constraintStart_toStartOf="@id/btn_refresh_filter"
+            app:layout_constraintTop_toBottomOf="@id/btn_refresh_filter" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_filter_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_default"
+            android:background="@drawable/shape_td_main_blue_fill_12_rect"
+            android:onClick="@{()->filterSelectionViewModel.openSearchResult()}"
+            android:text="@string/btn_filter_search"
+            android:textAppearance="@style/title_2M"
+            android:textColor="@color/td_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_refresh_filter"
+            app:layout_constraintTop_toBottomOf="@id/sv_filter_options" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

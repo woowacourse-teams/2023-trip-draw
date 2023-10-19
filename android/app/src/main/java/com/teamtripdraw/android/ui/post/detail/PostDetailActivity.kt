@@ -12,7 +12,6 @@ import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.ui.common.dialog.DialogUtil
 import com.teamtripdraw.android.ui.post.writing.PostWritingActivity
-import com.teamtripdraw.android.ui.post.writing.WritingMode
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -74,8 +73,7 @@ class PostDetailActivity : AppCompatActivity() {
             this,
             EventObserver {
                 if (it) {
-                    val intent =
-                        PostWritingActivity.getIntent(this, viewModel.postId, WritingMode.EDIT)
+                    val intent = PostWritingActivity.getIntentByPost(this, viewModel.postId)
                     startActivity(intent)
                 }
             },

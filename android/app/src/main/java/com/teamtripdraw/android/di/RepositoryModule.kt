@@ -1,10 +1,12 @@
 package com.teamtripdraw.android.di
 
+import com.teamtripdraw.android.data.repository.AddressRepositoryImpl
 import com.teamtripdraw.android.data.repository.AuthRepositoryImpl
 import com.teamtripdraw.android.data.repository.GeocodingRepositoryImpl
 import com.teamtripdraw.android.data.repository.PointRepositoryImpl
 import com.teamtripdraw.android.data.repository.PostRepositoryImpl
 import com.teamtripdraw.android.data.repository.TripRepositoryImpl
+import com.teamtripdraw.android.domain.repository.AddressRepository
 import com.teamtripdraw.android.domain.repository.AuthRepository
 import com.teamtripdraw.android.domain.repository.GeocodingRepository
 import com.teamtripdraw.android.domain.repository.PointRepository
@@ -39,4 +41,8 @@ interface RepositoryModule {
     @Binds
     @Singleton
     fun bindsGeocoding(repository: GeocodingRepositoryImpl): GeocodingRepository
+
+    @Binds
+    @Singleton
+    fun bindsAddressRepository(repository: AddressRepositoryImpl): AddressRepository
 }

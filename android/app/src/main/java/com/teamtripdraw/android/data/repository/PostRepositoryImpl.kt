@@ -8,6 +8,8 @@ import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.domain.model.post.PrePatchPost
 import com.teamtripdraw.android.domain.model.post.PrePost
 import com.teamtripdraw.android.domain.repository.PostRepository
+import java.io.File
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
@@ -23,9 +25,34 @@ class PostRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getPost(postId: Long): Result<Post> {
-        return remotePostDataSource.getPost(postId).map { it.toDomain() }
+    override suspend fun createCurrentPointPost(
+        tripId: Long,
+        title: String,
+        address: String,
+        writing: String,
+        latitude: Double,
+        longitude: Double,
+        recordedAt: LocalDateTime,
+        imageFile: File?,
+    ): Result<Long> {
+        return remotePostDataSource.createCurrentPointPost(
+            tripId = tripId,
+            title = title,
+            address = address,
+            writing = writing,
+            latitude = latitude,
+            longitude = longitude,
+            recordedAt = recordedAt,
+            imageFile = imageFile
+        )
     }
+
+    override suspend fun getPostByPostId(postId: Long): Result<Post> {
+        return remotePostDataSource.getPostByPostId(postId).map { it.toDomain() }
+    }
+
+    override suspend fun getPostByPointId(pointId: Long): Result<Post> =
+        remotePostDataSource.getPostByPointId(pointId = pointId).map { it.toDomain() }
 
     override suspend fun getTripPosts(tripId: Long): Result<List<Post>> {
         return remotePostDataSource.getTripPosts(tripId)

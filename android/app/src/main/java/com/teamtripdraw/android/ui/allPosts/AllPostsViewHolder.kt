@@ -4,15 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamtripdraw.android.databinding.ItemAllPostsBinding
-import com.teamtripdraw.android.ui.model.UiPostOfAll
+import com.teamtripdraw.android.ui.model.allPosts.UiPostOfAll
 
 class AllPostsViewHolder(
     private val binding: ItemAllPostsBinding,
-    viewModel: AllPostsViewModel,
+    openPostEvent: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.allPostsViewModel = viewModel
+        binding.openPostEvent = openPostEvent
     }
 
     fun bind(item: UiPostOfAll) {
@@ -22,14 +22,14 @@ class AllPostsViewHolder(
     companion object {
         fun of(
             parent: ViewGroup,
-            viewModel: AllPostsViewModel,
+            openPostEvent: (Long) -> Unit,
         ): AllPostsViewHolder {
             val binding = ItemAllPostsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-            return AllPostsViewHolder(binding, viewModel)
+            return AllPostsViewHolder(binding, openPostEvent)
         }
     }
 }

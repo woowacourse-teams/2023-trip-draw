@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
 import com.teamtripdraw.android.domain.model.post.PostWritingValidState
@@ -14,18 +15,17 @@ import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.domain.repository.GeocodingRepository
 import com.teamtripdraw.android.domain.repository.PointRepository
 import com.teamtripdraw.android.domain.repository.PostRepository
-import com.teamtripdraw.android.domain.repository.TripRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class PostWritingViewModel @Inject constructor(
     private val pointRepository: PointRepository,
     private val postRepository: PostRepository,
-    private val tripRepository: TripRepository,
     private val geocodingRepository: GeocodingRepository,
 ) : ViewModel() {
 
@@ -35,6 +35,8 @@ class PostWritingViewModel @Inject constructor(
     private var tripId: Long = Trip.NULL_SUBSTITUTE_ID
     private var pointId: Long = Point.NULL_SUBSTITUTE_ID
     private var postId: Long = Post.NULL_SUBSTITUTE_ID
+    private var latitude: Double = Point.NULL_LATITUDE
+    private var longitude: Double = Point.NULL_LONGITUDE
     private lateinit var writingMode: WritingMode
 
     val title: MutableLiveData<String> = MutableLiveData("")
@@ -99,18 +101,77 @@ class PostWritingViewModel @Inject constructor(
         _selectPhotoEvent.value = false
     }
 
-    fun initWritingMode(writingMode: WritingMode, id: Long) {
-        this.writingMode = writingMode
+    fun initPostData(
+        tripId: Long = Trip.NULL_SUBSTITUTE_ID,
+        pointId: Long = Point.NULL_SUBSTITUTE_ID,
+        postId: Long = Post.NULL_SUBSTITUTE_ID,
+        latitude: Double = Point.NULL_LATITUDE,
+        longitude: Double = Point.NULL_LONGITUDE,
+    ) {
+        this.tripId = tripId
+        this.pointId = pointId
+        this.postId = postId
+        this.latitude = latitude
+        this.longitude = longitude
+        writingMode = WritingMode.getWritingMode(tripId, pointId, postId, latitude, longitude)
+        fetchPostData()
+    }
+
+    private fun fetchPostData() {
         when (writingMode) {
-            WritingMode.NEW -> {
-                pointId = id
-                tripId = tripRepository.getCurrentTripId()
-                fetchPoint()
+            WritingMode.NEW_RECORDED_POINT -> fetchPostDataByPoint()
+            WritingMode.NEW_CURRENT_POINT -> fetchPostDataByLatLng()
+            WritingMode.EDIT -> fetchPost()
+        }
+    }
+
+    private fun fetchPostDataByPoint() {
+        viewModelScope.launch {
+            pointRepository.getPoint(pointId = pointId, tripId = tripId).onSuccess {
+                _point.value = it
+                fetchAddress()
+                fetchWritingMode()
             }
-            WritingMode.EDIT -> {
-                postId = id
+        }
+    }
+
+    private fun fetchPostDataByLatLng() {
+        viewModelScope.launch {
+            geocodingRepository.getAddress(latitude, longitude).onSuccess {
+                _address.value = it
+            }
+        }
+    }
+
+    private fun fetchAddress() {
+        _point.value?.let { point ->
+            viewModelScope.launch {
+                geocodingRepository.getAddress(point.latitude, point.longitude)
+                    .onSuccess { _address.value = it }
+            }
+        }
+    }
+
+    private fun fetchWritingMode() {
+        if (_point.value == null) throw IllegalArgumentException("")
+        if (_point.value!!.hasPost.not()) {
+            writingMode = WritingMode.NEW_RECORDED_POINT
+            return
+        }
+        writingMode = WritingMode.EDIT
+        viewModelScope.launch {
+            postRepository.getPostByPointId(pointId).onSuccess {
+                setPostData(it)
                 fetchPost()
-            }
+            }.onFailure { TripDrawApplication.logUtil.general.log(it) }
+        }
+    }
+
+    private fun fetchPost() {
+        viewModelScope.launch {
+            postRepository.getPostByPostId(postId = postId)
+                .onSuccess { setPostData(it) }
+                .onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
     }
 
@@ -122,64 +183,64 @@ class PostWritingViewModel @Inject constructor(
     }
 
     fun completeWritingEvent() {
+        when (writingMode) {
+            WritingMode.NEW_CURRENT_POINT -> writeNewCurrentPointPost()
+            WritingMode.NEW_RECORDED_POINT -> writeNewRecordedPointPost()
+            WritingMode.EDIT -> writeEditedPost()
+        }
+    }
+
+    private fun writeNewCurrentPointPost() {
         viewModelScope.launch {
-            when (writingMode) {
-                WritingMode.NEW -> {
-                    val prePost = PrePost(
-                        tripId = tripId,
-                        pointId = pointId,
-                        title = title.value ?: "",
-                        writing = writing.value ?: "",
-                        address = address.value ?: "",
-                        imageFile = imageFile.value,
-                    )
-                    postRepository.addPost(prePost).onSuccess {
-                        _writingCompletedEvent.value = Event(true)
-                    }
-                }
-                WritingMode.EDIT -> {
-                    val prePatchPost = PrePatchPost(
-                        postId = postId,
-                        title = title.value ?: "",
-                        writing = writing.value ?: "",
-                        imageFile = imageFile.value,
-                    )
-                    postRepository.patchPost(prePatchPost).onSuccess {
-                        _writingCompletedEvent.value = Event(true)
-                    }
-                }
+            postRepository.createCurrentPointPost(
+                tripId = tripId,
+                title = title.value ?: "",
+                address = address.value ?: "",
+                writing = writing.value ?: "",
+                latitude = latitude,
+                longitude = longitude,
+                recordedAt = LocalDateTime.now(),
+                imageFile = imageFile.value,
+            ).onSuccess { _writingCompletedEvent.value = Event(true) }
+                .onFailure { TripDrawApplication.logUtil.general.log(it) }
+        }
+    }
+
+    private fun writeNewRecordedPointPost() {
+        viewModelScope.launch {
+            val prePost = PrePost(
+                tripId = tripId,
+                pointId = pointId,
+                title = title.value ?: "",
+                writing = writing.value ?: "",
+                address = address.value ?: "",
+                imageFile = imageFile.value,
+            )
+            postRepository.addPost(prePost).onSuccess {
+                _writingCompletedEvent.value = Event(true)
             }
         }
     }
 
-    private fun fetchPoint() {
+    private fun writeEditedPost() {
         viewModelScope.launch {
-            pointRepository.getPoint(pointId = pointId, tripId = tripId)
-                .onSuccess {
-                    _point.value = it
-                    fetchAddress()
-                }
-        }
-    }
-
-    private fun fetchPost() {
-        viewModelScope.launch {
-            postRepository.getPost(postId = postId)
-                .onSuccess {
-                    _address.value = it.address
-                    title.value = it.title
-                    writing.value = it.writing
-                    _imageUri.value = it.postImageUrl
-                }
-        }
-    }
-
-    private fun fetchAddress() {
-        _point.value?.let { point ->
-            viewModelScope.launch {
-                geocodingRepository.getAddress(point.latitude, point.longitude)
-                    .onSuccess { _address.value = it }
+            val prePatchPost = PrePatchPost(
+                postId = postId,
+                title = title.value ?: "",
+                writing = writing.value ?: "",
+                imageFile = imageFile.value,
+            )
+            postRepository.patchPost(prePatchPost).onSuccess {
+                _writingCompletedEvent.value = Event(true)
             }
         }
+    }
+
+    private fun setPostData(post: Post) {
+        postId = post.postId
+        _address.value = post.address
+        title.value = post.title
+        writing.value = post.writing
+        _imageUri.value = post.postImageUrl
     }
 }

@@ -27,6 +27,9 @@ class MarkerSelectedViewModel @Inject constructor(
 
     private var tripId: Long = Trip.NULL_SUBSTITUTE_ID
 
+    var isMine: Boolean = true
+        private set
+
     private val _selectedPoint = MutableLiveData<Point>()
     val selectedUiPoint: LiveData<UiPoint> = Transformations.map(_selectedPoint) { point ->
         point.toPresentation()
@@ -47,6 +50,10 @@ class MarkerSelectedViewModel @Inject constructor(
 
     fun updateTripId(tripId: Long) {
         this.tripId = tripId
+    }
+
+    fun updateIsMine(isMine: Boolean) {
+        this.isMine = isMine
     }
 
     fun getPointInfo() {

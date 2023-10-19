@@ -14,6 +14,7 @@ import com.teamtripdraw.android.R
 import com.teamtripdraw.android.databinding.ActivityPostWritingBinding
 import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
+import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
 import com.teamtripdraw.android.support.framework.presentation.extensions.toResizedImageFile
 import com.teamtripdraw.android.support.framework.presentation.images.createImageUri
@@ -67,18 +68,19 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     private fun initIntentData() {
+        val tripId = intent.getLongExtra(INTENT_KEY_TRIP_ID, Trip.NULL_SUBSTITUTE_ID)
         val pointId = intent.getLongExtra(INTENT_KEY_POINT_ID, Point.NULL_SUBSTITUTE_ID)
         val postId = intent.getLongExtra(INTENT_KEY_POST_ID, Post.NULL_SUBSTITUTE_ID)
+        val latitude: Double = intent.getDoubleExtra(INTENT_KEY_LATITUDE, Point.NULL_LATITUDE)
+        val longitude: Double = intent.getDoubleExtra(INTENT_KEY_LONGITUDE, Point.NULL_LONGITUDE)
 
-        when {
-            pointId != Point.NULL_SUBSTITUTE_ID && postId == Post.NULL_SUBSTITUTE_ID -> {
-                viewModel.initWritingMode(WritingMode.NEW, pointId)
-            }
-            postId != Post.NULL_SUBSTITUTE_ID && pointId == Point.NULL_SUBSTITUTE_ID -> {
-                viewModel.initWritingMode(WritingMode.EDIT, postId)
-            }
-            else -> throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
-        }
+        viewModel.initPostData(
+            tripId = tripId,
+            pointId = pointId,
+            postId = postId,
+            latitude = latitude,
+            longitude = longitude,
+        )
     }
 
     private fun initObserve() {
@@ -122,32 +124,36 @@ class PostWritingActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val INTENT_KEY_TRIP_ID = "tripId"
         private const val INTENT_KEY_POINT_ID = "pointId"
         private const val INTENT_KEY_POST_ID = "postId"
-        private const val WRONG_INTENT_VALUE_MESSAGE = "인텐트 값이 잘못되었습니다. (PostWritingActivity)"
+        private const val INTENT_KEY_LATITUDE = "latitude"
+        private const val INTENT_KEY_LONGITUDE = "longitude"
 
-        /**
-         * 새로운 글을 작성합니다.
-         * 기존의 글을 수정하고 싶다면 "WritingMode.Edit"를 설정해주세요.
-         */
-        fun getIntent(context: Context, pointId: Long): Intent {
+        fun getIntentByPoint(context: Context, tripId: Long, pointId: Long): Intent {
             val intent = Intent(context, PostWritingActivity::class.java)
+            intent.putExtra(INTENT_KEY_TRIP_ID, tripId)
             intent.putExtra(INTENT_KEY_POINT_ID, pointId)
             return intent
         }
 
-        /**
-         * 기존의 글을 수정합니다.
-         * 새로운 글을 작성하고 싶다면 글 작성 모드를 설정하지 마세요.
-         */
-        fun getIntent(
+        fun getIntentByLatLng(
+            context: Context,
+            tripId: Long,
+            latitude: Double,
+            longitude: Double,
+        ): Intent {
+            val intent = Intent(context, PostWritingActivity::class.java)
+            intent.putExtra(INTENT_KEY_TRIP_ID, tripId)
+            intent.putExtra(INTENT_KEY_LATITUDE, latitude)
+            intent.putExtra(INTENT_KEY_LONGITUDE, longitude)
+            return intent
+        }
+
+        fun getIntentByPost(
             context: Context,
             postId: Long,
-            wringMode: WritingMode,
         ): Intent {
-            if (wringMode == WritingMode.NEW) {
-                throw IllegalArgumentException(WRONG_INTENT_VALUE_MESSAGE)
-            }
             val intent = Intent(context, PostWritingActivity::class.java)
             intent.putExtra(INTENT_KEY_POST_ID, postId)
             return intent
