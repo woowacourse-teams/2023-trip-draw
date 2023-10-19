@@ -91,6 +91,12 @@ android {
             localProperties.getProperty("TERMS_OF_SERVICE_URL"),
         )
 
+        buildConfigField(
+            "String",
+            "TRIP_DRAW_API_VERSION",
+            localProperties.getProperty("TRIP_DRAW_API_VERSION"),
+        )
+
         manifestPlaceholders["NATIVE_APP_KEY"] =
             localProperties.getProperty("KAKAO_NATIVE_APP_KEY_NO_QUOTES")
 
