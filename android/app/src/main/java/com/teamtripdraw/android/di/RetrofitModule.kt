@@ -13,6 +13,8 @@ import com.teamtripdraw.android.data.httpClient.service.TokenRefreshService
 import com.teamtripdraw.android.di.qualifier.GeneralOKHttpClient
 import com.teamtripdraw.android.di.qualifier.NaverReverseGeocodingOkHttpClient
 import com.teamtripdraw.android.di.qualifier.NaverReverseGeocodingRetrofit
+import com.teamtripdraw.android.di.qualifier.TripDrawApiVersionInterceptor
+import com.teamtripdraw.android.di.qualifier.TripDrawAuthorizationInterceptor
 import com.teamtripdraw.android.di.qualifier.TripDrawOkHttpClient
 import com.teamtripdraw.android.di.qualifier.TripDrawRetrofit
 import dagger.Module
@@ -35,20 +37,29 @@ object RetrofitModule {
     private const val AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT = "Bearer %s"
 
     @Provides
-    @TripDrawOkHttpClient
+    @TripDrawAuthorizationInterceptor
     fun providesAuthorizationInterceptor(userIdentifyInfoDataSource: UserIdentifyInfoDataSource.Local): Interceptor =
         Interceptor { chain ->
-            with(chain) {
-                proceed(
-                    request()
-                        .newBuilder()
-                        .addHeader(
-                            "Authorization",
-                            AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getAccessToken()),
-                        )
-                        .build(),
-                )
-            }
+            val accessToken: String =
+                AUTHORIZATION_INTERCEPTOR_VALUE_FORMAT.format(userIdentifyInfoDataSource.getAccessToken())
+            chain.proceed(
+                chain.request()
+                    .newBuilder()
+                    .addHeader("Authorization", accessToken)
+                    .build(),
+            )
+        }
+
+    @Provides
+    @TripDrawApiVersionInterceptor
+    fun providesApiVersionInterceptor(): Interceptor =
+        Interceptor { chain ->
+            chain.proceed(
+                chain.request()
+                    .newBuilder()
+                    .addHeader("X-version", BuildConfig.TRIP_DRAW_API_VERSION)
+                    .build(),
+            )
         }
 
     @Provides
@@ -79,10 +90,12 @@ object RetrofitModule {
     @TripDrawOkHttpClient
     fun providesTripDrawOkHttpClient(
         @GeneralOKHttpClient generalOKHttpClient: OkHttpClient,
-        @TripDrawOkHttpClient authorizationInterceptor: Interceptor,
+        @TripDrawAuthorizationInterceptor authorizationInterceptor: Interceptor,
+        @TripDrawApiVersionInterceptor apiVersionInterceptor: Interceptor,
     ): OkHttpClient =
         generalOKHttpClient.newBuilder()
             .addInterceptor(authorizationInterceptor)
+            .addInterceptor(apiVersionInterceptor)
             .build()
 
     @Provides

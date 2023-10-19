@@ -5,7 +5,9 @@ import com.teamtripdraw.android.data.dataSource.post.PostDataSource
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toData
 import com.teamtripdraw.android.data.httpClient.dto.mapper.toHttpRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.AddPostRequest
+import com.teamtripdraw.android.data.httpClient.dto.request.CreateCurrentPointPostRequest
 import com.teamtripdraw.android.data.httpClient.dto.request.PatchPostRequest
+import com.teamtripdraw.android.data.httpClient.service.CreateCurrentPointPostService
 import com.teamtripdraw.android.data.httpClient.service.GetPointPostService
 import com.teamtripdraw.android.data.httpClient.service.PostService
 import com.teamtripdraw.android.data.model.DataPost
@@ -13,17 +15,20 @@ import com.teamtripdraw.android.data.model.DataPostOfAll
 import com.teamtripdraw.android.data.model.DataPrePatchPost
 import com.teamtripdraw.android.data.model.DataPrePost
 import com.teamtripdraw.android.data.model.mapper.toData
+import com.teamtripdraw.android.support.framework.presentation.LocalDateTimeFormatter.isoRemoveNanoSecondFormatter
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RemotePostDataSourceImpl @Inject constructor(
     private val moshi: Moshi,
     private val postService: PostService,
     private val getPointPostService: GetPointPostService,
+    private val createCurrentPointPostService: CreateCurrentPointPostService,
 ) : PostDataSource.Remote {
 
     override suspend fun addPost(
@@ -38,6 +43,36 @@ class RemotePostDataSourceImpl @Inject constructor(
         return postService.addPost(dto, imageBody)
             .process { body, headers ->
                 Result.success(body.toData())
+            }
+    }
+
+    override suspend fun createCurrentPointPost(
+        tripId: Long,
+        title: String,
+        address: String,
+        writing: String,
+        latitude: Double,
+        longitude: Double,
+        recordedAt: LocalDateTime,
+        imageFile: File?,
+    ): Result<Long> {
+        val createCurrentPointPostRequest = CreateCurrentPointPostRequest(
+            address = address,
+            latitude = latitude,
+            longitude = longitude,
+            recordedAt = recordedAt.format(isoRemoveNanoSecondFormatter),
+            title = title,
+            tripId = tripId,
+            writing = writing,
+        )
+
+        val request = moshi.adapter(CreateCurrentPointPostRequest::class.java)
+            .toJson(createCurrentPointPostRequest)
+        val dto = request.toRequestBody("application/json".toMediaTypeOrNull())
+        val imageBody = imageFile?.toMultipartRequestBody()
+        return createCurrentPointPostService.createCurrentPointPost(dto, imageBody)
+            .process { body, headers ->
+                Result.success(body.postId)
             }
     }
 

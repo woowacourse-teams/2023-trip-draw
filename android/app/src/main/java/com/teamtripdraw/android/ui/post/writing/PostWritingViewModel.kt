@@ -19,6 +19,7 @@ import com.teamtripdraw.android.support.framework.presentation.event.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +35,8 @@ class PostWritingViewModel @Inject constructor(
     private var tripId: Long = Trip.NULL_SUBSTITUTE_ID
     private var pointId: Long = Point.NULL_SUBSTITUTE_ID
     private var postId: Long = Post.NULL_SUBSTITUTE_ID
+    private var latitude: Double = Point.NULL_LATITUDE
+    private var longitude: Double = Point.NULL_LONGITUDE
     private lateinit var writingMode: WritingMode
 
     val title: MutableLiveData<String> = MutableLiveData("")
@@ -102,31 +105,41 @@ class PostWritingViewModel @Inject constructor(
         tripId: Long = Trip.NULL_SUBSTITUTE_ID,
         pointId: Long = Point.NULL_SUBSTITUTE_ID,
         postId: Long = Post.NULL_SUBSTITUTE_ID,
+        latitude: Double = Point.NULL_LATITUDE,
+        longitude: Double = Point.NULL_LONGITUDE,
     ) {
         this.tripId = tripId
         this.pointId = pointId
         this.postId = postId
-        setWritingMode(tripId, pointId, postId)
+        this.latitude = latitude
+        this.longitude = longitude
+        writingMode = WritingMode.getWritingMode(tripId, pointId, postId, latitude, longitude)
         fetchPostData()
     }
 
-    private fun setWritingMode(tripId: Long, pointId: Long, postId: Long) {
-        if (tripId != Trip.NULL_SUBSTITUTE_ID && pointId != Point.NULL_SUBSTITUTE_ID) {
-            writingMode = WritingMode.NEW
-        } else if (postId != Post.NULL_SUBSTITUTE_ID) writingMode = WritingMode.EDIT
+    private fun fetchPostData() {
+        when (writingMode) {
+            WritingMode.NEW_RECORDED_POINT -> fetchPostDataByPoint()
+            WritingMode.NEW_CURRENT_POINT -> fetchPostDataByLatLng()
+            WritingMode.EDIT -> fetchPost()
+        }
     }
 
-    private fun fetchPostData() {
-        if (writingMode == WritingMode.NEW) {
-            viewModelScope.launch {
-                pointRepository.getPoint(pointId = pointId, tripId = tripId).onSuccess {
-                    _point.value = it
-                    fetchAddress()
-                    fetchWritingMode()
-                }
+    private fun fetchPostDataByPoint() {
+        viewModelScope.launch {
+            pointRepository.getPoint(pointId = pointId, tripId = tripId).onSuccess {
+                _point.value = it
+                fetchAddress()
+                fetchWritingMode()
             }
-        } else if (writingMode == WritingMode.EDIT) {
-            fetchPost()
+        }
+    }
+
+    private fun fetchPostDataByLatLng() {
+        viewModelScope.launch {
+            geocodingRepository.getAddress(latitude, longitude).onSuccess {
+                _address.value = it
+            }
         }
     }
 
@@ -142,7 +155,7 @@ class PostWritingViewModel @Inject constructor(
     private fun fetchWritingMode() {
         if (_point.value == null) throw IllegalArgumentException("")
         if (_point.value!!.hasPost.not()) {
-            writingMode = WritingMode.NEW
+            writingMode = WritingMode.NEW_RECORDED_POINT
             return
         }
         writingMode = WritingMode.EDIT
@@ -171,12 +184,29 @@ class PostWritingViewModel @Inject constructor(
 
     fun completeWritingEvent() {
         when (writingMode) {
-            WritingMode.NEW -> writeNewPost()
+            WritingMode.NEW_CURRENT_POINT -> writeNewCurrentPointPost()
+            WritingMode.NEW_RECORDED_POINT -> writeNewRecordedPointPost()
             WritingMode.EDIT -> writeEditedPost()
         }
     }
 
-    private fun writeNewPost() {
+    private fun writeNewCurrentPointPost() {
+        viewModelScope.launch {
+            postRepository.createCurrentPointPost(
+                tripId = tripId,
+                title = title.value ?: "",
+                address = address.value ?: "",
+                writing = writing.value ?: "",
+                latitude = latitude,
+                longitude = longitude,
+                recordedAt = LocalDateTime.now(),
+                imageFile = imageFile.value,
+            ).onSuccess { _writingCompletedEvent.value = Event(true) }
+                .onFailure { TripDrawApplication.logUtil.general.log(it) }
+        }
+    }
+
+    private fun writeNewRecordedPointPost() {
         viewModelScope.launch {
             val prePost = PrePost(
                 tripId = tripId,

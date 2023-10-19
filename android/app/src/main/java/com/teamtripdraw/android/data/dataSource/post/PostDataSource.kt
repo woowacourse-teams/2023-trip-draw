@@ -5,6 +5,7 @@ import com.teamtripdraw.android.data.model.DataPostOfAll
 import com.teamtripdraw.android.data.model.DataPrePatchPost
 import com.teamtripdraw.android.data.model.DataPrePost
 import java.io.File
+import java.time.LocalDateTime
 
 interface PostDataSource {
 
@@ -14,6 +15,17 @@ interface PostDataSource {
 
         suspend fun addPost(
             dataPrePost: DataPrePost,
+            imageFile: File?,
+        ): Result<Long>
+
+        suspend fun createCurrentPointPost(
+            tripId: Long,
+            title: String,
+            address: String,
+            writing: String,
+            latitude: Double,
+            longitude: Double,
+            recordedAt: LocalDateTime,
             imageFile: File?,
         ): Result<Long>
 

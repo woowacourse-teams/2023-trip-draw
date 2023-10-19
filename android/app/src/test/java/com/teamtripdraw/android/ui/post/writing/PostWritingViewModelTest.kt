@@ -39,7 +39,6 @@ internal class PostWritingViewModelTest : DefaultViewModelTest() {
         sut = PostWritingViewModel(
             postRepository = postRepository,
             pointRepository = pointRepository,
-            tripRepository = tripRepository,
             geocodingRepository = geocodingRepository,
         )
     }
