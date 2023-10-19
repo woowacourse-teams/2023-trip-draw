@@ -16,15 +16,3 @@ interface CreateCurrentPointPostService {
         @Part imageFile: MultipartBody.Part?,
     ): ResponseState<CreateCurrentPointPostResponse>
 }
-
-// @Multipart
-// @POST("/posts")
-// suspend fun addPost(
-//    @Part("dto") addPostRequest: RequestBody,
-//    @Part imageFile: MultipartBody.Part?,
-// ): ResponseState<AddPostResponse>
-
-// @POST("/points")
-// suspend fun createRecordingPoint(
-//    @Body body: CreateRecordingPointRequest,
-// ): ResponseState<CreateRecordingPointResponse>
