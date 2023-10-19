@@ -99,7 +99,7 @@ public class PostController {
             responseCode = "200",
             description = "특정 감상 상세 조회 성공."
     )
-    @GetMapping("/posts/{postId}")
+    @GetMapping(value = "/posts/{postId}", headers = "X-version=V2")
     public ResponseEntity<PostResponse> read(
             @Auth LoginUser loginUser,
             @PathVariable Long postId
@@ -113,7 +113,7 @@ public class PostController {
             responseCode = "200",
             description = "위치정보로 감상 조회 성공."
     )
-    @GetMapping("/points/{pointId}/post")
+    @GetMapping(value = "/points/{pointId}/post", headers = "X-version=V2")
     public ResponseEntity<PostResponse> readByPointId(
             @Auth LoginUser loginUser,
             @PathVariable Long pointId
@@ -127,7 +127,7 @@ public class PostController {
             responseCode = "200",
             description = "특정 여행의 모든 감상 조회 성공."
     )
-    @GetMapping("/trips/{tripId}/posts")
+    @GetMapping(value = "/trips/{tripId}/posts", headers = "X-version=V2")
     public ResponseEntity<PostsResponse> readAllPostsOfTrip(
             @Auth LoginUser loginUser,
             @PathVariable Long tripId
@@ -141,7 +141,7 @@ public class PostController {
             responseCode = "200",
             description = "모든 감상 조회 성공."
     )
-    @GetMapping("/posts")
+    @GetMapping(value = "/posts", headers = "X-version=V2")
     public ResponseEntity<PostsSearchResponse> readAllPosts(
             @Auth LoginUser loginUser,
             PostSearchRequest postSearchRequest

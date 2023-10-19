@@ -52,7 +52,7 @@ public class TripController {
             responseCode = "200",
             description = "나의 여행 조회 성공."
     )
-    @GetMapping("/{tripId}")
+    @GetMapping(value = "/{tripId}", headers = "X-version=V2")
     public ResponseEntity<TripResponse> readById(@Auth LoginUser loginUser, @PathVariable Long tripId) {
         TripResponse response = tripService.readTripById(loginUser, tripId);
         return ResponseEntity.ok(response);
@@ -74,7 +74,7 @@ public class TripController {
             responseCode = "200",
             description = "모든 회원 여행 전체 조회 성공."
     )
-    @GetMapping
+    @GetMapping(headers = "X-version=V2")
     public ResponseEntity<TripsSearchResponse> readAll(@Auth LoginUser loginUser, TripSearchRequest tripSearchRequest) {
         TripsSearchResponse response = tripService.readAll(loginUser, tripSearchRequest);
         return ResponseEntity.ok(response);
