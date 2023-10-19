@@ -15,9 +15,9 @@ class AddressSelectionViewModel @Inject constructor(
     private val addressRepository: AddressRepository,
 ) : ViewModel() {
 
-    val selectedSiDo: MutableLiveData<String> = MutableLiveData("")
+    private val selectedSiDo: MutableLiveData<String> = MutableLiveData("")
     val selectedSiGunGu: MutableLiveData<String> = MutableLiveData("")
-    val selectedEupMyeonDong: MutableLiveData<String> = MutableLiveData("")
+    private val selectedEupMyeonDong: MutableLiveData<String> = MutableLiveData("")
     val address: String get() = "${selectedSiDo.value} ${selectedSiGunGu.value} ${selectedEupMyeonDong.value}"
 
     private val _siDos: MutableLiveData<List<String>> = MutableLiveData(listOf())
@@ -37,13 +37,34 @@ class AddressSelectionViewModel @Inject constructor(
         fetchSiDos()
     }
 
+    fun selectSiDo(siDo: String) {
+        selectedSiDo.value = siDo
+        selectedSiGunGu.value = ""
+        selectedEupMyeonDong.value = ""
+
+        _siGunGus.value = listOf()
+        _eupMyeonDongs.value = listOf()
+
+        fetchSiGunGu()
+    }
+
+    fun selectSiGunGu(siGunGu: String) {
+        selectedSiGunGu.value = siGunGu
+        selectedEupMyeonDong.value = ""
+
+        _eupMyeonDongs.value = listOf()
+
+        fetchEupMyeonDong()
+    }
+
+    fun selectEupMyeonDong(eupMyeonDong: String) {
+        selectedEupMyeonDong.value = eupMyeonDong
+    }
+
     private fun fetchSiDos() {
         viewModelScope.launch {
-            val addresses = addressRepository.getAddresses("", "")
+            val addresses: List<String> = addressRepository.getAddresses("", "")
             _siDos.value = addresses
-            selectedSiDo.value = ""
-            _siGunGus.value = listOf()
-            _eupMyeonDongs.value = listOf()
         }
     }
 
@@ -51,8 +72,6 @@ class AddressSelectionViewModel @Inject constructor(
         viewModelScope.launch {
             val addresses = addressRepository.getAddresses(selectedSiDo.value!!, "")
             _siGunGus.value = addresses
-            selectedSiGunGu.value = ""
-            _eupMyeonDongs.value = listOf()
         }
     }
 
@@ -61,7 +80,6 @@ class AddressSelectionViewModel @Inject constructor(
             val addresses =
                 addressRepository.getAddresses(selectedSiDo.value!!, selectedSiGunGu.value!!)
             _eupMyeonDongs.value = addresses
-            selectedEupMyeonDong.value = ""
         }
     }
 

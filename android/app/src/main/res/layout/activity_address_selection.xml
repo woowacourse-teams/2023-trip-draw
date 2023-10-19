@@ -24,15 +24,17 @@
             android:text="@string/tv_address_selection_si_do"
             android:textAppearance="@style/title_3B"
             android:textColor="@color/td_black"
-            app:layout_constraintBottom_toTopOf="@id/lv_address_selection_si_do"
+            app:layout_constraintBottom_toTopOf="@id/rv_address_selection_si_do"
             app:layout_constraintEnd_toStartOf="@id/divider_address_selection_si_do_si_gun_gu"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/lv_address_selection_si_do"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_address_selection_si_do"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/divider_address_selection_si_do_si_gun_gu"
             app:layout_constraintEnd_toStartOf="@+id/divider_address_selection_si_do_si_gun_gu"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +62,7 @@
             android:text="@string/tv_address_selection_si_gun_gu"
             android:textAppearance="@style/title_3B"
             android:textColor="@color/td_black"
-            app:layout_constraintBottom_toTopOf="@id/lv_address_selection_si_gun_gu"
+            app:layout_constraintBottom_toTopOf="@id/rv_address_selection_si_gun_gu"
             app:layout_constraintEnd_toStartOf="@+id/tv_address_selection_eup_myeon_dong"
             app:layout_constraintStart_toEndOf="@+id/divider_address_selection_si_do_si_gun_gu"
             app:layout_constraintTop_toTopOf="parent" />
@@ -76,10 +78,12 @@
             app:layout_constraintStart_toEndOf="@+id/tv_address_selection_si_gun_gu"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/lv_address_selection_si_gun_gu"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_address_selection_si_gun_gu"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/divider_address_selection_si_do_si_gun_gu"
             app:layout_constraintEnd_toStartOf="@+id/divider_address_selection_si_gun_gu_eup_myeon_dong"
             app:layout_constraintStart_toEndOf="@+id/divider_address_selection_si_do_si_gun_gu"
@@ -95,15 +99,17 @@
             android:text="@string/tv_address_selection_eup_myeon_dong"
             android:textAppearance="@style/title_3B"
             android:textColor="@color/td_black"
-            app:layout_constraintBottom_toTopOf="@id/lv_address_selection_eup_myeon_dong"
+            app:layout_constraintBottom_toTopOf="@id/rv_address_selection_eup_myeon_dong"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_address_selection_si_gun_gu"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/lv_address_selection_eup_myeon_dong"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_address_selection_eup_myeon_dong"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/divider_address_selection_si_gun_gu_eup_myeon_dong"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/divider_address_selection_si_gun_gu_eup_myeon_dong"
