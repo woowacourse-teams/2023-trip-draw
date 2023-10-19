@@ -35,12 +35,6 @@ class FilterSelectionViewModel @Inject constructor() : ViewModel() {
     private val _selectedHourTo = MutableLiveData(OptionHour.maxHour.value)
     val selectedHourTo: LiveData<Int> = _selectedHourTo
 
-    fun setSelectedOption(options: SelectedOptions) {
-        _selectedOption.value = options
-        _selectedHourFrom.value = options.hours?.first()
-        _selectedHourTo.value = options.hours?.last()
-    }
-
     private val _address = MutableLiveData("")
     val address: LiveData<String> = _address
 
@@ -58,6 +52,12 @@ class FilterSelectionViewModel @Inject constructor() : ViewModel() {
 
     fun setupFilterType(type: FilterType) {
         _filterType.value = type
+    }
+
+    fun setSelectedOption(options: SelectedOptions) {
+        _selectedOption.value = options
+        _selectedHourFrom.value = options.hours?.first()
+        _selectedHourTo.value = options.hours?.last()
     }
 
     fun setAddress(address: String = "") {
