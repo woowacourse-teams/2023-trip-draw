@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -223,7 +224,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             getUpdateLocation(
                 getFusedLocationClient(),
                 requireContext(),
-                homeViewModel::createPoint,
+                homeViewModel::openPostWriting,
             )
         }
     }
@@ -238,9 +239,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-    private fun navigateToPostWriting(pointId: Long) {
+    private fun navigateToPostWriting(locationResult: LocationResult) {
         val tripId = homeViewModel.tripId
-        startActivity(PostWritingActivity.getIntentByPoint(requireContext(), tripId, pointId))
+        startActivity(
+            PostWritingActivity.getIntentByLatLng(
+                context = requireContext(),
+                tripId = tripId,
+                latitude = locationResult.locations.first().latitude,
+                longitude = locationResult.locations.first().longitude,
+            ),
+        )
     }
 
     private fun observeUpdateTripId() {
