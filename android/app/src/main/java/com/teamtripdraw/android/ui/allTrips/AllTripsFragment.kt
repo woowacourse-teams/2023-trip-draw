@@ -38,6 +38,7 @@ class AllTripsFragment : Fragment() {
                 intent.getParcelableExtraCompat<SelectedOptions>(SELECTED_OPTIONS_INTENT_KEY)
                     ?: throw java.lang.IllegalStateException()
             viewModel.updateSelectedOptions(selectedOptions)
+            viewModel.fetchTrips()
         }
 
     override fun onCreateView(
@@ -52,6 +53,7 @@ class AllTripsFragment : Fragment() {
         initObserver()
         setAdapter()
         addScrollListener()
+        viewModel.fetchTrips()
 
         return binding.root
     }
@@ -106,18 +108,7 @@ class AllTripsFragment : Fragment() {
     private fun setAdapter() {
         adapter = AllTripsAdapter(viewModel)
         binding.rvAllTrips.adapter = adapter
-    }
-
-    override fun onResume() {
-        super.onResume()
-        fetchTrips()
-    }
-
-    private fun fetchTrips() = viewModel.fetchTrips()
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+        binding.rvAllTrips.itemAnimator = null
     }
 
     private fun addScrollListener() {
@@ -140,6 +131,11 @@ class AllTripsFragment : Fragment() {
 
     private fun isLoadThreshold(layoutManager: LinearLayoutManager, lastPosition: Int): Boolean =
         layoutManager.itemCount <= lastPosition + LOAD_THRESHOLD
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
     companion object {
         private const val LOAD_THRESHOLD = 3

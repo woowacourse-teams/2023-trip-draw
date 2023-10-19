@@ -38,6 +38,7 @@ class AllPostsFragment : Fragment() {
                 intent.getParcelableExtraCompat<SelectedOptions>(SELECTED_OPTIONS_INTENT_KEY)
                     ?: throw java.lang.IllegalStateException()
             viewModel.updateSelectedOptions(selectedOptions)
+            viewModel.fetchPosts()
         }
 
     override fun onCreateView(
@@ -52,6 +53,7 @@ class AllPostsFragment : Fragment() {
         initObserver()
         setAdapter()
         addScrollListener()
+        viewModel.fetchPosts()
 
         return binding.root
     }
@@ -101,14 +103,13 @@ class AllPostsFragment : Fragment() {
                     viewModel.selectedOptions,
                 )
             getFilterOptionsResult.launch(intent)
-        } else {
-            binding.rvAllPosts.scrollToPosition(INITIAL_POSITION)
         }
     }
 
     private fun setAdapter() {
         adapter = AllPostsAdapter(viewModel::openPostDetail)
         binding.rvAllPosts.adapter = adapter
+        binding.rvAllPosts.itemAnimator = null
     }
 
     private fun addScrollListener() {
@@ -134,13 +135,6 @@ class AllPostsFragment : Fragment() {
 
     private fun checkLoadThreshold(layoutManager: LinearLayoutManager, lastPosition: Int) =
         layoutManager.itemCount <= lastPosition + LOAD_THRESHOLD
-
-    override fun onResume() {
-        super.onResume()
-        fetchPosts()
-    }
-
-    private fun fetchPosts() = viewModel.fetchPosts()
 
     override fun onDestroyView() {
         super.onDestroyView()

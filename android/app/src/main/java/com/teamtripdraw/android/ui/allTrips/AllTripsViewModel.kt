@@ -60,6 +60,11 @@ class AllTripsViewModel @Inject constructor(
         }
     }
 
+    private fun addLoadingItem() {
+        _uiTripItems.value =
+            requireNotNull(_uiTripItems.value).toMutableList().apply { add(UiAllTripLoadingItem) }
+    }
+
     private fun fetchMoreTrips() {
         viewModelScope.launch {
             tripRepository.getAllTrips(
@@ -103,11 +108,6 @@ class AllTripsViewModel @Inject constructor(
             addAll(trips.map { it.toPresentation() })
         }
         isAddLoading = false
-    }
-
-    private fun addLoadingItem() {
-        _uiTripItems.value =
-            requireNotNull(_uiTripItems.value).toMutableList().apply { add(UiAllTripLoadingItem) }
     }
 
     fun updateSelectedOptions(options: SelectedOptions) {
