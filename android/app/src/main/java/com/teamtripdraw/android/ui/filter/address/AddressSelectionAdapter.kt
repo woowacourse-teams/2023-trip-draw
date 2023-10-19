@@ -3,10 +3,11 @@ package com.teamtripdraw.android.ui.filter.address
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.teamtripdraw.android.ui.model.UiAddressSelectionItem
 
 class AddressSelectionAdapter(
-    private val selectEvent: (addressNickname: String) -> Unit,
-) : ListAdapter<String, AddressSelectionViewHolder>(diffUtil) {
+    private val selectEvent: (address: UiAddressSelectionItem) -> Unit,
+) : ListAdapter<UiAddressSelectionItem, AddressSelectionViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressSelectionViewHolder {
         return AddressSelectionViewHolder.of(parent, selectEvent)
@@ -17,14 +18,18 @@ class AddressSelectionAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<String>() {
+        val diffUtil = object : DiffUtil.ItemCallback<UiAddressSelectionItem>() {
 
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
+            override fun areItemsTheSame(
+                oldItem: UiAddressSelectionItem,
+                newItem: UiAddressSelectionItem,
+            ): Boolean =
                 oldItem == newItem
+
+            override fun areContentsTheSame(
+                oldItem: UiAddressSelectionItem,
+                newItem: UiAddressSelectionItem,
+            ): Boolean = false
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamtripdraw.android.domain.repository.AddressRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import com.teamtripdraw.android.ui.model.UiAddressSelectionItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,14 +21,15 @@ class AddressSelectionViewModel @Inject constructor(
     private val selectedEupMyeonDong: MutableLiveData<String> = MutableLiveData("")
     val address: String get() = "${selectedSiDo.value} ${selectedSiGunGu.value} ${selectedEupMyeonDong.value}"
 
-    private val _siDos: MutableLiveData<List<String>> = MutableLiveData(listOf())
-    val siDos: LiveData<List<String>> = _siDos
+    private val _siDos: MutableLiveData<List<UiAddressSelectionItem>> = MutableLiveData(listOf())
+    val siDos: LiveData<List<UiAddressSelectionItem>> = _siDos
 
-    private val _siGunGus: MutableLiveData<List<String>> = MutableLiveData(listOf())
-    val siGunGus: LiveData<List<String>> = _siGunGus
+    private val _siGunGus: MutableLiveData<List<UiAddressSelectionItem>> = MutableLiveData(listOf())
+    val siGunGus: LiveData<List<UiAddressSelectionItem>> = _siGunGus
 
-    private val _eupMyeonDongs: MutableLiveData<List<String>> = MutableLiveData(listOf())
-    val eupMyeonDongs: LiveData<List<String>> = _eupMyeonDongs
+    private val _eupMyeonDongs: MutableLiveData<List<UiAddressSelectionItem>> =
+        MutableLiveData(listOf())
+    val eupMyeonDongs: LiveData<List<UiAddressSelectionItem>> = _eupMyeonDongs
 
     private val _selectingCompletedEvent: MutableLiveData<Event<Boolean>> =
         MutableLiveData(Event(false))
@@ -37,8 +39,16 @@ class AddressSelectionViewModel @Inject constructor(
         fetchSiDos()
     }
 
-    fun selectSiDo(siDo: String) {
-        selectedSiDo.value = siDo
+    fun selectSiDo(siDo: UiAddressSelectionItem) {
+        _siDos.value?.let {
+            val uiAddressSelectionItems = it.toMutableList()
+            uiAddressSelectionItems.map { it.isSelected = false }
+            siDo.isSelected = true
+
+            _siDos.value = uiAddressSelectionItems
+        }
+
+        selectedSiDo.value = siDo.addressName
         selectedSiGunGu.value = ""
         selectedEupMyeonDong.value = ""
 
@@ -48,8 +58,16 @@ class AddressSelectionViewModel @Inject constructor(
         fetchSiGunGu()
     }
 
-    fun selectSiGunGu(siGunGu: String) {
-        selectedSiGunGu.value = siGunGu
+    fun selectSiGunGu(siGunGu: UiAddressSelectionItem) {
+        _siGunGus.value?.let {
+            val uiAddressSelectionItems = it.toMutableList()
+            uiAddressSelectionItems.map { it.isSelected = false }
+            siGunGu.isSelected = true
+
+            _siGunGus.value = uiAddressSelectionItems
+        }
+
+        selectedSiGunGu.value = siGunGu.addressName
         selectedEupMyeonDong.value = ""
 
         _eupMyeonDongs.value = listOf()
@@ -57,29 +75,37 @@ class AddressSelectionViewModel @Inject constructor(
         fetchEupMyeonDong()
     }
 
-    fun selectEupMyeonDong(eupMyeonDong: String) {
-        selectedEupMyeonDong.value = eupMyeonDong
+    fun selectEupMyeonDong(eupMyeonDong: UiAddressSelectionItem) {
+        _eupMyeonDongs.value?.let {
+            val uiAddressSelectionItems = it.toMutableList()
+            uiAddressSelectionItems.map { it.isSelected = false }
+            eupMyeonDong.isSelected = true
+
+            _eupMyeonDongs.value = uiAddressSelectionItems
+        }
+
+        selectedEupMyeonDong.value = eupMyeonDong.addressName
     }
 
     private fun fetchSiDos() {
         viewModelScope.launch {
             val addresses: List<String> = addressRepository.getAddresses("", "")
-            _siDos.value = addresses
+            _siDos.value = addresses.map { UiAddressSelectionItem(it) }
         }
     }
 
     fun fetchSiGunGu() {
         viewModelScope.launch {
-            val addresses = addressRepository.getAddresses(selectedSiDo.value!!, "")
-            _siGunGus.value = addresses
+            val addresses: List<String> = addressRepository.getAddresses(selectedSiDo.value!!, "")
+            _siGunGus.value = addresses.map { UiAddressSelectionItem(it) }
         }
     }
 
     fun fetchEupMyeonDong() {
         viewModelScope.launch {
-            val addresses =
+            val addresses: List<String> =
                 addressRepository.getAddresses(selectedSiDo.value!!, selectedSiGunGu.value!!)
-            _eupMyeonDongs.value = addresses
+            _eupMyeonDongs.value = addresses.map { UiAddressSelectionItem(it) }
         }
     }
 
