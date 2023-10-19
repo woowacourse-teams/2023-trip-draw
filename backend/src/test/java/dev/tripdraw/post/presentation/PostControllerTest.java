@@ -53,6 +53,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 class PostControllerTest extends ControllerTest {
 
     private static final String INVALID_TOKEN = "wrong.long.token";
+    private static final String VERSION_HEADER = "X-version";
+    private static final String V2 = "V2";
 
     @Autowired
     private PostRepository postRepository;
@@ -267,6 +269,7 @@ class PostControllerTest extends ControllerTest {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/posts/{postId}", post.id())
                 .then().log().all()
                 .extract();
@@ -295,6 +298,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/posts/{postId}", invalidPostId)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -309,6 +313,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/points/{pointId}/post", point.id())
                 .then().log().all()
                 .extract();
@@ -332,6 +337,7 @@ class PostControllerTest extends ControllerTest {
         // expect
         RestAssured.given().log().all()
                 .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/points/{pointId}/post", invalidPointId)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -350,6 +356,7 @@ class PostControllerTest extends ControllerTest {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/trips/{tripId}/posts", trip.id())
                 .then().log().all()
                 .extract();
@@ -374,6 +381,7 @@ class PostControllerTest extends ControllerTest {
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
                 .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/trips/{tripId}/posts", Long.MIN_VALUE)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -489,6 +497,7 @@ class PostControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .params(params)
                 .when().get("/posts")
                 .then().log().all()
