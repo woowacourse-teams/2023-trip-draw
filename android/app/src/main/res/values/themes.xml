@@ -22,6 +22,19 @@
         <item name="postSplashScreenTheme">@style/Theme.TripDraw</item>
     </style>
 
+    <!-- custom chip -->
+    <style name="filterChip" parent="@style/Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/selector_filter_chip_bg_state</item>
+        <item name="chipStrokeColor">@color/selector_filter_text_state</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="checkedIcon">@null</item>
+    </style>
+
+    <style name="chipTextAppearance" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textAppearance">@style/caption_1</item>
+        <item name="android:textColor">@color/selector_filter_text_state</item>
+    </style>
+
     <!-- text theme. -->
 
     <style name="title_1B">

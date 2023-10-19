@@ -104,4 +104,28 @@
 
     <!-- AllPostsFragment -->
     <string name="tv_all_posts_no_post">검색된 감상이 없습니다.</string>
+
+    <!-- FilterSelectionActivity -->
+    <string name="tv_filter_option_year">연도</string>
+    <string name="tv_filter_option_month">월</string>
+    <string name="tv_filter_option_day_of_week">요일</string>
+    <string name="tv_filter_option_age_range">나이대</string>
+    <string name="tv_filter_option_gender">성별</string>
+    <string name="et_filter_search">검색어를 입력해주세요</string>
+    <string name="tv_filter_address_title">지역 검색</string>
+    <string name="tv_filter_current_position_title">현재 위치</string>
+    <string name="tv_filter_date_title">날짜</string>
+    <string name="tv_filter_hour_title">시간대</string>
+    <string name="tv_filter_options_hour_from">: 00</string>
+    <string name="tv_filter_options_hour_divider">~</string>
+    <string name="tv_filter_options_hour_to">: 59</string>
+    <string name="tv_refresh_filter">초기화</string>
+    <string name="btn_filter_search">검색</string>
+
+    <!-- AddressSelectionActivity -->
+    <string name="tv_address_selection_si_do">시 / 도</string>
+    <string name="tv_address_selection_si_gun_gu">시 / 군 / 구</string>
+    <string name="tv_address_selection_eup_myeon_dong">읍 / 면 / 동</string>
+    <string name="btn_selecting_complete">선택 완료</string>
+
 </resources>

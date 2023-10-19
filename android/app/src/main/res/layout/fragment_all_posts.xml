@@ -36,6 +36,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_default"
+                android:onClick="@{()->allPostsViewModel.openFilterSelection()}"
                 android:src="@drawable/ic_search" />
 
         </com.google.android.material.appbar.MaterialToolbar>
@@ -53,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_all_posts"
-            app:setNoItemsMessageVisibility="@{allPostsViewModel.posts.empty}" />
+            app:setNoItemsMessageVisibility="@{allPostsViewModel.posts.isEmpty}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_all_posts"

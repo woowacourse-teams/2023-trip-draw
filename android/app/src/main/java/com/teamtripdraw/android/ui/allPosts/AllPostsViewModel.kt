@@ -9,6 +9,7 @@ import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.model.post.PostOfAll
 import com.teamtripdraw.android.domain.repository.PostRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
+import com.teamtripdraw.android.ui.filter.SelectedOptions
 import com.teamtripdraw.android.ui.model.allPosts.UiAllPosts
 import com.teamtripdraw.android.ui.model.allPosts.UiItemView
 import com.teamtripdraw.android.ui.model.allPosts.UiLoadingItem
@@ -25,8 +26,13 @@ class AllPostsViewModel @Inject constructor(
     private val _uiPosts: MutableLiveData<List<UiItemView>> = MutableLiveData(listOf())
     val posts: LiveData<UiAllPosts> = Transformations.map(_uiPosts) { post -> UiAllPosts(post) }
 
+    var selectedOptions: SelectedOptions? = null
+
     private val _openPostDetailEvent = MutableLiveData<Event<Long>>()
     val openPostDetailEvent: LiveData<Event<Long>> = _openPostDetailEvent
+
+    private val _openFilterSelectionEvent = MutableLiveData<Boolean>()
+    val openFilterSelectionEvent: LiveData<Boolean> = _openFilterSelectionEvent
 
     private var lastId: Long? = null
 
@@ -37,29 +43,53 @@ class AllPostsViewModel @Inject constructor(
         private set
 
     fun fetchPosts() {
-        if (_uiPosts.value!!.isNotEmpty() && hasNextPage) {
-            isAddLoading = true
-            addLoadingItem()
-        }
+        reloadIfFiltered()
+        checkLoadOrNot()
         getPosts()
     }
 
+    private fun reloadIfFiltered() {
+        if (_openFilterSelectionEvent.value == true) {
+            lastId = null
+        }
+    }
+
+    private fun checkLoadOrNot() {
+        if (lastId != null && hasNextPage) {
+            isAddLoading = true
+            addLoadingItem()
+        }
+    }
+
     private fun addLoadingItem() {
-        _uiPosts.value = _uiPosts.value!!.toMutableList().apply { add(UiLoadingItem) }
+        _uiPosts.value = requireNotNull(_uiPosts.value).toMutableList().apply { add(UiLoadingItem) }
     }
 
     private fun getPosts() {
         viewModelScope.launch {
-            postRepository.getAllPosts(lastViewedId = lastId, limit = PAGE_ITEM_SIZE)
-                .onSuccess { posts ->
-                    setLastItemId(posts)
-                    setHasNextPage(posts)
-                    isAddLoading = false
+            postRepository.getAllPosts(
+                lastViewedId = lastId,
+                limit = PAGE_ITEM_SIZE,
+                address = selectedOptions?.address ?: "",
+                years = selectedOptions?.years ?: listOf(),
+                months = selectedOptions?.months ?: listOf(),
+                daysOfWeek = selectedOptions?.daysOfWeek ?: listOf(),
+                hours = selectedOptions?.hours ?: listOf(),
+                ageRanges = selectedOptions?.ageRanges ?: listOf(),
+                genders = selectedOptions?.genders ?: listOf(),
+            ).onSuccess { posts ->
+                setLastItemId(posts)
+                setHasNextPage(posts)
+                isAddLoading = false
+
+                if (_openFilterSelectionEvent.value == true) {
+                    getSearchResult(posts)
+                } else {
                     fetchPosts(posts)
                 }
-                .onFailure {
-                    TripDrawApplication.logUtil.general.log(it)
-                }
+            }.onFailure {
+                TripDrawApplication.logUtil.general.log(it)
+            }
         }
     }
 
@@ -71,15 +101,28 @@ class AllPostsViewModel @Inject constructor(
         if (posts.size < PAGE_ITEM_SIZE && lastId != null) hasNextPage = false
     }
 
+    private fun getSearchResult(posts: List<PostOfAll>) {
+        _uiPosts.value = posts.map { it.toPresentation() }
+        _openFilterSelectionEvent.value = false
+    }
+
     private fun fetchPosts(posts: List<PostOfAll>) {
-        _uiPosts.value = _uiPosts.value!!.toMutableList().apply {
+        _uiPosts.value = requireNotNull(_uiPosts.value).toMutableList().apply {
             remove(UiLoadingItem)
             addAll(posts.map { it.toPresentation() })
         }
     }
 
+    fun updateSelectedOptions(options: SelectedOptions) {
+        selectedOptions = options
+    }
+
     fun openPostDetail(id: Long) {
         _openPostDetailEvent.value = Event(id)
+    }
+
+    fun openFilterSelection() {
+        _openFilterSelectionEvent.value = true
     }
 
     companion object {
