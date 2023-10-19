@@ -1,8 +1,7 @@
 package dev.tripdraw.post.dto;
 
-import lombok.Builder;
-
 import java.util.Set;
+import lombok.Builder;
 
 @Builder
 public record PostSearchConditions(
