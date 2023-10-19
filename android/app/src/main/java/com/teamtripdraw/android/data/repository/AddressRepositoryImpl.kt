@@ -1,11 +1,19 @@
 package com.teamtripdraw.android.data.repository
 
+import com.teamtripdraw.android.data.dataSource.address.AddressDataSource
 import com.teamtripdraw.android.domain.repository.AddressRepository
 import javax.inject.Inject
 
-class AddressRepositoryImpl @Inject constructor() : AddressRepository {
+class AddressRepositoryImpl @Inject constructor(
+    private val remoteAddressDataSource: AddressDataSource.Remote,
+) : AddressRepository {
 
-    override suspend fun getAddresses(siDo: String, siGunGu: String): List<String> {
-        return listOf("수달시", "희애시", "멧돼지시")
-    }
+    override suspend fun getSiDos(): Result<List<String>> =
+        remoteAddressDataSource.getAddresses("", "")
+
+    override suspend fun getSiGunGus(siDo: String): Result<List<String>> =
+        remoteAddressDataSource.getAddresses(siDo, "")
+
+    override suspend fun getEupMyeonDongs(siDo: String, siGunGu: String): Result<List<String>> =
+        remoteAddressDataSource.getAddresses(siDo, siGunGu)
 }

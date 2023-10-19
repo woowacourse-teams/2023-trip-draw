@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamtripdraw.android.TripDrawApplication
 import com.teamtripdraw.android.domain.repository.AddressRepository
 import com.teamtripdraw.android.support.framework.presentation.event.Event
 import com.teamtripdraw.android.ui.model.UiAddressSelectionItem
@@ -86,23 +87,28 @@ class AddressSelectionViewModel @Inject constructor(
 
     private fun fetchSiDos() {
         viewModelScope.launch {
-            val addresses: List<String> = addressRepository.getAddresses("", "")
-            _siDos.value = addresses.map { UiAddressSelectionItem(it) }
+            addressRepository.getSiDos()
+                .onSuccess { getSiDos ->
+                    _siDos.value = getSiDos.map { UiAddressSelectionItem(it) }
+                }.onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
     }
 
-    fun fetchSiGunGu() {
+    private fun fetchSiGunGu() {
         viewModelScope.launch {
-            val addresses: List<String> = addressRepository.getAddresses(selectedSiDo.value!!, "")
-            _siGunGus.value = addresses.map { UiAddressSelectionItem(it) }
+            addressRepository.getSiGunGus(selectedSiDo.value!!)
+                .onSuccess { getGunGus ->
+                    _siGunGus.value = getGunGus.map { UiAddressSelectionItem(it) }
+                }.onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
     }
 
-    fun fetchEupMyeonDong() {
+    private fun fetchEupMyeonDong() {
         viewModelScope.launch {
-            val addresses: List<String> =
-                addressRepository.getAddresses(selectedSiDo.value!!, selectedSiGunGu.value!!)
-            _eupMyeonDongs.value = addresses.map { UiAddressSelectionItem(it) }
+            addressRepository.getEupMyeonDongs(selectedSiDo.value!!, selectedSiGunGu.value!!)
+                .onSuccess { getEupMyeonDongs ->
+                    _eupMyeonDongs.value = getEupMyeonDongs.map { UiAddressSelectionItem(it) }
+                }.onFailure { TripDrawApplication.logUtil.general.log(it) }
         }
     }
 
