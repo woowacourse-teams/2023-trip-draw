@@ -7,14 +7,18 @@ import static java.util.stream.Collectors.toList;
 
 import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.file.application.FileUploader;
+import dev.tripdraw.member.domain.Member;
+import dev.tripdraw.member.domain.MemberRepository;
 import dev.tripdraw.post.domain.Post;
 import dev.tripdraw.post.domain.PostCreateEvent;
+import dev.tripdraw.post.domain.PostDynamicQueryRepository;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
+import dev.tripdraw.post.dto.PostPaging;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
-import dev.tripdraw.post.dto.PostSearchPaging;
+import dev.tripdraw.post.dto.PostSearchConditions;
 import dev.tripdraw.post.dto.PostSearchRequest;
 import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
@@ -37,10 +41,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class PostService {
 
-    private final PostQueryService postQueryService;
+    private static final int FIRST_INDEX = 0;
+
+    private final PostDynamicQueryRepository postDynamicQueryRepository;
     private final PostRepository postRepository;
     private final TripRepository tripRepository;
     private final PointRepository pointRepository;
+    private final MemberRepository memberRepository;
     private final FileUploader fileUploader;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -49,13 +56,12 @@ public class PostService {
             PostAndPointCreateRequest postAndPointCreateRequest,
             MultipartFile file
     ) {
-        Long memberId = loginUser.memberId();
-
-        Trip trip = tripRepository.getById(postAndPointCreateRequest.tripId());
-        trip.validateAuthorization(memberId);
+        Member member = memberRepository.getById(loginUser.memberId());
+        Trip trip = tripRepository.getByTripId(postAndPointCreateRequest.tripId());
+        trip.validateAuthorization(member.id());
         Point point = pointRepository.save(postAndPointCreateRequest.toPoint(trip));
 
-        Post post = postAndPointCreateRequest.toPost(memberId, point);
+        Post post = postAndPointCreateRequest.toPost(member, point);
         uploadImage(file, post, trip);
         Post savedPost = postRepository.save(post);
 
@@ -77,13 +83,12 @@ public class PostService {
             PostRequest postRequest,
             MultipartFile file
     ) {
-        Long memberId = loginUser.memberId();
-
-        Trip trip = tripRepository.getById(postRequest.tripId());
-        trip.validateAuthorization(memberId);
+        Member member = memberRepository.getById(loginUser.memberId());
+        Trip trip = tripRepository.getByTripId(postRequest.tripId());
+        trip.validateAuthorization(member.id());
         Point point = pointRepository.getById(postRequest.pointId());
 
-        Post post = postRequest.toPost(memberId, point);
+        Post post = postRequest.toPost(member, point);
         uploadImage(file, post, trip);
         Post savedPost = postRepository.save(post);
 
@@ -92,20 +97,26 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse read(Long postId) {
-        Post post = postRepository.getByPostId(postId);
-        return PostResponse.from(post);
+    public PostResponse read(LoginUser loginUser, Long postId) {
+        Post post = postRepository.getPostWithPointAndMemberById(postId);
+        return PostResponse.from(post, loginUser.memberId());
     }
 
     @Transactional(readOnly = true)
-    public PostsResponse readAllByTripId(Long tripId) {
+    public PostResponse readByPointId(LoginUser loginUser, Long pointId) {
+        Post post = postRepository.getPostWithPointAndMemberByPointId(pointId);
+        return PostResponse.from(post, loginUser.memberId());
+    }
+
+    @Transactional(readOnly = true)
+    public PostsResponse readAllByTripId(LoginUser loginUser, Long tripId) {
         if (!tripRepository.existsById(tripId)) {
             throw new TripException(TRIP_NOT_FOUND);
         }
 
-        return postRepository.findAllByTripId(tripId).stream()
+        return postRepository.findAllPostWithPointAndMemberByTripId(tripId).stream()
                 .sorted(comparing(Post::pointRecordedAt).reversed())
-                .collect(collectingAndThen(toList(), PostsResponse::from));
+                .collect(collectingAndThen(toList(), posts -> PostsResponse.from(posts, loginUser.memberId())));
     }
 
     public void update(LoginUser loginUser, Long postId, PostUpdateRequest postUpdateRequest, MultipartFile file) {
@@ -113,7 +124,7 @@ public class PostService {
 
         Post post = postRepository.getByPostId(postId);
         post.validateAuthorization(memberId);
-        Trip trip = tripRepository.getById(post.tripId());
+        Trip trip = tripRepository.getByTripId(post.tripId());
         trip.validateAuthorization(memberId);
 
         post.changeTitle(postUpdateRequest.title());
@@ -124,28 +135,26 @@ public class PostService {
     public void delete(LoginUser loginUser, Long postId) {
         Post post = postRepository.getByPostId(postId);
         post.validateAuthorization(loginUser.memberId());
+        Point point = post.point();
+        point.unregisterPost();
         postRepository.deleteById(postId);
     }
 
     @Transactional(readOnly = true)
-    public PostsSearchResponse readAll(PostSearchRequest postSearchRequest) {
-        PostSearchPaging postSearchPaging = postSearchRequest.toPostSearchPaging();
+    public PostsSearchResponse readAll(LoginUser loginUser, PostSearchRequest postSearchRequest) {
+        PostSearchConditions conditions = postSearchRequest.toPostSearchConditions();
+        PostPaging postPaging = postSearchRequest.toPostPaging();
 
-        List<Post> posts = postQueryService.findAllByConditions(
-                postSearchRequest.toPostSearchConditions(),
-                postSearchPaging
-        );
+        List<Post> posts = postDynamicQueryRepository.findAllByConditions(conditions, postPaging);
 
-        List<PostSearchResponse> postSearchResponses = posts.stream()
-                .map(PostSearchResponse::from)
+        List<PostSearchResponse> responses = posts.stream()
+                .map(post -> PostSearchResponse.from(post, loginUser.memberId()))
                 .toList();
-        boolean hasNextPage = (posts.size() == postSearchPaging.limit() + 1);
 
-        if (hasNextPage) {
-            postSearchResponses = postSearchResponses.subList(0, postSearchPaging.limit());
+        if (postPaging.hasNextPage(responses.size())) {
+            return PostsSearchResponse.of(responses.subList(FIRST_INDEX, postPaging.limit()), true);
         }
-
-        return PostsSearchResponse.of(postSearchResponses, hasNextPage);
+        return PostsSearchResponse.of(responses, false);
     }
 }
 

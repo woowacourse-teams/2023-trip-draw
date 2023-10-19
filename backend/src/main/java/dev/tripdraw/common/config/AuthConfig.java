@@ -29,6 +29,8 @@ public class AuthConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api-docs")
                 .excludePathPatterns("/v3/api-docs/**")
                 .excludePathPatterns("/oauth/**")
-                .excludePathPatterns("/actuator/**");
+                .excludePathPatterns("/profile")
+                .excludePathPatterns("/admin/**")
+                .excludePathPatterns("/admin");
     }
 }

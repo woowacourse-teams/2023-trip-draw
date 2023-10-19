@@ -1,6 +1,6 @@
 package dev.tripdraw.trip.acceptance;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.MemberFixture.새로운_사용자;
 import static dev.tripdraw.test.fixture.TestFixture.서울_2022_1_2_일;
 import static dev.tripdraw.test.fixture.TestFixture.서울_2023_1_1_일;
 import static dev.tripdraw.test.fixture.TestFixture.양양_2021_3_2_화;
@@ -42,8 +42,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class TripSearchAcceptanceTest extends ControllerTest {
 
     private static final String WRONG_TOKEN = "wrong.long.token";
@@ -69,9 +67,9 @@ public class TripSearchAcceptanceTest extends ControllerTest {
     public void setUp() {
         super.setUp();
 
-        Member huchu = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        Member reo = memberRepository.save(new Member("리오", "kakaoId", KAKAO));
-        Member herb = memberRepository.save(new Member("허브", "kakaoId", KAKAO));
+        Member huchu = memberRepository.save(새로운_사용자("통후추"));
+        Member reo = memberRepository.save(새로운_사용자("리오"));
+        Member herb = memberRepository.save(새로운_사용자("허브"));
 
         huchuToken = jwtTokenProvider.generateAccessToken(huchu.id().toString());
         String reoToken = jwtTokenProvider.generateAccessToken(reo.id().toString());
@@ -94,7 +92,6 @@ public class TripSearchAcceptanceTest extends ControllerTest {
 
         lastViewedId = 허브_제주_2023_2_1_수;
     }
-
 
     @Nested
     class 감상이_있는_모든_여행을_페이지네이션으로_조회할_때 {

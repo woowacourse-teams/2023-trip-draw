@@ -28,7 +28,7 @@ public record PostSearchRequest(
                 .build();
     }
 
-    public PostSearchPaging toPostSearchPaging() {
-        return new PostSearchPaging(lastViewedId, limit);
+    public PostPaging toPostPaging() {
+        return new PostPaging(lastViewedId, limit);
     }
 }

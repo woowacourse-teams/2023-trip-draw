@@ -1,10 +1,14 @@
 package dev.tripdraw.auth.presentation;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.AuthFixture.OAUTH_TOKEN;
 import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_ACCESS_TOKEN_설정;
 import static dev.tripdraw.test.fixture.AuthFixture.만료된_토큰_생성용_REFRESH_TOKEN_설정;
+import static dev.tripdraw.test.fixture.MemberFixture.OAUTH_아이디;
+import static dev.tripdraw.test.fixture.MemberFixture.닉네임이_없는_사용자;
+import static dev.tripdraw.test.fixture.MemberFixture.사용자;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -28,20 +32,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AuthControllerTest extends ControllerTest {
-
-    @LocalServerPort
-    private int port;
 
     @MockBean
     private OauthClientProvider oauthClientProvider;
@@ -57,9 +53,8 @@ class AuthControllerTest extends ControllerTest {
 
     @BeforeEach
     public void setUp() {
-        RestAssured.port = port;
-        when(oauthClientProvider.provide(KAKAO))
-                .thenReturn(new TestKakaoApiClient());
+        super.setUp();
+        given(oauthClientProvider.provide(KAKAO)).willReturn(new TestKakaoApiClient());
     }
 
     @Nested
@@ -68,8 +63,8 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 가입된_회원이면_토큰이_포함된_응답을_반환한다() {
             // given
-            memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-            OauthRequest oauthRequest = new OauthRequest(KAKAO, "oauth.kakao.token");
+            memberRepository.save(사용자());
+            OauthRequest oauthRequest = new OauthRequest(KAKAO, OAUTH_TOKEN);
 
             // when
             ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -92,7 +87,7 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 신규_회원이면_회원을_저장하고_빈_토큰이_포함된_응답을_반환한다() {
             // given
-            OauthRequest oauthRequest = new OauthRequest(KAKAO, "oauth.kakao.token");
+            OauthRequest oauthRequest = new OauthRequest(KAKAO, OAUTH_TOKEN);
 
             // when
             ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -119,10 +114,8 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 정상_등록하면_토큰이_포함된_응답을_반환한다() {
             // given
-            Member member = Member.of("kakaoId", KAKAO);
-            memberRepository.save(member);
-
-            RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, "oauth.kakao.token");
+            memberRepository.save(닉네임이_없는_사용자(OAUTH_아이디));
+            RegisterRequest registerRequest = new RegisterRequest("통후추", KAKAO, OAUTH_TOKEN);
 
             // when
             ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -145,7 +138,7 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 회원이_존재하지_않으면_예외가_발생한다() {
             // given
-            RegisterRequest registerRequest = new RegisterRequest("저장안된후추", KAKAO, "oauth.kakao.token");
+            RegisterRequest registerRequest = new RegisterRequest("저장안된후추", KAKAO, OAUTH_TOKEN);
 
             // expect
             RestAssured.given().log().all()
@@ -159,8 +152,8 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 이미_존재하는_닉네임이면_예외가_발생한다() {
             // given
-            Member member = memberRepository.save(new Member("중복닉네임", "kakaoId", KAKAO));
-            RegisterRequest registerRequest = new RegisterRequest(member.nickname(), KAKAO, "oauth.kakao.token");
+            Member member = memberRepository.save(사용자());
+            RegisterRequest registerRequest = new RegisterRequest(member.nickname(), KAKAO, OAUTH_TOKEN);
 
             // expect
             RestAssured.given().log().all()
@@ -192,7 +185,7 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 만료기간이_남은_Refresh_토큰이면_Access_토큰과_Refresh_토큰을_재발급한다() {
             // given
-            Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+            Member member = memberRepository.save(사용자());
             String refreshToken = jwtTokenProvider.generateRefreshToken();
             refreshTokenRepository.save(new RefreshToken(member.id(), refreshToken));
             TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(refreshToken);
@@ -207,7 +200,6 @@ class AuthControllerTest extends ControllerTest {
 
             // then
             OauthResponse oauthResponse = response.as(OauthResponse.class);
-
             assertSoftly(softly -> {
                 softly.assertThat(response.statusCode()).isEqualTo(OK.value());
                 softly.assertThat(oauthResponse.accessToken()).isNotEmpty();
@@ -218,7 +210,7 @@ class AuthControllerTest extends ControllerTest {
         @Test
         void 만료기간이_지난_Refresh_토큰이면_401_예외가_발생한다() {
             // given
-            Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
+            Member member = memberRepository.save(사용자());
             JwtTokenProvider expiredTokenProvider = new JwtTokenProvider(
                     만료된_토큰_생성용_ACCESS_TOKEN_설정(),
                     만료된_토큰_생성용_REFRESH_TOKEN_설정()
@@ -227,6 +219,7 @@ class AuthControllerTest extends ControllerTest {
             refreshTokenRepository.save(new RefreshToken(member.id(), expiredToken));
             TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest(expiredToken);
 
+            // expect
             RestAssured.given().log().all()
                     .contentType(APPLICATION_JSON_VALUE)
                     .body(tokenRefreshRequest)

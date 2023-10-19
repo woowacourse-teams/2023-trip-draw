@@ -6,8 +6,8 @@ import static dev.tripdraw.test.fixture.AuthFixture.테스트_ACCESS_TOKEN_설�
 import static dev.tripdraw.test.fixture.AuthFixture.테스트_REFRESH_TOKEN_설정;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.mock;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import dev.tripdraw.auth.exception.AuthException;
@@ -34,7 +34,7 @@ class AuthExtractorTest {
         String accessToken = jwtTokenProvider.generateAccessToken("1");
         HttpServletRequest request = mock(HttpServletRequest.class);
         String encoded = "Bearer " + accessToken;
-        when(request.getHeader(AUTHORIZATION)).thenReturn(encoded);
+        given(request.getHeader(AUTHORIZATION)).willReturn(encoded);
 
         // when
         LoginUser loginUser = authExtractor.extract(request);
@@ -48,7 +48,7 @@ class AuthExtractorTest {
         // given
         HttpServletRequest request = mock(HttpServletRequest.class);
         String encoded = "Basic aGVsbG86d29ybGQ=";
-        when(request.getHeader(AUTHORIZATION)).thenReturn(encoded);
+        given(request.getHeader(AUTHORIZATION)).willReturn(encoded);
 
         // expect
         assertThatThrownBy(() -> authExtractor.extract(request))
@@ -60,7 +60,7 @@ class AuthExtractorTest {
     void 요청_헤더에_인증_정보가_없을_경우_예외를_발생시킨다() {
         // given
         HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getHeader(AUTHORIZATION)).thenReturn(null);
+        given(request.getHeader(AUTHORIZATION)).willReturn(null);
 
         // expect
         assertThatThrownBy(() -> authExtractor.extract(request))
@@ -73,7 +73,7 @@ class AuthExtractorTest {
         // given
         HttpServletRequest request = mock(HttpServletRequest.class);
         String notEncoded = "Bearer wrong.long.token";
-        when(request.getHeader(AUTHORIZATION)).thenReturn(notEncoded);
+        given(request.getHeader(AUTHORIZATION)).willReturn(notEncoded);
 
         // expect
         Assertions.assertThatThrownBy(() -> authExtractor.extract(request))

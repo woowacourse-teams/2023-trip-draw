@@ -12,6 +12,12 @@ public record PostResponse(
         @Schema(description = "감상이 속하는 여행의 Id", example = "1")
         Long tripId,
 
+        @Schema(description = "나의 감상 확인 flag", example = "true")
+        boolean isMine,
+
+        @Schema(description = "작성자 닉네임", example = "통후추")
+        String authorNickname,
+
         @Schema(description = "제목", example = "우도의 바닷가")
         String title,
 
@@ -33,10 +39,12 @@ public record PostResponse(
 
     private static final String EMPTY_IMAGE_URL = "";
 
-    public static PostResponse from(Post post) {
+    public static PostResponse from(Post post, Long loginUserId) {
         return new PostResponse(
                 post.id(),
                 post.tripId(),
+                post.member().id().equals(loginUserId),
+                post.member().nickname(),
                 post.title(),
                 post.address(),
                 post.writing(),

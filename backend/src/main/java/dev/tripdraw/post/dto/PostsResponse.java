@@ -8,9 +8,9 @@ public record PostsResponse(
         @Schema(description = "감상 목록")
         List<PostResponse> posts
 ) {
-    public static PostsResponse from(List<Post> posts) {
+    public static PostsResponse from(List<Post> posts, Long loginUserId) {
         return new PostsResponse(posts.stream()
-                .map(PostResponse::from)
+                .map(post -> PostResponse.from(post, loginUserId))
                 .toList());
     }
 }

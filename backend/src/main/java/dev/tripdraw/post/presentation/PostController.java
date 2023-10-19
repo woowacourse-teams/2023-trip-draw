@@ -79,8 +79,7 @@ public class PostController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<PostCreateResponse> create(
-            @Auth
-            LoginUser loginUser,
+            @Auth LoginUser loginUser,
 
             @Parameter(description = "감상 정보를 담은 JSON 객체")
             @Valid
@@ -100,12 +99,26 @@ public class PostController {
             responseCode = "200",
             description = "특정 감상 상세 조회 성공."
     )
-    @GetMapping("/posts/{postId}")
+    @GetMapping(value = "/posts/{postId}", headers = "X-version=V2")
     public ResponseEntity<PostResponse> read(
             @Auth LoginUser loginUser,
             @PathVariable Long postId
     ) {
-        PostResponse response = postService.read(postId);
+        PostResponse response = postService.read(loginUser, postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "위치정보로 감상 조회 API", description = "특정한 1개의 감상을 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "위치정보로 감상 조회 성공."
+    )
+    @GetMapping(value = "/points/{pointId}/post", headers = "X-version=V2")
+    public ResponseEntity<PostResponse> readByPointId(
+            @Auth LoginUser loginUser,
+            @PathVariable Long pointId
+    ) {
+        PostResponse response = postService.readByPointId(loginUser, pointId);
         return ResponseEntity.ok(response);
     }
 
@@ -114,12 +127,12 @@ public class PostController {
             responseCode = "200",
             description = "특정 여행의 모든 감상 조회 성공."
     )
-    @GetMapping("/trips/{tripId}/posts")
+    @GetMapping(value = "/trips/{tripId}/posts", headers = "X-version=V2")
     public ResponseEntity<PostsResponse> readAllPostsOfTrip(
             @Auth LoginUser loginUser,
             @PathVariable Long tripId
     ) {
-        PostsResponse response = postService.readAllByTripId(tripId);
+        PostsResponse response = postService.readAllByTripId(loginUser, tripId);
         return ResponseEntity.ok(response);
     }
 
@@ -128,12 +141,12 @@ public class PostController {
             responseCode = "200",
             description = "모든 감상 조회 성공."
     )
-    @GetMapping("/posts")
+    @GetMapping(value = "/posts", headers = "X-version=V2")
     public ResponseEntity<PostsSearchResponse> readAllPosts(
             @Auth LoginUser loginUser,
             PostSearchRequest postSearchRequest
     ) {
-        PostsSearchResponse response = postService.readAll(postSearchRequest);
+        PostsSearchResponse response = postService.readAll(loginUser, postSearchRequest);
         return ResponseEntity.ok(response);
     }
 
@@ -147,8 +160,7 @@ public class PostController {
             consumes = MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<Void> update(
-            @Auth
-            LoginUser loginUser,
+            @Auth LoginUser loginUser,
 
             @PathVariable Long postId,
 

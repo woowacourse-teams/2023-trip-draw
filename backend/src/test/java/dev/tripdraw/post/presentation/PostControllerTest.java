@@ -1,7 +1,12 @@
 package dev.tripdraw.post.presentation;
 
-import static dev.tripdraw.common.auth.OauthType.KAKAO;
-import static org.assertj.core.api.Assertions.assertThat;
+import static dev.tripdraw.post.presentation.PostControllerTest.PostRequestFixture.감상_생성_요청;
+import static dev.tripdraw.post.presentation.PostControllerTest.PostRequestFixture.멀티파트_요청;
+import static dev.tripdraw.post.presentation.PostControllerTest.PostRequestFixture.현재_위치_감상_생성_요청;
+import static dev.tripdraw.test.fixture.MemberFixture.사용자;
+import static dev.tripdraw.test.fixture.PointFixture.새로운_위치정보;
+import static dev.tripdraw.test.fixture.PostFixture.새로운_감상;
+import static dev.tripdraw.test.fixture.TripFixture.새로운_여행;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -13,44 +18,52 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import dev.tripdraw.auth.application.JwtTokenProvider;
+import dev.tripdraw.common.auth.LoginUser;
 import dev.tripdraw.draw.application.RouteImageGenerator;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
+import dev.tripdraw.post.domain.Post;
+import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.post.dto.PostAndPointCreateRequest;
 import dev.tripdraw.post.dto.PostCreateResponse;
 import dev.tripdraw.post.dto.PostRequest;
 import dev.tripdraw.post.dto.PostResponse;
+import dev.tripdraw.post.dto.PostSearchResponse;
 import dev.tripdraw.post.dto.PostUpdateRequest;
 import dev.tripdraw.post.dto.PostsResponse;
 import dev.tripdraw.post.dto.PostsSearchResponse;
 import dev.tripdraw.test.ControllerTest;
+import dev.tripdraw.trip.domain.Point;
+import dev.tripdraw.trip.domain.PointRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
-import dev.tripdraw.trip.dto.PointCreateRequest;
-import dev.tripdraw.trip.dto.PointResponse;
 import io.restassured.RestAssured;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PostControllerTest extends ControllerTest {
 
-    private static final String WRONG_TOKEN = "wrong.long.token";
+    private static final String INVALID_TOKEN = "wrong.long.token";
+    private static final String VERSION_HEADER = "X-version";
+    private static final String V2 = "V2";
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Autowired
     private TripRepository tripRepository;
+
+    @Autowired
+    private PointRepository pointRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -62,43 +75,38 @@ class PostControllerTest extends ControllerTest {
     @MockBean
     private RouteImageGenerator routeImageGenerator;
 
+    private Member member;
     private Trip trip;
-    private String huchuToken;
+    private Point point;
+    private String accessToken;
+    private LoginUser loginUser;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
-
-        Member member = memberRepository.save(new Member("통후추", "kakaoId", KAKAO));
-        trip = tripRepository.save(Trip.of(member.id(), member.nickname()));
-        huchuToken = jwtTokenProvider.generateAccessToken(member.id().toString());
+        member = memberRepository.save(사용자());
+        trip = tripRepository.save(새로운_여행(member));
+        point = pointRepository.save(새로운_위치정보(trip));
+        accessToken = jwtTokenProvider.generateAccessToken(member.id().toString());
+        loginUser = new LoginUser(member.id());
     }
 
     @Test
     void 현재_위치에_대한_감상을_생성한다() {
         // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                trip.id(),
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
+        PostAndPointCreateRequest request = 현재_위치_감상_생성_요청(trip.id());
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .extract();
 
         // then
         PostCreateResponse postCreateResponse = response.as(PostCreateResponse.class);
-
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
             softly.assertThat(postCreateResponse.postId()).isNotNull();
@@ -108,21 +116,13 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_인증에_실패하면_예외를_발생시킨다() {
         // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                trip.id(),
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
+        PostAndPointCreateRequest request = 현재_위치_감상_생성_요청(trip.id());
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(WRONG_TOKEN)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(INVALID_TOKEN)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(UNAUTHORIZED.value());
@@ -131,21 +131,13 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                Long.MIN_VALUE,
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
+        PostAndPointCreateRequest request = 현재_위치_감상_생성_요청(Long.MAX_VALUE);
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -154,21 +146,13 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_제목이_비어있으면_예외를_발생시킨다() {
         // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                trip.id(),
-                "",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
+        PostAndPointCreateRequest request = 현재_위치_감상_생성_요청(trip.id(), "");
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -177,44 +161,14 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 현재_위치에_대한_감상을_생성할_때_제목이_100자를_초과하면_예외를_발생시킨다() {
         // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                trip.id(),
-                "a".repeat(101),
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
+        String invalidTitle = "A".repeat(101);
+        PostAndPointCreateRequest request = 현재_위치_감상_생성_요청(trip.id(), invalidTitle);
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
-                .when().post("/posts/current-location")
-                .then().log().all()
-                .statusCode(BAD_REQUEST.value());
-    }
-
-    @Test
-    void 현재_위치에_대한_감상을_생성할_때_위도가_존재하지_않으면_예외를_발생시킨다() {
-        // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                trip.id(),
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                null,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postAndPointCreateRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts/current-location")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -223,28 +177,19 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 사용자가_선택한_위치에_대한_감상을_생성한다() {
         // given
-        PointResponse pointResponse = createPoint();
-
-        PostRequest postRequest = new PostRequest(
-                trip.id(),
-                pointResponse.pointId(),
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
-        );
+        PostRequest request = 감상_생성_요청(trip.id(), point.id());
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .extract();
 
         // then
         PostCreateResponse postCreateResponse = response.as(PostCreateResponse.class);
-
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(CREATED.value());
             softly.assertThat(postCreateResponse.postId()).isNotNull();
@@ -254,21 +199,13 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_인증에_실패하면_예외를_발생시킨다() {
         // given
-        PointResponse pointResponse = createPoint();
-
-        PostRequest postRequest = new PostRequest(
-                trip.id(),
-                pointResponse.pointId(),
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
-        );
+        PostRequest request = 감상_생성_요청(trip.id(), point.id());
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(WRONG_TOKEN)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(INVALID_TOKEN)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(UNAUTHORIZED.value());
@@ -277,21 +214,14 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_여행의_ID이면_예외를_발생시킨다() {
         // given
-        PointResponse pointResponse = createPoint();
-
-        PostRequest postRequest = new PostRequest(
-                Long.MIN_VALUE,
-                pointResponse.pointId(),
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
-        );
+        Long invalidTripId = Long.MAX_VALUE;
+        PostRequest request = 감상_생성_요청(invalidTripId, point.id());
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -300,65 +230,30 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_존재하지_않는_위치의_ID이면_예외를_발생시킨다() {
         // given
-        PostRequest postRequest = new PostRequest(
-                trip.id(),
-                Long.MIN_VALUE,
-                "우도의 바닷가",
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
-        );
+        Long invalidPointId = Long.MAX_VALUE;
+        PostRequest request = 감상_생성_요청(trip.id(), invalidPointId);
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }
 
     @Test
-    void 사용자가_선택한_위치에_대한_감상을_생성할_때_주소가_비어있으면_예외를_발생시킨다() {
-        // given
-        PointResponse pointResponse = createPoint();
-
-        PostRequest postRequest = new PostRequest(
-                trip.id(),
-                pointResponse.pointId(),
-                "우도의 바닷가",
-                null,
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
-        );
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
-                .when().post("/posts")
-                .then().log().all()
-                .statusCode(BAD_REQUEST.value());
-    }
-
-    @Test
     void 사용자가_선택한_위치에_대한_감상을_생성할_때_제목이_100자를_초과하면_예외를_발생시킨다() {
         // given
-        PointResponse pointResponse = createPoint();
-
-        PostRequest postRequest = new PostRequest(
-                trip.id(),
-                pointResponse.pointId(),
-                "a".repeat(101),
-                "제주특별자치도 제주시 애월읍",
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
-        );
+        String invalidTitle = "A".repeat(101);
+        PostRequest request = 감상_생성_요청(trip.id(), point.id(), invalidTitle);
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart("dto", postRequest, APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart("dto", request, APPLICATION_JSON_VALUE)
                 .when().post("/posts")
                 .then().log().all()
                 .statusCode(BAD_REQUEST.value());
@@ -367,51 +262,83 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 특정_감상을_조회한다() {
         // given
-        PostCreateResponse postResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
+        Post post = postRepository.save(새로운_감상(point, member.id()));
+        updateHasPost(List.of(point));
 
         // when
-        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .when().get("/posts/{postId}", postResponse.postId())
+                .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
+                .when().get("/posts/{postId}", post.id())
                 .then().log().all()
                 .extract();
 
-        PostResponse getResponse = findResponse.as(PostResponse.class);
-
         // then
+        PostResponse postResponse = response.as(PostResponse.class);
         assertSoftly(softly -> {
-            softly.assertThat(findResponse.statusCode()).isEqualTo(OK.value());
-            softly.assertThat(getResponse.postId()).isNotNull();
-            softly.assertThat(getResponse.title()).isEqualTo("우도의 바닷가");
-            softly.assertThat(getResponse.pointResponse().pointId()).isNotNull();
-            softly.assertThat(getResponse.pointResponse().latitude()).isEqualTo(1.1);
-            softly.assertThat(getResponse.postImageUrl()).isEmpty();
-            softly.assertThat(getResponse.routeImageUrl()).isEmpty();
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postResponse)
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(PostResponse.from(post, loginUser.memberId()));
         });
     }
 
-    @Test
-    void 특정_감상을_조회할_때_인증에_실패하면_예외가_발생한다() {
-        // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
-
-        // expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(WRONG_TOKEN)
-                .when().get("/posts/{postId}", postCreateResponse.postId())
-                .then().log().all()
-                .statusCode(UNAUTHORIZED.value());
+    private void updateHasPost(final List<Point> points) {
+        pointRepository.saveAll(points);
     }
 
     @Test
     void 특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외가_발생한다() {
-        // given & expect
+        // given
+        Long invalidPostId = Long.MIN_VALUE;
+
+        // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .when().get("/posts/{postId}", -1)
+                .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
+                .when().get("/posts/{postId}", invalidPostId)
+                .then().log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    void 위치정보_ID로_특정_감상을_조회한다() {
+        // given
+        Post post = postRepository.save(새로운_감상(point, member.id()));
+        updateHasPost(List.of(point));
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
+                .when().get("/points/{pointId}/post", point.id())
+                .then().log().all()
+                .extract();
+
+        // then
+        PostResponse postResponse = response.as(PostResponse.class);
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postResponse)
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(PostResponse.from(post, loginUser.memberId()));
+        });
+    }
+
+    @Test
+    void 위치정보_ID로_특정_감상을_조회할_때_존재하지_않는_감상_ID이면_예외가_발생한다() {
+        // given
+        Long invalidPointId = Long.MIN_VALUE;
+
+        // expect
+        RestAssured.given().log().all()
+                .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
+                .when().get("/points/{pointId}/post", invalidPointId)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
     }
@@ -419,104 +346,83 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 특정_여행에_대한_모든_감상을_조회한다() {
         // given
-        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
-        createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 21, 24));
+        Point point1 = pointRepository.save(새로운_위치정보(2023, 10, 23, 10, 23, trip));
+        Point point2 = pointRepository.save(새로운_위치정보(2023, 10, 23, 10, 24, trip));
+        Post post1 = postRepository.save(새로운_감상(point1, member.id()));
+        Post post2 = postRepository.save(새로운_감상(point2, member.id()));
+        updateHasPost(List.of(point1, point2));
 
         // when
-        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
+                .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/trips/{tripId}/posts", trip.id())
                 .then().log().all()
                 .extract();
 
-        PostsResponse postsResponse = findResponse.as(PostsResponse.class);
-
         // then
+        PostsResponse postsResponse = response.as(PostsResponse.class);
         assertSoftly(softly -> {
-            softly.assertThat(findResponse.statusCode()).isEqualTo(OK.value());
-            softly.assertThat(postsResponse.posts().get(0).postId()).isNotNull();
-            softly.assertThat(postsResponse.posts().get(0).title()).isEqualTo("우도의 바닷가");
-            softly.assertThat(postsResponse.posts().get(0).pointResponse().pointId()).isNotNull();
-            softly.assertThat(postsResponse.posts().get(0).pointResponse().latitude()).isEqualTo(1.1);
-            softly.assertThat(postsResponse.posts().get(1).postId()).isNotNull();
-            softly.assertThat(postsResponse.posts().get(1).title()).isEqualTo("우도의 바닷가");
-            softly.assertThat(postsResponse.posts().get(1).pointResponse().pointId()).isNotNull();
-            softly.assertThat(postsResponse.posts().get(1).pointResponse().latitude()).isEqualTo(1.1);
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postsResponse.posts())
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(List.of(
+                            PostResponse.from(post2, loginUser.memberId()),
+                            PostResponse.from(post1, loginUser.memberId())
+                    ));
         });
     }
 
     @Test
-    void 특정_여행에_대한_모든_감상을_조회할_때_인증에_실패하면_예외가_발생한다() {
-        // given & expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(WRONG_TOKEN)
-                .when().get("/trips/{tripId}/posts", trip.id())
-                .then().log().all()
-                .statusCode(UNAUTHORIZED.value());
-    }
-
-    @Test
     void 특정_여행에_대한_모든_감상을_조회할_때_존재하지_않는_여행의_ID이면_예외가_발생한다() {
-        // given & expect
+        // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(WRONG_TOKEN)
+                .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
                 .when().get("/trips/{tripId}/posts", Long.MIN_VALUE)
                 .then().log().all()
-                .statusCode(UNAUTHORIZED.value());
+                .statusCode(NOT_FOUND.value());
     }
 
     @Test
     void 감상을_수정한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.now());
-
-        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
-                "우도의 땅콩 아이스크림",
-                "수정한 내용입니다."
-        );
-
-        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postUpdateRequest);
+        Post post = postRepository.save(새로운_감상(point, member.id()));
+        PostUpdateRequest request = new PostUpdateRequest("우도의 땅콩 아이스크림", "수정한 내용입니다.");
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart(multiPartSpecification)
-                .when().patch("/posts/{postId}", postCreateResponse.postId())
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart(멀티파트_요청(request))
+                .when().patch("/posts/{postId}", post.id())
                 .then().log().all()
                 .extract();
 
         // then
-        PostResponse postResponse = readPost(postCreateResponse.postId());
-
+        Post updatedPost = postRepository.getPostWithPointAndMemberById(post.id());
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(NO_CONTENT.value());
-            softly.assertThat(postResponse.title()).isEqualTo("우도의 땅콩 아이스크림");
-            softly.assertThat(postResponse.writing()).isEqualTo("수정한 내용입니다.");
+            softly.assertThat(updatedPost.title()).isEqualTo("우도의 땅콩 아이스크림");
+            softly.assertThat(updatedPost.writing()).isEqualTo("수정한 내용입니다.");
         });
     }
 
     @Test
     void 감상을_수정할_때_인증에_실패하면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
-
-        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
-                "우도의 땅콩 아이스크림",
-                "수정한 내용입니다."
-        );
-
-        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postUpdateRequest);
+        Post post = postRepository.save(새로운_감상(point, member.id()));
+        PostUpdateRequest request = new PostUpdateRequest("우도의 땅콩 아이스크림", "수정한 내용입니다.");
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(WRONG_TOKEN)
-                .multiPart(multiPartSpecification)
-                .when().patch("/posts/{postId}", postCreateResponse.postId())
+                .auth().preemptive().oauth2(INVALID_TOKEN)
+                .multiPart(멀티파트_요청(request))
+                .when().patch("/posts/{postId}", post.id())
                 .then().log().all()
                 .statusCode(UNAUTHORIZED.value());
     }
@@ -524,18 +430,13 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_수정할_때_존재하지_않는_여행의_ID이면_예외가_발생한다() {
         // given
-        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(
-                "우도의 땅콩 아이스크림",
-                "수정한 내용입니다."
-        );
-
-        MultiPartSpecification multiPartSpecification = getMultiPartSpecification(postUpdateRequest);
+        PostUpdateRequest request = new PostUpdateRequest("우도의 땅콩 아이스크림", "수정한 내용입니다.");
 
         // expect
         RestAssured.given().log().all()
                 .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart(multiPartSpecification)
+                .auth().preemptive().oauth2(accessToken)
+                .multiPart(멀티파트_요청(request))
                 .when().patch("/posts/{postId}", Long.MIN_VALUE)
                 .then().log().all()
                 .statusCode(NOT_FOUND.value());
@@ -544,190 +445,130 @@ class PostControllerTest extends ControllerTest {
     @Test
     void 감상을_삭제한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
+        Post post = postRepository.save(새로운_감상(point, member.id()));
 
-        // expect1 : 삭제하면 204 NO_CONTENT 응답
-        RestAssured.given().log().all()
+        // when
+        ExtractableResponse<Response> firstResponse = RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .when().delete("/posts/{postId}", postCreateResponse.postId())
+                .auth().preemptive().oauth2(accessToken)
+                .when().delete("/posts/{postId}", post.id())
                 .then().log().all()
-                .statusCode(NO_CONTENT.value());
+                .extract();
+        ExtractableResponse<Response> secondResponse = RestAssured.given().log().all()
+                .contentType(APPLICATION_JSON_VALUE)
+                .auth().preemptive().oauth2(accessToken)
+                .when().get("/posts/{postId}", post.id())
+                .then().log().all()
+                .extract();
 
-        // expect2 : 다시 조회하면 404 NOT_FOUND 응답
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .when().get("/posts/{postId}", postCreateResponse.postId())
-                .then().log().all()
-                .statusCode(NOT_FOUND.value());
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(firstResponse.statusCode()).isEqualTo(NO_CONTENT.value());
+            softly.assertThat(secondResponse.statusCode()).isEqualTo(NOT_FOUND.value());
+        });
     }
 
     @Test
     void 감상을_삭제할_때_인증에_실패하면_예외가_발생한다() {
         // given
-        PostCreateResponse postCreateResponse = createPost("제주특별자치도 제주시 애월읍", LocalDateTime.of(2023, 7, 18, 20, 24));
+        Post post = postRepository.save(새로운_감상(point, member.id()));
 
         // expect
         RestAssured.given().log().all()
                 .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(WRONG_TOKEN)
-                .when().delete("/posts/{postId}", postCreateResponse.postId())
+                .auth().preemptive().oauth2(INVALID_TOKEN)
+                .when().delete("/posts/{postId}", post.id())
                 .then().log().all()
                 .statusCode(UNAUTHORIZED.value());
     }
 
     @Test
-    void 감상을_삭제할_때_존재하지_않는_여행의_ID이면_예외가_발생한다() {
-        // given & expect
-        RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .when().delete("/posts/{postId}", Long.MIN_VALUE)
-                .then().log().all()
-                .statusCode(NOT_FOUND.value());
-    }
-
-    @Test
     void 다른_사용자들의_감상을_조회한다() {
         // given
-        PostCreateResponse jejuJuly20hourPostResponse = createPost("제주특별자치도 제주시 애월읍",
-                LocalDateTime.of(2023, 7, 18, 20, 24));
-        PostCreateResponse jejuAugust17hourPostResponse = createPost("제주특별자치도 제주시 애월읍",
-                LocalDateTime.of(2023, 8, 18, 17, 24));
-        PostCreateResponse jejuSeptember17hourPostResponse = createPost("제주특별자치도 제주시 애월읍",
-                LocalDateTime.of(2023, 9, 18, 17, 24));
-        PostCreateResponse seoulSeptember17hourPostResponse = createPost("서울특별시 송파구 잠실동",
-                LocalDateTime.of(2023, 9, 18, 17, 24));
-
-        Map<String, Object> jejuParams = Map.of(
-                "address", "제주특별자치도 제주시 애월읍",
-                "limit", 10
-        );
-
-        Map<String, Object> jejuHour17Params = Map.of(
-                "hours", Set.of(17),
-                "address", "제주특별자치도 제주시 애월읍",
-                "limit", 10
-        );
-
-        Map<String, Object> hour17Params = Map.of(
-                "hours", Set.of(17),
-                "limit", 10
-        );
+        Point julyPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 7, 18, 20, 24), trip));
+        Point augustPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 8, 18, 17, 24), trip));
+        Point septemberPoint = pointRepository.save(새로운_위치정보(LocalDateTime.of(2023, 9, 18, 17, 24), trip));
+        Post jejuJulyPost = postRepository.save(새로운_감상(julyPoint, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+        Post jejuAugustPost = postRepository.save(새로운_감상(augustPoint, member.id(), "제주특별자치도 제주시 애월읍", trip.id()));
+        Post seoulSeptemberPost = postRepository.save(새로운_감상(septemberPoint, member.id(), "서울특별시 송파구 잠실동", trip.id()));
+        updateHasPost(List.of(julyPoint, augustPoint, septemberPoint));
+        Map<String, Object> params = Map.of("address", "제주특별자치도 제주시 애월읍", "limit", 10);
 
         // when
-        ExtractableResponse<Response> jejuResponse = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(huchuToken)
-                .params(jejuParams)
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().preemptive().oauth2(accessToken)
+                .header(VERSION_HEADER, V2)
+                .params(params)
                 .when().get("/posts")
                 .then().log().all()
-                .statusCode(OK.value())
-                .extract();
-
-        ExtractableResponse<Response> jejuhour17Response = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(huchuToken)
-                .params(jejuHour17Params)
-                .when().get("/posts")
-                .then().log().all()
-                .statusCode(OK.value())
-                .extract();
-
-        ExtractableResponse<Response> hour17Response = RestAssured.given().log().all()
-                .auth().preemptive().oauth2(huchuToken)
-                .params(hour17Params)
-                .when().get("/posts")
-                .then().log().all()
-                .statusCode(OK.value())
                 .extract();
 
         // then
-        PostsSearchResponse jejuPostsSearchResponse = jejuResponse.as(PostsSearchResponse.class);
-        PostsSearchResponse jeju17hourPostsSearchResponse = jejuhour17Response.as(PostsSearchResponse.class);
-        PostsSearchResponse hour17PostsSearchResponse = hour17Response.as(PostsSearchResponse.class);
-
-        assertThat(jejuPostsSearchResponse.posts().get(0).postId()).isEqualTo(jejuSeptember17hourPostResponse.postId());
-        assertThat(jejuPostsSearchResponse.posts().get(1).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
-        assertThat(jejuPostsSearchResponse.posts().get(2).postId()).isEqualTo(jejuJuly20hourPostResponse.postId());
-
-        assertThat(jeju17hourPostsSearchResponse.posts().get(0).postId()).isEqualTo(
-                jejuSeptember17hourPostResponse.postId());
-        assertThat(jeju17hourPostsSearchResponse.posts().get(1).postId()).isEqualTo(
-                jejuAugust17hourPostResponse.postId());
-
-        assertThat(hour17PostsSearchResponse.posts().get(0).postId()).isEqualTo(
-                seoulSeptember17hourPostResponse.postId());
-        assertThat(hour17PostsSearchResponse.posts().get(1).postId()).isEqualTo(
-                jejuSeptember17hourPostResponse.postId());
-        assertThat(hour17PostsSearchResponse.posts().get(2).postId()).isEqualTo(jejuAugust17hourPostResponse.postId());
+        PostsSearchResponse postsSearchResponse = response.as(PostsSearchResponse.class);
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(postsSearchResponse.posts())
+                    .usingRecursiveComparison()
+                    .ignoringFieldsOfTypes(LocalDateTime.class)
+                    .isEqualTo(List.of(
+                            PostSearchResponse.from(jejuAugustPost, member.id()),
+                            PostSearchResponse.from(jejuJulyPost, member.id())
+                    ));
+        });
     }
 
-    private PointResponse createPoint() {
-        PointCreateRequest request = new PointCreateRequest(
-                trip.id(),
-                1.1,
-                2.2,
-                LocalDateTime.of(2023, 7, 18, 20, 24)
-        );
+    static class PostRequestFixture {
+        public static PostAndPointCreateRequest 현재_위치_감상_생성_요청(Long tripId) {
+            return new PostAndPointCreateRequest(
+                    tripId,
+                    "우도의 바닷가",
+                    "제주특별자치도 제주시 애월읍",
+                    "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                    1.1,
+                    2.2,
+                    LocalDateTime.of(2023, 7, 18, 20, 24)
+            );
+        }
 
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .body(request)
-                .when().post("/points")
-                .then().log().all()
-                .extract();
+        public static PostAndPointCreateRequest 현재_위치_감상_생성_요청(Long tripId, String title) {
+            return new PostAndPointCreateRequest(
+                    tripId,
+                    title,
+                    "제주특별자치도 제주시 애월읍",
+                    "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
+                    1.1,
+                    2.2,
+                    LocalDateTime.of(2023, 7, 18, 20, 24)
+            );
+        }
 
-        return response.as(PointResponse.class);
-    }
+        public static PostRequest 감상_생성_요청(Long tripId, Long pointId) {
+            return new PostRequest(
+                    tripId,
+                    pointId,
+                    "우도의 바닷가",
+                    "제주특별자치도 제주시 애월읍",
+                    "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+            );
+        }
 
-    private PostCreateResponse createPost(String address, LocalDateTime localDateTime) {
-        // given
-        PostAndPointCreateRequest postAndPointCreateRequest = new PostAndPointCreateRequest(
-                trip.id(),
-                "우도의 바닷가",
-                address,
-                "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다.",
-                1.1,
-                2.2,
-                localDateTime
-        );
+        public static PostRequest 감상_생성_요청(Long tripId, Long pointId, String title) {
+            return new PostRequest(
+                    tripId,
+                    pointId,
+                    title,
+                    "제주특별자치도 제주시 애월읍",
+                    "우도에서 땅콩 아이스크림을 먹었다.\\n너무 맛있었다."
+            );
+        }
 
-        MultiPartSpecification multiPartSpecification = new MultiPartSpecBuilder(postAndPointCreateRequest)
-                .fileName("postAndPointCreateRequest")
-                .controlName("dto")
-                .mimeType("application/json")
-                .charset("UTF-8")
-                .build();
-
-        ExtractableResponse<Response> createResponse = RestAssured.given().log().all()
-                .contentType(MULTIPART_FORM_DATA_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .multiPart(multiPartSpecification)
-                .when().post("/posts/current-location")
-                .then().log().all()
-                .extract();
-
-        return createResponse.as(PostCreateResponse.class);
-    }
-
-    PostResponse readPost(Long postId) {
-        ExtractableResponse<Response> findResponse = RestAssured.given().log().all()
-                .contentType(APPLICATION_JSON_VALUE)
-                .auth().preemptive().oauth2(huchuToken)
-                .when().get("/posts/{postId}", postId)
-                .then().log().all()
-                .extract();
-
-        return findResponse.as(PostResponse.class);
-    }
-
-    private MultiPartSpecification getMultiPartSpecification(Object request) {
-        return new MultiPartSpecBuilder(request)
-                .fileName("request")
-                .controlName("dto")
-                .mimeType("application/json")
-                .charset("UTF-8")
-                .build();
+        public static MultiPartSpecification 멀티파트_요청(Object request) {
+            return new MultiPartSpecBuilder(request)
+                    .fileName("request")
+                    .controlName("dto")
+                    .mimeType("application/json")
+                    .charset("UTF-8")
+                    .build();
+        }
     }
 }

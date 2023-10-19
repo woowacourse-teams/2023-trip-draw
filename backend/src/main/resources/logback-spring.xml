@@ -28,7 +28,7 @@
         </logger>
     </springProfile>
 
-    <springProfile name="dev">
+    <springProfile name="dev, dev1, dev2">
         <logger level="INFO" name="org.springframework.boot">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
@@ -39,7 +39,7 @@
         </logger>
     </springProfile>
 
-    <springProfile name="prod">
+    <springProfile name="prod, prod1, prod2">
         <logger level="WARN" name="org.springframework.boot">
             <appender-ref ref="FILE"/>
         </logger>
