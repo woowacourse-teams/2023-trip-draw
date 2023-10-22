@@ -41,48 +41,55 @@ class AddressSelectionViewModel @Inject constructor(
     }
 
     fun selectSiDo(selectedSiDoItem: UiAddressSelectionItem) {
+        selectedSiDo.value = selectedSiDoItem.addressName
         _siDos.value?.let { siDoItems ->
-            _siDos.value = siDoItems.toMutableList().map { item ->
-                val isSelected = item.addressName == selectedSiDoItem.addressName
-                UiAddressSelectionItem(item.addressName, isSelected)
-            }
+            _siDos.value = getSelectedChangedList(siDoItems, selectedSiDoItem)
         }
 
-        this.selectedSiDo.value = selectedSiDoItem.addressName
-        selectedSiGunGu.value = ""
-        selectedEupMyeonDong.value = ""
-
-        _siGunGus.value = listOf()
-        _eupMyeonDongs.value = listOf()
-
+        resetSiGunGu()
+        resetEupMyeonDong()
         fetchSiGunGu()
     }
 
     fun selectSiGunGu(selectedSiGunGuItem: UiAddressSelectionItem) {
+        selectedSiGunGu.value = selectedSiGunGuItem.addressName
         _siGunGus.value?.let { siGunGuItems ->
-            _siGunGus.value = siGunGuItems.toMutableList().map { item ->
-                val isSelected = item.addressName == selectedSiGunGuItem.addressName
-                UiAddressSelectionItem(item.addressName, isSelected)
-            }
+            _siGunGus.value = getSelectedChangedList(siGunGuItems, selectedSiGunGuItem)
         }
 
-        selectedSiGunGu.value = selectedSiGunGuItem.addressName
-        selectedEupMyeonDong.value = ""
-
-        _eupMyeonDongs.value = listOf()
-
+        resetEupMyeonDong()
         fetchEupMyeonDong()
     }
 
     fun selectEupMyeonDong(selectedEupMyeonDongItem: UiAddressSelectionItem) {
+        selectedEupMyeonDong.value = selectedEupMyeonDongItem.addressName
         _eupMyeonDongs.value?.let { eupMyeonDongs ->
-            _eupMyeonDongs.value = eupMyeonDongs.toMutableList().map { item ->
-                val isSelected = item.addressName == selectedEupMyeonDongItem.addressName
+            _eupMyeonDongs.value = getSelectedChangedList(eupMyeonDongs, selectedEupMyeonDongItem)
+        }
+    }
+
+    private fun getSelectedChangedList(
+        list: List<UiAddressSelectionItem>,
+        selectedItem: UiAddressSelectionItem,
+    ): List<UiAddressSelectionItem> {
+        return list.toMutableList().map { item ->
+            val isSelected = item.addressName == selectedItem.addressName
+            if (isSelected || item.isSelected) { // item의 selected가 true로 변경되거나 false로 변경되는 경우에만 새로운 인스턴스를 생성한다.
                 UiAddressSelectionItem(item.addressName, isSelected)
+            } else {
+                item
             }
         }
+    }
 
-        selectedEupMyeonDong.value = selectedEupMyeonDongItem.addressName
+    private fun resetSiGunGu() {
+        selectedSiGunGu.value = ""
+        _siGunGus.value = listOf()
+    }
+
+    private fun resetEupMyeonDong() {
+        selectedEupMyeonDong.value = ""
+        _eupMyeonDongs.value = listOf()
     }
 
     private fun fetchSiDos() {
