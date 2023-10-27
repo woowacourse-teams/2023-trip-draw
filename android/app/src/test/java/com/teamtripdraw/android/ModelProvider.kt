@@ -4,15 +4,17 @@ import com.teamtripdraw.android.domain.model.point.Point
 import com.teamtripdraw.android.domain.model.post.Post
 import java.time.LocalDateTime
 
-fun getPost(
+fun DummyPost(
     postId: Long = 0,
     tripId: Long = 0,
     title: String = "",
     writing: String = "",
     address: String = "",
-    point: Point = getPoint(),
+    point: Point = DummyPoint(),
     postImageUrl: String = "",
     routeImageUrl: String = "",
+    isMine: Boolean = false,
+    authorNickname: String = "",
 ): Post = Post(
     postId = postId,
     tripId = tripId,
@@ -22,9 +24,11 @@ fun getPost(
     point = point,
     postImageUrl = postImageUrl,
     routeImageUrl = routeImageUrl,
+    isMine = isMine,
+    authorNickname = authorNickname,
 )
 
-fun getPoint(
+fun DummyPoint(
     pointId: Long = 0,
     latitude: Double = 0.0,
     longitude: Double = 0.0,
