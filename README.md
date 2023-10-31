@@ -18,6 +18,26 @@
 </div>
 <br/>
 
+## 🚩 서비스 소개
+
+<img width="250" alt="image" src="https://github.com/woowacourse-teams/2023-trip-draw/assets/69189793/f92b9d92-b4b5-4aad-b1d1-fea38caa1e32">
+<img width="250" alt="image" src="https://github.com/woowacourse-teams/2023-trip-draw/assets/69189793/91613e0d-e528-4021-b166-7ed749890504">
+<img width="250" alt="image" src="https://github.com/woowacourse-teams/2023-trip-draw/assets/69189793/e891084d-e165-4d25-8134-56e36473472d">   
+
+
+여행을 시작하는 설렘부터, 여행을 마무리하는 아쉬움까지도 트립드로우가 언제나 당신의 여행과 함께 합니다!   
+
+트립드로우는 당신이 내딛는 소중한 걸음을 모두 그려드려요.    
+
+언젠가 꼭 다시 오기로 한 맛집의 이름을 외우지 마세요.    
+
+머리 위로 쏟아질듯한 별들을 언제 만났는지 신경 쓰지 마세요.   
+
+트립드로우가 전부 빼놓지 않고 적어드릴게요.    
+
+당신은 이 여행을 온전히 즐기기만 하세요.
+
+
 ## 🚅 인프라 구조
 
 <img width="900" alt="image" src="https://github.com/woowacourse-teams/2023-trip-draw/assets/58586537/4a9ce83a-d86a-4272-93c9-fd3ed830d1c4">
