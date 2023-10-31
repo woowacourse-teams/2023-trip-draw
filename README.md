@@ -16,7 +16,28 @@
 [![Release](https://img.shields.io/github/v/release/woowacourse-teams/2023-trip-draw?color=blue)](https://github.com/woowacourse-teams/2023-trip-draw/releases/tag/1.1.2)
 
 </div>
-<br/>
+
+## 🚩 서비스 소개 
+    
+<img width="200" alt="image" src="https://github.com/woowacourse-teams/2023-trip-draw/assets/69189793/90ac70c2-be54-4e31-9127-6cf6655b467f">
+<img width="200" alt="image" src="https://github.com/woowacourse-teams/2023-trip-draw/assets/69189793/f70986e9-ee40-4164-b1b1-e03565571cb3">
+<img width="200" alt="image" src="https://github.com/woowacourse-teams/2023-trip-draw/assets/69189793/49b304a7-2286-44ad-9bf0-9c730debcd0f">     
+   
+<br>    
+   
+여행을 시작하는 설렘부터, 여행을 마무리하는 아쉬움까지도 트립드로우가 언제나 당신의 여행과 함께 합니다!   
+
+트립드로우는 당신이 내딛는 소중한 걸음을 모두 그려드려요.     
+
+언젠가 꼭 다시 오기로 한 맛집의 이름을 외우지 마세요.    
+
+머리 위로 쏟아질듯한 별들을 언제 만났는지 신경 쓰지 마세요.    
+
+트립드로우가 전부 빼놓지 않고 적어드릴게요.   
+ 
+당신은 이 여행을 온전히 즐기기만 하세요.   
+
+<br>
 
 ## 🚅 인프라 구조
 
