@@ -4,7 +4,10 @@ import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.domain.AreaRepository;
 import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponses;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,5 +74,14 @@ public class AreaService {
 
         areaRepository.deleteAllInBatch();
         areaRepository.saveAll(areas);
+    }
+
+    public FullAreaResponses readAll() {
+        List<Area> areas = areaRepository.findAll();
+        List<FullAreaResponse> areaResponses = areas.stream()
+                .map(FullAreaResponse::from)
+                .collect(Collectors.toList());
+
+        return FullAreaResponses.from(areaResponses);
     }
 }
