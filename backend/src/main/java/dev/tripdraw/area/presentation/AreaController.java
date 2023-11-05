@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import dev.tripdraw.area.application.AreaServiceFacade;
 import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponses;
 import dev.tripdraw.common.swagger.SwaggerAuthorizationRequired;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AreaController {
 
     private final AreaServiceFacade areaServiceFacade;
+
+    @Operation(summary = "전체 행정구역 조회 API", description = "전체 행정구역을 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "전체 행정구역 조회 성공."
+    )
+    @GetMapping("/all")
+    public ResponseEntity<FullAreaResponses> readAll() {
+        FullAreaResponses responses = areaServiceFacade.readAll();
+        return ResponseEntity.ok(responses);
+    }
 
     @Operation(summary = "행정구역 조회 API", description = "행정구역을 조회합니다.")
     @ApiResponse(

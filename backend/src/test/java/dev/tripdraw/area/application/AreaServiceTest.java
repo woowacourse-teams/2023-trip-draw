@@ -8,6 +8,8 @@ import static org.mockito.Mockito.verify;
 import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.domain.AreaRepository;
 import dev.tripdraw.area.dto.AreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponses;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -32,6 +34,28 @@ class AreaServiceTest {
 
     @Autowired
     private AreaService areaService;
+
+    @Test
+    void 전체_지역을_조회한다() {
+        // given
+        Area 지역1 = areaRepository.save(new Area("서울시", "강남구", "개포동"));
+        Area 지역2 = areaRepository.save(new Area("서울시", "강남구", "강남동"));
+        Area 지역3 = areaRepository.save(new Area("서울시", "송파구", "잠실동"));
+        Area 지역4 = areaRepository.save(new Area("부산시", "강남구", "개포동"));
+
+        // when
+        FullAreaResponses responses = areaService.readAll();
+
+        // then
+        assertThat(responses.areas()).usingRecursiveComparison()
+                .isEqualTo(
+                        List.of(
+                                FullAreaResponse.from(지역1),
+                                FullAreaResponse.from(지역2),
+                                FullAreaResponse.from(지역3),
+                                FullAreaResponse.from(지역4)
+                        ));
+    }
 
     @MethodSource("paramsAndResponse")
     @ParameterizedTest

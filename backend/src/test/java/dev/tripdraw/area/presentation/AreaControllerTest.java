@@ -2,6 +2,7 @@ package dev.tripdraw.area.presentation;
 
 import static dev.tripdraw.test.fixture.MemberFixture.새로운_사용자;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -10,6 +11,8 @@ import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.domain.AreaRepository;
 import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponses;
 import dev.tripdraw.auth.application.JwtTokenProvider;
 import dev.tripdraw.member.domain.Member;
 import dev.tripdraw.member.domain.MemberRepository;
@@ -23,6 +26,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -43,6 +47,10 @@ class AreaControllerTest extends ControllerTest {
 
     private Member huchu;
     private String huchuToken;
+    private Area 지역1;
+    private Area 지역2;
+    private Area 지역3;
+    private Area 지역4;
 
 
     @BeforeEach
@@ -51,10 +59,36 @@ class AreaControllerTest extends ControllerTest {
         huchu = memberRepository.save(새로운_사용자("통후추"));
         huchuToken = jwtTokenProvider.generateAccessToken(huchu.id().toString());
 
-        areaRepository.save(new Area("서울시", "강남구", "개포동"));
-        areaRepository.save(new Area("서울시", "강남구", "강남동"));
-        areaRepository.save(new Area("서울시", "송파구", "잠실동"));
-        areaRepository.save(new Area("부산시", "강남구", "개포동"));
+        지역1 = areaRepository.save(new Area("서울시", "강남구", "개포동"));
+        지역2 = areaRepository.save(new Area("서울시", "강남구", "강남동"));
+        지역3 = areaRepository.save(new Area("서울시", "송파구", "잠실동"));
+        지역4 = areaRepository.save(new Area("부산시", "강남구", "개포동"));
+    }
+
+    @Test
+    void 전체_행정구역을_조회한다() {
+        // when
+        ExtractableResponse<Response> actual = RestAssured.given().log().all()
+                .auth().preemptive().oauth2(huchuToken)
+                .when().get("/areas/all")
+                .then().log().all()
+                .extract();
+
+        FullAreaResponses responses = actual.as(FullAreaResponses.class);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(actual.statusCode()).isEqualTo(OK.value());
+            softly.assertThat(responses.areas()).usingRecursiveComparison()
+                    .isEqualTo(
+                            List.of(
+                                    FullAreaResponse.from(지역1),
+                                    FullAreaResponse.from(지역2),
+                                    FullAreaResponse.from(지역3),
+                                    FullAreaResponse.from(지역4)
+                            ));
+        });
+
     }
 
     @MethodSource("paramsAndresponse")
@@ -72,7 +106,7 @@ class AreaControllerTest extends ControllerTest {
 
         // then
         AreaResponse areaResponse = actual.as(AreaResponse.class);
-        SoftAssertions.assertSoftly(softly -> {
+        assertSoftly(softly -> {
             softly.assertThat(actual.statusCode()).isEqualTo(OK.value());
             softly.assertThat(areaResponse).isEqualTo(response);
         });

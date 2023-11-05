@@ -3,6 +3,7 @@ package dev.tripdraw.area.application;
 import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
+import dev.tripdraw.area.dto.FullAreaResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,5 +24,9 @@ public class AreaServiceFacade {
     public void create() {
         List<Area> areas = openApiAreaDownloader.download();
         areaService.create(areas);
+    }
+
+    public FullAreaResponses readAll() {
+        return areaService.readAll();
     }
 }
