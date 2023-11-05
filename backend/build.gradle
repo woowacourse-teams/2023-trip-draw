@@ -68,13 +68,6 @@ dependencies {
     implementation 'org.mindrot:jbcrypt:0.4'
 }
 
-processResources.dependsOn('copySecret')
-
-tasks.register('copySecret', Copy) {
-    from '../sub-2023-trip-draw'
-    into 'src/main/resources'
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
