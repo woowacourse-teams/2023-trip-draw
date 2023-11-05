@@ -67,14 +67,13 @@ class AreaControllerTest extends ControllerTest {
 
     @Test
     void 전체_행정구역을_조회한다() {
-        // given
+        // when
         ExtractableResponse<Response> actual = RestAssured.given().log().all()
                 .auth().preemptive().oauth2(huchuToken)
                 .when().get("/areas/all")
                 .then().log().all()
                 .extract();
 
-        // when
         FullAreaResponses responses = actual.as(FullAreaResponses.class);
 
         // then
