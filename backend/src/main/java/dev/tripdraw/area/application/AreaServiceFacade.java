@@ -1,7 +1,6 @@
 package dev.tripdraw.area.application;
 
 import dev.tripdraw.area.domain.Area;
-import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
 import dev.tripdraw.area.dto.FullAreaResponses;
 import java.util.List;

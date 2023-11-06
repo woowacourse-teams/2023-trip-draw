@@ -2,13 +2,14 @@ package dev.tripdraw.area.application;
 
 import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.domain.AreaRepository;
-import dev.tripdraw.area.dto.AreaReqeust;
 import dev.tripdraw.area.dto.AreaResponse;
 import dev.tripdraw.area.dto.FullAreaResponse;
 import dev.tripdraw.area.dto.FullAreaResponses;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AreaService {
 
     private final AreaRepository areaRepository;
-    private final OpenApiAreaDownloader openAPIAreaDownloader;
 
     @Transactional(readOnly = true)
     public AreaResponse read(String sido, String sigungu) {
@@ -66,6 +66,7 @@ public class AreaService {
         return AreaResponse.from(umds);
     }
 
+    @CacheEvict(cacheNames = "areas", key = "'allAreas'")
     public void create(List<Area> areas) {
         long count = areaRepository.count();
         if (count != 0) {
@@ -76,6 +77,8 @@ public class AreaService {
         areaRepository.saveAll(areas);
     }
 
+    @Cacheable(cacheNames = "areas", key = "'allAreas'")
+    @Transactional(readOnly = true)
     public FullAreaResponses readAll() {
         List<Area> areas = areaRepository.findAll();
         List<FullAreaResponse> areaResponses = areas.stream()
