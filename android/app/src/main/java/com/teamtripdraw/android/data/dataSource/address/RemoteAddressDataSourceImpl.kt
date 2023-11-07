@@ -6,7 +6,7 @@ import com.teamtripdraw.android.data.httpClient.service.GetAllAddressesService
 import com.teamtripdraw.android.data.model.DataAddress
 import javax.inject.Inject
 
-class RemoteAddressDataSource @Inject constructor(
+class RemoteAddressDataSourceImpl @Inject constructor(
     private val getAddressesService: GetAddressesService,
     private val getAllAddressesService: GetAllAddressesService,
 ) : AddressDataSource.Remote {
