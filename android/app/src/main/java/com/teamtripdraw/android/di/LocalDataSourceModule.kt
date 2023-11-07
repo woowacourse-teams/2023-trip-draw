@@ -1,5 +1,7 @@
 package com.teamtripdraw.android.di
 
+import com.teamtripdraw.android.data.dataSource.address.AddressDataSource
+import com.teamtripdraw.android.data.dataSource.address.LocalAddressDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.LocalUserIdentifyInfoDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.auth.userIdentifyInfo.UserIdentifyInfoDataSource
 import com.teamtripdraw.android.data.dataSource.trip.LocalTripDataSourceImpl
@@ -21,4 +23,8 @@ interface LocalDataSourceModule {
     @Binds
     @Singleton
     fun bindsLocalTripDataSource(source: LocalTripDataSourceImpl): TripDataSource.Local
+
+    @Binds
+    @Singleton
+    fun bindsLocalAddressDataSource(source: LocalAddressDataSourceImpl): AddressDataSource.Local
 }
