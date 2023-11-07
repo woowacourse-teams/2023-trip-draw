@@ -3,7 +3,6 @@ package dev.tripdraw.area.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.mockito.Mockito.verify;
 
 import dev.tripdraw.area.domain.Area;
 import dev.tripdraw.area.domain.AreaRepository;
@@ -12,7 +11,6 @@ import dev.tripdraw.area.dto.FullAreaResponse;
 import dev.tripdraw.area.dto.FullAreaResponses;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -21,6 +19,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -35,6 +34,9 @@ class AreaServiceTest {
     @Autowired
     private AreaService areaService;
 
+    @Autowired
+    private CacheManager cacheManager;
+
     @Test
     void 전체_지역을_조회한다() {
         // given
@@ -47,6 +49,30 @@ class AreaServiceTest {
         FullAreaResponses responses = areaService.readAll();
 
         // then
+        assertThat(responses.areas()).usingRecursiveComparison()
+                .isEqualTo(
+                        List.of(
+                                FullAreaResponse.from(지역1),
+                                FullAreaResponse.from(지역2),
+                                FullAreaResponse.from(지역3),
+                                FullAreaResponse.from(지역4)
+                        ));
+    }
+
+    @Test
+    void 전체_지역_조회_시_지역_정보를_캐싱한다() {
+        // given
+        Area 지역1 = areaRepository.save(new Area("서울시", "강남구", "개포동"));
+        Area 지역2 = areaRepository.save(new Area("서울시", "강남구", "강남동"));
+        Area 지역3 = areaRepository.save(new Area("서울시", "송파구", "잠실동"));
+        Area 지역4 = areaRepository.save(new Area("부산시", "강남구", "개포동"));
+
+        // when
+        areaService.readAll();
+
+        // then
+        FullAreaResponses responses = cacheManager.getCache("areas").get("allAreas", FullAreaResponses.class);
+
         assertThat(responses.areas()).usingRecursiveComparison()
                 .isEqualTo(
                         List.of(
@@ -80,6 +106,19 @@ class AreaServiceTest {
 
         // expect
         assertThatNoException().isThrownBy(() -> areaService.create(areas));
+    }
+
+    @Test
+    void 전체_행정구역_저장_시_지역_정보_캐시를_비운다() {
+        // given
+        areaRepository.save(new Area("서울시", "강남구", "개포동"));
+        areaService.readAll();
+
+        // when
+        areaService.create(List.of());
+
+        // then
+        assertThat(cacheManager.getCache("areas").get("allAreas")).isNull();
     }
 
     @Test
