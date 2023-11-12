@@ -60,19 +60,19 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var recordingPointBinder: RecordingPointService.RecordingPointBinder
 
-    private lateinit var updatedTripId: LiveData<Long>
+    private lateinit var updatedPointId: LiveData<Long>
 
     private val recordingPointServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             recordingPointBinder = service as RecordingPointService.RecordingPointBinder
-            recordingPointBinder.updatedTripIdHolderInitializeState()
-            updatedTripId = recordingPointBinder.getUpdatedTripIdHolder()
+            recordingPointBinder.updatedPointIdHolderInitializeState()
+            updatedPointId = recordingPointBinder.getUpdatedPointIdHolder()
             recordingPointServiceBindingState = true
-            observeUpdateTripId()
+            observeUpdatePointId()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            recordingPointBinder.updatedTripIdHolderInitializeState()
+            recordingPointBinder.updatedPointIdHolderInitializeState()
             recordingPointServiceBindingState = false
         }
     }
@@ -251,8 +251,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-    private fun observeUpdateTripId() {
-        updatedTripId.observe(viewLifecycleOwner) {
+    private fun observeUpdatePointId() {
+        updatedPointId.observe(viewLifecycleOwner) {
             // map 좌표 최신화 방법 #193 참고
             if (it != Point.NULL_SUBSTITUTE_ID) homeViewModel.updateTripInfo()
         }

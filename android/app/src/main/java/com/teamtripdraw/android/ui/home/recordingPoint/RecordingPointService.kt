@@ -38,8 +38,8 @@ class RecordingPointService : Service() {
     private var currentTripId by Delegates.notNull<Long>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val _updatedTripId = MutableLiveData<Long>(Point.NULL_SUBSTITUTE_ID)
-    val updatedTripId: LiveData<Long> = _updatedTripId
+    private val _updatedPointId = MutableLiveData<Long>(Point.NULL_SUBSTITUTE_ID)
+    val updatedPointId: LiveData<Long> = _updatedPointId
 
     private fun recordPoint(locationResult: LocationResult) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -47,7 +47,7 @@ class RecordingPointService : Service() {
                 getPrePoint(locationResult),
                 currentTripId,
             ).onSuccess {
-                _updatedTripId.postValue(it)
+                _updatedPointId.postValue(it)
             }.onFailure {
                 logUtil.general.log(it)
             }
@@ -112,9 +112,9 @@ class RecordingPointService : Service() {
     override fun onBind(intent: Intent?): IBinder? = RecordingPointBinder()
 
     inner class RecordingPointBinder : Binder() {
-        fun getUpdatedTripIdHolder(): LiveData<Long> = updatedTripId
-        fun updatedTripIdHolderInitializeState() {
-            _updatedTripId.value = Point.NULL_SUBSTITUTE_ID
+        fun getUpdatedPointIdHolder(): LiveData<Long> = updatedPointId
+        fun updatedPointIdHolderInitializeState() {
+            _updatedPointId.value = Point.NULL_SUBSTITUTE_ID
         }
     }
 
