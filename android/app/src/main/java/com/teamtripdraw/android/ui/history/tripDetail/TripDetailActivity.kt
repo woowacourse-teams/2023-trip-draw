@@ -130,9 +130,10 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             val markerSelectedBottomSheet = MarkerSelectedBottomSheet()
             markerSelectedBottomSheet.arguments =
                 MarkerSelectedBottomSheet.getBundle(
-                    pointId,
-                    viewModel.tripId,
-                    BottomSheetClickSituation.HISTORY,
+                    pointId = pointId,
+                    tripId = viewModel.tripId,
+                    situation = BottomSheetClickSituation.HISTORY,
+                    isMine = viewModel.isMine,
                 )
             markerSelectedBottomSheet.show(supportFragmentManager, this.javaClass.name)
         }

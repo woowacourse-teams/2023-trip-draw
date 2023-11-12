@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FilterOptionsView">
+        <attr name="filterOptionsTitleAppearance" format="integer">
+            <enum name="title" value="1" />
+            <enum name="subtitle" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

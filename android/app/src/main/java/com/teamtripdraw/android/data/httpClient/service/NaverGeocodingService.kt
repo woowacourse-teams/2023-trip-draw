@@ -12,6 +12,6 @@ interface NaverGeocodingService {
         @Query("coords") coords: String,
         @Query("sourcecrs") sourcecrs: String = "epsg:4326",
         @Query("output") output: String = "json",
-        @Query("orders") orders: String = "legalcode,admcode",
+        @Query("orders") orders: String = "admcode",
     ): ResponseState<GetReverseGeocodingResponse>
 }

@@ -11,5 +11,7 @@ data class Point(
 ) {
     companion object {
         const val NULL_SUBSTITUTE_ID = -1L
+        const val NULL_LATITUDE = (-100).toDouble() // latitude는 -90 ~ 90 범위의 값을 가집니다.
+        const val NULL_LONGITUDE = (-200F).toDouble() // longitude는 -180 ~ 180 범위의 값을 가집니다.
     }
 }

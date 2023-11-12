@@ -9,6 +9,12 @@ annotation class GeneralOKHttpClient
 annotation class TripDrawOkHttpClient
 
 @Qualifier
+annotation class TripDrawAuthorizationInterceptor
+
+@Qualifier
+annotation class TripDrawApiVersionInterceptor
+
+@Qualifier
 annotation class NaverReverseGeocodingOkHttpClient
 
 @Qualifier

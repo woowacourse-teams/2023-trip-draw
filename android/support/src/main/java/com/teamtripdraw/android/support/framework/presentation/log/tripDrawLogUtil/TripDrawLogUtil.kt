@@ -64,7 +64,7 @@ class TripDrawLogUtil() : LogUtil {
                 scope.setContexts(RESPONSE_STATE_FAILURE_CODE_KEY, code)
                 scope.setContexts(
                     RESPONSE_STATE_FAILURE_ERROR_BODY_KEY,
-                    errorBody ?: NO_ERROR_BODY_MESSAGE,
+                    errorBody?.string() ?: NO_ERROR_BODY_MESSAGE,
                 )
             }
         }

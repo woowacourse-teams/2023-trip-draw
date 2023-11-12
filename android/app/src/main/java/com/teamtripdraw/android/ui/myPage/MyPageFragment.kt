@@ -1,12 +1,14 @@
 package com.teamtripdraw.android.ui.myPage
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.teamtripdraw.android.BuildConfig
 import com.teamtripdraw.android.databinding.FragmentMyPageBinding
 import com.teamtripdraw.android.domain.model.trip.Trip
 import com.teamtripdraw.android.support.framework.presentation.event.EventObserver
@@ -15,8 +17,6 @@ import com.teamtripdraw.android.ui.history.HistoryActivity
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointAlarmManager
 import com.teamtripdraw.android.ui.home.recordingPoint.RecordingPointService
 import com.teamtripdraw.android.ui.login.LoginActivity
-import com.teamtripdraw.android.ui.policy.OpenSourceLicenseActivity
-import com.teamtripdraw.android.ui.policy.PrivacyPolicyActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,6 +47,7 @@ class MyPageFragment : Fragment() {
 
     private fun initObserver() {
         initOpenTripHistoryObserver()
+        initOpenTermsOfServiceObserver()
         initOpenOpenSourceLicenseObserver()
         initOpenPrivacyPolicyObserver()
         initLogOutEventObserver()
@@ -60,15 +61,30 @@ class MyPageFragment : Fragment() {
         }
     }
 
+    private fun initOpenTermsOfServiceObserver() {
+        viewModel.openTermsOfService.observe(viewLifecycleOwner) {
+            if (it.not()) return@observe
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.TERMS_OF_SERVICE_URL))
+            startActivity(browserIntent)
+        }
+    }
+
     private fun initOpenOpenSourceLicenseObserver() {
         viewModel.openOpenSourceLicenseEvent.observe(viewLifecycleOwner) {
-            if (it) startActivity(OpenSourceLicenseActivity.getIntent(requireContext()))
+            if (it.not()) return@observe
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.OPEN_SOURCE_LICENSE_URL))
+            startActivity(browserIntent)
         }
     }
 
     private fun initOpenPrivacyPolicyObserver() {
         viewModel.openPrivacyPolicyEvent.observe(viewLifecycleOwner) {
-            if (it) startActivity(PrivacyPolicyActivity.getIntent(requireContext()))
+            if (it.not()) return@observe
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PRIVACY_POLICY_URL))
+            startActivity(browserIntent)
         }
     }
 

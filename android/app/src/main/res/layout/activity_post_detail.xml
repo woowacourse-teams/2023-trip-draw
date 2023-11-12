@@ -42,7 +42,8 @@
                 android:layout_marginEnd="@dimen/margin_default"
                 android:contentDescription="@string/btn_delete_description"
                 android:onClick="@{()->postDetailViewModel.openDeletionEvent()}"
-                android:src="@drawable/ic_delete" />
+                android:src="@drawable/ic_delete"
+                app:setIconVisibility="@{postDetailViewModel.postDetail.isMine}" />
 
             <ImageView
                 android:id="@+id/btn_post_detail_edit"
@@ -52,7 +53,8 @@
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/btn_edit_description"
                 android:onClick="@{() -> postDetailViewModel.editPost()}"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                app:setIconVisibility="@{postDetailViewModel.postDetail.isMine}" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -104,14 +106,36 @@
                     tools:text="우도의 바닷가" />
 
                 <ImageView
+                    android:id="@+id/iv_post_detail_user_icon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/ic_user"
+                    app:layout_constraintStart_toStartOf="@id/tv_post_detail_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_post_detail_title" />
+
+                <TextView
+                    android:id="@+id/tv_post_detail_author"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@{postDetailViewModel.postDetail.authorNickname}"
+                    android:textAppearance="@style/caption_1"
+                    android:textColor="@color/td_black"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_post_detail_user_icon"
+                    app:layout_constraintStart_toEndOf="@id/iv_post_detail_user_icon"
+                    app:layout_constraintTop_toTopOf="@id/iv_post_detail_user_icon"
+                    tools:text="통후추" />
+
+                <ImageView
                     android:id="@+id/iv_post_detail_location_icon"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginTop="8dp"
                     android:contentDescription="@string/btn_post_detail_location_icon_description"
                     android:src="@drawable/ic_location"
-                    app:layout_constraintStart_toStartOf="@id/tv_post_detail_title"
-                    app:layout_constraintTop_toBottomOf="@id/tv_post_detail_title" />
+                    app:layout_constraintStart_toStartOf="@id/iv_post_detail_user_icon"
+                    app:layout_constraintTop_toBottomOf="@id/iv_post_detail_user_icon" />
 
                 <TextView
                     android:id="@+id/tv_post_detail_address"
@@ -130,8 +154,9 @@
                     android:layout_marginEnd="@dimen/margin_default"
                     android:contentDescription="@string/iv_route_description"
                     android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@id/divider_post_detail"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_post_detail_recorded_at"
+                    app:layout_constraintTop_toBottomOf="@id/tv_post_detail_recorded_at"
                     app:loadPostImage="@{postDetailViewModel.postDetail.routeImageUrl}"
                     app:setImageVisibility="@{postDetailViewModel.postDetail.routeImageUrl}"
                     tools:background="@color/td_gray" />
@@ -150,11 +175,12 @@
                 <ImageView
                     android:id="@+id/iv_image"
                     android:layout_width="0dp"
-                    android:layout_height="307dp"
+                    android:layout_height="0dp"
                     android:layout_marginTop="24dp"
                     android:contentDescription="@string/iv_image_description"
                     android:scaleType="centerCrop"
                     app:clickToShowImageViewer="@{postDetailViewModel.postDetail.postImageUrl}"
+                    app:layout_constraintDimensionRatio="5.5:4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_post_detail"

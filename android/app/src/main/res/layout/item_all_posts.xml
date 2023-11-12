@@ -6,19 +6,19 @@
     <data>
 
         <variable
-            name="allPostsViewModel"
-            type="com.teamtripdraw.android.ui.allPosts.AllPostsViewModel" />
+            name="openPostEvent"
+            type="kotlin.jvm.functions.Function1" />
 
         <variable
             name="postItem"
-            type="com.teamtripdraw.android.ui.model.UiPostOfAll" />
+            type="com.teamtripdraw.android.ui.model.allPosts.UiPostOfAll" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_default"
-        android:onClick="@{()->allPostsViewModel.openPostDetail(postItem.postId)}">
+        android:onClick="@{(value)->openPostEvent.invoke(postItem.postId)}">
 
         <ImageView
             android:id="@+id/iv_item_all_posts_image"
@@ -71,12 +71,11 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="@dimen/margin_default"
+            android:layout_marginBottom="4dp"
             android:contentDescription="@string/btn_post_detail_location_icon_description"
             android:src="@drawable/ic_location"
-            app:layout_constraintBottom_toTopOf="@id/divider_item_all_posts"
-            app:layout_constraintStart_toStartOf="@id/tv_item_all_posts_writing"
-            app:layout_constraintTop_toBottomOf="@id/tv_item_all_posts_writing" />
+            app:layout_constraintStart_toStartOf="@id/iv_item_all_posts_user_icon"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_all_posts_user_icon" />
 
         <TextView
             android:id="@+id/tv_item_all_posts_address"
@@ -94,13 +93,36 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
             android:text="@{postItem.recordedAt}"
             android:textAppearance="@style/caption_1"
-            android:textColor="@color/td_dark_gray"
-            app:layout_constraintBottom_toBottomOf="@id/iv_item_all_posts_location_icon"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toTopOf="@id/divider_item_all_posts"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_item_all_posts_location_icon"
             tools:text="2023.07.18 | 21:00" />
+
+        <ImageView
+            android:id="@+id/iv_item_all_posts_user_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="@dimen/margin_default"
+            android:background="@drawable/ic_user"
+            app:layout_constraintStart_toStartOf="@id/tv_item_all_posts_writing"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_all_posts_writing" />
+
+        <TextView
+            android:id="@+id/tv_item_all_posts_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{postItem.authorNickname}"
+            android:textAppearance="@style/caption_1"
+            android:textColor="@color/td_black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_item_all_posts_user_icon"
+            app:layout_constraintStart_toEndOf="@id/iv_item_all_posts_user_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_item_all_posts_user_icon"
+            tools:text="통후추" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_item_all_posts"

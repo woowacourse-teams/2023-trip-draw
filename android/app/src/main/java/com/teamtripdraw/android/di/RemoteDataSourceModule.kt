@@ -1,5 +1,7 @@
 package com.teamtripdraw.android.di
 
+import com.teamtripdraw.android.data.dataSource.address.AddressDataSource
+import com.teamtripdraw.android.data.dataSource.address.RemoteAddressDataSource
 import com.teamtripdraw.android.data.dataSource.auth.login.LoginDataSource
 import com.teamtripdraw.android.data.dataSource.auth.login.RemoteLoginDataSourceImpl
 import com.teamtripdraw.android.data.dataSource.auth.signUp.RemoteSignUpDataSourceImpl
@@ -46,6 +48,10 @@ interface RemoteDataSourceModule {
     @Binds
     @Singleton
     fun bindsRemoteLoginDataSource(source: RemoteLoginDataSourceImpl): LoginDataSource.Remote
+
+    @Binds
+    @Singleton
+    fun bindsRemoteAddressDataSource(source: RemoteAddressDataSource): AddressDataSource.Remote
 
     @Binds
     @Singleton
