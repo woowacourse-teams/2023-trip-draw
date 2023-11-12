@@ -4,15 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
-import dev.tripdraw.draw.application.RouteImageUploader;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -28,9 +27,8 @@ class RouteImageUploaderTest {
         RouteImageUploader routeImageUploader = new RouteImageUploader(domain, base, route);
 
         // expect
-        try (MockedStatic<ImageIO> imageIO = Mockito.mockStatic(ImageIO.class)) {
-            String imageUrl = routeImageUploader.upload(bufferedImage);
-
+        try (MockedStatic<ImageIO> imageIO = BDDMockito.mockStatic(ImageIO.class)) {
+            routeImageUploader.upload(bufferedImage);
             imageIO.verify(
                     () -> ImageIO.write(any(BufferedImage.class), any(String.class), any(File.class)),
                     times(1)
@@ -48,9 +46,8 @@ class RouteImageUploaderTest {
         RouteImageUploader routeImageUploader = new RouteImageUploader(domain, base, route);
 
         // expect
-        try (MockedStatic<ImageIO> imageIO = Mockito.mockStatic(ImageIO.class)) {
+        try (MockedStatic<ImageIO> imageIO = BDDMockito.mockStatic(ImageIO.class)) {
             String imageUrl = routeImageUploader.upload(bufferedImage);
-
             assertThat(imageUrl).startsWith(domain + route);
         }
     }

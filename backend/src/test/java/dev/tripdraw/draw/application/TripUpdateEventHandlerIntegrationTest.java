@@ -1,10 +1,10 @@
 package dev.tripdraw.draw.application;
 
-import static dev.tripdraw.test.fixture.TestFixture.여행;
+import static dev.tripdraw.test.fixture.TripFixture.여행;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.timeout;
+import static org.mockito.BDDMockito.timeout;
 
 import dev.tripdraw.trip.domain.TripRepository;
 import dev.tripdraw.trip.domain.TripUpdateEvent;

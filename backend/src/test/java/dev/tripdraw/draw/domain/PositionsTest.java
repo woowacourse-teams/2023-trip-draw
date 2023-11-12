@@ -2,8 +2,6 @@ package dev.tripdraw.draw.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dev.tripdraw.draw.domain.Position;
-import dev.tripdraw.draw.domain.Positions;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

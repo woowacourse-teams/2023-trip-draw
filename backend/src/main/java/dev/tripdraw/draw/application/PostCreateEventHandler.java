@@ -7,11 +7,10 @@ import dev.tripdraw.post.domain.PostCreateEvent;
 import dev.tripdraw.post.domain.PostRepository;
 import dev.tripdraw.trip.domain.Trip;
 import dev.tripdraw.trip.domain.TripRepository;
+import java.util.List;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
-
-import java.util.List;
 
 @Component
 public class PostCreateEventHandler {

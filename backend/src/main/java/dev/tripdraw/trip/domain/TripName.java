@@ -17,7 +17,7 @@ public class TripName {
 
     private String name;
 
-    private TripName(String name) {
+    public TripName(String name) {
         this.name = name;
     }
 

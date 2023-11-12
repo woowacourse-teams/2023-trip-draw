@@ -13,11 +13,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 @Accessors(fluent = true)
 @Getter
@@ -83,5 +82,9 @@ public class Point extends BaseEntity {
         if (hasPost) {
             throw new TripException(POINT_ALREADY_HAS_POST);
         }
+    }
+
+    public void unregisterPost() {
+        this.hasPost = false;
     }
 }

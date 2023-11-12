@@ -1,15 +1,15 @@
 package dev.tripdraw.auth.oauth;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 import dev.tripdraw.auth.dto.KakaoInfoResponse;
 import dev.tripdraw.auth.dto.OauthInfo;
 import dev.tripdraw.common.auth.OauthType;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -45,14 +45,8 @@ class KakaoApiClientTest {
         // given
         String accessToken = "good.access.token";
         KakaoApiClient kakaoApiClient = new KakaoApiClient("url", restTemplate);
-
-        when(restTemplate.postForObject(any(String.class), any(Object.class), any()))
-                .thenReturn(new KakaoInfoResponse(
-                        "kakaoId",
-                        true,
-                        LocalDateTime.now(),
-                        null
-                ));
+        KakaoInfoResponse kakaoInfoResponse = new KakaoInfoResponse("kakaoId", true, now(), null);
+        given(restTemplate.postForObject(any(String.class), any(Object.class), any())).willReturn(kakaoInfoResponse);
 
         // when
         OauthInfo oauthInfo = kakaoApiClient.requestOauthInfo(accessToken);

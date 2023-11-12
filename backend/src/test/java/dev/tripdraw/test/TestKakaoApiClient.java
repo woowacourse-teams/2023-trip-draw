@@ -1,6 +1,7 @@
 package dev.tripdraw.test;
 
 import static dev.tripdraw.common.auth.OauthType.KAKAO;
+import static dev.tripdraw.test.fixture.AuthFixture.OAuth_정보;
 
 import dev.tripdraw.auth.dto.OauthInfo;
 import dev.tripdraw.auth.oauth.OauthClient;
@@ -15,6 +16,6 @@ public class TestKakaoApiClient implements OauthClient {
 
     @Override
     public OauthInfo requestOauthInfo(String accessToken) {
-        return new OauthInfo("kakaoId", KAKAO);
+        return OAuth_정보(accessToken);
     }
 }

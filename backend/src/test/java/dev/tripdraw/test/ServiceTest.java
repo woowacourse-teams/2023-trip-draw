@@ -1,17 +1,17 @@
 package dev.tripdraw.test;
 
-import jakarta.transaction.Transactional;
-import java.lang.annotation.ElementType;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@SuppressWarnings("NonAsciiCharacters")
+@Target(TYPE)
+@Retention(RUNTIME)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Transactional
 @SpringBootTest

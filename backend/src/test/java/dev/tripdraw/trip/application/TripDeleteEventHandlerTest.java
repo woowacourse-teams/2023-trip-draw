@@ -2,7 +2,7 @@ package dev.tripdraw.trip.application;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
+import static org.mockito.BDDMockito.times;
 
 import dev.tripdraw.member.domain.MemberDeleteEvent;
 import dev.tripdraw.trip.domain.PointRepository;
@@ -34,14 +34,13 @@ class TripDeleteEventHandlerTest {
     void 회원_삭제_이벤트를_받아_회원의_여행을_삭제한다() {
         // given
         MemberDeleteEvent memberDeleteEvent = new MemberDeleteEvent(1L);
-
         List<Long> tripIds = List.of(1L);
         given(tripRepository.findAllTripIdsByMemberId(memberDeleteEvent.memberId()))
-                .willReturn(tripIds);
+                .willReturn(List.of(1L));
 
         // when
         tripDeleteEventHandler.deletePostByMemberId(memberDeleteEvent);
-        
+
         // then
         then(tripRepository)
                 .should(times(1))
