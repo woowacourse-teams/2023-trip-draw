@@ -249,4 +249,9 @@ dependencies {
 
     // lottie
     implementation(libs.lottie)
+
+    // room
+    implementation(libs.bundles.room)
+    testImplementation(libs.roomTest)
+    kapt(libs.roomKapt)
 }

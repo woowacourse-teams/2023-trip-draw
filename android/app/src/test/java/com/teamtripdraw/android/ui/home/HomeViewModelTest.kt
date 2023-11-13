@@ -8,12 +8,8 @@ import com.teamtripdraw.android.ui.home.HomeUiState.BEFORE_TRIP
 import com.teamtripdraw.android.ui.home.HomeUiState.ON_TRIP
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class HomeViewModelTest : DefaultViewModelTest() {
@@ -23,17 +19,11 @@ class HomeViewModelTest : DefaultViewModelTest() {
     private lateinit var tripRepository: TripRepository
     private lateinit var pointRepository: PointRepository
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+    @Before
+    fun setUp() {
         tripRepository = mockk(relaxed = true)
         pointRepository = mockk()
         cut = HomeViewModel(tripRepository, pointRepository)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test

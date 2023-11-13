@@ -6,6 +6,7 @@ import com.teamtripdraw.android.data.httpClient.service.CreateTripService
 import com.teamtripdraw.android.data.httpClient.service.DeletePointService
 import com.teamtripdraw.android.data.httpClient.service.DeleteTripService
 import com.teamtripdraw.android.data.httpClient.service.GetAddressesService
+import com.teamtripdraw.android.data.httpClient.service.GetAllAddressesService
 import com.teamtripdraw.android.data.httpClient.service.GetAllTripsService
 import com.teamtripdraw.android.data.httpClient.service.GetPointPostService
 import com.teamtripdraw.android.data.httpClient.service.GetPointService
@@ -108,6 +109,11 @@ object ServiceModule {
     @Singleton
     fun providesGetAddressesService(@TripDrawRetrofit retrofit: Retrofit): GetAddressesService =
         retrofit.create(GetAddressesService::class.java)
+
+    @Provides
+    @Singleton
+    fun providersGetAllAddressesService(@TripDrawRetrofit retrofit: Retrofit): GetAllAddressesService =
+        retrofit.create(GetAllAddressesService::class.java)
 
     @Provides
     @Singleton

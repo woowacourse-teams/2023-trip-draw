@@ -20,6 +20,7 @@ material = "1.9.0"
 # Test Libraries
 junit = "4.13.2"
 androidTestJunit = "1.1.5"
+androidTestJunitKtx = "1.1.5"
 androidxTestEspresso = "3.5.1"
 assertj = "3.22.0"
 
@@ -101,6 +102,9 @@ hilt = "2.44"
 # lottie
 lottie = "6.1.0"
 
+# room
+room = "2.5.0"
+
 [libraries]
 # AndroidX Libraries
 coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -112,6 +116,7 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 
 # Test Libraries
 androidTestJunit = { module = "androidx.test.ext:junit", version.ref = "androidTestJunit" }
+androidTestJunitKtx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidTestJunitKtx" }
 androidxTestEspresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxTestEspresso" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 
@@ -194,13 +199,20 @@ hiltKapt = { module = "com.google.dagger:hilt-android-compiler", version.ref = "
 # lottie
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
+# room
+room = { module = "androidx.room:room-runtime", version.ref = "room" }
+roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }
+roomKapt = { module = "androidx.room:room-compiler", version.ref = "room" }
+roomTest = { module = "androidx.room:room-testing", version.ref = "room" }
+
 [bundles]
 domainTest = ["junitJupiter", "assertjCore"]
 androidUnitTest = ["jupiterApi", "jupiterEngine", "parameterizedTest", "junit4", "junit4VintageEngine", "assertj", "mockk", "coroutineTest", "coreTest"]
-androidTest = ["androidTestJunit", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
+androidTest = ["androidTestJunit", "androidTestJunitKtx", "androidxTestEspresso", "mockkAndroid", "mockkAgent"]
 httpClient = ["okhttp", "retrofit", "moshi", "moshiConverter", "loggingInterceptor"]
 androidDefault = ["coreKtx", "appcompat", "constraintlayout", "material", "fragmentKtx"]
 naverMap = ["naverMap", "gmsPlayServicesLocation"]
+room = ["room", "roomKtx"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradleplugin" }
@@ -220,3 +232,4 @@ mannodermaus = { id = "de.mannodermaus.android-junit5", version.ref = "mannoderm
 sentryPlugin = { id = "io.sentry.android.gradle", version.ref = "sentryPlugin" }
 # hilt
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+roomKapt = { id = "androidx.room:room-compiler", version.ref = "room" }
