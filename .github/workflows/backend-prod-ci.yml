@@ -32,8 +32,11 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: 빌드 수행
-        run: ./gradlew build
-        working-directory: ${{ env.working-directory }}
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+          build-root-directory: ${{ env.working-directory }}
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: 테스트 결과 코멘트 등록
         uses: EnricoMi/publish-unit-test-result-action@v2
