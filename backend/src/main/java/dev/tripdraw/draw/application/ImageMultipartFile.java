@@ -9,7 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ImageMultipartFile implements MultipartFile {
 
-    private static final String DOT = "\\.";
+    private static final String DELIMITER = ".";
+    private static final int BEGIN_INDEX = 0;
+    private static final int LENGTH_OF_DELIMITER = 1;
 
     private final ByteArrayOutputStream byteArrayOutputStream;
     private final String originalFilename;
@@ -29,9 +31,9 @@ public class ImageMultipartFile implements MultipartFile {
     }
 
     public static ImageMultipartFile of(ByteArrayOutputStream byteArrayOutputStream, String originalFilename) {
-        String[] values = originalFilename.split(DOT);
-        String name = values[0];
-        String contentType = values[1];
+        int indexOfDelimiter = originalFilename.indexOf(DELIMITER);
+        String name = originalFilename.substring(BEGIN_INDEX, indexOfDelimiter);
+        String contentType = originalFilename.substring(indexOfDelimiter + LENGTH_OF_DELIMITER);
         return new ImageMultipartFile(byteArrayOutputStream, originalFilename, name, contentType);
     }
 
