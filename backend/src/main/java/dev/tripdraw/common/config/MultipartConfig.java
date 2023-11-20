@@ -11,6 +11,8 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @Configuration
 public class MultipartConfig {
 
+    private static final int MAX_SIZE = 20;
+
     @Bean
     public MultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
@@ -19,8 +21,8 @@ public class MultipartConfig {
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory multipartConfigFactory = new MultipartConfigFactory();
-        multipartConfigFactory.setMaxRequestSize(DataSize.ofMegabytes(20));
-        multipartConfigFactory.setMaxFileSize(DataSize.ofMegabytes(20));
+        multipartConfigFactory.setMaxRequestSize(DataSize.ofMegabytes(MAX_SIZE));
+        multipartConfigFactory.setMaxFileSize(DataSize.ofMegabytes(MAX_SIZE));
 
         return multipartConfigFactory.createMultipartConfig();
     }
