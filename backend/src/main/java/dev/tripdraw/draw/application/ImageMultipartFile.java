@@ -15,31 +15,20 @@ public class ImageMultipartFile implements MultipartFile {
 
     private final ByteArrayOutputStream byteArrayOutputStream;
     private final String originalFilename;
-    private final String name;
-    private final String contentType;
 
-    private ImageMultipartFile(
-            ByteArrayOutputStream byteArrayOutputStream,
-            String originalFilename,
-            String name,
-            String contentType
-    ) {
+    private ImageMultipartFile(ByteArrayOutputStream byteArrayOutputStream, String originalFilename) {
         this.byteArrayOutputStream = byteArrayOutputStream;
         this.originalFilename = originalFilename;
-        this.name = name;
-        this.contentType = contentType;
     }
 
     public static ImageMultipartFile of(ByteArrayOutputStream byteArrayOutputStream, String originalFilename) {
-        int indexOfDelimiter = originalFilename.indexOf(DELIMITER);
-        String name = originalFilename.substring(BEGIN_INDEX, indexOfDelimiter);
-        String contentType = originalFilename.substring(indexOfDelimiter + LENGTH_OF_DELIMITER);
-        return new ImageMultipartFile(byteArrayOutputStream, originalFilename, name, contentType);
+        return new ImageMultipartFile(byteArrayOutputStream, originalFilename);
     }
 
     @Override
     public String getName() {
-        return name;
+        int indexOfDelimiter = originalFilename.indexOf(DELIMITER);
+        return originalFilename.substring(BEGIN_INDEX, indexOfDelimiter);
     }
 
     @Override
@@ -49,7 +38,8 @@ public class ImageMultipartFile implements MultipartFile {
 
     @Override
     public String getContentType() {
-        return contentType;
+        int indexOfDelimiter = originalFilename.indexOf(DELIMITER);
+        return originalFilename.substring(indexOfDelimiter + LENGTH_OF_DELIMITER);
     }
 
     @Override
